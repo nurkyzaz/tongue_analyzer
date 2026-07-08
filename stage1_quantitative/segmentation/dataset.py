@@ -43,6 +43,7 @@ def eval_transforms(size):
 
 
 class SegDataset(Dataset):
+    """TonguExpert-only manifest (raw_path/mask_path relative to data_root)."""
     def __init__(self, manifest_csv, data_root, split, size=384):
         df = pd.read_csv(manifest_csv)
         self.df = df[(df.split == split) & (df.has_mask)].reset_index(drop=True)
@@ -55,6 +56,30 @@ class SegDataset(Dataset):
     def __getitem__(self, i):
         row = self.df.iloc[i]
         img = cv2.cvtColor(cv2.imread(os.path.join(self.root, row.raw_path)), cv2.COLOR_BGR2RGB)
+        mask = cv2.imread(os.path.join(self.root, row.mask_path), cv2.IMREAD_GRAYSCALE)
+        mask = (mask > 127).astype(np.float32)
+        out = self.tf(image=img, mask=mask)
+        return out["image"], out["mask"].unsqueeze(0).float()
+
+
+class SegManifestDataset(Dataset):
+    """Unified manifest with generic img_path/mask_path columns (relative to data_root).
+    Optionally filter by `source` (e.g. only 'sm_tongue') for per-domain evaluation."""
+    def __init__(self, manifest_csv, data_root, split, size=384, source=None):
+        df = pd.read_csv(manifest_csv)
+        df = df[df.split == split]
+        if source is not None:
+            df = df[df.source == source]
+        self.df = df.reset_index(drop=True)
+        self.root = data_root
+        self.tf = train_transforms(size) if split == "train" else eval_transforms(size)
+
+    def __len__(self):
+        return len(self.df)
+
+    def __getitem__(self, i):
+        row = self.df.iloc[i]
+        img = cv2.cvtColor(cv2.imread(os.path.join(self.root, row.img_path)), cv2.COLOR_BGR2RGB)
         mask = cv2.imread(os.path.join(self.root, row.mask_path), cv2.IMREAD_GRAYSCALE)
         mask = (mask > 127).astype(np.float32)
         out = self.tf(image=img, mask=mask)
