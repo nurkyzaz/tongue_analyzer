@@ -6,20 +6,23 @@ Set TIH_LLM_BACKEND=openai (+ TIH_LLM_BASE_URL/API_KEY/MODEL) to enable LLM-poli
 """
 import os
 import base64
-import io
 import numpy as np
 import cv2
-from fastapi import FastAPI
+from fastapi import FastAPI, Header, HTTPException
 from fastapi.responses import HTMLResponse
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from deployment.api.service import TongueService
 
 SEG = os.getenv("TIH_SEG_CKPT", "checkpoints/seg_combined/best.pt")
 MT = os.getenv("TIH_MT_CKPT", "checkpoints/multitask_v2/best.pt")
+API_KEY = os.getenv("TIH_API_KEY", "")          # if set, /analyze requires X-API-Key header
+CORS_ORIGINS = os.getenv("TIH_CORS_ORIGINS", "*").split(",")
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 app = FastAPI(title="TongueInsight Hybrid")
+app.add_middleware(CORSMiddleware, allow_origins=CORS_ORIGINS, allow_methods=["*"], allow_headers=["*"])
 _service = None
 
 
@@ -48,7 +51,9 @@ def health():
 
 
 @app.post("/analyze")
-def analyze(req: AnalyzeReq):
+def analyze(req: AnalyzeReq, x_api_key: str = Header(default="")):
+    if API_KEY and x_api_key != API_KEY:
+        raise HTTPException(status_code=401, detail="invalid or missing X-API-Key")
     img = _decode(req.image)
     return service().analyze(img, metadata=req.metadata)
 
