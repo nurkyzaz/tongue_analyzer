@@ -1,0 +1,96 @@
+"""Stage-1 end-to-end inference: photo -> segmentation -> mask-guided characteristics -> JSON.
+
+    python stage1_quantitative/infer.py --image path.jpg \
+        --seg checkpoints/seg/best.pt --mt checkpoints/multitask_v2/best.pt
+
+Runs the U-Net++ segmenter to get the tongue mask, then the multi-task head (mask-guided) to
+predict the 5 key characteristics with confidences, and emits a Stage1Output JSON. A simple quality
+gate rejects images whose predicted tongue coverage is implausibly small/large.
+"""
+import argparse
+import os
+import sys
+import cv2
+import numpy as np
+import torch
+import torch.nn.functional as F
+import segmentation_models_pytorch as smp
+import albumentations as A
+from albumentations.pytorch import ToTensorV2
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from labels import KEY_CHARS, LABEL_MAPS, CHAR_DESC
+from feature_extraction.model import MultiTaskTongueNet
+from schema import Stage1Output
+
+MEAN, STD = (0.485, 0.456, 0.406), (0.229, 0.224, 0.225)
+
+
+def _preprocess(img_rgb, size):
+    tf = A.Compose([A.LongestMaxSize(max_size=size),
+                    A.PadIfNeeded(size, size, border_mode=cv2.BORDER_CONSTANT, value=0),
+                    A.Normalize(MEAN, STD), ToTensorV2()])
+    return tf(image=img_rgb)["image"].unsqueeze(0)
+
+
+class Stage1Pipeline:
+    def __init__(self, seg_ckpt, mt_ckpt, device=None, size=384):
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+        self.size = size
+        seg_state = torch.load(seg_ckpt, map_location=self.device)
+        enc = seg_state["args"].get("encoder", "resnet34")
+        self.seg = smp.UnetPlusPlus(encoder_name=enc, encoder_weights=None, in_channels=3, classes=1)
+        self.seg.load_state_dict(seg_state["model"])
+        self.seg.to(self.device).eval()
+
+        mt_state = torch.load(mt_ckpt, map_location=self.device)
+        self.mt = MultiTaskTongueNet(mt_state["args"].get("encoder", "resnet34"), pretrained=False)
+        self.mt.load_state_dict(mt_state["model"])
+        self.mt.to(self.device).eval()
+
+    @torch.no_grad()
+    def __call__(self, image_path, sid=None):
+        img = cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2RGB)
+        x = _preprocess(img, self.size).to(self.device)
+
+        mask_prob = self.seg(x).sigmoid()
+        mask = (mask_prob > 0.5).float()
+        coverage = mask.mean().item()
+        accepted, reasons = True, []
+        if coverage < 0.05:
+            accepted, reasons = False, reasons + ["tongue not detected / too small"]
+        if coverage > 0.85:
+            accepted, reasons = False, reasons + ["mask implausibly large (framing/quality issue)"]
+
+        out = self.mt(x, mask)
+        chars = {}
+        for ch in KEY_CHARS:
+            prob = F.softmax(out[ch], dim=1)[0]
+            idx = int(prob.argmax())
+            chars[ch] = {"value": LABEL_MAPS[ch][idx],
+                         "confidence": round(float(prob[idx]), 4),
+                         "description": CHAR_DESC[ch]}
+
+        return Stage1Output(
+            sid=sid,
+            key_characteristics=chars,
+            quality={"mask_coverage": round(coverage, 4), "accepted": accepted, "reasons": reasons},
+        )
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--image", required=True)
+    ap.add_argument("--seg", default="checkpoints/seg/best.pt")
+    ap.add_argument("--mt", default="checkpoints/multitask_v2/best.pt")
+    ap.add_argument("--size", type=int, default=384)
+    args = ap.parse_args()
+    pipe = Stage1Pipeline(args.seg, args.mt, size=args.size)
+    result = pipe(args.image)
+    print(result.to_json())
+    print("\n--- summary ---")
+    print("\n".join(result.summary_lines()))
+
+
+if __name__ == "__main__":
+    main()

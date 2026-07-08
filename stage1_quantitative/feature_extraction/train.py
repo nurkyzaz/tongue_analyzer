@@ -21,7 +21,10 @@ from feature_extraction.model import MultiTaskTongueNet
 from feature_extraction.losses import FocalLoss
 
 
-def class_weights(loader, device):
+def class_weights(loader, device, mode="sqrt", clamp=(0.5, 4.0)):
+    """Per-class weights. `sqrt` (mild inverse-sqrt-freq) avoids crushing an extreme majority class
+    the way full inverse-freq does; combined with Focal Loss that is enough for imbalance.
+    Weights are mean-normalised to ~1 and clamped so no class dominates or vanishes."""
     counts = {ch: torch.zeros(NUM_CLASSES[ch]) for ch in KEY_CHARS}
     for *_, y, _ in loader:
         for k, ch in enumerate(KEY_CHARS):
@@ -29,8 +32,15 @@ def class_weights(loader, device):
                 counts[ch][c] += (y[:, k] == c).sum()
     w = {}
     for ch in KEY_CHARS:
-        inv = 1.0 / counts[ch].clamp(min=1)
-        w[ch] = (inv / inv.sum() * NUM_CLASSES[ch]).to(device)
+        n = counts[ch].clamp(min=1)
+        if mode == "none":
+            raw = torch.ones_like(n)
+        elif mode == "inv":
+            raw = 1.0 / n
+        else:  # sqrt
+            raw = 1.0 / n.sqrt()
+        raw = raw / raw.mean()                      # centre around 1.0
+        w[ch] = raw.clamp(clamp[0], clamp[1]).to(device)
     return w
 
 
@@ -62,6 +72,7 @@ def main():
     ap.add_argument("--lr", type=float, default=3e-4)
     ap.add_argument("--workers", type=int, default=10)
     ap.add_argument("--out", default="checkpoints/multitask")
+    ap.add_argument("--cw-mode", default="sqrt", choices=["none", "inv", "sqrt"])
     ap.add_argument("--max-steps", type=int, default=0)
     args = ap.parse_args()
     os.makedirs(args.out, exist_ok=True)
@@ -74,7 +85,7 @@ def main():
     print(f"train={len(tr)} val={len(va)} device={device}", flush=True)
 
     model = MultiTaskTongueNet(args.encoder, pretrained=True).to(device)
-    cw = class_weights(tl, device)
+    cw = class_weights(tl, device, mode=args.cw_mode)
     losses = {ch: FocalLoss(gamma=2.0, class_weight=cw[ch]).to(device) for ch in KEY_CHARS}
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-4)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=args.epochs)
