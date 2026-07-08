@@ -37,13 +37,13 @@ class Stage1Pipeline:
     def __init__(self, seg_ckpt, mt_ckpt, device=None, size=384):
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.size = size
-        seg_state = torch.load(seg_ckpt, map_location=self.device)
+        seg_state = torch.load(seg_ckpt, map_location=self.device, weights_only=False)
         enc = seg_state["args"].get("encoder", "resnet34")
         self.seg = smp.UnetPlusPlus(encoder_name=enc, encoder_weights=None, in_channels=3, classes=1)
         self.seg.load_state_dict(seg_state["model"])
         self.seg.to(self.device).eval()
 
-        mt_state = torch.load(mt_ckpt, map_location=self.device)
+        mt_state = torch.load(mt_ckpt, map_location=self.device, weights_only=False)
         self.mt = MultiTaskTongueNet(mt_state["args"].get("encoder", "resnet34"), pretrained=False)
         self.mt.load_state_dict(mt_state["model"])
         self.mt.to(self.device).eval()

@@ -16,10 +16,18 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
 - ⬜ Dataset stats report
 
 ## Phase 2 — Stage 1 quantitative
-- 🔄 2.1 Segmentation (U-Net++ ResNet-34, Raw→Mask) — **training, val Dice ≈ 0.99**
-- 🔄 2.2 Multi-task head (5 key chars cls, mask feature-masking, Focal Loss) — **training**
-- ⬜ 2.2b Regression heads for continuous phenotypes (P*.txt)
-- ⬜ 2.3 Eval on gold (L1 manual) test set; export Stage1Output JSON + inference script
+- ✅ 2.1 Segmentation (U-Net++ ResNet-34) — **val Dice 0.994** (`checkpoints/seg/best.pt`)
+- ✅ 2.2 Multi-task head (5 key chars, mask-guided pooling, Focal Loss) — **test mean macro-F1 0.735** (`checkpoints/multitask_v2/best.pt`)
+- ✅ 2.3 End-to-end inference → `Stage1Output` JSON (`stage1_quantitative/infer.py`) + test eval (`evaluation/eval_stage1.py`)
+- ⬜ 2.2b Regression heads for continuous phenotypes (P*.txt) — richer output
+- ⬜ 2.4 Real-photo eval set (domain-gap check) + tune coating rare class
+
+### Stage-1 test metrics (695 imgs, gold-preferred labels)
+| char | acc | macroF1 |  | char | acc | macroF1 |
+|---|---|---|---|---|---|---|
+| coating | 0.88 | 0.56 |  | fissure | 0.86 | 0.84 |
+| tai | 0.82 | 0.78 |  | tooth_mk | 0.77 | 0.77 |
+| zhi | 0.74 | 0.72 |  | **MEAN** | | **0.735** |
 
 ## Phase 3 — Stage 2 interpretation
 - ⬜ LLM adapter (vLLM / local / API) — **decision pending team answers**
