@@ -23,10 +23,8 @@ class FullPipeline:
         self.stage1 = Stage1Pipeline(seg_ckpt, mt_ckpt, size=size)
         self.llm = LLMClient()
 
-    def analyze(self, image_path, metadata=None, sid=None):
-        s1 = self.stage1(image_path, sid=sid)
+    def _assemble(self, s1, s2):
         s1_dict = json.loads(s1.to_json())
-        s2 = interpret(s1_dict, metadata=metadata, llm=self.llm)
         return {
             "quantitative": {
                 "key_characteristics": s1_dict["key_characteristics"],
@@ -37,6 +35,18 @@ class FullPipeline:
             "model_version": s1_dict["model_version"],
             "llm_backend": self.llm.backend,
         }
+
+    def analyze(self, image_path, metadata=None, sid=None):
+        s1 = self.stage1(image_path, sid=sid)
+        s2 = interpret(json.loads(s1.to_json()), metadata=metadata, llm=self.llm)
+        return self._assemble(s1, s2)
+
+    def analyze_array(self, img_rgb, metadata=None):
+        """Analyze an in-memory RGB image; also returns the mask + letterboxed display image
+        (both HxW at model size) so the caller can render a framing/mask overlay."""
+        s1, mask, disp = self.stage1(img_rgb, return_mask=True)
+        s2 = interpret(json.loads(s1.to_json()), metadata=metadata, llm=self.llm)
+        return self._assemble(s1, s2), mask, disp
 
 
 def main():

@@ -33,6 +33,13 @@ def _preprocess(img_rgb, size):
     return tf(image=img_rgb)["image"].unsqueeze(0)
 
 
+def _letterbox(img_rgb, size):
+    """Same letterbox geometry as _preprocess (no normalization) so masks align with the image."""
+    tf = A.Compose([A.LongestMaxSize(max_size=size),
+                    A.PadIfNeeded(size, size, border_mode=cv2.BORDER_CONSTANT, value=0)])
+    return tf(image=img_rgb)["image"]
+
+
 class Stage1Pipeline:
     def __init__(self, seg_ckpt, mt_ckpt, device=None, size=384):
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
@@ -49,8 +56,9 @@ class Stage1Pipeline:
         self.mt.to(self.device).eval()
 
     @torch.no_grad()
-    def __call__(self, image_path, sid=None):
-        img = cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2RGB)
+    def __call__(self, image_path, sid=None, return_mask=False):
+        img = cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2RGB) \
+            if isinstance(image_path, str) else image_path
         x = _preprocess(img, self.size).to(self.device)
 
         mask_prob = self.seg(x).sigmoid()
@@ -71,11 +79,17 @@ class Stage1Pipeline:
                          "confidence": round(float(prob[idx]), 4),
                          "description": CHAR_DESC[ch]}
 
-        return Stage1Output(
+        out_obj = Stage1Output(
             sid=sid,
             key_characteristics=chars,
             quality={"mask_coverage": round(coverage, 4), "accepted": accepted, "reasons": reasons},
         )
+        if return_mask:
+            # mask + letterboxed display image (both at self.size) for visualization/framing
+            m = mask[0, 0].cpu().numpy().astype(np.uint8)
+            disp = _letterbox(img, self.size)
+            return out_obj, m, disp
+        return out_obj
 
 
 def main():

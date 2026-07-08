@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<title>TongueInsight — Tongue Analysis Demo</title>
+<style>
+  :root{--bg:#0f1720;--card:#18222e;--fg:#e8eef4;--mut:#93a4b3;--acc:#31c48d;--warn:#f6c453;--err:#f16a6a;--line:#26333f}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+  .wrap{max-width:560px;margin:0 auto;padding:16px}
+  h1{font-size:20px;margin:8px 0 2px}
+  .sub{color:var(--mut);font-size:13px;margin-bottom:12px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
+  .frame{position:relative;width:100%;aspect-ratio:1/1;background:#000;border-radius:12px;overflow:hidden}
+  video,#shot{width:100%;height:100%;object-fit:cover;display:block}
+  #shot{display:none}
+  .guide{position:absolute;inset:0;pointer-events:none}
+  .hint{position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:12px;color:#dfe8f0;text-shadow:0 1px 3px #000}
+  .row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  button{flex:1;min-width:120px;border:0;border-radius:10px;padding:11px;font-size:14px;font-weight:600;cursor:pointer;background:#243444;color:var(--fg)}
+  button.primary{background:var(--acc);color:#04120b}
+  button:disabled{opacity:.5;cursor:default}
+  .badge{display:inline-block;padding:6px 10px;border-radius:8px;font-size:13px;font-weight:600}
+  .ok{background:rgba(49,196,141,.15);color:var(--acc)} .warn{background:rgba(246,196,83,.15);color:var(--warn)} .err{background:rgba(241,106,106,.15);color:var(--err)}
+  .char{margin:9px 0}
+  .char .top{display:flex;justify-content:space-between;font-size:13px}
+  .bar{height:7px;background:#0c1218;border-radius:5px;margin-top:4px;overflow:hidden}
+  .bar > i{display:block;height:100%;background:var(--acc)}
+  .report{font-size:14px;line-height:1.5;white-space:pre-wrap}
+  .report strong{color:#fff}
+  .disc{color:var(--mut);font-size:11px;margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
+  .hidden{display:none}
+  input[type=file]{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>TongueInsight <span style="color:var(--acc)">Hybrid</span></h1>
+  <div class="sub">Align your tongue inside the oval, then capture. Wellness demo — not a medical diagnosis.</div>
+
+  <div class="card">
+    <div class="frame">
+      <video id="cam" autoplay playsinline muted></video>
+      <img id="shot"/>
+      <!-- framing guide overlay: oval + crosshair + corner brackets -->
+      <svg class="guide" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <ellipse cx="50" cy="50" rx="30" ry="38" fill="none" stroke="#ffd24a" stroke-width="0.7" stroke-dasharray="3 2"/>
+        <line x1="50" y1="8" x2="50" y2="16" stroke="#ffd24a" stroke-width="0.5"/>
+        <line x1="50" y1="84" x2="50" y2="92" stroke="#ffd24a" stroke-width="0.5"/>
+        <g stroke="#ffffffaa" stroke-width="0.7" fill="none">
+          <path d="M6 16 V6 H16"/><path d="M84 6 H94 V16"/><path d="M94 84 V94 H84"/><path d="M16 94 H6 V84"/>
+        </g>
+      </svg>
+      <div class="hint" id="hint">Position the tip of your tongue near the bottom of the oval</div>
+    </div>
+    <div class="row">
+      <button id="startBtn" class="primary">Start camera</button>
+      <button id="snapBtn" disabled>Capture</button>
+      <button id="upBtn">Upload photo</button>
+      <input type="file" id="file" accept="image/*"/>
+    </div>
+    <div class="row hidden" id="retryRow"><button id="retry">↺ Retake</button></div>
+  </div>
+
+  <div class="card hidden" id="results">
+    <div id="framing" class="badge">…</div>
+    <img id="overlay" style="width:100%;border-radius:12px;margin:12px 0"/>
+    <div id="quant"></div>
+    <h3 style="margin:14px 0 6px;font-size:15px">Wellness interpretation</h3>
+    <div class="report" id="report"></div>
+    <div class="disc" id="disc"></div>
+  </div>
+  <div class="card hidden" id="loading">Analyzing…</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+let stream=null;
+
+async function startCam(){
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:720},height:{ideal:720}}});
+    $('cam').srcObject=stream; $('cam').style.display='block'; $('shot').style.display='none';
+    $('snapBtn').disabled=false; $('startBtn').textContent='Camera on';
+  }catch(e){ $('hint').textContent='Camera unavailable (needs https/localhost). Use “Upload photo”.'; }
+}
+function frameToDataURL(srcEl,w,h){
+  const c=document.createElement('canvas'); c.width=w; c.height=h;
+  c.getContext('2d').drawImage(srcEl,0,0,w,h); return c.toDataURL('image/jpeg',0.92);
+}
+async function analyze(dataURL){
+  $('results').classList.add('hidden'); $('loading').classList.remove('hidden');
+  try{
+    const r=await fetch('/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:dataURL})});
+    render(await r.json());
+  }catch(e){ $('loading').textContent='Error: '+e; }
+}
+function render(d){
+  $('loading').classList.add('hidden'); $('results').classList.remove('hidden'); $('retryRow').classList.remove('hidden');
+  const f=d.framing||{}; const fb=$('framing');
+  fb.textContent=f.message||''; fb.className='badge '+(f.status==='ok'?'ok':f.status==='error'?'err':'warn');
+  $('overlay').src=d.overlay_png||'';
+  const kc=(d.quantitative||{}).key_characteristics||{};
+  $('quant').innerHTML=Object.entries(kc).map(([k,c])=>{
+    const pct=Math.round((c.confidence||0)*100);
+    return `<div class="char"><div class="top"><span>${c.description||k}</span><b>${c.value} · ${pct}%</b></div>
+            <div class="bar"><i style="width:${pct}%"></i></div></div>`;}).join('');
+  const it=d.interpretation||{};
+  $('report').innerHTML=(it.report||'').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+  $('disc').textContent=it.disclaimer||'';
+}
+$('startBtn').onclick=startCam;
+$('snapBtn').onclick=()=>{ const v=$('cam'); const u=frameToDataURL(v,v.videoWidth||512,v.videoHeight||512);
+  $('shot').src=u; $('shot').style.display='block'; $('cam').style.display='none'; analyze(u); };
+$('upBtn').onclick=()=>$('file').click();
+$('file').onchange=e=>{ const fl=e.target.files[0]; if(!fl)return; const rd=new FileReader();
+  rd.onload=()=>{ const im=new Image(); im.onload=()=>{ $('shot').src=im.src; $('shot').style.display='block'; $('cam').style.display='none';
+    analyze(frameToDataURL(im,im.naturalWidth,im.naturalHeight)); }; im.src=rd.result; }; rd.readAsDataURL(fl); };
+$('retry').onclick=()=>{ $('results').classList.add('hidden'); $('retryRow').classList.add('hidden');
+  $('shot').style.display='none'; if(stream){$('cam').style.display='block';} };
+</script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+"""TongueInsight API + demo server.
+
+    uvicorn deployment.api.app:app --host 0.0.0.0 --port 7860
+Env: TIH_SEG_CKPT, TIH_MT_CKPT select checkpoints (defaults to the combined seg + multitask_v2).
+Set TIH_LLM_BACKEND=openai (+ TIH_LLM_BASE_URL/API_KEY/MODEL) to enable LLM-polished reports.
+"""
+import os
+import base64
+import io
+import numpy as np
+import cv2
+from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
+from pydantic import BaseModel
+
+from deployment.api.service import TongueService
+
+SEG = os.getenv("TIH_SEG_CKPT", "checkpoints/seg_combined/best.pt")
+MT = os.getenv("TIH_MT_CKPT", "checkpoints/multitask_v2/best.pt")
+HERE = os.path.dirname(os.path.abspath(__file__))
+
+app = FastAPI(title="TongueInsight Hybrid")
+_service = None
+
+
+def service():
+    global _service
+    if _service is None:
+        _service = TongueService(SEG, MT)
+    return _service
+
+
+class AnalyzeReq(BaseModel):
+    image: str                 # data URL or bare base64
+    metadata: dict | None = None
+
+
+def _decode(data_url: str) -> np.ndarray:
+    b64 = data_url.split(",", 1)[1] if "," in data_url else data_url
+    arr = np.frombuffer(base64.b64decode(b64), np.uint8)
+    bgr = cv2.imdecode(arr, cv2.IMREAD_COLOR)
+    return cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
+
+
+@app.get("/health")
+def health():
+    return {"status": "ok", "seg": SEG, "mt": MT}
+
+
+@app.post("/analyze")
+def analyze(req: AnalyzeReq):
+    img = _decode(req.image)
+    return service().analyze(img, metadata=req.metadata)
+
+
+@app.get("/", response_class=HTMLResponse)
+def index():
+    with open(os.path.join(HERE, "static", "index.html"), encoding="utf-8") as f:
+        return f.read()
