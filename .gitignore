@@ -1,0 +1,32 @@
+# Data & models (never commit large/clinical assets)
+data/raw/
+data/processed/
+data/external/
+*.zip
+*.pt
+*.pth
+*.onnx
+*.ckpt
+checkpoints/
+runs/
+wandb/
+mlruns/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+envs/
+*.egg-info/
+.ipynb_checkpoints/
+
+# Secrets / local config
+.env
+*.key
+secrets.yaml
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
