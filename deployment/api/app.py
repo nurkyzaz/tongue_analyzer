@@ -5,12 +5,14 @@ Env: TIH_SEG_CKPT, TIH_MT_CKPT select checkpoints (defaults to the combined seg 
 Set TIH_LLM_BACKEND=openai (+ TIH_LLM_BASE_URL/API_KEY/MODEL) to enable LLM-polished reports.
 """
 import os
+import json
 import base64
 import numpy as np
 import cv2
 from fastapi import FastAPI, Header, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from deployment.api.service import TongueService
@@ -23,6 +25,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 app = FastAPI(title="TongueInsight Hybrid")
 app.add_middleware(CORSMiddleware, allow_origins=CORS_ORIGINS, allow_methods=["*"], allow_headers=["*"])
+app.mount("/static", StaticFiles(directory=os.path.join(HERE, "static")), name="static")
 _service = None
 
 
@@ -56,6 +59,15 @@ def analyze(req: AnalyzeReq, x_api_key: str = Header(default="")):
         raise HTTPException(status_code=401, detail="invalid or missing X-API-Key")
     img = _decode(req.image)
     return service().analyze(img, metadata=req.metadata)
+
+
+@app.get("/examples")
+def examples():
+    p = os.path.join(HERE, "static", "examples", "examples.json")
+    if os.path.exists(p):
+        with open(p, encoding="utf-8") as f:
+            return json.load(f)
+    return {"examples": []}
 
 
 @app.get("/", response_class=HTMLResponse)
