@@ -30,13 +30,15 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
 | zhi | 0.74 | 0.72 |  | **MEAN** | | **0.735** |
 
 ## Phase 3 — Stage 2 interpretation
-- ⬜ LLM adapter (vLLM / local / API) — **decision pending team answers**
-- ⬜ TCM knowledge base + FAISS RAG
-- ⬜ JSON→report generator + prompts
+- ✅ LLM adapter (`llm_client.py`) — backend-agnostic (none / OpenAI-compatible vLLM/API via env)
+- ✅ Seed TCM knowledge base + rule-based retrieval (`knowledge_base/tcm_patterns.json`)
+- ✅ JSON→report generator (`interpret.py`) — template now, LLM-polish when a backend is set
+- ⬜ Upgrade retrieval to FAISS embeddings + expand KB (once LLM backend chosen)
 
 ## Phase 4 — Integration
-- ⬜ `run_full_analysis(image, metadata)` orchestrator
-- ⬜ FastAPI service + Gradio demo + quality gate
+- ✅ `pipeline.py` orchestrator (image[+metadata] → quantitative JSON + report) — **end-to-end works**
+- ✅ Quality gate (mask-coverage reject) wired in
+- ⬜ FastAPI service (`deployment/api`) + Gradio demo
 
 ## Phase 5–7 — Optimize / evaluate / deploy
 - ⬜ ONNX export + benchmarks · metrics · API hardening + disclaimers

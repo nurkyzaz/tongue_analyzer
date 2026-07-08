@@ -1,0 +1,65 @@
+{
+  "_meta": {
+    "purpose": "Illustrative Traditional Chinese Medicine (TCM) tongue-sign associations used to ground Stage-2 report generation.",
+    "disclaimer": "Traditional associations for wellness/education only. NOT medical diagnosis. TCM patterns are not validated by modern clinical evidence.",
+    "trigger_grammar": "Each card lists `match` conditions over Stage-1 characteristics: {char: [accepted values]}. A card fires when all its conditions are satisfied; specificity = number of matched conditions."
+  },
+  "observations": {
+    "coating": {"non_greasy": "a thin, non-greasy coating", "greasy": "a greasy coating", "greasy_thick": "a thick, greasy coating"},
+    "tai": {"white": "white coating color", "light_yellow": "light-yellow coating", "yellow": "yellow coating"},
+    "zhi": {"light": "a pale/light tongue body", "regular": "a normal-colored tongue body", "dark": "a dark/red tongue body"},
+    "fissure": {"none": "no visible cracks", "light": "mild fissures/cracks", "severe": "pronounced fissures/cracks"},
+    "tooth_mk": {"none": "no tooth marks", "light": "mild tooth marks on the edges", "severe": "pronounced tooth marks on the edges"}
+  },
+  "patterns": [
+    {
+      "id": "damp_phlegm",
+      "name": "Dampness / Phlegm accumulation",
+      "match": {"coating": ["greasy_thick", "greasy"]},
+      "explanation": "A thick, greasy coating is traditionally associated with 'dampness' or phlegm accumulation, often linked in TCM to sluggish digestion or fluid retention.",
+      "common_sensations": ["a heavy or foggy feeling", "digestive sluggishness", "low energy after meals"]
+    },
+    {
+      "id": "heat_signs",
+      "name": "Heat pattern",
+      "match": {"tai": ["yellow", "light_yellow"]},
+      "explanation": "A yellow coating is traditionally read as a sign of 'heat', sometimes associated with inflammation, stress, or rich diet.",
+      "common_sensations": ["feeling warm or flushed", "thirst", "irritability"]
+    },
+    {
+      "id": "cold_signs",
+      "name": "Cold pattern",
+      "match": {"tai": ["white"], "zhi": ["light"]},
+      "explanation": "A white coating with a pale body is traditionally associated with a 'cold' or deficient state.",
+      "common_sensations": ["feeling cold easily", "low appetite", "fatigue"]
+    },
+    {
+      "id": "qi_deficiency_damp",
+      "name": "Spleen Qi deficiency with dampness",
+      "match": {"tooth_mk": ["severe", "light"], "coating": ["greasy", "greasy_thick"]},
+      "explanation": "Tooth marks together with a greasy coating are classically associated with 'Spleen Qi deficiency with dampness' — a common TCM pattern linked to digestion and fluid balance.",
+      "common_sensations": ["fatigue", "bloating", "loose stools", "fluid retention"]
+    },
+    {
+      "id": "blood_deficiency",
+      "name": "Qi/Blood deficiency",
+      "match": {"zhi": ["light"], "tooth_mk": ["severe", "light"]},
+      "explanation": "A pale body with tooth marks is traditionally associated with 'Qi/Blood deficiency', often related to energy and circulation.",
+      "common_sensations": ["tiredness", "pallor", "dizziness", "poor concentration"]
+    },
+    {
+      "id": "yin_deficiency_heat",
+      "name": "Yin deficiency with heat",
+      "match": {"fissure": ["severe", "light"], "zhi": ["dark"]},
+      "explanation": "Cracks with a darker/red body are traditionally read as 'Yin deficiency' with heat — associated with dryness and overwork.",
+      "common_sensations": ["dry mouth/throat", "night restlessness", "warm palms/soles"]
+    },
+    {
+      "id": "blood_stasis",
+      "name": "Blood stasis tendency",
+      "match": {"zhi": ["dark"]},
+      "explanation": "A notably dark tongue body is traditionally associated with 'blood stasis' — sluggish circulation.",
+      "common_sensations": ["fixed aches", "cold extremities", "sluggish circulation"]
+    }
+  ]
+}
