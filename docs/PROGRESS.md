@@ -16,9 +16,10 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
 - ⬜ Dataset stats report
 
 ## Phase 2 — Stage 1 quantitative
-- ⬜ 2.1 Segmentation (U-Net++ ResNet-34, Raw→Mask) — **first vertical slice**
-- ⬜ 2.2 Multi-task head (5 key chars cls + phenotype reg, mask feature-masking, Focal Loss)
-- ⬜ 2.3 Train/eval; export Stage1Output JSON + inference script
+- 🔄 2.1 Segmentation (U-Net++ ResNet-34, Raw→Mask) — **training, val Dice ≈ 0.99**
+- 🔄 2.2 Multi-task head (5 key chars cls, mask feature-masking, Focal Loss) — **training**
+- ⬜ 2.2b Regression heads for continuous phenotypes (P*.txt)
+- ⬜ 2.3 Eval on gold (L1 manual) test set; export Stage1Output JSON + inference script
 
 ## Phase 3 — Stage 2 interpretation
 - ⬜ LLM adapter (vLLM / local / API) — **decision pending team answers**
