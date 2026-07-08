@@ -11,6 +11,12 @@ plan glossed over. Verified live before committing compute.
 | **RTDS** | Signal Image & Video Processing 2026 | ✅ [github.com/byzhang811/RTDS-Tongue_Analysis](https://github.com/byzhang811/RTDS-Tongue_Analysis) (U-Net++, Swin-hybrid, Focal Loss) | ❌ 2,100 imgs **private** | Reuse architecture/recipe only. |
 | **SSC-Net** | Digital Health 2025 ([PMC12099091](https://pmc.ncbi.nlm.nih.gov/articles/PMC12099091/)) | availability unconfirmed | ❌ BUCM 1,500 imgs not public | Reuse multi-task design (mask→feature-masking, ROI fusion, 5 key chars). |
 | **MMIR-TCM** | [arXiv 2607.01814](https://arxiv.org/abs/2607.01814) (Jul 2026) | ❌ "Coming soon" — docs only | ❌ MedTCM not released | **Cannot clone.** Build our own Stage-2 RAG instead. |
+| **Memory-SAM** | [arXiv 2510.15849](https://arxiv.org/abs/2510.15849) | ✅ [github.com/jw-chae/memory-sam](https://github.com/jw-chae/memory-sam) (SAM2 + DINOv3 retrieval-to-prompt) | ✅ **SM-Tongue 2,155 real 512² pairs** (HF `Mark-CHAE/SM-Tongue-Public-Original512`) | The real Memory-SAM. Cloned to `repos/memory-sam`. Implemented with **DINOv2 fallback** (DINOv3 gated). SM-Tongue is our real-photo data. |
+
+### ⚠️ Licensing flags for COMMERCIAL use (important for the mobile app)
+- **SM-Tongue**: CC-BY-NC-4.0 (**non-commercial**) — OK for research/eval/demo; needs commercial license (or eval-only use, not production training) before shipping.
+- **DINOv3**: Meta gated research license — we use non-gated **DINOv2** as fallback; verify DINOv2 license (Apache-2.0 for code; weights license) for production.
+- **SAM2**: Apache-2.0 (commercial OK). **TonguExpert**: verify dataset license/terms before commercial training.
 
 ## TonguExpert dataset structure (from README/Header)
 
