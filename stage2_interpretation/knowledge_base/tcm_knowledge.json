@@ -34,7 +34,7 @@
       "label": "Coating color",
       "kind": "categorical",
       "values": {
-        "white": {"tcm_term": "white coating (Cold)", "plain_gloss": "traditionally linked to a 'colder' or more sluggish state; normal if thin", "points_to": {"yang_deficiency": 0.5, "phlegm_dampness": 0.3}},
+        "white": {"tcm_term": "white coating", "plain_gloss": "a thin white coating is the normal, healthy coating; only a thick white coating leans 'cold/damp'", "points_to": {"yang_deficiency": 0.2}},
         "light_yellow": {"tcm_term": "light-yellow coating (emerging Heat)", "plain_gloss": "the start of a 'warmer'/inflammatory tendency or mild damp-heat", "points_to": {"damp_heat": 0.6}},
         "yellow": {"tcm_term": "yellow coating (Heat / Damp-Heat)", "plain_gloss": "traditionally linked to internal 'heat' — think thirst, feeling warm, or richer diet; with a greasy texture, damp-heat", "points_to": {"damp_heat": 1.0}}
       }

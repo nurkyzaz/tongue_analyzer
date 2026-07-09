@@ -65,27 +65,31 @@ def feature_readings(chars, kb):
     return readings
 
 
+def _card(kb, pid, conf):
+    pat = kb["patterns"].get(pid, {})
+    return {"id": pid, "tcm_name": pat.get("tcm_name", pid), "plain_name": pat.get("plain_name", ""),
+            "explanation": pat.get("explanation", ""),
+            "associated_symptoms": pat.get("associated_symptoms", []),
+            "recommendations": pat.get("recommendations", {}),
+            "followup_questions": pat.get("followup_questions", []),
+            "confidence": round(conf, 3)}
+
+
 def vote_patterns(readings, kb, top_k=3):
+    """Accumulate severity-weighted votes; map to ABSOLUTE confidence (saturating), so a weak top
+    pattern reads as low confidence rather than a misleading 100%. Falls back to 'balanced' when
+    nothing is notable."""
     scores = {}
     for r in readings:
         for p, w in r["points_to"].items():
             scores[p] = scores.get(p, 0.0) + w
     scores.pop("balanced", None)
-    if not scores or max(scores.values()) < 0.25:
-        scores["balanced"] = 1.0            # nothing notable -> balanced picture
-    mx = max(scores.values())
+    top_raw = max(scores.values()) if scores else 0.0
     ranked = sorted(scores.items(), key=lambda kv: -kv[1])[:top_k]
-    out = []
-    for pid, s in ranked:
-        pat = kb["patterns"].get(pid, {})
-        out.append({
-            "id": pid, "tcm_name": pat.get("tcm_name", pid), "plain_name": pat.get("plain_name", ""),
-            "explanation": pat.get("explanation", ""),
-            "associated_symptoms": pat.get("associated_symptoms", []),
-            "recommendations": pat.get("recommendations", {}),
-            "followup_questions": pat.get("followup_questions", []),
-            "confidence": round(s / mx, 3),
-        })
+    # saturating map: raw ~1.5 -> ~0.65, raw 3 -> ~0.8; weak 0.3 -> ~0.17
+    out = [_card(kb, pid, s / (s + 1.2)) for pid, s in ranked]
+    if top_raw < 0.55:                       # no strong pattern -> lead with the balanced picture
+        out = [_card(kb, "balanced", 1.0 - top_raw / 0.55)] + out
     return out
 
 
