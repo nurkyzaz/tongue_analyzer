@@ -12,6 +12,18 @@ plan glossed over. Verified live before committing compute.
 | **SSC-Net** | Digital Health 2025 ([PMC12099091](https://pmc.ncbi.nlm.nih.gov/articles/PMC12099091/)) | availability unconfirmed | ❌ BUCM 1,500 imgs not public | Reuse multi-task design (mask→feature-masking, ROI fusion, 5 key chars). |
 | **MMIR-TCM** | [arXiv 2607.01814](https://arxiv.org/abs/2607.01814) (Jul 2026) | ❌ "Coming soon" — docs only | ❌ MedTCM not released | **Cannot clone.** Build our own Stage-2 RAG instead. |
 | **Memory-SAM** | [arXiv 2510.15849](https://arxiv.org/abs/2510.15849) | ✅ [github.com/jw-chae/memory-sam](https://github.com/jw-chae/memory-sam) (SAM2 + DINOv3 retrieval-to-prompt) | ✅ **SM-Tongue 2,155 real 512² pairs** (HF `Mark-CHAE/SM-Tongue-Public-Original512`) | The real Memory-SAM. Cloned to `repos/memory-sam`. Implemented with **DINOv2 fallback** (DINOv3 gated). SM-Tongue is our real-photo data. |
+| **TCM-Tongue** | [arXiv 2507.18288](https://arxiv.org/abs/2507.18288) (Jul 2025) | benchmarks (YOLO/SSD/MobileNet) | ✅ **6,719 imgs, 20 practitioner-verified categories** ([GitHub](https://github.com/btbuIntelliSense/Intelligent-tongue-diagnosis-detection-dataset) → Baidu Cloud; [Dryad DOI](https://datadryad.org/dataset/doi:10.5061/dryad.1c59zw48r)) | **Best new dataset.** Object-detection boxes (COCO/TXT/XML). Adds features we lack (red dots, peeled, purple, thin/chubby, organ subregions). Dryad=CC BY 4.0; GitHub mirror restates none. |
+| **UTongue** (UESTC) | — | ✅ repo (MobileNetV2/ResNet) | ~3,000, body color/coating/9-class shape | Baseline pipeline + extra classification data. |
+| **BioHit** | — | — | [300 imgs + manual masks](https://github.com/BioHit/TongeImageDataset) | Small seg add-on. |
+| **TOM** | [arXiv 2508.14932](https://arxiv.org/abs/2508.14932) | ✅ open-source seg tool (95.2% mIoU) | — | Alternative seg (multi-teacher distillation). Our combined U-Net++ already ≈ this. |
+
+### 🧭 TCM knowledge resources (for the grounded reference set — see TCM_RESEARCH.md)
+| Resource | Source | Use | Access |
+|---|---|---|---|
+| **WHO ICD-11 Ch.26** | World Health Organization | 196 standardized TM **pattern** names/codes | public [icd.who.int](https://icd.who.int/) |
+| **CCMQ (9 constitutions)** | Wang Qi, Beijing Univ. of Chinese Medicine | validated questionnaire → **follow-up-question flow** | items in peer-reviewed papers |
+| **SymMap** | *Nucleic Acids Research* 2019 | TCM symptom → **plain-language / modern symptom** mapping | [symmap.org](http://www.symmap.org) |
+| **Maciocia / Kirschbaum** | standard TCM texts | per-feature interpretation (basis of `tcm_knowledge.json`) | reference (cite) |
 
 ### ⚠️ Licensing flags for COMMERCIAL use (important for the mobile app)
 - **SM-Tongue**: CC-BY-NC-4.0 (**non-commercial**) — OK for research/eval/demo; needs commercial license (or eval-only use, not production training) before shipping.
