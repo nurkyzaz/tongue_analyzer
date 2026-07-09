@@ -3,72 +3,71 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-<title>TongueInsight — Tongue Analysis Demo</title>
+<title>TongueInsight — Tongue Reading (educational)</title>
 <style>
-  :root{--bg:#0f1720;--card:#18222e;--card2:#141d27;--fg:#e8eef4;--mut:#93a4b3;--acc:#31c48d;--warn:#f6c453;--err:#f16a6a;--line:#26333f;--chip:#213142}
+  :root{--bg:#0f1720;--card:#18222e;--card2:#141d27;--fg:#e8eef4;--mut:#93a4b3;--acc:#31c48d;--warn:#f6c453;--err:#f16a6a;--line:#26333f;--chip:#213142;--blue:#6db1ff}
   *{box-sizing:border-box}
   body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
-  .wrap{max-width:620px;margin:0 auto;padding:16px}
-  h1{font-size:21px;margin:8px 0 2px}
-  h2{font-size:16px;margin:18px 0 8px}
+  .wrap{max-width:640px;margin:0 auto;padding:16px}
+  h1{font-size:21px;margin:8px 0 2px} h2{font-size:16px;margin:18px 0 8px}
   .sub{color:var(--mut);font-size:13px;margin-bottom:12px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
   .frame{position:relative;width:100%;aspect-ratio:1/1;background:#000;border-radius:12px;overflow:hidden}
-  video,#shot{width:100%;height:100%;object-fit:cover;display:block}
-  #shot{display:none}
+  video,#shot{width:100%;height:100%;object-fit:cover;display:block}#shot{display:none}
   .guide{position:absolute;inset:0;pointer-events:none}
   .hint{position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:12px;color:#dfe8f0;text-shadow:0 1px 3px #000}
   .row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
   button{flex:1;min-width:110px;border:0;border-radius:10px;padding:11px;font-size:14px;font-weight:600;cursor:pointer;background:#243444;color:var(--fg)}
-  button.primary{background:var(--acc);color:#04120b}
-  button:disabled{opacity:.5;cursor:default}
+  button.primary{background:var(--acc);color:#04120b} button:disabled{opacity:.5;cursor:default}
   .badge{display:inline-block;padding:6px 10px;border-radius:8px;font-size:13px;font-weight:600}
-  .ok{background:rgba(49,196,141,.15);color:var(--acc)} .warn{background:rgba(246,196,83,.15);color:var(--warn)} .err{background:rgba(241,106,106,.15);color:var(--err)}
+  .ok{background:rgba(49,196,141,.15);color:var(--acc)}.warn{background:rgba(246,196,83,.15);color:var(--warn)}.err{background:rgba(241,106,106,.15);color:var(--err)}
   .sign{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px;margin:8px 0}
-  .sign .top{display:flex;justify-content:space-between;font-size:13px;align-items:baseline}
+  .sign.faint{opacity:.85}
+  .sign .top{display:flex;justify-content:space-between;font-size:13px;align-items:baseline;gap:8px}
+  .deg{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--warn);font-weight:700}
   .sign .val{font-weight:700;color:#fff}
-  .bar{height:6px;background:#0c1218;border-radius:5px;margin:6px 0;overflow:hidden}
-  .bar>i{display:block;height:100%;background:var(--acc)}
-  .sign .mean{font-size:13px;color:#cdd8e2;line-height:1.45}
-  .chip{display:inline-block;background:var(--chip);color:#bcd;border-radius:20px;padding:2px 9px;font-size:11px;margin:2px 3px 0 0}
+  .bar{height:6px;background:#0c1218;border-radius:5px;margin:6px 0;overflow:hidden}.bar>i{display:block;height:100%;background:var(--warn)}
+  .tcm{font-size:13px;color:#cdd8e2;line-height:1.45}.tcm b{color:#fff}
+  .plain{font-size:13px;color:var(--blue);line-height:1.45;margin-top:3px}
+  .healthy{font-size:13px;color:var(--mut);padding:5px 2px}
+  .pat{background:var(--card2);border:1px solid var(--line);border-left:3px solid var(--acc);border-radius:10px;padding:11px;margin:9px 0}
+  .pat .nm{font-weight:700;color:#fff;font-size:14px}.pat .pn{color:var(--acc);font-size:12.5px;margin-bottom:4px}
+  .pat .ex{font-size:13px;line-height:1.5;color:#cdd8e2}
+  .chip{display:inline-block;background:var(--chip);color:#bcd;border-radius:20px;padding:2px 9px;font-size:11px;margin:3px 3px 0 0}
+  .rec{font-size:12.5px;color:#bcd;background:rgba(49,196,141,.08);border-radius:8px;padding:8px;margin-top:7px}
+  .qa{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:11px;margin:8px 0}
+  .qa .q{font-size:13.5px;margin-bottom:7px}
+  .qbtns{display:flex;gap:6px}.qbtns button{flex:1;padding:7px;font-size:13px}
+  .qbtns button.sel{background:var(--acc);color:#04120b}
+  .conf{font-size:13px;margin-top:8px}.conf b{color:var(--acc)}
   .prose{font-size:14px;line-height:1.55}.prose strong{color:#fff}
-  .pat{border-left:3px solid var(--acc);padding:2px 0 2px 10px;margin:8px 0;font-size:13.5px;line-height:1.5}
-  .pat b{color:#fff}
-  .care{font-size:13px;color:#bcd;background:rgba(49,196,141,.08);border-radius:8px;padding:9px;margin-top:6px}
   .src{color:var(--mut);font-size:11px;line-height:1.5;margin-top:8px}
   .disc{color:var(--mut);font-size:11px;margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
-  .ex{display:flex;gap:12px;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:10px}
-  .ex img{width:110px;height:110px;object-fit:cover;border-radius:8px;flex-shrink:0}
-  .ex .exb{font-size:12.5px;line-height:1.45}
-  .ex .ext{font-weight:700;color:#fff;font-size:13.5px;margin-bottom:2px}
-  .hidden{display:none}
-  input[type=file]{display:none}
+  .ex-item{display:flex;gap:12px;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:10px}
+  .ex-item img{width:104px;height:104px;object-fit:cover;border-radius:8px;flex-shrink:0}
+  .ex-item .exb{font-size:12.5px;line-height:1.45}.ex-item .ext{font-weight:700;color:#fff;font-size:13.5px;margin-bottom:2px}
+  .hidden{display:none} input[type=file]{display:none}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>TongueInsight <span style="color:var(--acc)">Hybrid</span></h1>
-  <div class="sub">Align your tongue inside the oval, then capture. Educational wellness demo — not a medical diagnosis.</div>
+  <h1>TongueInsight <span style="color:var(--acc)">Reading</span></h1>
+  <div class="sub">Align your tongue in the oval and capture. An <b>educational</b> look at what the traditional Chinese-medicine tongue-reading framework associates with your tongue's features — not a diagnosis.</div>
 
   <div class="card">
     <div class="frame">
-      <video id="cam" autoplay playsinline muted></video>
-      <img id="shot"/>
+      <video id="cam" autoplay playsinline muted></video><img id="shot"/>
       <svg class="guide" viewBox="0 0 100 100" preserveAspectRatio="none">
         <ellipse cx="50" cy="50" rx="30" ry="38" fill="none" stroke="#ffd24a" stroke-width="0.7" stroke-dasharray="3 2"/>
-        <line x1="50" y1="8" x2="50" y2="16" stroke="#ffd24a" stroke-width="0.5"/>
-        <line x1="50" y1="84" x2="50" y2="92" stroke="#ffd24a" stroke-width="0.5"/>
-        <g stroke="#ffffffaa" stroke-width="0.7" fill="none">
-          <path d="M6 16 V6 H16"/><path d="M84 6 H94 V16"/><path d="M94 84 V94 H84"/><path d="M16 94 H6 V84"/>
-        </g>
+        <line x1="50" y1="8" x2="50" y2="16" stroke="#ffd24a" stroke-width="0.5"/><line x1="50" y1="84" x2="50" y2="92" stroke="#ffd24a" stroke-width="0.5"/>
+        <g stroke="#ffffffaa" stroke-width="0.7" fill="none"><path d="M6 16 V6 H16"/><path d="M84 6 H94 V16"/><path d="M94 84 V94 H84"/><path d="M16 94 H6 V84"/></g>
       </svg>
       <div class="hint" id="hint">Position the tip of your tongue near the bottom of the oval</div>
     </div>
     <div class="row">
       <button id="startBtn" class="primary">Start camera</button>
       <button id="snapBtn" disabled>Capture</button>
-      <button id="upBtn">Upload photo</button>
-      <input type="file" id="file" accept="image/*"/>
+      <button id="upBtn">Upload photo</button><input type="file" id="file" accept="image/*"/>
     </div>
     <div class="row hidden" id="retryRow"><button id="retry">↺ Retake</button></div>
   </div>
@@ -77,83 +76,96 @@
     <div id="framing" class="badge">…</div>
     <img id="overlay" style="width:100%;border-radius:12px;margin:12px 0"/>
     <div id="overview" class="prose" style="color:var(--mut)"></div>
-    <h2>Your signs, one by one</h2>
-    <div id="signs"></div>
-    <h2>What they suggest together</h2>
-    <div id="combined" class="prose"></div>
-    <div id="patterns"></div>
-    <div id="care"></div>
-    <div id="sources" class="src"></div>
-    <div class="disc" id="disc"></div>
+    <h2>Your signs, one by one</h2><div id="signs"></div>
+    <h2>What they suggest together</h2><div id="combined" class="prose"></div><div id="patterns"></div>
+    <div id="followup"></div>
+    <div id="sources" class="src"></div><div class="disc" id="disc"></div>
   </div>
   <div class="card hidden" id="loading">Analyzing…</div>
 
   <h2>What different tongues mean</h2>
   <div class="sub" style="margin-top:-4px">Real examples from the dataset, read by the model.</div>
-  <div id="examples"></div>
-  <div class="src" id="exAttr"></div>
+  <div id="examples"></div><div class="src" id="exAttr"></div>
 </div>
 
 <script>
-const $=id=>document.getElementById(id);
-const md=s=>(s||'').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+const $=id=>document.getElementById(id), md=s=>(s||'').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
 let stream=null;
+async function startCam(){try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:720},height:{ideal:720}}});
+  $('cam').srcObject=stream;$('cam').style.display='block';$('shot').style.display='none';$('snapBtn').disabled=false;$('startBtn').textContent='Camera on';}
+  catch(e){$('hint').textContent='Camera unavailable (needs https/localhost). Use “Upload photo”.';}}
+function toURL(el,w,h){const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(el,0,0,w,h);return c.toDataURL('image/jpeg',0.92);}
+async function analyze(u){$('results').classList.add('hidden');$('loading').classList.remove('hidden');
+  try{const r=await fetch('/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:u})});render(await r.json());}catch(e){$('loading').textContent='Error: '+e;}}
 
-async function startCam(){
-  try{
-    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:720},height:{ideal:720}}});
-    $('cam').srcObject=stream; $('cam').style.display='block'; $('shot').style.display='none';
-    $('snapBtn').disabled=false; $('startBtn').textContent='Camera on';
-  }catch(e){ $('hint').textContent='Camera unavailable (needs https/localhost). Use “Upload photo”.'; }
+function signCard(f){
+  if(f.key!=='tai'&&f.key!=='zhi'&&!f.mentioned)   // graded feature that's absent -> healthy one-liner
+    return `<div class="healthy">✓ <b>${f.label}:</b> ${f.plain}</div>`;
+  const pct=Math.round((f.severity||0)*100);
+  const deg=f.band&&f.band!=='none'?`<span class="deg">${f.band}</span>`:'';
+  const bar=(f.key==='coating'||f.key==='fissure'||f.key==='tooth_mk')?`<div class="bar"><i style="width:${pct}%"></i></div>`:'';
+  return `<div class="sign ${f.band==='faint'?'faint':''}"><div class="top"><span>${deg} ${f.tcm_term||f.value}</span></div>
+    ${bar}<div class="tcm"><b>TCM:</b> ${f.tcm||''}</div><div class="plain">In plain terms: ${f.plain||''}</div></div>`;
 }
-function toDataURL(el,w,h){const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(el,0,0,w,h);return c.toDataURL('image/jpeg',0.92);}
-async function analyze(u){
-  $('results').classList.add('hidden'); $('loading').classList.remove('hidden');
-  try{const r=await fetch('/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:u})});render(await r.json());}
-  catch(e){$('loading').textContent='Error: '+e;}
+function patCard(p){
+  const sym=(p.associated_symptoms||[]).map(s=>`<span class="chip">${s}</span>`).join('');
+  const recs=[...(p.recommendations?.diet||[]),...(p.recommendations?.lifestyle||[])].slice(0,4);
+  const rec=recs.length?`<div class="rec">🌿 ${recs.join(' · ')}</div>`:'';
+  return `<div class="pat"><div class="nm">${p.tcm_name} · <span style="color:var(--mut);font-weight:600">${Math.round(p.confidence*100)}%</span></div>
+    <div class="pn">${p.plain_name}</div><div class="ex">${p.explanation||''}</div>
+    ${sym?`<div style="margin-top:6px">${sym}</div>`:''}${rec}</div>`;
 }
-function signCard(c){
-  const pct=Math.round((c.confidence||0)*100);
-  const chips=(c.tendencies||[]).map(t=>`<span class="chip">${t}</span>`).join('');
-  return `<div class="sign"><div class="top"><span>${c.label}</span><span class="val">${c.value} · ${pct}%</span></div>
-    <div class="bar"><i style="width:${pct}%"></i></div>
-    <div class="mean"><strong>${c.headline||''}</strong> — ${c.meaning||''} ${chips}</div></div>`;
+function renderFollowup(fu){
+  const box=$('followup'); box.innerHTML='';
+  if(!fu||!fu.length)return;
+  const f=fu[0]; const answers={};
+  const head=document.createElement('div');
+  head.innerHTML=`<h2>Refine (optional)</h2><div class="sub" style="margin-top:-4px">In this tradition, <b>${f.plain_name}</b> often goes with the following — does any match you? Your answers refine the confidence; this stays exploratory, not a diagnosis.</div>`;
+  box.appendChild(head);
+  const conf=document.createElement('div'); conf.className='conf';
+  const setConf=v=>conf.innerHTML=`Confidence in <b>${f.pattern}</b>: <b>${Math.round(v*100)}%</b>`;
+  setConf(f.base_confidence);
+  f.questions.forEach((q,i)=>{
+    const el=document.createElement('div'); el.className='qa';
+    el.innerHTML=`<div class="q">${q.q}</div><div class="qbtns"><button data-a="1">Yes</button><button data-a="0">No</button></div>`;
+    el.querySelectorAll('button').forEach(b=>b.onclick=async()=>{
+      el.querySelectorAll('button').forEach(x=>x.classList.remove('sel')); b.classList.add('sel');
+      answers[i]={weight:q.weight,answer:b.dataset.a==='1'};
+      const r=await fetch('/refine',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({base_confidence:f.base_confidence,answers:Object.values(answers)})});
+      setConf((await r.json()).confidence);
+    });
+    box.appendChild(el);
+  });
+  box.appendChild(conf);
 }
 function render(d){
-  $('loading').classList.add('hidden'); $('results').classList.remove('hidden'); $('retryRow').classList.remove('hidden');
-  const f=d.framing||{}; const fb=$('framing');
-  fb.textContent=f.message||''; fb.className='badge '+(f.status==='ok'?'ok':f.status==='error'?'err':'warn');
+  $('loading').classList.add('hidden');$('results').classList.remove('hidden');$('retryRow').classList.remove('hidden');
+  const f=d.framing||{},fb=$('framing');
+  fb.textContent=f.message||'';fb.className='badge '+(f.status==='ok'?'ok':f.status==='error'?'err':'warn');
   $('overlay').src=d.overlay_png||'';
   const it=d.interpretation||{};
   $('overview').textContent=it.overview||'';
-  $('signs').innerHTML=(it.characteristics||[]).map(signCard).join('');
+  $('signs').innerHTML=(it.features||[]).map(signCard).join('');
   $('combined').innerHTML=md(it.combined);
-  $('patterns').innerHTML=(it.patterns||[]).map(p=>`<div class="pat"><b>${p.name}</b> — ${p.explanation}</div>`).join('');
-  const care=(it.patterns||[]).map(p=>p.care).filter(Boolean)[0];
-  $('care').innerHTML=care?`<div class="care">🌿 <b>Traditional wellness note:</b> ${care}</div>`:'';
+  $('patterns').innerHTML=(it.patterns||[]).filter(p=>p.id!=='balanced').map(patCard).join('');
+  renderFollowup(it.followup);
   $('sources').innerHTML=(it.sources&&it.sources.length)?'Grounding: '+it.sources.join(' · '):'';
   $('disc').textContent=it.disclaimer||'';
   window.scrollTo({top:$('results').offsetTop-10,behavior:'smooth'});
 }
 $('startBtn').onclick=startCam;
-$('snapBtn').onclick=()=>{const v=$('cam');const u=toDataURL(v,v.videoWidth||512,v.videoHeight||512);$('shot').src=u;$('shot').style.display='block';$('cam').style.display='none';analyze(u);};
+$('snapBtn').onclick=()=>{const v=$('cam'),u=toURL(v,v.videoWidth||512,v.videoHeight||512);$('shot').src=u;$('shot').style.display='block';$('cam').style.display='none';analyze(u);};
 $('upBtn').onclick=()=>$('file').click();
 $('file').onchange=e=>{const fl=e.target.files[0];if(!fl)return;const rd=new FileReader();
-  rd.onload=()=>{const im=new Image();im.onload=()=>{$('shot').src=im.src;$('shot').style.display='block';$('cam').style.display='none';analyze(toDataURL(im,im.naturalWidth,im.naturalHeight));};im.src=rd.result;};rd.readAsDataURL(fl);};
-$('retry').onclick=()=>{$('results').classList.add('hidden');$('retryRow').classList.add('hidden');$('shot').style.display='none';if(stream){$('cam').style.display='block';}};
-
-// Examples gallery
-fetch('/examples').then(r=>r.json()).then(d=>{
-  $('exAttr').textContent=d.attribution||'';
+  rd.onload=()=>{const im=new Image();im.onload=()=>{$('shot').src=im.src;$('shot').style.display='block';$('cam').style.display='none';analyze(toURL(im,im.naturalWidth,im.naturalHeight));};im.src=rd.result;};rd.readAsDataURL(fl);};
+$('retry').onclick=()=>{$('results').classList.add('hidden');$('retryRow').classList.add('hidden');$('shot').style.display='none';if(stream)$('cam').style.display='block';};
+fetch('/examples').then(r=>r.json()).then(d=>{$('exAttr').textContent=d.attribution||'';
   $('examples').innerHTML=(d.examples||[]).map(e=>{
-    const signs=Object.values(e.characteristics).map(c=>`${c.description.split(' ')[0]}: <b>${c.value}</b>`).join(' · ');
-    return `<div class="ex"><img src="/static/examples/${e.file}" alt="${e.title}"/>
-      <div class="exb"><div class="ext">${e.title}</div>
-      <div style="color:var(--mut);margin-bottom:4px">${signs}</div>
-      <div>${e.focus_meaning||''}</div>
-      ${e.patterns&&e.patterns[0]?`<div style="margin-top:4px;color:#bcd">→ <b>${e.patterns[0].name}</b></div>`:''}</div></div>`;
-  }).join('');
-});
+    const signs=Object.values(e.characteristics||{}).map(c=>`${(c.description||'').split(' ')[0]}: <b>${c.value}</b>`).join(' · ');
+    return `<div class="ex-item"><img src="/static/examples/${e.file}" alt="${e.title}"/><div class="exb">
+      <div class="ext">${e.title}</div><div style="color:var(--mut);margin-bottom:4px">${signs}</div>
+      <div>${e.focus_meaning||''}</div>${e.patterns&&e.patterns[0]?`<div style="margin-top:4px;color:#bcd">→ <b>${e.patterns[0].tcm_name||e.patterns[0].name||''}</b></div>`:''}</div></div>`;}).join('');});
 </script>
 </body>
 </html>

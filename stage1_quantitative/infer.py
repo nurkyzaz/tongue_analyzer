@@ -19,7 +19,7 @@ import albumentations as A
 from albumentations.pytorch import ToTensorV2
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from labels import KEY_CHARS, LABEL_MAPS, CHAR_DESC
+from labels import KEY_CHARS, LABEL_MAPS, CHAR_DESC, SEVERITY_KEYS, SEVERITY_OF_CHAR
 from feature_extraction.model import MultiTaskTongueNet
 from schema import Stage1Output
 
@@ -52,8 +52,10 @@ class Stage1Pipeline:
 
         mt_state = torch.load(mt_ckpt, map_location=self.device, weights_only=False)
         self.mt = MultiTaskTongueNet(mt_state["args"].get("encoder", "resnet34"), pretrained=False)
-        self.mt.load_state_dict(mt_state["model"])
+        # strict=False so older checkpoints without the severity head still load
+        self.mt.load_state_dict(mt_state["model"], strict=False)
         self.mt.to(self.device).eval()
+        self.sev_trained = "sev_mae" in mt_state         # regression head is meaningful
 
     @torch.no_grad()
     def __call__(self, image_path, sid=None, return_mask=False):
@@ -71,13 +73,24 @@ class Stage1Pipeline:
             accepted, reasons = False, reasons + ["mask implausibly large (framing/quality issue)"]
 
         out = self.mt(x, mask)
+        sev_reg = out["severity"][0].cpu().numpy() if self.sev_trained else None
         chars = {}
         for ch in KEY_CHARS:
             prob = F.softmax(out[ch], dim=1)[0]
             idx = int(prob.argmax())
+            n = len(LABEL_MAPS[ch])
+            # expected-ordinal severity in [0,1]: works with any checkpoint, extracts graded degree
+            sev_ord = float((prob * torch.arange(n, device=prob.device)).sum() / (n - 1))
+            # blend with the trained regression head when available and this char maps to one
+            sev = sev_ord
+            if sev_reg is not None and ch in SEVERITY_OF_CHAR:
+                sev_meas = float(sev_reg[SEVERITY_KEYS.index(SEVERITY_OF_CHAR[ch])])
+                sev = 0.5 * sev_ord + 0.5 * sev_meas
             chars[ch] = {"value": LABEL_MAPS[ch][idx],
                          "confidence": round(float(prob[idx]), 4),
-                         "description": CHAR_DESC[ch]}
+                         "description": CHAR_DESC[ch],
+                         "severity": round(sev, 4),
+                         "probs": {LABEL_MAPS[ch][j]: round(float(prob[j]), 4) for j in range(n)}}
 
         out_obj = Stage1Output(
             sid=sid,

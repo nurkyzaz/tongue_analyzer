@@ -1,187 +1,195 @@
 {
   "_meta": {
-    "purpose": "Structured Traditional Chinese Medicine (TCM) tongue-diagnosis knowledge that grounds Stage-2 report generation: per-characteristic meanings and combined pattern synthesis.",
-    "disclaimer": "Educational/wellness content based on traditional TCM literature. NOT a medical diagnosis and NOT validated by modern clinical evidence. Consult a qualified professional for health concerns.",
-    "grounding": "Meanings follow standard TCM tongue-diagnosis references (see `sources`). Quantitative features are produced by the Stage-1 model trained on public tongue datasets."
+    "purpose": "Grounded TCM tongue-reading knowledge base: per-feature (graded) meanings in TCM + plain language, and patterns aligned to the CCMQ 9-constitution model and WHO ICD-11 Ch.26 pattern names, with plain-language associated symptoms, follow-up questions (from validated CCMQ items), and specific traditional recommendations.",
+    "framing": "Educational only. Every statement is 'traditionally associated with…', one framework's perspective — NOT a diagnosis. Plain-language glosses describe what practitioners in this tradition associate a sign with; they are not medical claims.",
+    "schema": "features.<char>: graded meaning keyed by presence/value + points_to pattern weights. patterns.<id>: tcm_name (ICD-11-style), plain_name, explanation, associated_symptoms (plain), followup_questions (CCMQ-derived, with weights), recommendations."
   },
-  "overview": "In Traditional Chinese Medicine the tongue is read as a map of the body's internal state. The tongue BODY (its color, shape and texture) reflects the condition of Blood, Qi and the Organs, while the tongue COATING reflects the Stomach and Spleen and the presence of pathogenic factors such as Cold, Heat and Dampness. No single sign is read in isolation — the practitioner synthesizes them into an overall pattern.",
+  "overview": "In TCM tongue reading, the tongue BODY (color, shape, cracks, tooth-marks) reflects Blood/Qi/Yang and the organs, while the COATING (color, thickness, greasiness) reflects digestion and factors such as Cold, Heat and Dampness. Signs are read by degree and in combination, never one at a time.",
   "sources": [
-    {"ref": "Maciocia G. Tongue Diagnosis in Chinese Medicine (rev. ed.), Eastland Press.", "type": "TCM classical reference"},
-    {"ref": "Maciocia G. The Foundations of Chinese Medicine, Elsevier/Churchill Livingstone.", "type": "TCM classical reference"},
-    {"ref": "Kirschbaum B. Atlas of Chinese Tongue Diagnosis, Eastland Press.", "type": "TCM classical reference"},
-    {"ref": "Quantitative tongue features: TonguExpert (biosino.org), SSC-Net (Digital Health, 2025), RTDS (SIViP, 2026).", "type": "computational tongue analysis"}
+    "Maciocia G., Tongue Diagnosis in Chinese Medicine & Foundations of Chinese Medicine",
+    "Kirschbaum B., Atlas of Chinese Tongue Diagnosis",
+    "WHO ICD-11 Chapter 26 (Traditional Medicine, Module 1) — standardized pattern names",
+    "Wang Qi (Beijing Univ. of Chinese Medicine), Constitution in Chinese Medicine Questionnaire (CCMQ) — validated 9-constitution model & items",
+    "SymMap (Nucleic Acids Research 2019) — TCM symptom ↔ modern-medicine symptom mapping"
   ],
-  "characteristics": {
+  "severity_bands": [
+    {"max": 0.15, "word": "none", "mention": false},
+    {"max": 0.35, "word": "faint", "mention": true},
+    {"max": 0.60, "word": "mild", "mention": true},
+    {"max": 0.80, "word": "moderate", "mention": true},
+    {"max": 2.0, "word": "pronounced", "mention": true}
+  ],
+  "features": {
     "coating": {
       "label": "Coating thickness (greasiness)",
-      "tcm_role": "The coating (苔, tāi) is produced by Stomach Qi 'steaming' upward. Its thickness reflects digestive strength and, crucially, the amount of Dampness, Phlegm or retained food in the body.",
-      "values": {
-        "non_greasy": {
-          "headline": "Thin, non-greasy coating — generally healthy",
-          "meaning": "A thin coating through which the tongue body is faintly visible reflects normal Stomach Qi and the absence of significant Dampness. This is considered the healthy baseline.",
-          "tcm": "Normal Stomach/Spleen function; no accumulation of Dampness.",
-          "tendencies": ["balanced digestion"]
-        },
-        "greasy": {
-          "headline": "Greasy coating — Dampness / Phlegm",
-          "meaning": "A greasy, sticky coating that looks as if it can't be wiped away points to Dampness or Phlegm accumulating internally, classically from the Spleen failing to transform and transport fluids.",
-          "tcm": "Dampness / Phlegm; impaired Spleen transformation.",
-          "tendencies": ["heavy or foggy feeling", "digestive sluggishness", "loose stools"]
-        },
-        "greasy_thick": {
-          "headline": "Thick, greasy coating — pronounced Dampness / food retention",
-          "meaning": "A thick greasy coating indicates a stronger accumulation of Damp-Phlegm or retained food. The thicker the coating, the more substantial the pathogenic accumulation is considered to be.",
-          "tcm": "Marked Dampness/Phlegm or food stagnation.",
-          "tendencies": ["fullness after eating", "nausea or heaviness", "reduced appetite"]
-        }
-      }
+      "kind": "graded_value",
+      "absent_value": "non_greasy",
+      "tcm_term": "greasy / thick coating",
+      "present_tcm": "Dampness or Phlegm the digestion isn't transforming",
+      "present_plain": "sluggish digestion — a heavy, greasy or thick coating is traditionally linked to bloating, heaviness after meals, and feeling foggy",
+      "absent_plain": "a thin, non-greasy coating is considered the healthy baseline (good digestive function)",
+      "points_to": {"phlegm_dampness": 1.0, "spleen_qi_deficiency": 0.6, "damp_heat": 0.4}
     },
     "tai": {
       "label": "Coating color",
-      "tcm_role": "The color of the coating indicates the THERMAL nature of the condition — whether it leans Cold or Hot — and helps locate Damp-Heat.",
+      "kind": "categorical",
       "values": {
-        "white": {
-          "headline": "White coating — Cold or exterior / neutral",
-          "meaning": "A white coating generally indicates a Cold pattern or, if thin, a healthy or early/exterior condition. A thick white greasy coating leans toward Cold-Damp.",
-          "tcm": "Cold pattern (or normal if thin).",
-          "tendencies": ["feeling cold", "preference for warmth"]
-        },
-        "light_yellow": {
-          "headline": "Light-yellow coating — emerging Heat / Damp-Heat",
-          "meaning": "Light yellow marks the transition from Cold toward Heat: mild internal Heat or the beginning of Damp-Heat, often reflecting mild inflammation or a richer diet.",
-          "tcm": "Mild Heat or early Damp-Heat.",
-          "tendencies": ["mild thirst", "slight warmth"]
-        },
-        "yellow": {
-          "headline": "Yellow coating — Heat / Damp-Heat",
-          "meaning": "A distinctly yellow coating indicates interior Heat; combined with a greasy texture it indicates Damp-Heat. Deeper yellow is read as stronger Heat.",
-          "tcm": "Interior Heat or Damp-Heat.",
-          "tendencies": ["thirst", "feeling warm", "irritability"]
-        }
+        "white": {"tcm_term": "white coating (Cold)", "plain_gloss": "traditionally linked to a 'colder' or more sluggish state; normal if thin", "points_to": {"yang_deficiency": 0.5, "phlegm_dampness": 0.3}},
+        "light_yellow": {"tcm_term": "light-yellow coating (emerging Heat)", "plain_gloss": "the start of a 'warmer'/inflammatory tendency or mild damp-heat", "points_to": {"damp_heat": 0.6}},
+        "yellow": {"tcm_term": "yellow coating (Heat / Damp-Heat)", "plain_gloss": "traditionally linked to internal 'heat' — think thirst, feeling warm, or richer diet; with a greasy texture, damp-heat", "points_to": {"damp_heat": 1.0}}
       }
     },
     "zhi": {
       "label": "Tongue body color",
-      "tcm_role": "The body color (质, zhì) reflects the state of Blood, Qi, Yang warmth and the nutritive (Ying) level. It is one of the most important tongue signs.",
+      "kind": "categorical",
       "values": {
-        "light": {
-          "headline": "Pale body — Deficiency (Qi / Blood / Yang)",
-          "meaning": "A pale tongue lighter than a healthy pale-red indicates Deficiency: Blood deficiency (undernourished), Qi deficiency (weak function) or, if also wet/swollen, Yang deficiency (internal cold).",
-          "tcm": "Qi / Blood / Yang deficiency.",
-          "tendencies": ["fatigue", "pallor", "feeling cold", "dizziness"]
-        },
-        "regular": {
-          "headline": "Pale-red body — balanced",
-          "meaning": "A normal pale-red, lively body color reflects sufficient and freely-moving Qi and Blood. This is the healthy reference.",
-          "tcm": "Balanced Qi and Blood.",
-          "tendencies": ["balanced state"]
-        },
-        "dark": {
-          "headline": "Red / dark body — Heat or Blood stasis",
-          "meaning": "A red or darker body indicates Heat — full Heat if bright red, or Yin-deficiency (empty) Heat if red with little coating. A dusky, purplish-dark body suggests Blood stasis / sluggish circulation.",
-          "tcm": "Heat, Yin-deficiency Heat, or Blood stasis.",
-          "tendencies": ["feeling hot", "restlessness", "fixed aches (if stasis)"]
-        }
+        "light": {"tcm_term": "pale body (Deficiency)", "plain_gloss": "traditionally linked to being under-nourished or under-powered — tiredness, pallor, and (in this tradition) a tendency associated with low blood/iron", "points_to": {"blood_deficiency": 1.0, "spleen_qi_deficiency": 0.6, "yang_deficiency": 0.5}},
+        "regular": {"tcm_term": "pale-red body (balanced)", "plain_gloss": "a healthy, lively body color — balanced Qi and Blood", "points_to": {"balanced": 1.0}},
+        "dark": {"tcm_term": "red / dark body (Heat or Blood stasis)", "plain_gloss": "a redder body is linked to 'heat' (feeling hot, restless); a dusky, purple-dark body to sluggish circulation", "points_to": {"damp_heat": 0.5, "yin_deficiency": 0.5, "blood_stasis": 0.8}}
       }
     },
     "fissure": {
       "label": "Fissures / cracks",
-      "tcm_role": "Cracks in the tongue body classically reflect depletion of Yin or Body Fluids, often with underlying Heat that has 'dried' the surface; some cracks are constitutional.",
-      "values": {
-        "none": {
-          "headline": "No cracks — fluids intact",
-          "meaning": "A smooth body without cracks suggests Yin and Body Fluids are well preserved.",
-          "tcm": "Adequate Yin / Fluids.",
-          "tendencies": ["good hydration"]
-        },
-        "light": {
-          "headline": "Mild fissures — mild Yin / Fluid deficiency",
-          "meaning": "Shallow or few cracks suggest mild depletion of Yin or Fluids; a central crack often relates to the Stomach.",
-          "tcm": "Mild Yin / Stomach-Fluid deficiency.",
-          "tendencies": ["occasional dry mouth"]
-        },
-        "severe": {
-          "headline": "Deep / numerous cracks — marked Yin deficiency or Heat",
-          "meaning": "Deep or numerous cracks indicate more significant Yin/Fluid depletion, often with chronic Heat; when red-and-cracked with scanty coating this is classic empty-Heat from Yin deficiency.",
-          "tcm": "Significant Yin deficiency / chronic Heat.",
-          "tendencies": ["dry mouth/throat", "night restlessness", "warm palms/soles"]
-        }
-      }
+      "kind": "graded_value",
+      "absent_value": "none",
+      "tcm_term": "cracks / fissures",
+      "present_tcm": "depletion of Yin or Body Fluids, often with some Heat that 'dries' the surface",
+      "present_plain": "traditionally linked to dryness — not enough rest, fluids, or 'cooling' reserves; think dry mouth or feeling run-down",
+      "absent_plain": "a smooth body without cracks suggests fluids/Yin are well preserved",
+      "points_to": {"yin_deficiency": 1.0}
     },
     "tooth_mk": {
       "label": "Tooth marks (scalloped edges)",
-      "tcm_role": "Indentations along the tongue edges appear when the tongue is swollen and presses against the teeth — the hallmark of Spleen Qi deficiency with Dampness.",
-      "values": {
-        "none": {
-          "headline": "No tooth marks — healthy Spleen Qi",
-          "meaning": "Smooth edges without indentations suggest the Spleen is transforming fluids well and the tongue is not swollen.",
-          "tcm": "Healthy Spleen Qi.",
-          "tendencies": ["stable energy/digestion"]
-        },
-        "light": {
-          "headline": "Mild tooth marks — mild Spleen Qi deficiency / Dampness",
-          "meaning": "Faint scalloping at the edges suggests early Spleen Qi deficiency and a tendency to retain Dampness.",
-          "tcm": "Mild Spleen Qi deficiency with Dampness.",
-          "tendencies": ["tiredness", "mild bloating"]
-        },
-        "severe": {
-          "headline": "Pronounced tooth marks — marked Spleen deficiency with Dampness",
-          "meaning": "Deep scalloping reflects a swollen tongue from marked Spleen Qi (or Yang) deficiency with fluid retention — the body is not moving Dampness well.",
-          "tcm": "Marked Spleen Qi/Yang deficiency with Dampness.",
-          "tendencies": ["fatigue", "bloating", "fluid retention/puffiness", "loose stools"]
-        }
-      }
+      "kind": "graded_value",
+      "absent_value": "none",
+      "tcm_term": "tooth marks / scalloped edges",
+      "present_tcm": "a swollen tongue from Spleen-Qi (digestive) deficiency with Dampness",
+      "present_plain": "traditionally linked to low digestive energy and fluid retention — tiredness, bloating, puffiness, and (in this tradition) a tendency associated with low blood/iron",
+      "absent_plain": "smooth edges suggest the digestion is handling fluids well",
+      "points_to": {"spleen_qi_deficiency": 1.0, "phlegm_dampness": 0.6, "blood_deficiency": 0.4}
     }
   },
-  "combined_patterns": [
-    {
-      "id": "spleen_qi_damp",
-      "name": "Spleen Qi deficiency with Dampness",
-      "match": {"tooth_mk": ["severe", "light"], "coating": ["greasy", "greasy_thick"]},
-      "explanation": "Tooth marks (a swollen, deficient Spleen) together with a greasy coating (Dampness the Spleen isn't transforming) form one of the most common TCM patterns. The Spleen governs digestion and fluid metabolism, so this pattern is traditionally linked to tiredness, bloating and fluid retention.",
-      "care": "Traditionally supported by warm, cooked, easy-to-digest foods; reducing cold/raw and greasy foods; gentle regular movement."
+  "patterns": {
+    "spleen_qi_deficiency": {
+      "tcm_name": "Spleen qi deficiency pattern",
+      "icd11": "ICD-11 Ch.26 (Spleen qi deficiency pattern)",
+      "plain_name": "low digestive energy (a 'poor digestion' tendency)",
+      "explanation": "In TCM the Spleen governs digestion and fluid metabolism. Tooth-marks + a pale body + a thin coating are the classic tongue picture of Spleen-qi deficiency — traditionally associated with tiredness and weak digestion.",
+      "associated_symptoms": ["tiredness, especially after meals", "bloating or fullness after eating", "loose stools", "poor appetite", "pale complexion", "(in this tradition, associated with low iron / anemia tendencies)"],
+      "followup_questions": [
+        {"q": "Do you often feel bloated or overly full after eating?", "weight": 0.5},
+        {"q": "Do you get tired easily, especially after meals?", "weight": 0.4},
+        {"q": "Are your stools often loose or unformed?", "weight": 0.4}
+      ],
+      "recommendations": {
+        "diet": ["Favour warm, cooked, easy-to-digest meals (soups, stews, congee)", "Reduce cold/raw foods, iced drinks, excess dairy and sugar", "Eat at regular times; avoid overeating or eating late"],
+        "lifestyle": ["Gentle regular movement (walking, qigong) rather than exhausting exercise", "If tiredness/pallor persist, consider checking iron/ferritin with a doctor"]
+      }
     },
-    {
-      "id": "cold_damp",
-      "name": "Cold-Damp (Spleen Yang) pattern",
-      "match": {"tai": ["white"], "coating": ["greasy", "greasy_thick"], "zhi": ["light"]},
-      "explanation": "A pale body with a white greasy coating points to Cold-Damp — insufficient Yang warmth to move fluids, so Dampness accumulates in a cold internal environment.",
-      "care": "Warmth, warming spices, avoiding cold/raw foods are the traditional emphases."
+    "phlegm_dampness": {
+      "tcm_name": "Dampness / phlegm-damp pattern",
+      "icd11": "ICD-11 Ch.26 (Dampness pattern)",
+      "plain_name": "damp / heavy pattern (fluid-retention tendency)",
+      "explanation": "A thick, greasy coating (± tooth-marks, a swollen tongue) is the hallmark of Dampness/Phlegm — fluids not being transformed. Traditionally linked to heaviness and sluggish digestion.",
+      "associated_symptoms": ["a heavy or foggy feeling", "puffiness / water retention", "phlegm or mucus", "sluggish digestion, heaviness after meals", "tendency to gain weight easily"],
+      "followup_questions": [
+        {"q": "Do you often feel your body or head is heavy, foggy, or not fresh?", "weight": 0.5},
+        {"q": "Do you notice puffiness or water retention?", "weight": 0.4},
+        {"q": "Do you often have phlegm or a coated feeling in the mouth?", "weight": 0.3}
+      ],
+      "recommendations": {
+        "diet": ["Reduce greasy, fried, sweet and cold/raw foods and dairy", "Favour lighter, warm, well-cooked meals; add aromatic spices (ginger, cardamom)", "Avoid overeating"],
+        "lifestyle": ["Regular movement to help the body 'move' dampness", "Keep warm and dry; avoid sitting in damp/cold environments"]
+      }
     },
-    {
-      "id": "damp_heat",
-      "name": "Damp-Heat pattern",
-      "match": {"tai": ["yellow", "light_yellow"], "coating": ["greasy", "greasy_thick"]},
-      "explanation": "A yellow greasy coating is the classic sign of Damp-Heat — Dampness that has combined with Heat. It is traditionally associated with a feeling of heaviness together with heat signs such as thirst or irritability.",
-      "care": "Traditionally, lighter cooling foods and reducing greasy, spicy and alcohol intake."
+    "damp_heat": {
+      "tcm_name": "Damp-heat pattern",
+      "icd11": "ICD-11 Ch.26 (Damp-heat pattern)",
+      "plain_name": "damp-heat (heaviness + heat)",
+      "explanation": "A yellow, greasy coating (often with a redder body) is the classic Damp-Heat picture — dampness combined with heat.",
+      "associated_symptoms": ["a bitter or sticky taste in the mouth", "feeling warm, flushed or irritable", "oily skin or breakouts", "thirst"],
+      "followup_questions": [
+        {"q": "Do you often have a bitter or sticky taste in your mouth?", "weight": 0.5},
+        {"q": "Do you tend to feel warm, flushed, or irritable?", "weight": 0.4},
+        {"q": "Is your skin oily or prone to breakouts?", "weight": 0.3}
+      ],
+      "recommendations": {
+        "diet": ["Favour lighter, cooling foods (vegetables, mung bean, barley water)", "Reduce alcohol, spicy, greasy, and very sweet foods", "Stay hydrated with water rather than sugary drinks"],
+        "lifestyle": ["Avoid overheating; keep a regular sleep schedule"]
+      }
     },
-    {
-      "id": "yin_def_heat",
-      "name": "Yin deficiency with empty-Heat",
-      "match": {"fissure": ["severe", "light"], "zhi": ["dark"]},
-      "explanation": "Cracks together with a red body indicate Yin (the cooling, moistening aspect) failing to contain Heat — 'empty-Heat'. Often relates to overwork, insufficient rest and dryness.",
-      "care": "Traditionally, rest, hydration, moistening/nourishing foods, and avoiding excess stimulants."
+    "yin_deficiency": {
+      "tcm_name": "Yin deficiency (empty-heat) pattern",
+      "icd11": "ICD-11 Ch.26 (Yin deficiency pattern)",
+      "plain_name": "dryness / overheat tendency (running low on 'reserves')",
+      "explanation": "Cracks in the body (especially with a red body and scanty coating) are traditionally read as Yin/fluid depletion with 'empty heat' — often from overwork, poor sleep, or dryness.",
+      "associated_symptoms": ["dry mouth or throat", "warm palms/soles or feeling hot in the evening", "restless or poor sleep, night sweats", "feeling run-down despite rest"],
+      "followup_questions": [
+        {"q": "Do you often have a dry mouth or throat?", "weight": 0.5},
+        {"q": "Do you get warm palms/soles, night sweats, or restless sleep?", "weight": 0.5}
+      ],
+      "recommendations": {
+        "diet": ["Favour moistening, nourishing foods (pear, cooked greens, soups, sesame)", "Reduce coffee, alcohol, and very spicy/dry foods", "Stay well hydrated"],
+        "lifestyle": ["Prioritise rest and consistent sleep", "Avoid overwork and excessive stimulants"]
+      }
     },
-    {
-      "id": "qi_blood_def",
-      "name": "Qi and Blood deficiency",
-      "match": {"zhi": ["light"], "tooth_mk": ["severe", "light"]},
-      "explanation": "A pale body with tooth marks suggests the body is under-nourished and under-powered — Qi and Blood deficiency — traditionally linked to tiredness, pallor and poor concentration.",
-      "care": "Traditionally, nourishing cooked foods, adequate rest and gentle strengthening exercise."
+    "yang_deficiency": {
+      "tcm_name": "Yang deficiency pattern",
+      "icd11": "ICD-11 Ch.26 (Yang deficiency pattern)",
+      "plain_name": "cold / low-warmth tendency",
+      "explanation": "A pale, swollen, wet tongue with a white coating is traditionally linked to Yang deficiency — not enough internal 'warmth' to move fluids.",
+      "associated_symptoms": ["feeling cold easily; cold hands and feet", "low energy", "preference for warm food/drinks", "possible puffiness"],
+      "followup_questions": [
+        {"q": "Do you feel cold easily, or have cold hands and feet?", "weight": 0.5},
+        {"q": "Do you strongly prefer warm food and drinks?", "weight": 0.3}
+      ],
+      "recommendations": {
+        "diet": ["Favour warm, cooked foods and warming spices (ginger, cinnamon)", "Avoid cold/raw foods and iced drinks"],
+        "lifestyle": ["Keep warm; gentle warming exercise", "Protect the lower back and abdomen from cold"]
+      }
     },
-    {
-      "id": "blood_stasis",
-      "name": "Blood stasis tendency",
-      "match": {"zhi": ["dark"]},
-      "explanation": "A notably dark or dusky body is read as Blood stasis — circulation that has become sluggish or obstructed. In TCM this is associated with fixed aches and a history of stagnation.",
-      "care": "Traditionally, gentle movement and warmth to encourage circulation."
+    "blood_deficiency": {
+      "tcm_name": "Blood deficiency pattern",
+      "icd11": "ICD-11 Ch.26 (Blood deficiency pattern)",
+      "plain_name": "under-nourished (a 'low blood / low iron' tendency in this tradition)",
+      "explanation": "A pale body (often with tooth-marks) is traditionally read as Blood deficiency — under-nourishment of the body and mind. In this tradition it overlaps with presentations that modern medicine would check for iron-deficiency/anemia.",
+      "associated_symptoms": ["fatigue and pallor", "dizziness, especially on standing", "poor concentration or memory", "brittle nails or hair", "scanty or light periods (if applicable)"],
+      "followup_questions": [
+        {"q": "Do you often feel dizzy or lightheaded, especially when standing up?", "weight": 0.4},
+        {"q": "Is your complexion pale, or your nails/hair brittle?", "weight": 0.4},
+        {"q": "Do you often feel tired with poor concentration?", "weight": 0.3}
+      ],
+      "recommendations": {
+        "diet": ["Favour nourishing cooked foods: dark leafy greens, beets, dates, black sesame, good-quality protein", "Pair iron-rich foods with vitamin C; reduce excess coffee/tea with meals"],
+        "lifestyle": ["Adequate rest; avoid over-exertion", "If fatigue/pallor/dizziness persist, consider a doctor checking iron/ferritin and full blood count"]
+      }
     },
-    {
-      "id": "healthy",
-      "name": "Balanced / healthy picture",
-      "match": {"zhi": ["regular"], "coating": ["non_greasy"], "fissure": ["none"], "tooth_mk": ["none"]},
-      "explanation": "A pale-red body with a thin coating, no cracks and no tooth marks is the traditional picture of balanced Qi, Blood and Fluids with healthy digestion.",
-      "care": "Maintain balanced diet, rest and activity."
+    "blood_stasis": {
+      "tcm_name": "Blood stasis pattern",
+      "icd11": "ICD-11 Ch.26 (Blood stasis pattern)",
+      "plain_name": "sluggish-circulation tendency",
+      "explanation": "A notably dark, dusky or purplish body is traditionally read as Blood stasis — circulation that has become sluggish or obstructed.",
+      "associated_symptoms": ["fixed, sharp or stabbing aches (same spot)", "cold extremities", "dark spots or dull complexion"],
+      "followup_questions": [
+        {"q": "Do you get fixed, sharp aches that stay in one spot?", "weight": 0.5},
+        {"q": "Are your hands and feet often cold?", "weight": 0.3}
+      ],
+      "recommendations": {
+        "diet": ["Favour foods traditionally used to 'move' blood (small amounts of ginger, turmeric, hawthorn)", "Reduce heavy, greasy foods"],
+        "lifestyle": ["Regular gentle movement and warmth to support circulation", "Avoid prolonged sitting"]
+      }
+    },
+    "balanced": {
+      "tcm_name": "Balanced (gentleness) constitution",
+      "icd11": "—",
+      "plain_name": "balanced picture",
+      "explanation": "A pale-red body with a thin coating, no cracks and no tooth-marks is the traditional picture of balanced Qi, Blood and Fluids with healthy digestion.",
+      "associated_symptoms": ["stable energy, digestion and sleep"],
+      "followup_questions": [],
+      "recommendations": {
+        "diet": ["Maintain a varied, balanced diet of mostly warm, cooked foods"],
+        "lifestyle": ["Maintain regular sleep, movement and stress balance"]
+      }
     }
-  ]
+  }
 }

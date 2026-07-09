@@ -38,7 +38,7 @@ def main():
     os.makedirs(OUT_DIR, exist_ok=True)
     df = pd.read_csv("data/processed/manifest.csv")
     test = df[df.split == "test"]
-    pipe = FullPipeline("checkpoints/seg_combined/best.pt", "checkpoints/multitask_v2/best.pt")
+    pipe = FullPipeline("checkpoints/seg_combined/best.pt", "checkpoints/multitask_v3/best.pt")
 
     examples = []
     used = set()
@@ -68,11 +68,13 @@ def main():
         fname = f"{focus}_{val}.jpg"
         shutil.copy(os.path.join(DATA_ROOT, raw_path), os.path.join(OUT_DIR, fname))
         interp = res["interpretation"]
+        fr = next((c for c in interp["features"] if c["key"] == focus), {})
+        focus_meaning = ((fr.get("plain") or "") if fr else "")
         examples.append({
             "file": fname, "title": title, "focus": focus,
             "characteristics": {k: {"value": v["value"], "confidence": v["confidence"],
                                     "description": v["description"]} for k, v in kc.items()},
-            "focus_meaning": next((c["meaning"] for c in interp["characteristics"] if c["key"] == focus), ""),
+            "focus_meaning": focus_meaning,
             "patterns": interp["patterns"],
             "combined": interp["combined"],
         })

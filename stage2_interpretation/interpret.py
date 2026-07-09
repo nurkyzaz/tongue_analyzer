@@ -1,14 +1,13 @@
-"""Stage 2 — turn Stage-1 structured output into a rich, grounded TCM wellness report.
+"""Stage 2 — educational interpretation grounded in the TCM knowledge base.
 
-Produces, for every request:
-  - overview of tongue reading,
-  - a per-characteristic breakdown (each of the 5 scores explained: what YOUR value means),
-  - a combined interpretation synthesizing the 5 signs into TCM pattern(s),
-  - traditional care notes, grounding sources, and a disclaimer.
+For each detected feature it reports the **degree** (from Stage-1 severity), the **TCM term**, and a
+**plain-language gloss** of what practitioners in this tradition associate it with. It then votes
+(weighted by severity) toward the patterns in the CCMQ 9-constitution model, and surfaces optional
+**follow-up questions** (validated CCMQ items) that refine confidence. Framed throughout as one
+tradition's perspective, never a diagnosis.
 
-Grounding = `knowledge_base/tcm_knowledge.json` (standard TCM tongue-diagnosis literature). If an
-LLM backend is configured, the same grounding is handed to the model (RAG) to write the narrative;
-otherwise a deterministic rich template is used. Framing is wellness/education, never diagnosis.
+`interpret(stage1_output, metadata, llm)` -> structured dict (see bottom).
+`refine(patterns, answers)` -> updated pattern confidences after follow-up answers.
 """
 import json
 import os
@@ -16,10 +15,11 @@ import os
 from llm_client import LLMClient
 
 KB_PATH = os.path.join(os.path.dirname(__file__), "knowledge_base", "tcm_knowledge.json")
-DISCLAIMER = ("This is an automated wellness/educational summary based on traditional Chinese "
-              "medicine tongue-reading literature — not a medical diagnosis, and not validated by "
-              "modern clinical evidence. Please consult a qualified healthcare professional for any "
-              "health concern.")
+DISCLAIMER = ("Educational summary exploring the traditional-Chinese-medicine tongue-reading "
+              "framework — not a medical diagnosis, and not validated by modern clinical evidence. "
+              "For any health concern, please consult a qualified healthcare professional.")
+
+GRADED = {"coating", "fissure", "tooth_mk"}   # features whose meaning scales with severity
 
 
 def load_kb(path=KB_PATH):
@@ -27,81 +27,120 @@ def load_kb(path=KB_PATH):
         return json.load(f)
 
 
-def per_characteristic(chars, kb):
-    """For each of the 5 signs, attach the meaning of the specific predicted value."""
-    out = []
+def _band(sev, kb):
+    for b in kb["severity_bands"]:
+        if sev <= b["max"]:
+            return b
+    return kb["severity_bands"][-1]
+
+
+def feature_readings(chars, kb):
+    """Per-feature reading: degree band + dual-language + pattern contributions."""
+    readings = []
     for ch, c in chars.items():
-        spec = kb["characteristics"].get(ch, {})
-        vinfo = spec.get("values", {}).get(c["value"], {})
+        spec = kb["features"].get(ch, {})
+        sev = float(c.get("severity", 0.0))
+        band = _band(sev, kb)
+        if ch in GRADED:
+            present = band["mention"]
+            reading = {
+                "key": ch, "label": spec.get("label", ch), "value": c["value"],
+                "severity": round(sev, 3), "band": band["word"], "mentioned": present,
+                "tcm_term": spec.get("tcm_term", ""),
+                "tcm": spec.get("present_tcm", "") if present else "",
+                "plain": spec.get("present_plain", "") if present else spec.get("absent_plain", ""),
+                "points_to": {p: w * sev for p, w in spec.get("points_to", {}).items()} if present else {},
+            }
+        else:  # categorical color feature
+            vinfo = spec.get("values", {}).get(c["value"], {})
+            conf = float(c.get("confidence", 1.0))
+            reading = {
+                "key": ch, "label": spec.get("label", ch), "value": c["value"],
+                "severity": round(sev, 3), "band": "", "mentioned": True,
+                "tcm_term": vinfo.get("tcm_term", ""), "tcm": vinfo.get("tcm_term", ""),
+                "plain": vinfo.get("plain_gloss", ""),
+                "points_to": {p: w * conf for p, w in vinfo.get("points_to", {}).items()},
+            }
+        readings.append(reading)
+    return readings
+
+
+def vote_patterns(readings, kb, top_k=3):
+    scores = {}
+    for r in readings:
+        for p, w in r["points_to"].items():
+            scores[p] = scores.get(p, 0.0) + w
+    scores.pop("balanced", None)
+    if not scores or max(scores.values()) < 0.25:
+        scores["balanced"] = 1.0            # nothing notable -> balanced picture
+    mx = max(scores.values())
+    ranked = sorted(scores.items(), key=lambda kv: -kv[1])[:top_k]
+    out = []
+    for pid, s in ranked:
+        pat = kb["patterns"].get(pid, {})
         out.append({
-            "key": ch,
-            "label": spec.get("label", ch),
-            "value": c["value"],
-            "confidence": c["confidence"],
-            "tcm_role": spec.get("tcm_role", ""),
-            "headline": vinfo.get("headline", ""),
-            "meaning": vinfo.get("meaning", ""),
-            "tcm": vinfo.get("tcm", ""),
-            "tendencies": vinfo.get("tendencies", []),
+            "id": pid, "tcm_name": pat.get("tcm_name", pid), "plain_name": pat.get("plain_name", ""),
+            "explanation": pat.get("explanation", ""),
+            "associated_symptoms": pat.get("associated_symptoms", []),
+            "recommendations": pat.get("recommendations", {}),
+            "followup_questions": pat.get("followup_questions", []),
+            "confidence": round(s / mx, 3),
         })
     return out
 
 
-def retrieve_patterns(chars, kb):
-    fired = []
-    for card in kb["combined_patterns"]:
-        if all(chars.get(c, {}).get("value") in vals for c, vals in card["match"].items()):
-            fired.append((len(card["match"]), card))
-    fired.sort(key=lambda t: -t[0])
-    return [c for _, c in fired]
+def _synthesis(readings, patterns):
+    noted = [r for r in readings if r["mentioned"] and r["key"] in GRADED and r["band"] != "none"]
+    if patterns and patterns[0]["id"] != "balanced":
+        lead = patterns[0]
+        txt = (f"Taken together, your signs most align with **{lead['tcm_name']}** "
+               f"— in plain terms, *{lead['plain_name']}*. {lead['explanation']}")
+        if len(patterns) > 1 and patterns[1]["id"] != "balanced":
+            txt += f" There are also secondary hints of {patterns[1]['tcm_name']}."
+        return txt
+    return ("Your tongue looks close to the balanced picture — no strong traditional pattern stands "
+            "out. The notes above describe each sign on its own.")
 
 
-def synthesize(per_char, patterns):
-    """A plain-language paragraph on what the 5 signs together suggest."""
-    if not patterns:
-        return ("Individually your signs don't combine into a single strong traditional pattern. "
-                "The per-sign notes above describe what each one means on its own.")
-    lead = patterns[0]
-    txt = f"Taken together, your signs most align with **{lead['name']}**. {lead['explanation']}"
-    if len(patterns) > 1:
-        others = ", ".join(p["name"] for p in patterns[1:3])
-        txt += f" There are also secondary hints of {others}, which a practitioner would weigh alongside the main picture."
-    return txt
+def _markdown(readings, patterns, combined, sources):
+    L = ["**Your signs, one by one**"]
+    for r in readings:
+        deg = f"{r['band']} " if r["band"] and r["band"] != "none" else ""
+        if r["key"] in GRADED and not r["mentioned"]:
+            L.append(f"- **{r['label']}:** {r['plain']}")
+        else:
+            L.append(f"- **{deg}{r['tcm_term'] or r['value']}** — *TCM:* {r['tcm']}. *In plain terms:* {r['plain']}")
+    L += ["", "**What they suggest together**", combined]
+    if patterns and patterns[0]["id"] != "balanced":
+        p = patterns[0]
+        if p["associated_symptoms"]:
+            L += ["", f"*In this tradition, {p['plain_name']} is often associated with:* "
+                  + ", ".join(p["associated_symptoms"][:5]) + "."]
+        rec = p.get("recommendations", {})
+        recs = (rec.get("diet", []) + rec.get("lifestyle", []))[:4]
+        if recs:
+            L += ["", "**Traditional wellness notes**"] + [f"- {x}" for x in recs]
+    L += ["", "**Grounding:** " + "; ".join(sources[:4]), "", "**Note**", DISCLAIMER]
+    return "\n".join(L)
 
 
-def _markdown(overview, per_char, patterns, combined, sources):
-    lines = ["**How tongue reading works**", overview, "", "**Your signs, one by one**"]
-    for c in per_char:
-        conf = f" ({round(c['confidence']*100)}% confidence)" if c.get("confidence") else ""
-        lines.append(f"- **{c['label']}: {c['value']}**{conf} — {c['meaning']}")
-    lines += ["", "**What they suggest together**", combined]
-    if patterns:
-        care = next((p.get("care") for p in patterns if p.get("care")), None)
-        if care:
-            lines += ["", "**Traditional wellness notes**", care]
-    lines += ["", "**Grounding**", "Interpretations follow standard TCM references: "
-              + "; ".join(s["ref"] for s in sources if s["type"].startswith("TCM")) + ".",
-              "", "**Note**", DISCLAIMER]
-    return "\n".join(lines)
-
-
-def _llm_narrative(overview, per_char, patterns, sources, llm):
+def _llm_narrative(readings, patterns, sources, llm):
     grounding = {
-        "overview": overview,
-        "per_characteristic": [{"sign": c["label"], "your_value": c["value"],
-                                "meaning": c["meaning"], "tcm": c["tcm"]} for c in per_char],
-        "combined_patterns": [{"name": p["name"], "explanation": p["explanation"],
-                               "care": p.get("care", "")} for p in patterns[:3]],
-        "sources": [s["ref"] for s in sources],
+        "features": [{"sign": r["label"], "degree": r["band"], "tcm": r["tcm"], "plain": r["plain"]}
+                     for r in readings],
+        "patterns": [{"tcm_name": p["tcm_name"], "plain_name": p["plain_name"],
+                      "explanation": p["explanation"], "symptoms": p["associated_symptoms"],
+                      "recommendations": p["recommendations"]} for p in patterns[:2]],
+        "sources": sources,
     }
-    system = ("You are a careful TCM wellness educator. Using ONLY the provided grounding, write an "
-              "informative but friendly report with these sections: a short intro, 'Your signs one by "
-              "one' (explain each value), 'What they suggest together' (synthesize into pattern(s)), "
-              "and 'Traditional wellness notes'. Do NOT invent patterns, diagnoses, studies or facts "
-              "beyond the grounding. Never claim medical certainty.")
-    user = ("Grounding (JSON):\n" + json.dumps(grounding, ensure_ascii=False, indent=2) +
-            "\n\nWrite the report in Markdown. End with a reminder to consult a professional.")
-    text = llm.chat(system, user, max_tokens=900)
+    system = ("You are a careful TCM wellness educator. Using ONLY the grounding, write a warm, "
+              "specific report: (1) each detected sign with its degree, its TCM term AND a plain-language "
+              "gloss; (2) what they suggest together; (3) plain-language associations; (4) specific "
+              "traditional wellness notes. Never invent signs/patterns/claims beyond the grounding, and "
+              "never state a diagnosis. Frame as one tradition's perspective.")
+    user = ("Grounding:\n" + json.dumps(grounding, ensure_ascii=False, indent=2) +
+            "\n\nWrite it in Markdown, ending with a reminder to consult a professional.")
+    text = llm.chat(system, user, max_tokens=1000)
     return (text + "\n\n**Note**\n" + DISCLAIMER) if text else None
 
 
@@ -110,32 +149,41 @@ def interpret(stage1_output, metadata=None, llm: LLMClient = None):
     chars = stage1_output["key_characteristics"]
     quality = stage1_output.get("quality", {})
     if not quality.get("accepted", True):
-        msg = ("The photo could not be analyzed reliably (" +
-               "; ".join(quality.get("reasons", ["low quality"])) +
-               "). Please retake in good, even lighting with the tongue fully visible.")
-        return {"report": msg, "overview": "", "characteristics": [], "patterns": [],
-                "combined": "", "sources": [], "disclaimer": DISCLAIMER}
+        msg = ("The photo couldn't be read reliably (" + "; ".join(quality.get("reasons", ["low quality"]))
+               + "). Please retake in good, even lighting with the tongue fully visible.")
+        return {"report": msg, "features": [], "patterns": [], "combined": "", "sources": [],
+                "disclaimer": DISCLAIMER}
 
-    per_char = per_characteristic(chars, kb)
-    patterns = retrieve_patterns(chars, kb)
-    combined = synthesize(per_char, patterns)
-    sources = kb["sources"]
-    overview = kb["overview"]
+    readings = feature_readings(chars, kb)
+    patterns = vote_patterns(readings, kb)
+    combined = _synthesis(readings, patterns)
+    sources, overview = kb["sources"], kb["overview"]
 
     llm = llm or LLMClient()
-    report = (_llm_narrative(overview, per_char, patterns, sources, llm) if llm.enabled else None) \
-        or _markdown(overview, per_char, patterns, combined, sources)
+    report = (_llm_narrative(readings, patterns, sources, llm) if llm.enabled else None) \
+        or _markdown(readings, patterns, combined, sources)
 
     return {
-        "overview": overview,
-        "characteristics": per_char,
-        "patterns": [{"name": p["name"], "explanation": p["explanation"], "care": p.get("care", "")}
-                     for p in patterns[:3]],
-        "combined": combined,
-        "sources": [s["ref"] for s in sources],
-        "report": report,
-        "disclaimer": DISCLAIMER,
+        "overview": overview, "features": readings, "patterns": patterns,
+        "combined": combined, "sources": sources, "report": report, "disclaimer": DISCLAIMER,
+        # follow-up flow: questions for the top non-balanced pattern
+        "followup": ([{"pattern_id": patterns[0]["id"], "pattern": patterns[0]["tcm_name"],
+                       "plain_name": patterns[0]["plain_name"], "base_confidence": patterns[0]["confidence"],
+                       "questions": patterns[0]["followup_questions"]}]
+                     if patterns and patterns[0]["id"] != "balanced" and patterns[0]["followup_questions"]
+                     else []),
     }
+
+
+def refine(base_confidence, answers):
+    """Transparent log-odds update. `answers` = [{weight, answer(bool)}]. Yes pushes confidence up by
+    the item's published weight, No pushes it down. Returns a refined 0-1 confidence."""
+    import math
+    p = min(max(base_confidence, 1e-3), 1 - 1e-3)
+    logit = math.log(p / (1 - p))
+    for a in answers:
+        logit += (1.4 * a["weight"]) * (1 if a.get("answer") else -1)
+    return round(1 / (1 + math.exp(-logit)), 3)
 
 
 if __name__ == "__main__":

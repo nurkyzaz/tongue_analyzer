@@ -4,7 +4,7 @@ Reports per-characteristic accuracy, macro-F1, and per-class F1 (so rare-class b
 Uses ground-truth masks (segmentation is ~0.99 Dice, so predicted≈GT for this metric).
 
     python evaluation/eval_stage1.py --data-root data/raw --manifest data/processed/manifest.csv \
-        --mt checkpoints/multitask_v2/best.pt
+        --mt checkpoints/multitask_v3/best.pt
 """
 import argparse
 import os
@@ -25,7 +25,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--data-root", required=True)
     ap.add_argument("--manifest", required=True)
-    ap.add_argument("--mt", default="checkpoints/multitask_v2/best.pt")
+    ap.add_argument("--mt", default="checkpoints/multitask_v3/best.pt")
     ap.add_argument("--split", default="test")
     ap.add_argument("--img-size", type=int, default=384)
     ap.add_argument("--batch-size", type=int, default=32)
@@ -41,7 +41,7 @@ def main():
     print(f"Evaluating {len(ds)} {args.split} images | checkpoint={args.mt}\n")
 
     P = {c: [] for c in KEY_CHARS}; G = {c: [] for c in KEY_CHARS}
-    for img, mask, y, _ in dl:
+    for img, mask, y, _, _sev in dl:
         out = model(img.to(device), mask.to(device))
         for k, ch in enumerate(KEY_CHARS):
             P[ch].append(out[ch].argmax(1).cpu().numpy()); G[ch].append(y[:, k].numpy())

@@ -15,7 +15,7 @@ from albumentations.pytorch import ToTensorV2
 
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from labels import KEY_CHARS, CLASS_TO_IDX
+from labels import KEY_CHARS, CLASS_TO_IDX, SEVERITY_KEYS
 
 IMAGENET_MEAN = (0.485, 0.456, 0.406)
 IMAGENET_STD = (0.229, 0.224, 0.225)
@@ -38,9 +38,18 @@ def _tf(size, train):
 
 
 class MultiTaskDataset(Dataset):
-    def __init__(self, manifest_csv, data_root, split, size=384):
+    def __init__(self, manifest_csv, data_root, split, size=384, severity_csv=None):
         df = pd.read_csv(manifest_csv)
-        self.df = df[(df.split == split) & (df.has_mask)].reset_index(drop=True)
+        df = df[(df.split == split) & (df.has_mask)].reset_index(drop=True)
+        self.sev_cols = list(SEVERITY_KEYS)
+        if severity_csv and os.path.exists(severity_csv):
+            sev = pd.read_csv(severity_csv)
+            df = df.merge(sev, on="sid", how="left")
+        for c in self.sev_cols:
+            if c not in df:
+                df[c] = 0.0
+        df[self.sev_cols] = df[self.sev_cols].fillna(0.0)
+        self.df = df
         self.root = data_root
         self.tf = _tf(size, split == "train")
 
@@ -67,4 +76,5 @@ class MultiTaskDataset(Dataset):
         mask = (cv2.imread(os.path.join(self.root, row.mask_path), cv2.IMREAD_GRAYSCALE) > 127).astype(np.float32)
         out = self.tf(image=img, mask=mask)
         y, w = self._target(row)
-        return out["image"], out["mask"].unsqueeze(0).float(), torch.from_numpy(y), torch.from_numpy(w)
+        sev = torch.tensor([row[c] for c in self.sev_cols], dtype=torch.float32)
+        return out["image"], out["mask"].unsqueeze(0).float(), torch.from_numpy(y), torch.from_numpy(w), sev

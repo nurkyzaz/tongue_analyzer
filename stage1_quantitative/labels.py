@@ -25,3 +25,8 @@ CHAR_DESC = {
 
 CLASS_TO_IDX = {c: {v: i for i, v in enumerate(vals)} for c, vals in LABEL_MAPS.items()}
 NUM_CLASSES = {c: len(v) for c, v in LABEL_MAPS.items()}
+
+# Continuous severity regression targets (0-1), from TonguExpert phenotype measurements.
+# These give a graded "degree" per feature (the sensitivity fix), each tied to a characteristic.
+SEVERITY_KEYS = ["fissure_sev", "toothmk_sev", "coating_cov"]
+SEVERITY_OF_CHAR = {"fissure": "fissure_sev", "tooth_mk": "toothmk_sev", "coating": "coating_cov"}

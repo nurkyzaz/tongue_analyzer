@@ -18,7 +18,7 @@ from pydantic import BaseModel
 from deployment.api.service import TongueService
 
 SEG = os.getenv("TIH_SEG_CKPT", "checkpoints/seg_combined/best.pt")
-MT = os.getenv("TIH_MT_CKPT", "checkpoints/multitask_v2/best.pt")
+MT = os.getenv("TIH_MT_CKPT", "checkpoints/multitask_v3/best.pt")  # v3 = +severity regression head
 API_KEY = os.getenv("TIH_API_KEY", "")          # if set, /analyze requires X-API-Key header
 CORS_ORIGINS = os.getenv("TIH_CORS_ORIGINS", "*").split(",")
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -59,6 +59,20 @@ def analyze(req: AnalyzeReq, x_api_key: str = Header(default="")):
         raise HTTPException(status_code=401, detail="invalid or missing X-API-Key")
     img = _decode(req.image)
     return service().analyze(img, metadata=req.metadata)
+
+
+class RefineReq(BaseModel):
+    base_confidence: float
+    answers: list                  # [{"weight": float, "answer": bool}]
+
+
+@app.post("/refine")
+def refine_endpoint(req: RefineReq):
+    """Follow-up flow: update a pattern's confidence from the user's yes/no answers (transparent
+    log-odds). Exploratory refinement of a traditional framework's perspective, not a diagnosis."""
+    service()                       # ensures stage2_interpretation is on sys.path
+    from interpret import refine
+    return {"confidence": refine(req.base_confidence, req.answers)}
 
 
 @app.get("/examples")
