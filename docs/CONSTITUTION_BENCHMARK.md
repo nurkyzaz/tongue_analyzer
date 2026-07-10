@@ -9,7 +9,7 @@ Findings after surveying the Chinese literature, and a first working benchmark._
 |---|---|---|---|---|
 | Hospital constitution sets (e.g. 22,482 tongue imgs, doctor-labelled 9 types) | image→constitution | ✅ | ❌ in-hospital | would be ideal — **not obtainable** |
 | **CCMQ** (Wang Qi 9-constitution questionnaire) | text questionnaire | ✅ (scoring is a public standard) | scoring yes, response data no | our follow-up-question basis |
-| **ZhongJing-OMNI** ([github](https://github.com/pariskang/ZhongJing-OMNI)) | **multimodal** — tongue images + Q&A | Q&A/VQA | ✅ | tongue-image VQA for LLMs; structure loose |
+| **ZhongJing-OMNI** ([github](https://github.com/pariskang/ZhongJing-OMNI), [HF](https://huggingface.co/datasets/CMLM/ZhongJing-OMNI)) | **multimodal** — tongue images + Q&A | Q&A/VQA | ⚠️ **announced, not released** | data dir empty on both GitHub & HF (README + 1 `demo.png` only) |
 | **TCMEval-SDT** ([Nature SciData](https://www.nature.com/articles/s41597-025-04772-9), [github](https://github.com/zhuyan166/TCMEval)) | **text** cases | ✅ gold syndrome (MCQ) | ✅ **CC-BY 4.0** | **usable** (see below) |
 | **TCM-BEST4SDT** ([github](https://github.com/DYJG-research/TCM-BEST4SDT)) | text, 257 syndromes | ✅ | ✅ | syndrome differentiation for LLMs |
 | **TCMBench / TCM-ED** | text, 5,473 licensing-exam Qs | exam answers | ✅ | LLM TCM knowledge |
@@ -84,10 +84,29 @@ like the literature), independent of the image model.
 - ❌ Not an image-model benchmark (uses the cases' text tongue descriptions, not photos).
 - ❌ Not a constitution-accuracy claim.
 
-## Paths to a real constitution/image benchmark (future)
-1. **Multimodal via ZhongJing-OMNI**: run our image pipeline on its tongue images and compare our
-   feature/pattern output to its expert Q&A answers. Needs parsing its answer format.
-2. **LLM-reasoning score**: if we add a Stage-2 LLM, report its score on TCMEval-SDT / TCM-BEST4SDT MCQ
+## Multimodal image→syndrome: harness built, dataset unreleased
+
+`evaluation/benchmark_multimodal.py` runs our **real production vision pipeline** (seg_combined + v5
+characteristics + extra features) on tongue photos and scores it against expert answers — the closest
+thing to a true image→syndrome check. It uses the ZhongJing-OMNI `TongueDiagnosis/` layout
+(`images/<id>.png` + `answers/<id>_answer.txt`) and reuses the **same Chinese parser** as the text
+benchmark for the gold side, reporting (a) feature agreement (does our vision read the same
+body-colour/coating/marks the expert described?) and (b) axis consistency.
+
+**Blocker (honest):** ZhongJing-OMNI's multimodal tongue data is **announced but never released** — its
+GitHub and HuggingFace repos both ship only a README and a single `demo.png` (263 kB, "1 row"), and the
+citation URL is a `yourusername` placeholder. Worse, that lone `demo.png` is **a screenshot of a chat
+UI**, not a diagnostic photo, and its gold is self-contradictory (README caption: "swollen + tooth-marks
+→ Qi deficiency"; the answer *inside* the same screenshot: "no swelling or tooth-marks, normal
+pale-pink"). Cropping the ~93 px tongue thumbnail out of the screenshot, the harness runs cleanly
+end-to-end (our read: regular/white/greasy → Damp), but at that resolution/domain and with a
+contradictory label this is a **plumbing verification, n=1 — not a score**. The harness is ready to
+produce a real number the day the images are released (or on any image+expert-answer set in this layout).
+
+## Other paths to a real constitution/image benchmark (future)
+1. **LLM-reasoning score**: if we add a Stage-2 LLM, report its score on TCMEval-SDT / TCM-BEST4SDT MCQ
    (a standard, citable "TCM reasoning" number for the reasoning layer).
-3. **Collect a small constitution set**: pair tongue photos with a validated **CCMQ** assessment (clinic
+2. **Collect a small constitution set**: pair tongue photos with a validated **CCMQ** assessment (clinic
    partnership) — the only route to a true tongue→constitution accuracy.
+3. **Chase a released multimodal set**: e-mail the ZhongJing-OMNI authors (ylkan21@m.fudan.edu.cn) for
+   the tongue images, or substitute another image+expert-answer set into the same harness.
