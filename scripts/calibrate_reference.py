@@ -44,12 +44,11 @@ def main():
         n += 1
 
     stats = {"n": n, "graded": {}, "categorical": {}}
+    qs = list(range(0, 101, 5))          # 0,5,...,100 -> quantile curve for percentile-rank lookup
     for k in GRADED:
         a = np.array(sev[k]) if sev[k] else np.array([0.0])
         stats["graded"][k] = {"mean": round(float(a.mean()), 4),
-                              "p50": round(float(np.percentile(a, 50)), 4),
-                              "p75": round(float(np.percentile(a, 75)), 4),
-                              "p90": round(float(np.percentile(a, 90)), 4)}
+                              "q": [round(float(np.percentile(a, p)), 4) for p in qs]}
     for c in ("tai", "zhi"):
         tot = sum(catfreq[c].values()) or 1
         stats["categorical"][c] = {v: round(cnt / tot, 4) for v, cnt in catfreq[c].items()}

@@ -20,6 +20,7 @@ DISCLAIMER = ("Educational summary exploring the traditional-Chinese-medicine to
               "For any health concern, please consult a qualified healthcare professional.")
 
 GRADED = {"coating", "fissure", "tooth_mk"}   # features whose meaning scales with severity
+MENTION_REL = 0.6                              # surface a graded feature only if its population rank >= this
 
 
 STATS_PATH = os.path.join(os.path.dirname(__file__), "knowledge_base", "reference_stats.json")
@@ -39,10 +40,23 @@ def load_stats(path=STATS_PATH):
 
 
 def _rel(severity, feat, stats):
-    """Distinctiveness of a graded feature: how far ABOVE the population norm (0..1). Common features
-    (severity near the population mean) contribute ~0, so they don't drive everyone's result."""
-    mean = stats.get("graded", {}).get(feat, {}).get("mean", 0.3)
-    return max(0.0, min(1.0, (severity - mean) / max(1e-3, 1.0 - mean)))
+    """Distinctiveness = PERCENTILE RANK of this severity in the population (0..1). Handles skewed/
+    biased features correctly: a coating value ~everyone has ranks ~0.5 (not distinctive), while any
+    real crack (most tongues have none) ranks high. This is the data-grounded fix for both the
+    'greasy on every tongue' and 'severe cracks read as balanced' bugs."""
+    if severity < 0.12:                        # not present in absolute terms -> never distinctive
+        return 0.0
+    q = stats.get("graded", {}).get(feat, {}).get("q")
+    if not q or q[-1] < 0.2:                    # feature ~never present in the population:
+        return round(max(0.0, min(1.0, (severity - 0.3) / 0.7)), 4)   # rank by absolute severity
+    # q holds values at percentiles 0,5,...,100 -> invert to get the rank of `severity`
+    step = 100.0 / (len(q) - 1)
+    for i in range(len(q) - 1):
+        if severity <= q[i + 1]:
+            lo, hi = q[i], q[i + 1]
+            frac = 0.0 if hi <= lo else (severity - lo) / (hi - lo)
+            return round((i + frac) * step / 100.0, 4)
+    return 1.0
 
 
 def _cat_weight(value, char, stats):
@@ -66,14 +80,17 @@ def feature_readings(chars, kb, stats):
         sev = float(c.get("severity", 0.0))
         band = _band(sev, kb)
         if ch in GRADED:
-            present = band["mention"]
-            rel = _rel(sev, ch, stats)                 # how distinctive vs population
+            rel = _rel(sev, ch, stats)                 # percentile rank vs population
+            present = rel >= MENTION_REL               # surface only if distinctively high
+            band = _band(rel, kb)                      # degree reflects the population rank
+            val_absent = (c["value"] == spec.get("absent_value"))
             reading = {
                 "key": ch, "label": spec.get("label", ch), "value": c["value"],
                 "severity": round(sev, 3), "rel": round(rel, 3), "band": band["word"], "mentioned": present,
                 "tcm_term": spec.get("tcm_term", ""),
                 "tcm": spec.get("present_tcm", "") if present else "",
-                "plain": spec.get("present_plain", "") if present else spec.get("absent_plain", ""),
+                "plain": spec.get("present_plain", "") if present else
+                         (spec.get("absent_plain", "") if val_absent else "within a typical range for this sign"),
                 "points_to": {p: w * rel for p, w in spec.get("points_to", {}).items()} if present else {},
             }
         else:  # categorical color feature — weight by rarity of the value
@@ -103,9 +120,9 @@ def extra_readings(extra_chars, kb, stats):
     for feat, c in (extra_chars or {}).items():
         sev = float(c.get("severity", 0.0))
         rel = _rel(sev, feat, stats)
-        if rel < 0.25:                         # not notably above typical -> skip
+        if rel < MENTION_REL:                   # only surface distinctively-present extras
             continue
-        band = _band(0.15 + rel * 0.85, kb)     # band reflects distinctiveness, not raw prob
+        band = _band(rel, kb)                   # band reflects population rank, not raw prob
         spec = specs.get(feat, {})
         vote = rel * EXTRA_RELIABILITY.get(feat, 0.35)     # noisy detectors barely influence pattern
         out.append({"key": feat, "label": spec.get("label", feat), "value": "present",
