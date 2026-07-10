@@ -30,8 +30,11 @@ def _tf(size, train):
                 A.ShiftScaleRotate(0.08, 0.15, 20, border_mode=cv2.BORDER_CONSTANT,
                                    value=0, mask_value=0, p=0.7),
                 A.RandomBrightnessContrast(0.3, 0.3, p=0.6),
-                A.HueSaturationValue(15, 25, 15, p=0.5),
-                A.RandomGamma((70, 130), p=0.4),
+                # white-balance robustness: MILD per-channel shifts simulate illuminant/colour-temperature
+                # casts, WITHOUT rotating hue (which would corrupt the tai/zhi colour labels themselves).
+                A.RGBShift(r_shift_limit=14, g_shift_limit=10, b_shift_limit=14, p=0.5),
+                A.HueSaturationValue(hue_shift_limit=6, sat_shift_limit=18, val_shift_limit=12, p=0.4),
+                A.RandomGamma((80, 120), p=0.4),
                 A.ImageCompression(quality_lower=40, quality_upper=95, p=0.3)]
     aug += [A.Normalize(IMAGENET_MEAN, IMAGENET_STD), ToTensorV2()]
     return A.Compose(aug)
