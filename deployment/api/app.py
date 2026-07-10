@@ -18,7 +18,7 @@ from pydantic import BaseModel
 from deployment.api.service import TongueService
 
 SEG = os.getenv("TIH_SEG_CKPT", "checkpoints/seg_combined/best.pt")
-MT = os.getenv("TIH_MT_CKPT", "checkpoints/multitask_v3/best.pt")  # v3 = +severity regression head
+MT = os.getenv("TIH_MT_CKPT", "checkpoints/multitask_v5/best.pt")  # v5 = +severity +WB-aug (best benchmark)
 API_KEY = os.getenv("TIH_API_KEY", "")          # if set, /analyze requires X-API-Key header
 CORS_ORIGINS = os.getenv("TIH_CORS_ORIGINS", "*").split(",")
 HERE = os.path.dirname(os.path.abspath(__file__))
