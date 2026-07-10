@@ -28,7 +28,7 @@
       "present_tcm": "Dampness or Phlegm the digestion isn't transforming",
       "present_plain": "sluggish digestion — a heavy, greasy or thick coating is traditionally linked to bloating, heaviness after meals, and feeling foggy",
       "absent_plain": "a thin, non-greasy coating is considered the healthy baseline (good digestive function)",
-      "points_to": {"phlegm_dampness": 1.0, "spleen_qi_deficiency": 0.6, "damp_heat": 0.4}
+      "points_to": {"phlegm_dampness": 1.0, "damp_heat": 0.3}
     },
     "tai": {
       "label": "Coating color",
@@ -43,7 +43,7 @@
       "label": "Tongue body color",
       "kind": "categorical",
       "values": {
-        "light": {"tcm_term": "pale body (Deficiency)", "plain_gloss": "traditionally linked to being under-nourished or under-powered — tiredness, pallor, and (in this tradition) a tendency associated with low blood/iron", "points_to": {"blood_deficiency": 1.0, "spleen_qi_deficiency": 0.6, "yang_deficiency": 0.5}},
+        "light": {"tcm_term": "pale body (Deficiency)", "plain_gloss": "a pale tongue is traditionally read as 'not enough Blood' — under-nourished; linked to tiredness, pallor, dizziness, and (in this tradition) a low-blood/low-iron tendency", "points_to": {"blood_deficiency": 1.3, "spleen_qi_deficiency": 0.4, "yang_deficiency": 0.4}},
         "regular": {"tcm_term": "pale-red body (balanced)", "plain_gloss": "a healthy, lively body color — balanced Qi and Blood", "points_to": {"balanced": 1.0}},
         "dark": {"tcm_term": "red / dark body (Heat or Blood stasis)", "plain_gloss": "a redder body is linked to 'heat' (feeling hot, restless); a dusky, purple-dark body to sluggish circulation", "points_to": {"damp_heat": 0.5, "yin_deficiency": 0.5, "blood_stasis": 0.8}}
       }
@@ -64,9 +64,9 @@
       "absent_value": "none",
       "tcm_term": "tooth marks / scalloped edges",
       "present_tcm": "a swollen tongue from Spleen-Qi (digestive) deficiency with Dampness",
-      "present_plain": "traditionally linked to low digestive energy and fluid retention — tiredness, bloating, puffiness, and (in this tradition) a tendency associated with low blood/iron",
+      "present_plain": "traditionally linked to low digestive energy and fluid retention — tiredness, bloating, puffiness",
       "absent_plain": "smooth edges suggest the digestion is handling fluids well",
-      "points_to": {"spleen_qi_deficiency": 1.0, "phlegm_dampness": 0.6, "blood_deficiency": 0.4}
+      "points_to": {"spleen_qi_deficiency": 1.0, "phlegm_dampness": 0.5, "blood_deficiency": 0.3}
     }
   },
   "extra_features": {

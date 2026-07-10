@@ -22,11 +22,12 @@
   .badge{display:inline-block;padding:6px 10px;border-radius:8px;font-size:13px;font-weight:600}
   .ok{background:rgba(49,196,141,.15);color:var(--acc)}.warn{background:rgba(246,196,83,.15);color:var(--warn)}.err{background:rgba(241,106,106,.15);color:var(--err)}
   .sign{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px;margin:8px 0}
-  .sign.faint{opacity:.85}
+  .sign.faint{opacity:.9}
   .sign .top{display:flex;justify-content:space-between;font-size:13px;align-items:baseline;gap:8px}
   .deg{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--warn);font-weight:700}
+  .score{font-size:13px;font-weight:700;color:var(--warn);white-space:nowrap}.score small{color:var(--mut);font-weight:600}
   .sign .val{font-weight:700;color:#fff}
-  .bar{height:6px;background:#0c1218;border-radius:5px;margin:6px 0;overflow:hidden}.bar>i{display:block;height:100%;background:var(--warn)}
+  .bar{height:7px;background:#0c1218;border-radius:5px;margin:6px 0;overflow:hidden}.bar>i{display:block;height:100%;background:var(--warn);border-radius:5px}
   .tcm{font-size:13px;color:#cdd8e2;line-height:1.45}.tcm b{color:#fff}
   .plain{font-size:13px;color:var(--blue);line-height:1.45;margin-top:3px}
   .healthy{font-size:13px;color:var(--mut);padding:5px 2px}
@@ -36,13 +37,23 @@
   .chip{display:inline-block;background:var(--chip);color:#bcd;border-radius:20px;padding:2px 9px;font-size:11px;margin:3px 3px 0 0}
   .rec{font-size:12.5px;color:#bcd;background:rgba(49,196,141,.08);border-radius:8px;padding:8px;margin-top:7px}
   .qa{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:11px;margin:8px 0}
-  .qa .q{font-size:13.5px;margin-bottom:7px}
-  .qbtns{display:flex;gap:6px}.qbtns button{flex:1;padding:7px;font-size:13px}
-  .qbtns button.sel{background:var(--acc);color:#04120b}
+  .qa .q{font-size:13.5px;margin-bottom:7px}.qbtns{display:flex;gap:6px}.qbtns button{flex:1;padding:7px;font-size:13px}.qbtns button.sel{background:var(--acc);color:#04120b}
   .conf{font-size:13px;margin-top:8px}.conf b{color:var(--acc)}
   .prose{font-size:14px;line-height:1.55}.prose strong{color:#fff}
   .src{color:var(--mut);font-size:11px;line-height:1.5;margin-top:8px}
   .disc{color:var(--mut);font-size:11px;margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
+  /* shareable tongue-type card */
+  .tc{position:relative;border-radius:16px;padding:20px 18px;text-align:center;overflow:hidden;
+      background:radial-gradient(120% 90% at 50% 0%, #1c3b31 0%, #14202b 55%, #0f1720 100%);border:1px solid #2b4a3e}
+  .tc .brand{font-size:12px;letter-spacing:.14em;color:var(--acc);font-weight:700}
+  .tc .kick{font-size:12px;letter-spacing:.18em;color:var(--mut);margin-top:10px}
+  .tc .emoji{font-size:64px;line-height:1.1;margin:6px 0}
+  .tc .name{font-size:30px;font-weight:800;color:#fff}
+  .tc .blurb{font-size:14px;font-style:italic;color:#cfe9dd;margin:4px 0 12px}
+  .tc .ring{font-size:15px;color:var(--mut)} .tc .ring b{font-size:40px;color:var(--acc);font-weight:800}
+  .tc .hl{margin-top:12px;text-align:left}
+  .tc .hlrow{display:flex;justify-content:space-between;font-size:12.5px;color:#dfe8f0;margin:8px 2px 3px}
+  .tc .cta{margin-top:14px;font-size:12px;color:var(--mut)}
   .ex-item{display:flex;gap:12px;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:10px}
   .ex-item img{width:104px;height:104px;object-fit:cover;border-radius:8px;flex-shrink:0}
   .ex-item .exb{font-size:12.5px;line-height:1.45}.ex-item .ext{font-weight:700;color:#fff;font-size:13.5px;margin-bottom:2px}
@@ -52,7 +63,7 @@
 <body>
 <div class="wrap">
   <h1>TongueInsight <span style="color:var(--acc)">Reading</span></h1>
-  <div class="sub">Align your tongue in the oval and capture. An <b>educational</b> look at what the traditional Chinese-medicine tongue-reading framework associates with your tongue's features — not a diagnosis.</div>
+  <div class="sub">Align your tongue in the oval and capture. An <b>educational</b> look at what the traditional Chinese-medicine tongue-reading framework associates with your tongue — not a diagnosis.</div>
 
   <div class="card">
     <div class="frame">
@@ -75,7 +86,8 @@
   <div class="card hidden" id="results">
     <div id="framing" class="badge">…</div>
     <img id="overlay" style="width:100%;border-radius:12px;margin:12px 0"/>
-    <div id="overview" class="prose" style="color:var(--mut)"></div>
+    <div id="card"></div>
+    <div id="overview" class="prose" style="color:var(--mut);margin-top:6px"></div>
     <h2>Your signs, one by one</h2><div id="signs"></div>
     <h2>What they suggest together</h2><div id="combined" class="prose"></div><div id="patterns"></div>
     <div id="followup"></div>
@@ -90,7 +102,9 @@
 
 <script>
 const $=id=>document.getElementById(id), md=s=>(s||'').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+const GRADED=['coating','fissure','tooth_mk','peeled_coating','red_tongue','purple_body','swollen','thin','red_dots','black_coating','slippery_coating'];
 let stream=null;
+
 async function startCam(){try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:720},height:{ideal:720}}});
   $('cam').srcObject=stream;$('cam').style.display='block';$('shot').style.display='none';$('snapBtn').disabled=false;$('startBtn').textContent='Camera on';}
   catch(e){$('hint').textContent='Camera unavailable (needs https/localhost). Use “Upload photo”.';}}
@@ -99,12 +113,13 @@ async function analyze(u){$('results').classList.add('hidden');$('loading').clas
   try{const r=await fetch('/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:u})});render(await r.json());}catch(e){$('loading').textContent='Error: '+e;}}
 
 function signCard(f){
-  if(f.key!=='tai'&&f.key!=='zhi'&&!f.mentioned)   // graded feature that's absent -> healthy one-liner
-    return `<div class="healthy">✓ <b>${f.label}:</b> ${f.plain}</div>`;
+  const graded=GRADED.includes(f.key);
+  if(graded&&!f.mentioned) return `<div class="healthy">✓ <b>${f.label}:</b> ${f.plain}</div>`;
   const pct=Math.round((f.severity||0)*100);
   const deg=f.band&&f.band!=='none'?`<span class="deg">${f.band}</span>`:'';
-  const bar=(f.key==='coating'||f.key==='fissure'||f.key==='tooth_mk')?`<div class="bar"><i style="width:${pct}%"></i></div>`:'';
-  return `<div class="sign ${f.band==='faint'?'faint':''}"><div class="top"><span>${deg} ${f.tcm_term||f.value}</span></div>
+  const score=graded?`<span class="score">${pct}<small>/100</small></span>`:'';
+  const bar=graded?`<div class="bar"><i style="width:${pct}%"></i></div>`:'';
+  return `<div class="sign ${f.band==='faint'?'faint':''}"><div class="top"><span>${deg} ${f.tcm_term||f.value}</span>${score}</div>
     ${bar}<div class="tcm"><b>TCM:</b> ${f.tcm||''}</div><div class="plain">In plain terms: ${f.plain||''}</div></div>`;
 }
 function patCard(p){
@@ -112,39 +127,73 @@ function patCard(p){
   const recs=[...(p.recommendations?.diet||[]),...(p.recommendations?.lifestyle||[])].slice(0,4);
   const rec=recs.length?`<div class="rec">🌿 ${recs.join(' · ')}</div>`:'';
   return `<div class="pat"><div class="nm">${p.tcm_name} · <span style="color:var(--mut);font-weight:600">${Math.round(p.confidence*100)}%</span></div>
-    <div class="pn">${p.plain_name}</div><div class="ex">${p.explanation||''}</div>
-    ${sym?`<div style="margin-top:6px">${sym}</div>`:''}${rec}</div>`;
+    <div class="pn">${p.plain_name}</div><div class="ex">${p.explanation||''}</div>${sym?`<div style="margin-top:6px">${sym}</div>`:''}${rec}</div>`;
+}
+function renderCard(card){
+  if(!card){$('card').innerHTML='';return;}
+  const hl=(card.highlights||[]).map(h=>`<div class="hlrow"><span>${h.label}</span><span>${h.score}/100</span></div><div class="bar"><i style="width:${h.score}%"></i></div>`).join('');
+  $('card').innerHTML=`<div class="tc" id="tc">
+    <div class="brand">👅 TONGUEINSIGHT</div><div class="kick">YOUR TONGUE TYPE</div>
+    <div class="emoji">${card.emoji||'✨'}</div><div class="name">${card.type_name||''}</div>
+    <div class="blurb">“${card.blurb||''}”</div>
+    <div class="ring"><b>${card.balance_score}</b> /100 balance</div>
+    <div class="hl">${hl}</div>
+    <div class="cta">Curious what yours says? Scan your tongue →</div></div>
+    <div class="row"><button id="dl" class="primary">📥 Download card</button><button id="shareBtn">🔗 Share</button></div>`;
+  $('dl').onclick=()=>drawShareCard(card);
+  $('shareBtn').onclick=async()=>{const t=`My tongue type: ${card.type_name} — balance ${card.balance_score}/100`;
+    try{await navigator.share({title:'My Tongue Type',text:t,url:location.href});}
+    catch(e){try{await navigator.clipboard.writeText(t+' '+location.href);alert('Copied to clipboard!');}catch(_){}}};
+}
+function roundRect(x,rx,ry,w,h,r){x.beginPath();x.moveTo(rx+r,ry);x.arcTo(rx+w,ry,rx+w,ry+h,r);x.arcTo(rx+w,ry+h,rx,ry+h,r);x.arcTo(rx,ry+h,rx,ry,r);x.arcTo(rx,ry,rx+w,ry,r);x.closePath();}
+function drawShareCard(card){
+  const W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
+  const g=x.createRadialGradient(W/2,0,80,W/2,300,1100);g.addColorStop(0,'#1c3b31');g.addColorStop(.55,'#14202b');g.addColorStop(1,'#0f1720');
+  x.fillStyle=g;x.fillRect(0,0,W,H);x.fillStyle='#31c48d';x.fillRect(0,0,W,10);x.textAlign='center';
+  x.fillStyle='#31c48d';x.font='700 34px system-ui';x.fillText('👅  T O N G U E I N S I G H T',W/2,96);
+  x.fillStyle='#93a4b3';x.font='600 30px system-ui';x.fillText('Y O U R   T O N G U E   T Y P E',W/2,168);
+  x.font='150px system-ui';x.fillText(card.emoji||'✨',W/2,370);
+  x.fillStyle='#ffffff';x.font='800 84px system-ui';x.fillText(card.type_name||'',W/2,470);
+  x.fillStyle='#cfe9dd';x.font='italic 40px system-ui';x.fillText('“'+(card.blurb||'')+'”',W/2,540);
+  // score ring
+  const cx=W/2,cy=760,r=150;x.lineWidth=26;x.lineCap='round';
+  x.strokeStyle='#17303a';x.beginPath();x.arc(cx,cy,r,0,2*Math.PI);x.stroke();
+  x.strokeStyle='#31c48d';x.beginPath();x.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+2*Math.PI*(card.balance_score/100));x.stroke();
+  x.fillStyle='#e8eef4';x.font='800 96px system-ui';x.fillText(card.balance_score,cx,cy+22);
+  x.fillStyle='#93a4b3';x.font='700 28px system-ui';x.fillText('BALANCE',cx,cy+68);
+  // highlights
+  let y=1010;x.textAlign='left';
+  (card.highlights||[]).slice(0,3).forEach(h=>{
+    x.fillStyle='#e8eef4';x.font='600 36px system-ui';x.fillText(h.label,120,y);
+    x.textAlign='right';x.fillStyle='#f6c453';x.fillText(h.score+'/100',960,y);x.textAlign='left';
+    x.fillStyle='#17222c';roundRect(x,120,y+18,840,20,10);x.fill();
+    x.fillStyle='#f6c453';roundRect(x,120,y+18,840*Math.max(0.02,h.score/100),20,10);x.fill();y+=104;});
+  x.textAlign='center';x.fillStyle='#93a4b3';x.font='700 32px system-ui';
+  x.fillText('Scan your tongue → '+location.host,W/2,H-92);
+  x.fillStyle='#5a6b7b';x.font='22px system-ui';
+  x.fillText('Educational · a traditional-medicine perspective · not a diagnosis',W/2,H-48);
+  c.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='my-tongue-type.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000);});
 }
 function renderFollowup(fu){
-  const box=$('followup'); box.innerHTML='';
-  if(!fu||!fu.length)return;
-  const f=fu[0]; const answers={};
+  const box=$('followup');box.innerHTML='';if(!fu||!fu.length)return;
+  const f=fu[0],answers={};
   const head=document.createElement('div');
-  head.innerHTML=`<h2>Refine (optional)</h2><div class="sub" style="margin-top:-4px">In this tradition, <b>${f.plain_name}</b> often goes with the following — does any match you? Your answers refine the confidence; this stays exploratory, not a diagnosis.</div>`;
-  box.appendChild(head);
-  const conf=document.createElement('div'); conf.className='conf';
-  const setConf=v=>conf.innerHTML=`Confidence in <b>${f.pattern}</b>: <b>${Math.round(v*100)}%</b>`;
-  setConf(f.base_confidence);
-  f.questions.forEach((q,i)=>{
-    const el=document.createElement('div'); el.className='qa';
+  head.innerHTML=`<h2>Refine (optional)</h2><div class="sub" style="margin-top:-4px">In this tradition, <b>${f.plain_name}</b> often goes with the following — does any match you? Exploratory, not a diagnosis.</div>`;box.appendChild(head);
+  const conf=document.createElement('div');conf.className='conf';
+  const setConf=v=>conf.innerHTML=`Confidence in <b>${f.pattern}</b>: <b>${Math.round(v*100)}%</b>`;setConf(f.base_confidence);
+  f.questions.forEach((q,i)=>{const el=document.createElement('div');el.className='qa';
     el.innerHTML=`<div class="q">${q.q}</div><div class="qbtns"><button data-a="1">Yes</button><button data-a="0">No</button></div>`;
-    el.querySelectorAll('button').forEach(b=>b.onclick=async()=>{
-      el.querySelectorAll('button').forEach(x=>x.classList.remove('sel')); b.classList.add('sel');
+    el.querySelectorAll('button').forEach(b=>b.onclick=async()=>{el.querySelectorAll('button').forEach(z=>z.classList.remove('sel'));b.classList.add('sel');
       answers[i]={weight:q.weight,answer:b.dataset.a==='1'};
-      const r=await fetch('/refine',{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({base_confidence:f.base_confidence,answers:Object.values(answers)})});
-      setConf((await r.json()).confidence);
-    });
-    box.appendChild(el);
-  });
+      const r=await fetch('/refine',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({base_confidence:f.base_confidence,answers:Object.values(answers)})});
+      setConf((await r.json()).confidence);});box.appendChild(el);});
   box.appendChild(conf);
 }
 function render(d){
   $('loading').classList.add('hidden');$('results').classList.remove('hidden');$('retryRow').classList.remove('hidden');
-  const f=d.framing||{},fb=$('framing');
-  fb.textContent=f.message||'';fb.className='badge '+(f.status==='ok'?'ok':f.status==='error'?'err':'warn');
-  $('overlay').src=d.overlay_png||'';
-  const it=d.interpretation||{};
+  const f=d.framing||{},fb=$('framing');fb.textContent=f.message||'';fb.className='badge '+(f.status==='ok'?'ok':f.status==='error'?'err':'warn');
+  $('overlay').src=d.overlay_png||'';const it=d.interpretation||{};
+  renderCard(it.card);
   $('overview').textContent=it.overview||'';
   $('signs').innerHTML=(it.features||[]).map(signCard).join('');
   $('combined').innerHTML=md(it.combined);
@@ -161,11 +210,10 @@ $('file').onchange=e=>{const fl=e.target.files[0];if(!fl)return;const rd=new Fil
   rd.onload=()=>{const im=new Image();im.onload=()=>{$('shot').src=im.src;$('shot').style.display='block';$('cam').style.display='none';analyze(toURL(im,im.naturalWidth,im.naturalHeight));};im.src=rd.result;};rd.readAsDataURL(fl);};
 $('retry').onclick=()=>{$('results').classList.add('hidden');$('retryRow').classList.add('hidden');$('shot').style.display='none';if(stream)$('cam').style.display='block';};
 fetch('/examples').then(r=>r.json()).then(d=>{$('exAttr').textContent=d.attribution||'';
-  $('examples').innerHTML=(d.examples||[]).map(e=>{
-    const signs=Object.values(e.characteristics||{}).map(c=>`${(c.description||'').split(' ')[0]}: <b>${c.value}</b>`).join(' · ');
-    return `<div class="ex-item"><img src="/static/examples/${e.file}" alt="${e.title}"/><div class="exb">
-      <div class="ext">${e.title}</div><div style="color:var(--mut);margin-bottom:4px">${signs}</div>
-      <div>${e.focus_meaning||''}</div>${e.patterns&&e.patterns[0]?`<div style="margin-top:4px;color:#bcd">→ <b>${e.patterns[0].tcm_name||e.patterns[0].name||''}</b></div>`:''}</div></div>`;}).join('');});
+  $('examples').innerHTML=(d.examples||[]).map(e=>{const signs=Object.values(e.characteristics||{}).map(c=>`${(c.description||'').split(' ')[0]}: <b>${c.value}</b>`).join(' · ');
+    return `<div class="ex-item"><img src="/static/examples/${e.file}" alt="${e.title}"/><div class="exb"><div class="ext">${e.title}</div>
+      <div style="color:var(--mut);margin-bottom:4px">${signs}</div><div>${e.focus_meaning||''}</div>
+      ${e.patterns&&e.patterns[0]?`<div style="margin-top:4px;color:#bcd">→ <b>${e.patterns[0].tcm_name||e.patterns[0].name||''}</b></div>`:''}</div></div>`;}).join('');});
 </script>
 </body>
 </html>

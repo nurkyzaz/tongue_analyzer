@@ -5,8 +5,8 @@
 | Dataset | Size | What it gives | Status | License |
 |---|---|---|---|---|
 | **TonguExpert** | 5,992 | images + masks + 5 labels + **~1,300 continuous phenotypes** (crack area, coating %, color) | ✅ in use (features + **severity targets**) | verify terms |
-| **SM-Tongue** | 2,155 real | real-photo segmentation masks | ✅ in use (fixed real-photo domain gap: seg 0.75→0.975) | CC-BY-NC-4.0 (non-commercial) |
-| **TCM-Tongue** | 6,719 | **20 practitioner-verified categories** (adds purple, red-dots, peeled, swollen, thin, red…) | ⏳ Phase 4 — Dryad download blocked by anti-bot; needs manual fetch | CC BY 4.0 (Dryad) |
+| **SM-Tongue** | 2,155 real | real-photo segmentation masks | ✅ in use (fixed real-photo domain gap: seg 0.75→0.975) |
+| **TCM-Tongue** | 6,719 | **20 practitioner-verified categories** (adds purple, red-dots, peeled, swollen, thin, red…) | ⏳ Phase 4 — Dryad download blocked by anti-bot; needs manual fetch |
 | **RTDS** | 2,100 | code only (U-Net++, Swin-hybrid, Focal Loss) — data private | reference recipe | — |
 | Memory-SAM / SM-Tongue tooling | — | SAM2+DINO training-free segmenter | benchmarked (auto-labeler, not in serving path) | SAM2 Apache-2.0; DINOv3 gated |
 

@@ -22,9 +22,33 @@ DISCLAIMER = ("Educational summary exploring the traditional-Chinese-medicine to
 GRADED = {"coating", "fissure", "tooth_mk"}   # features whose meaning scales with severity
 
 
+STATS_PATH = os.path.join(os.path.dirname(__file__), "knowledge_base", "reference_stats.json")
+
+
 def load_kb(path=KB_PATH):
     with open(path, encoding="utf-8") as f:
         return json.load(f)
+
+
+def load_stats(path=STATS_PATH):
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {"graded": {}, "categorical": {}}
+
+
+def _rel(severity, feat, stats):
+    """Distinctiveness of a graded feature: how far ABOVE the population norm (0..1). Common features
+    (severity near the population mean) contribute ~0, so they don't drive everyone's result."""
+    mean = stats.get("graded", {}).get(feat, {}).get("mean", 0.3)
+    return max(0.0, min(1.0, (severity - mean) / max(1e-3, 1.0 - mean)))
+
+
+def _cat_weight(value, char, stats):
+    """Informativeness of a categorical value = 1 - population frequency (rare value => informative)."""
+    freq = stats.get("categorical", {}).get(char, {}).get(value, 0.3)
+    return max(0.1, 1.0 - freq)
 
 
 def _band(sev, kb):
@@ -34,8 +58,8 @@ def _band(sev, kb):
     return kb["severity_bands"][-1]
 
 
-def feature_readings(chars, kb):
-    """Per-feature reading: degree band + dual-language + pattern contributions."""
+def feature_readings(chars, kb, stats):
+    """Per-feature reading: degree band + dual-language + DISTINCTIVENESS-weighted pattern votes."""
     readings = []
     for ch, c in chars.items():
         spec = kb["features"].get(ch, {})
@@ -43,43 +67,52 @@ def feature_readings(chars, kb):
         band = _band(sev, kb)
         if ch in GRADED:
             present = band["mention"]
+            rel = _rel(sev, ch, stats)                 # how distinctive vs population
             reading = {
                 "key": ch, "label": spec.get("label", ch), "value": c["value"],
-                "severity": round(sev, 3), "band": band["word"], "mentioned": present,
+                "severity": round(sev, 3), "rel": round(rel, 3), "band": band["word"], "mentioned": present,
                 "tcm_term": spec.get("tcm_term", ""),
                 "tcm": spec.get("present_tcm", "") if present else "",
                 "plain": spec.get("present_plain", "") if present else spec.get("absent_plain", ""),
-                "points_to": {p: w * sev for p, w in spec.get("points_to", {}).items()} if present else {},
+                "points_to": {p: w * rel for p, w in spec.get("points_to", {}).items()} if present else {},
             }
-        else:  # categorical color feature
+        else:  # categorical color feature — weight by rarity of the value
             vinfo = spec.get("values", {}).get(c["value"], {})
-            conf = float(c.get("confidence", 1.0))
+            w_inf = _cat_weight(c["value"], ch, stats)
             reading = {
                 "key": ch, "label": spec.get("label", ch), "value": c["value"],
-                "severity": round(sev, 3), "band": "", "mentioned": True,
+                "severity": round(sev, 3), "rel": round(w_inf, 3), "band": "", "mentioned": True,
                 "tcm_term": vinfo.get("tcm_term", ""), "tcm": vinfo.get("tcm_term", ""),
                 "plain": vinfo.get("plain_gloss", ""),
-                "points_to": {p: w * conf for p, w in vinfo.get("points_to", {}).items()},
+                "points_to": {p: w * w_inf for p, w in vinfo.get("points_to", {}).items()},
             }
         readings.append(reading)
     return readings
 
 
-def extra_readings(extra_chars, kb):
-    """Readings for the Phase-4 multi-label features (presence prob = severity). Only surfaced when
-    present (>= faint band), so absent features don't clutter the report."""
+# How much each extra feature is allowed to influence the PATTERN (from its val-AP; noisy ones barely).
+EXTRA_RELIABILITY = {"peeled_coating": 0.7, "red_dots": 0.6, "thin": 0.55, "red_tongue": 0.55,
+                     "black_coating": 0.35, "purple_body": 0.3, "swollen": 0.3, "slippery_coating": 0.2}
+
+
+def extra_readings(extra_chars, kb, stats):
+    """Readings for the Phase-4 multi-label features. These are noisier and over-predicted, so we
+    surface one only when it's clearly ABOVE the population norm (distinctive), and weight its vote
+    by that distinctiveness."""
     out, specs = [], kb.get("extra_features", {})
     for feat, c in (extra_chars or {}).items():
         sev = float(c.get("severity", 0.0))
-        band = _band(sev, kb)
-        if not band["mention"]:
+        rel = _rel(sev, feat, stats)
+        if rel < 0.25:                         # not notably above typical -> skip
             continue
+        band = _band(0.15 + rel * 0.85, kb)     # band reflects distinctiveness, not raw prob
         spec = specs.get(feat, {})
+        vote = rel * EXTRA_RELIABILITY.get(feat, 0.35)     # noisy detectors barely influence pattern
         out.append({"key": feat, "label": spec.get("label", feat), "value": "present",
-                    "severity": round(sev, 3), "band": band["word"], "mentioned": True,
+                    "severity": round(sev, 3), "rel": round(rel, 3), "band": band["word"], "mentioned": True,
                     "tcm_term": spec.get("tcm_term", ""), "tcm": spec.get("present_tcm", ""),
                     "plain": spec.get("present_plain", ""),
-                    "points_to": {p: w * sev for p, w in spec.get("points_to", {}).items()}})
+                    "points_to": {p: w * vote for p, w in spec.get("points_to", {}).items()}})
     return out
 
 
@@ -166,6 +199,40 @@ def _llm_narrative(readings, patterns, sources, llm):
     return (text + "\n\n**Note**\n" + DISCLAIMER) if text else None
 
 
+# Shareable "tongue type" archetypes (one per lead pattern). Evocative but non-scary, educational.
+ARCHETYPES = {
+    "balanced":              ("The Well-Balanced", "✨", "harmony across the board"),
+    "spleen_qi_deficiency":  ("The Gentle Engine", "\U0001F331", "runs best on warm, steady fuel"),
+    "phlegm_dampness":       ("The Misty One", "\U0001F32B️", "carries a little fog & heaviness"),
+    "damp_heat":             ("The Slow Fire", "\U0001F525", "runs a touch hot & humid"),
+    "yin_deficiency":        ("The Overclocked", "\U0001F335", "gives a lot, runs a little dry"),
+    "yang_deficiency":       ("The Cool Current", "❄️", "thrives with extra warmth"),
+    "blood_deficiency":      ("The Understocked", "\U0001FA78", "running low on reserves"),
+    "blood_stasis":          ("The Slow River", "\U0001F300", "circulation likes to keep moving"),
+}
+
+
+def build_card(readings, patterns):
+    """A short, shareable result: a 'tongue type' archetype + a positive 0-100 balance score + the
+    most DISTINCTIVE highlights (what stands out about this person, not what everyone has)."""
+    dev = sum(float(r.get("rel", 0)) for r in readings
+              if r["key"] not in ("tai", "zhi")) \
+        + sum(0.5 * float(r.get("rel", 0)) for r in readings
+              if r["key"] in ("tai", "zhi") and r["value"] not in ("regular", "white"))
+    balance = int(max(40, min(99, round(100 - 22 * dev))))
+    lead = patterns[0]["id"] if patterns else "balanced"
+    name, emoji, blurb = ARCHETYPES.get(lead, ARCHETYPES["balanced"])
+    hl = sorted([r for r in readings if r["key"] not in ("tai", "zhi") and float(r.get("rel", 0)) > 0.15],
+                key=lambda r: -float(r.get("rel", 0)))[:3]
+    return {
+        "type_name": name, "emoji": emoji, "blurb": blurb,
+        "balance_score": balance,
+        "lead_plain": (patterns[0]["plain_name"] if patterns else "balanced picture"),
+        "highlights": [{"label": r["label"], "band": r["band"],
+                        "score": int(round(float(r.get("severity", 0)) * 100))} for r in hl],
+    }
+
+
 def interpret(stage1_output, metadata=None, llm: LLMClient = None):
     kb = load_kb()
     chars = stage1_output["key_characteristics"]
@@ -176,7 +243,9 @@ def interpret(stage1_output, metadata=None, llm: LLMClient = None):
         return {"report": msg, "features": [], "patterns": [], "combined": "", "sources": [],
                 "disclaimer": DISCLAIMER}
 
-    readings = feature_readings(chars, kb) + extra_readings(stage1_output.get("extra_characteristics", {}), kb)
+    stats = load_stats()
+    readings = (feature_readings(chars, kb, stats)
+                + extra_readings(stage1_output.get("extra_characteristics", {}), kb, stats))
     patterns = vote_patterns(readings, kb)
     combined = _synthesis(readings, patterns)
     sources, overview = kb["sources"], kb["overview"]
@@ -187,6 +256,7 @@ def interpret(stage1_output, metadata=None, llm: LLMClient = None):
 
     return {
         "overview": overview, "features": readings, "patterns": patterns,
+        "card": build_card(readings, patterns),
         "combined": combined, "sources": sources, "report": report, "disclaimer": DISCLAIMER,
         # follow-up flow: questions for the top non-balanced pattern
         "followup": ([{"pattern_id": patterns[0]["id"], "pattern": patterns[0]["tcm_name"],
