@@ -65,6 +65,24 @@ def feature_readings(chars, kb):
     return readings
 
 
+def extra_readings(extra_chars, kb):
+    """Readings for the Phase-4 multi-label features (presence prob = severity). Only surfaced when
+    present (>= faint band), so absent features don't clutter the report."""
+    out, specs = [], kb.get("extra_features", {})
+    for feat, c in (extra_chars or {}).items():
+        sev = float(c.get("severity", 0.0))
+        band = _band(sev, kb)
+        if not band["mention"]:
+            continue
+        spec = specs.get(feat, {})
+        out.append({"key": feat, "label": spec.get("label", feat), "value": "present",
+                    "severity": round(sev, 3), "band": band["word"], "mentioned": True,
+                    "tcm_term": spec.get("tcm_term", ""), "tcm": spec.get("present_tcm", ""),
+                    "plain": spec.get("present_plain", ""),
+                    "points_to": {p: w * sev for p, w in spec.get("points_to", {}).items()}})
+    return out
+
+
 def _card(kb, pid, conf):
     pat = kb["patterns"].get(pid, {})
     return {"id": pid, "tcm_name": pat.get("tcm_name", pid), "plain_name": pat.get("plain_name", ""),
@@ -158,7 +176,7 @@ def interpret(stage1_output, metadata=None, llm: LLMClient = None):
         return {"report": msg, "features": [], "patterns": [], "combined": "", "sources": [],
                 "disclaimer": DISCLAIMER}
 
-    readings = feature_readings(chars, kb)
+    readings = feature_readings(chars, kb) + extra_readings(stage1_output.get("extra_characteristics", {}), kb)
     patterns = vote_patterns(readings, kb)
     combined = _synthesis(readings, patterns)
     sources, overview = kb["sources"], kb["overview"]

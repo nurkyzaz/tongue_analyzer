@@ -37,3 +37,8 @@ deployment/api/static/examples/examples.json
 
 # local test images (dataset samples; regenerate via scripts/make_test_set.py)
 test_images/*.jpg
+
+# TCM-Tongue (shezhen) dataset — large, kept out of git
+shezhen datasets/
+/tongue.zip
+data/external/tcm_tongue/

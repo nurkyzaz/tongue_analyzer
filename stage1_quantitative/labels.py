@@ -30,3 +30,17 @@ NUM_CLASSES = {c: len(v) for c, v in LABEL_MAPS.items()}
 # These give a graded "degree" per feature (the sensitivity fix), each tied to a characteristic.
 SEVERITY_KEYS = ["fissure_sev", "toothmk_sev", "coating_cov"]
 SEVERITY_OF_CHAR = {"fissure": "fissure_sev", "tooth_mk": "toothmk_sev", "coating": "coating_cov"}
+
+# Phase 4: extra multi-label features from the TCM-Tongue dataset (order matches the label CSV).
+EXTRA_FEATURES = ["peeled_coating", "red_tongue", "purple_body", "swollen",
+                  "thin", "red_dots", "black_coating", "slippery_coating"]
+EXTRA_DESC = {
+    "peeled_coating": "peeled / mirror coating",
+    "red_tongue": "red tongue body",
+    "purple_body": "purple / dusky body",
+    "swollen": "swollen / enlarged body",
+    "thin": "thin body",
+    "red_dots": "red dots / prickles",
+    "black_coating": "grey-black coating",
+    "slippery_coating": "wet / slippery coating",
+}

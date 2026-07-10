@@ -19,7 +19,8 @@ import albumentations as A
 from albumentations.pytorch import ToTensorV2
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from labels import KEY_CHARS, LABEL_MAPS, CHAR_DESC, SEVERITY_KEYS, SEVERITY_OF_CHAR
+from labels import (KEY_CHARS, LABEL_MAPS, CHAR_DESC, SEVERITY_KEYS, SEVERITY_OF_CHAR,
+                    EXTRA_FEATURES, EXTRA_DESC)
 from feature_extraction.model import MultiTaskTongueNet
 from schema import Stage1Output
 
@@ -41,7 +42,7 @@ def _letterbox(img_rgb, size):
 
 
 class Stage1Pipeline:
-    def __init__(self, seg_ckpt, mt_ckpt, device=None, size=384):
+    def __init__(self, seg_ckpt, mt_ckpt, device=None, size=384, extra_ckpt=None):
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.size = size
         seg_state = torch.load(seg_ckpt, map_location=self.device, weights_only=False)
@@ -56,6 +57,16 @@ class Stage1Pipeline:
         self.mt.load_state_dict(mt_state["model"], strict=False)
         self.mt.to(self.device).eval()
         self.sev_trained = "sev_mae" in mt_state         # regression head is meaningful
+
+        # Phase 4: optional extra-features model (8 new multi-label features). Loaded if present.
+        self.extra = None
+        extra_ckpt = extra_ckpt or "checkpoints/extra_features/best.pt"
+        if extra_ckpt and os.path.exists(extra_ckpt):
+            from feature_extraction.extra_model import ExtraFeaturesNet
+            es = torch.load(extra_ckpt, map_location=self.device, weights_only=False)
+            self.extra = ExtraFeaturesNet(es["args"].get("encoder", "resnet34"), pretrained=False)
+            self.extra.load_state_dict(es["model"])
+            self.extra.to(self.device).eval()
 
     @torch.no_grad()
     def __call__(self, image_path, sid=None, return_mask=False):
@@ -92,9 +103,19 @@ class Stage1Pipeline:
                          "severity": round(sev, 4),
                          "probs": {LABEL_MAPS[ch][j]: round(float(prob[j]), 4) for j in range(n)}}
 
+        # Phase 4: extra multi-label features (presence prob doubles as severity)
+        extra = {}
+        if self.extra is not None:
+            ep = torch.sigmoid(self.extra(x, mask))[0].cpu().numpy()
+            for k, feat in enumerate(EXTRA_FEATURES):
+                extra[feat] = {"value": "present" if ep[k] > 0.5 else "absent",
+                               "severity": round(float(ep[k]), 4),
+                               "description": EXTRA_DESC[feat]}
+
         out_obj = Stage1Output(
             sid=sid,
             key_characteristics=chars,
+            extra_characteristics=extra,
             quality={"mask_coverage": round(coverage, 4), "accepted": accepted, "reasons": reasons},
         )
         if return_mask:
