@@ -41,10 +41,16 @@ Train a single **v4** model with a shared encoder and **partial-label supervisio
 Then extend the KB (new feature entries + patterns: blood-stasis for purple, yin-deficiency for peeled,
 heat for red/red-dots) and the interpreter/inference to surface the new features with dual-language.
 
-## Steps
-1. ✅ Download from Dryad (2.34 GB) → `data/external/tcm_tongue/`.
-2. Convert YOLO labels → per-image multi-label CSV (`data/processed/tcm_tongue_labels.csv`).
-3. Generate seg masks for TCM-Tongue images (batch, our seg model).
-4. Add `extra_features` multi-label head + partial-label loss; unified multi-source dataset.
-5. Train v4; verify no regression on the 5 chars + severity, plus new-feature AP.
-6. Extend KB + interpreter + inference for the new features; regenerate examples; update demo.
+## Steps — ✅ DONE (2026-07-10)
+1. ✅ Dataset obtained (Dryad behind anti-bot → user browser-downloaded; `-txt`/YOLO format on server).
+2. ✅ `data/build_tcm_tongue_labels.py`: YOLO → per-image multi-label CSV (6,528 imgs, 8 new features).
+3. ✅ `scripts/precompute_masks.py`: cached seg masks for all TCM-Tongue images.
+4. ✅ **Separate** mask-guided multi-label model (`extra_model.py` + `train_extra.py`) — chosen over a
+   partial-label joint model so it can't destabilise v3; runs alongside v3 at inference.
+5. ✅ Trained: **val mAP 0.452** — strong: peeled 0.70, red-dots 0.62, thin 0.61, red 0.60 AP;
+   weaker (rare/subjective): purple 0.27, swollen 0.25, slippery 0.15 → fire conservatively.
+6. ✅ KB `extra_features` (map to existing patterns) + `interpret.py` readings/voting + `infer.py`
+   auto-loads the model → new features surface in reports with dual-language + severity. Demo updated.
+
+**Design note:** went with two models (v3 + extra) instead of one joint partial-label model — lower
+risk, cleaner, ~10 ms total. A future optimization could distil both into one shared-encoder model.
