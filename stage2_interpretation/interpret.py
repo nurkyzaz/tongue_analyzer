@@ -138,6 +138,7 @@ def _card(kb, pid, conf):
     return {"id": pid, "tcm_name": pat.get("tcm_name", pid), "plain_name": pat.get("plain_name", ""),
             "explanation": pat.get("explanation", ""),
             "associated_symptoms": pat.get("associated_symptoms", []),
+            "modern_correlation": pat.get("modern_correlation", ""),
             "recommendations": pat.get("recommendations", {}),
             "followup_questions": pat.get("followup_questions", []),
             "confidence": round(conf, 3)}
@@ -274,6 +275,7 @@ def interpret(stage1_output, metadata=None, llm: LLMClient = None):
     return {
         "overview": overview, "features": readings, "patterns": patterns,
         "card": build_card(readings, patterns),
+        "regions": kb.get("regions", {}),
         "combined": combined, "sources": sources, "report": report, "disclaimer": DISCLAIMER,
         # follow-up flow: questions for the top non-balanced pattern
         "followup": ([{"pattern_id": patterns[0]["id"], "pattern": patterns[0]["tcm_name"],

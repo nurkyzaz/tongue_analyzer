@@ -110,6 +110,7 @@
       "plain_name": "low digestive energy (a 'poor digestion' tendency)",
       "explanation": "In TCM the Spleen governs digestion and fluid metabolism. Tooth-marks + a pale body + a thin coating are the classic tongue picture of Spleen-qi deficiency — traditionally associated with tiredness and weak digestion.",
       "associated_symptoms": ["tiredness, especially after meals", "bloating or fullness after eating", "loose stools", "poor appetite", "pale complexion", "(in this tradition, associated with low iron / anemia tendencies)"],
+      "modern_correlation": "traditionally overlaps with functional digestive complaints and low-iron / fatigue presentations — educational only, not a diagnosis; a doctor can check iron/ferritin",
       "followup_questions": [
         {"q": "Do you often feel bloated or overly full after eating?", "weight": 0.5},
         {"q": "Do you get tired easily, especially after meals?", "weight": 0.4},
@@ -188,6 +189,7 @@
       "plain_name": "under-nourished (a 'low blood / low iron' tendency in this tradition)",
       "explanation": "A pale body (often with tooth-marks) is traditionally read as Blood deficiency — under-nourishment of the body and mind. In this tradition it overlaps with presentations that modern medicine would check for iron-deficiency/anemia.",
       "associated_symptoms": ["fatigue and pallor", "dizziness, especially on standing", "poor concentration or memory", "brittle nails or hair", "scanty or light periods (if applicable)"],
+      "modern_correlation": "the pale-tongue picture traditionally overlaps with iron-deficiency / anaemia presentations (low haemoglobin) — educational only; consider a doctor checking a full blood count + ferritin",
       "followup_questions": [
         {"q": "Do you often feel dizzy or lightheaded, especially when standing up?", "weight": 0.4},
         {"q": "Is your complexion pale, or your nails/hair brittle?", "weight": 0.4},
@@ -224,6 +226,44 @@
         "diet": ["Maintain a varied, balanced diet of mostly warm, cooked foods"],
         "lifestyle": ["Maintain regular sleep, movement and stress balance"]
       }
+    },
+    "qi_stagnation": {
+      "tcm_name": "Liver qi stagnation pattern",
+      "icd11": "ICD-11 Ch.26 (Liver qi stagnation pattern)",
+      "plain_name": "tension / stress-holding tendency",
+      "explanation": "Traditionally shown by slightly red or purple tongue SIDES (the Liver/Gallbladder zone) or a tense body. Often stress-related. (Our model reads global features, so this is mainly confirmed via the questions below.)",
+      "associated_symptoms": ["irritability or feeling wound-up", "frequent sighing", "tension headaches", "digestion upset by stress", "premenstrual tension"],
+      "modern_correlation": "overlaps with stress-related tension and functional digestive complaints (educational, not a diagnosis)",
+      "followup_questions": [
+        {"q": "Do you often feel stressed, tense, or find yourself sighing a lot?", "weight": 0.5},
+        {"q": "Does stress noticeably upset your digestion?", "weight": 0.4}
+      ],
+      "recommendations": {
+        "diet": ["Regular meals; go easy on caffeine and alcohol", "Aromatic, gently 'moving' foods (mint, citrus peel, fennel)"],
+        "lifestyle": ["Regular movement and stress-release (walking, stretching, breathing)", "Protect wind-down time before sleep"]
+      }
+    },
+    "special_diathesis": {
+      "tcm_name": "Special (allergic) constitution",
+      "icd11": "—",
+      "plain_name": "sensitive / allergy-prone tendency",
+      "explanation": "A constitutional sensitivity with no single defining tongue sign — recognised mainly from history. Included so the traditional 9-constitution set is complete.",
+      "associated_symptoms": ["allergies or hay fever", "hives or sensitive skin", "reactions to foods or environment"],
+      "modern_correlation": "overlaps with atopic / allergic tendencies (educational, not a diagnosis)",
+      "followup_questions": [
+        {"q": "Do you have allergies, hay fever, or easily-reacting / sensitive skin?", "weight": 0.6}
+      ],
+      "recommendations": {
+        "diet": ["Notice and reduce personal trigger foods; keep meals simple and fresh"],
+        "lifestyle": ["Identify environmental triggers; support steady sleep and stress balance"]
+      }
     }
+  },
+  "regions": {
+    "_note": "Where a sign appears maps to an organ system (classical tongue zoning). Our model currently reads GLOBAL features; zoning is provided as educational context and is a roadmap detection target (TCM-Tongue organ classes + TonguExpert subregions). Source: Song Weijiang, Holistic Theory of Tongue Diagnosis; Maciocia.",
+    "tip":    {"organs": "Heart / Lung",         "note": "redness or red dots at the tip → Heart/Lung 'heat' (often stress, poor sleep)"},
+    "center": {"organs": "Spleen / Stomach",     "note": "a central crack or thick central coating → Stomach/Spleen (digestion)"},
+    "sides":  {"organs": "Liver / Gallbladder",  "note": "redness or purple at the sides → Liver/Gallbladder (tension, stress)"},
+    "root":   {"organs": "Kidney / Intestines",  "note": "a thick coating at the root → lower-body dampness; a pale root → Kidney 'reserve'"}
   }
 }

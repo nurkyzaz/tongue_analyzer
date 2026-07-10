@@ -126,8 +126,9 @@ function patCard(p){
   const sym=(p.associated_symptoms||[]).map(s=>`<span class="chip">${s}</span>`).join('');
   const recs=[...(p.recommendations?.diet||[]),...(p.recommendations?.lifestyle||[])].slice(0,4);
   const rec=recs.length?`<div class="rec">🌿 ${recs.join(' · ')}</div>`:'';
+  const mod=p.modern_correlation?`<div style="font-size:12px;color:var(--blue);margin-top:5px">🔬 Modern view: ${p.modern_correlation}</div>`:'';
   return `<div class="pat"><div class="nm">${p.tcm_name} · <span style="color:var(--mut);font-weight:600">${Math.round(p.confidence*100)}%</span></div>
-    <div class="pn">${p.plain_name}</div><div class="ex">${p.explanation||''}</div>${sym?`<div style="margin-top:6px">${sym}</div>`:''}${rec}</div>`;
+    <div class="pn">${p.plain_name}</div><div class="ex">${p.explanation||''}</div>${mod}${sym?`<div style="margin-top:6px">${sym}</div>`:''}${rec}</div>`;
 }
 function renderCard(card){
   if(!card){$('card').innerHTML='';return;}

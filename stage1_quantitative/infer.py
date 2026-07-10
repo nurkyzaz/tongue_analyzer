@@ -34,6 +34,17 @@ def _preprocess(img_rgb, size):
     return tf(image=img_rgb)["image"].unsqueeze(0)
 
 
+def color_calibrate(img_rgb, strength=0.6, p=6):
+    """Shades-of-Gray white balance: estimate the illuminant colour and neutralise it, so phone-photo
+    colour casts don't bias the colour features (a warm/yellow cast otherwise over-reads Heat/Damp-Heat).
+    `strength` blends toward the correction (0 = off, 1 = full)."""
+    x = img_rgb.astype(np.float32)
+    ill = np.power(np.mean(np.power(x, p), axis=(0, 1)), 1.0 / p)   # per-channel illuminant
+    ill = ill / (ill.mean() + 1e-6)
+    ill = 1.0 + strength * (ill - 1.0)
+    return np.clip(x / ill.reshape(1, 1, 3), 0, 255).astype(np.uint8)
+
+
 def _letterbox(img_rgb, size):
     """Same letterbox geometry as _preprocess (no normalization) so masks align with the image."""
     tf = A.Compose([A.LongestMaxSize(max_size=size),
@@ -42,9 +53,10 @@ def _letterbox(img_rgb, size):
 
 
 class Stage1Pipeline:
-    def __init__(self, seg_ckpt, mt_ckpt, device=None, size=384, extra_ckpt=None):
+    def __init__(self, seg_ckpt, mt_ckpt, device=None, size=384, extra_ckpt=None, color_calib=None):
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.size = size
+        self.color_calib = os.getenv("TIH_COLOR_CALIB", "0") == "1" if color_calib is None else color_calib
         seg_state = torch.load(seg_ckpt, map_location=self.device, weights_only=False)
         enc = seg_state["args"].get("encoder", "resnet34")
         self.seg = smp.UnetPlusPlus(encoder_name=enc, encoder_weights=None, in_channels=3, classes=1)
@@ -72,6 +84,8 @@ class Stage1Pipeline:
     def __call__(self, image_path, sid=None, return_mask=False):
         img = cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2RGB) \
             if isinstance(image_path, str) else image_path
+        if self.color_calib:
+            img = color_calibrate(img)
         x = _preprocess(img, self.size).to(self.device)
 
         mask_prob = self.seg(x).sigmoid()
