@@ -50,3 +50,6 @@ data/eval/**/*.jpeg
 
 # self-contained labeling tool is a build artifact (2MB embedded images) — rebuild with build_label_tool.py
 evaluation/label_human40.html
+
+# merged label store is a build artifact (needs server-side datasets to build)
+data/processed/label_store.csv
