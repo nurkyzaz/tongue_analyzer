@@ -1,4 +1,48 @@
-<!doctype html>
+"""Build a SELF-CONTAINED labeling page: embeds the human-40 images as base64 data URIs so the tool
+works by just double-clicking the HTML file — no web server, no external image files.
+
+    python3 evaluation/build_label_tool.py
+    -> writes evaluation/label_human40.html (open it directly in a browser)
+
+Regenerate whenever the eval image set changes. Images are downscaled (max 1000px, JPEG q82) to keep
+the file small while staying sharp enough to label.
+"""
+import base64, io, os
+from PIL import Image
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.dirname(HERE)
+IMG_DIR = os.path.join(REPO, "data", "eval", "human40")
+OUT = os.path.join(HERE, "label_human40.html")
+MAXDIM, QUALITY = 1000, 82
+
+IDS = [f"t{i:02d}" for i in range(40) if i not in (15, 22)]  # t15 bad, t22 two tongues
+
+
+def encode(path):
+    im = Image.open(path).convert("RGB")
+    s = MAXDIM / max(im.size)
+    if s < 1:
+        im = im.resize((round(im.width * s), round(im.height * s)), Image.LANCZOS)
+    buf = io.BytesIO()
+    im.save(buf, "JPEG", quality=QUALITY)
+    return "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode()
+
+
+images = {}
+for iid in IDS:
+    for ext in (".jpg", ".png", ".jpeg"):
+        p = os.path.join(IMG_DIR, iid + ext)
+        if os.path.exists(p):
+            images[iid] = encode(p)
+            break
+    else:
+        print(f"WARN: no image for {iid}")
+
+# JS-embeddable map. Data URIs are ASCII-safe, so a plain join is fine.
+img_js = "{\n" + ",\n".join(f'"{k}":"{v}"' for k, v in images.items()) + "\n}"
+
+HTML = r"""<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -73,25 +117,23 @@
       <button id="prev">‹ Prev</button>
       <button id="next">Next ›</button>
       <span class="spacer"></span>
-      <span class="hint">keys: ←/→ nav · 1-3 pick</span>
+      <span class="hint">keys: ←/→ nav</span>
     </nav>
   </div>
 </main>
 
 <div class="foot">
   <button class="primary" id="export">⬇ Export JSON</button>
-  <label class="foot" style="margin:0;padding:0"><button id="importbtn">⬆ Import / resume</button>
-    <input type="file" id="importfile" accept="application/json" style="display:none"></label>
+  <button id="importbtn">⬆ Import / resume</button>
+  <input type="file" id="importfile" accept="application/json" style="display:none">
   <button id="clear">Clear all</button>
   <span class="hint" id="saved">autosaves to this browser</span>
 </div>
 
 <script>
-const IMG_DIR = "../data/eval/human40/";
-// t15 (bad image) and t22 (two tongues) intentionally excluded.
-const IDS = [];
-for (let i=0;i<40;i++){ if(i===15||i===22) continue; IDS.push("t"+String(i).padStart(2,"0")); }
+const IMAGES = __IMAGES__;
 const FLAGS = { t24: "rotated" };
+const IDS = Object.keys(IMAGES);
 const FIELDS = [
   {key:"red_tip",               lab:"Red tip",                  help:"Is the tip visibly redder than the rest of the body?", opts:["none","mild","strong"]},
   {key:"red_dots",              lab:"Red dots / prickles",      help:"Red dots or raised red papillae on the surface.",       opts:["none","few","many"]},
@@ -106,24 +148,18 @@ let cur = 0;
 const $ = id => document.getElementById(id);
 function isDone(id){ const d=data[id]; return d && FIELDS.every(f=>d[f.key]); }
 
-function tryExt(id, el){
-  // images may be .jpg or .png depending on source
-  el.onerror = ()=>{ if(!el.dataset.png){ el.dataset.png=1; el.src=IMG_DIR+id+".png"; } };
-  el.src = IMG_DIR+id+".jpg";
-}
-
 function render(){
   const id = IDS[cur];
   $("iid").textContent = id;
   $("flag").textContent = FLAGS[id] ? "⚑ "+FLAGS[id] : "";
-  tryExt(id, $("img"));
+  $("img").src = IMAGES[id] || "";
   const wrap = $("fields"); wrap.innerHTML = "";
   const d = data[id] || (data[id]={});
   for(const f of FIELDS){
     const div = document.createElement("div"); div.className="field";
     div.innerHTML = `<div class="lab">${f.lab}</div><div class="help">${f.help}</div>`;
     const opts = document.createElement("div"); opts.className="opts";
-    f.opts.forEach((o,i)=>{
+    f.opts.forEach(o=>{
       const b=document.createElement("button"); b.textContent=o;
       if(d[f.key]===o) b.classList.add("on");
       b.onclick=()=>{ d[f.key]=o; save(); render(); };
@@ -131,7 +167,6 @@ function render(){
     });
     div.appendChild(opts); wrap.appendChild(div);
   }
-  // jump grid
   const jg=$("jump"); jg.innerHTML="";
   IDS.forEach((id2,i)=>{
     const b=document.createElement("button"); b.textContent=id2.slice(1);
@@ -150,17 +185,10 @@ function go(d){ cur=(cur+d+IDS.length)%IDS.length; render(); }
 $("prev").onclick=()=>go(-1);
 $("next").onclick=()=>go(1);
 document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="INPUT")return;
   if(e.key==="ArrowLeft")go(-1);
   else if(e.key==="ArrowRight")go(1);
-  else if(["1","2","3"].includes(e.key)){
-    const d=data[IDS[cur]]||(data[IDS[cur]]={});
-    // number keys set the first still-unset field, else cycle whole card set is overkill:
-    // apply to the first field whose value differs — simplest: set field under focus order
-    const idx=+e.key-1;
-    for(const f of FIELDS){ if(idx<f.opts.length && !d[f.key]){ d[f.key]=f.opts[idx]; save(); render(); return; } }
-  }
 });
-
 $("export").onclick=()=>{
   const out={};
   for(const id of IDS){ if(data[id] && Object.keys(data[id]).length) out[id]=data[id]; }
@@ -181,3 +209,9 @@ render();
 </script>
 </body>
 </html>
+"""
+
+html = HTML.replace("__IMAGES__", img_js)
+with open(OUT, "w") as f:
+    f.write(html)
+print(f"wrote {OUT}  ({len(html)/1e6:.1f} MB, {len(images)} images embedded)")

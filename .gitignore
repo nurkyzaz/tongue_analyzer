@@ -47,3 +47,6 @@ data/external/tcm_tongue/
 data/eval/**/*.jpg
 data/eval/**/*.png
 data/eval/**/*.jpeg
+
+# self-contained labeling tool is a build artifact (2MB embedded images) — rebuild with build_label_tool.py
+evaluation/label_human40.html

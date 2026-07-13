@@ -74,11 +74,12 @@ model/labeling issue (see §4).
 `coating_obscures_body`, `tip_shape_ambiguous`). `red_tip` labels will let us tune the +2.0 threshold
 and turn the measurement into a benchmarked feature.
 
-**Labeling tool:** `evaluation/label_human40.html` — a self-contained page (open in a browser via a
-static server rooted at the repo, e.g. `python3 -m http.server`, then
-`/evaluation/label_human40.html`). Shows each image, click-to-pick each field, autosaves to
-localStorage, "Export JSON" downloads `human40_extra_labels.json` in the exact eval format. Model
-predictions are deliberately NOT shown, to keep the labeler unbiased.
+**Labeling tool:** `evaluation/label_human40.html` — a **fully self-contained** page: the 38 images are
+embedded as base64 data URIs, so it works by just **double-clicking the file** (no web server, no
+external image files). Shows each image, click-to-pick each field, autosaves to localStorage, "Export
+JSON" downloads `human40_extra_labels.json` in the exact eval format; "Import / resume" reloads a
+partial file. Model predictions are deliberately NOT shown, to keep the labeler unbiased. The file is a
+build artifact (git-ignored); regenerate with `python3 evaluation/build_label_tool.py`.
 
 ## 5. Do we already have professional labels? (`evaluation/find_professional_labels.py`)
 
