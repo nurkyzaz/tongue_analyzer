@@ -20,7 +20,7 @@ from albumentations.pytorch import ToTensorV2
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from labels import (KEY_CHARS, LABEL_MAPS, CHAR_DESC, SEVERITY_KEYS, SEVERITY_OF_CHAR,
-                    EXTRA_FEATURES, EXTRA_DESC)
+                    EXTRA_FEATURES, EXTRA_DESC, COAT_AXIS_DESC, derive_coat_axes)
 from feature_extraction.model import MultiTaskTongueNet
 from schema import Stage1Output
 
@@ -140,6 +140,15 @@ class Stage1Pipeline:
                          "description": CHAR_DESC[ch],
                          "severity": round(sev, 4),
                          "probs": {LABEL_MAPS[ch][j]: round(float(prob[j]), 4) for j in range(n)}}
+
+        # Split the coating prediction into two independent, interpretable axes (thickness × texture).
+        # severity = probability of the ABNORMAL class (thick / greasy) so it reads as a degree.
+        coat_probs = chars["coating"]["probs"]
+        ABNORMAL = {"coat_thickness": "thick", "coat_texture": "greasy"}
+        for axis, (val, conf, probs) in derive_coat_axes(coat_probs).items():
+            chars[axis] = {"value": val, "confidence": round(float(conf), 4),
+                           "description": COAT_AXIS_DESC[axis], "severity": round(float(probs[ABNORMAL[axis]]), 4),
+                           "probs": {k: round(float(v), 4) for k, v in probs.items()}}
 
         # Phase 4: extra multi-label features (presence prob doubles as severity)
         extra = {}

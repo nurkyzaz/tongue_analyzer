@@ -102,7 +102,7 @@
 
 <script>
 const $=id=>document.getElementById(id), md=s=>(s||'').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
-const GRADED=['coating','fissure','tooth_mk','peeled_coating','red_tongue','purple_body','swollen','thin','red_dots','black_coating','slippery_coating'];
+const GRADED=['coating','coat_thickness','coat_texture','fissure','tooth_mk','peeled_coating','red_tongue','purple_body','swollen','thin','red_dots','black_coating','slippery_coating'];
 let stream=null;
 
 async function startCam(){try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:720},height:{ideal:720}}});

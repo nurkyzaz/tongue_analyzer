@@ -20,6 +20,7 @@ DISCLAIMER = ("Educational summary exploring the traditional-Chinese-medicine to
               "For any health concern, please consult a qualified healthcare professional.")
 
 GRADED = {"coating", "fissure", "tooth_mk"}   # features whose meaning scales with severity
+GRADED_DISPLAY = GRADED | {"coat_thickness", "coat_texture"}   # + display axes, for text synthesis
 MENTION_REL = 0.6                              # surface a graded feature only if its population rank >= this
 
 
@@ -72,10 +73,50 @@ def _band(sev, kb):
     return kb["severity_bands"][-1]
 
 
+# The coating is displayed as two derived axes (thickness × texture); the conflated `coating` reading
+# is kept ONLY to drive pattern voting (unchanged) and hidden from the UI via display=False.
+COAT_AXES_DISPLAY = ("coat_thickness", "coat_texture")
+
+
+def coat_axis_readings(chars):
+    """Display-only readings for the two coating axes (they don't vote; `coating` still does)."""
+    out = []
+    cfg = {
+        "coat_thickness": {
+            "label": "Coating thickness", "abnormal": "thick", "tcm_term": "厚苔 (thick coating)",
+            "present_plain": "The coating looks thicker than a thin, see-through film — in this tradition a thicker coating suggests more internal accumulation (often damp or phlegm).",
+            "absent_plain": "The coating looks thin — a thin, see-through film is considered normal.",
+        },
+        "coat_texture": {
+            "label": "Coating texture", "abnormal": "greasy", "tcm_term": "腻苔 (greasy coating)",
+            "present_plain": "The coating looks greasy/slippery rather than dry and even — in this tradition a sign of dampness. (Surface papillae patterns can mimic this, so treat a low score with caution.)",
+            "absent_plain": "The coating texture looks smooth and even, not greasy.",
+        },
+    }
+    for ax in COAT_AXES_DISPLAY:
+        c = chars.get(ax)
+        if not c:
+            continue
+        cf = cfg[ax]
+        present = c["value"] == cf["abnormal"]
+        out.append({
+            "key": ax, "label": cf["label"], "value": c["value"],
+            "severity": round(float(c.get("severity", 0.0)), 3), "rel": round(float(c.get("severity", 0.0)), 3),
+            "band": "", "mentioned": present, "display": True,
+            "tcm_term": cf["tcm_term"] if present else "",
+            "tcm": cf["tcm_term"] if present else "",
+            "plain": cf["present_plain"] if present else cf["absent_plain"],
+            "points_to": {},                     # display-only: coating carries the vote
+        })
+    return out
+
+
 def feature_readings(chars, kb, stats):
     """Per-feature reading: degree band + dual-language + DISTINCTIVENESS-weighted pattern votes."""
     readings = []
     for ch, c in chars.items():
+        if ch in COAT_AXES_DISPLAY:              # handled by coat_axis_readings (display-only)
+            continue
         spec = kb["features"].get(ch, {})
         sev = float(c.get("severity", 0.0))
         band = _band(sev, kb)
@@ -103,6 +144,7 @@ def feature_readings(chars, kb, stats):
                 "plain": vinfo.get("plain_gloss", ""),
                 "points_to": {p: w * w_inf for p, w in vinfo.get("points_to", {}).items()},
             }
+        reading["display"] = ch != "coating"     # coating votes but is shown as the two axes instead
         readings.append(reading)
     return readings
 
@@ -163,7 +205,7 @@ def vote_patterns(readings, kb, top_k=3):
 
 
 def _synthesis(readings, patterns):
-    noted = [r for r in readings if r["mentioned"] and r["key"] in GRADED and r["band"] != "none"]
+    noted = [r for r in readings if r["mentioned"] and r["key"] in GRADED_DISPLAY and r["band"] != "none"]
     if patterns and patterns[0]["id"] != "balanced":
         lead = patterns[0]
         txt = (f"Taken together, your signs most align with **{lead['tcm_name']}** "
@@ -179,7 +221,7 @@ def _markdown(readings, patterns, combined, sources):
     L = ["**Your signs, one by one**"]
     for r in readings:
         deg = f"{r['band']} " if r["band"] and r["band"] != "none" else ""
-        if r["key"] in GRADED and not r["mentioned"]:
+        if r["key"] in GRADED_DISPLAY and not r["mentioned"]:
             L.append(f"- **{r['label']}:** {r['plain']}")
         else:
             L.append(f"- **{deg}{r['tcm_term'] or r['value']}** — *TCM:* {r['tcm']}. *In plain terms:* {r['plain']}")
@@ -263,18 +305,20 @@ def interpret(stage1_output, metadata=None, llm: LLMClient = None):
 
     stats = load_stats()
     readings = (feature_readings(chars, kb, stats)
+                + coat_axis_readings(chars)
                 + extra_readings(stage1_output.get("extra_characteristics", {}), kb, stats))
-    patterns = vote_patterns(readings, kb)
-    combined = _synthesis(readings, patterns)
+    patterns = vote_patterns(readings, kb)       # voting uses the full list (coating still votes)
+    disp = [r for r in readings if r.get("display", True)]   # display hides the conflated coating
+    combined = _synthesis(disp, patterns)
     sources, overview = kb["sources"], kb["overview"]
 
     llm = llm or LLMClient()
-    report = (_llm_narrative(readings, patterns, sources, llm) if llm.enabled else None) \
-        or _markdown(readings, patterns, combined, sources)
+    report = (_llm_narrative(disp, patterns, sources, llm) if llm.enabled else None) \
+        or _markdown(disp, patterns, combined, sources)
 
     return {
-        "overview": overview, "features": readings, "patterns": patterns,
-        "card": build_card(readings, patterns),
+        "overview": overview, "features": disp, "patterns": patterns,
+        "card": build_card(disp, patterns),
         "regions": kb.get("regions", {}),
         "combined": combined, "sources": sources, "report": report, "disclaimer": DISCLAIMER,
         # follow-up flow: questions for the top non-balanced pattern
