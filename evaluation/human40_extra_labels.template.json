@@ -1,0 +1,275 @@
+{
+ "_legend": {
+  "red_tip": "none | mild | strong  (is the tip visibly redder than the rest of the body?)",
+  "red_dots": "none | few | many  (red dots / raised red prickles on the surface)",
+  "surface_pattern": "none | present  (papillae texture/pattern strong enough you cant judge greasiness from it)",
+  "coating_obscures_body": "no | yes  (coating so thick/pale in the centre that body colour is unreadable there)",
+  "tip_shape_ambiguous": "no | yes  (tip is an odd shape that could be a tooth-mark or just anatomy)"
+ },
+ "t00": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t01": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t02": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t03": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t04": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t05": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t06": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t07": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t08": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t09": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t10": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t11": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t12": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t13": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t14": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t16": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t17": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t18": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t19": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t20": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t21": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t23": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t24": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t25": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t26": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t27": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t28": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t29": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t30": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t31": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t32": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t33": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t34": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t35": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t36": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t37": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t38": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ },
+ "t39": {
+  "red_tip": "",
+  "red_dots": "",
+  "surface_pattern": "",
+  "coating_obscures_body": "",
+  "tip_shape_ambiguous": ""
+ }
+}

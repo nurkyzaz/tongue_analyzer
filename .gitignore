@@ -42,3 +42,8 @@ test_images/*.jpg
 shezhen datasets/
 /tongue.zip
 data/external/tcm_tongue/
+
+# eval images (labels are tracked, raw images are not)
+data/eval/**/*.jpg
+data/eval/**/*.png
+data/eval/**/*.jpeg
