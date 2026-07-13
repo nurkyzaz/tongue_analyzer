@@ -20,6 +20,9 @@ from labels import KEY_CHARS, CLASS_TO_IDX, SEVERITY_KEYS
 IMAGENET_MEAN = (0.485, 0.456, 0.406)
 IMAGENET_STD = (0.229, 0.224, 0.225)
 MANUAL_CHARS = {"tai", "zhi", "fissure", "tooth_mk"}  # coating has no manual column
+# Loss weight on expert-manual (gold) targets vs auto labels (1.0). v5 used 2.0; raise via env to let
+# the small expert set dominate the noisy auto labels more (the training-signal fix).
+GOLD_WEIGHT = float(os.getenv("TIH_GOLD_WEIGHT", "2.0"))
 
 
 def _tf(size, train):
@@ -70,7 +73,7 @@ class MultiTaskDataset(Dataset):
             if ch in MANUAL_CHARS:
                 mv = row.get(f"{ch}_manual")
                 if isinstance(mv, str) and mv in CLASS_TO_IDX[ch]:
-                    val, w[k] = mv, 2.0
+                    val, w[k] = mv, GOLD_WEIGHT
             if val is None:
                 av = row.get(ch)
                 if isinstance(av, str) and av in CLASS_TO_IDX[ch]:

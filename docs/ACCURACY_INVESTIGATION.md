@@ -27,6 +27,12 @@ have ~100–160 expert-manual labels per feature to check against — label qual
 | **v6** | ConvNeXt V2 @512 + rebalance | **Regressed** (pale 0.59→0.43). Train loss → 0.017 = memorised the noisy labels. Bigger ≠ better. |
 | **v7** | resnet34@384 + TCM-Tongue non-greasy data (90→437) + rarity sampler + EMA | Pale ✓ (0.59→0.65), fissure ✓, but I injected noisy `tai` cross-labels (0.92→0.87). |
 | **v7b** | v7 with coating-only harvest | `tai` partly recovered; coating still overshot. |
+| **v8** | resnet34@384 + EMA + **gold weight 4.0** (expert L1 labels dominate) | Val meanF1 0.730→0.745, val zhi 0.72→0.75. But on **human-40**: tooth_mk 66→74 ✓, yet coating 55→42 ✗ (coating has NO gold → up-weighting the other 4 chars pulled the shared encoder), fissure 58→53, zhi 62→59. **OVERALL 61→59 — not promoted.** Same non-transfer lesson: val/gold gains don't reach the honest human metric. |
+
+**WS1 (training-signal) conclusion (2026-07-13):** re-weighting the *few* gold labels we have (v8) does
+NOT beat v5 on the honest human eval — it improves the chars that have gold at the cost of coating (which
+has none). The training-signal fix therefore needs **more/cleaner labels or per-characteristic training**,
+not a loss-weight knob. v5 remains production. `TIH_GOLD_WEIGHT` env added (default 2.0 = v5 behaviour).
 
 ### Verdict on human labels (10 real images)
 | | v5 | v7 | v7b |

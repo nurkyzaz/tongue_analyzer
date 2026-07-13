@@ -37,8 +37,12 @@ different problems with different ceilings and different levers.
 - **1a** Audit L1 manual-gold coverage. ✅ (tai 378 / zhi 339 / fissure 572 / tooth_mk 656; no coating)
 - **1b** Build a **gold-preferred** training manifest: manual labels high-weight, auto labels low-weight,
   per-characteristic (partial-label infra already supports it).
-- **1c** Retrain **v8** (resnet34@384 + EMA + gold-preferred), eval on human40 + human40b.
-- **1d** Promote if it beats v5 on the honest human eval; recalibrate `reference_stats.json`.
+- **1c** Retrain **v8** (resnet34@384 + EMA + gold weight 4.0), eval on human40. ✅ done
+- **1d** Promote if it beats v5. ❌ **v8 not promoted** — val↑ (0.745) but human-40 61→59% (lifted
+  tooth_mk, regressed coating which has no gold). **Finding: the few gold labels we have can't be
+  re-weighted into a win; WS1 now needs MORE/CLEANER labels or per-characteristic training** (see
+  ACCURACY_INVESTIGATION §v8). Redirect: (i) harvest more expert-graded coating data; (ii) per-char
+  fine-tuning that freezes coating; (iii) grow the human train/val split itself.
 
 ### WS2 — Unused high-insight signals (single-image) · P1
 - **2a** **Moisture (wet/dry)** signal from specular reflection on the mask (new measured feature).

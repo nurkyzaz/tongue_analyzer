@@ -84,16 +84,19 @@ def main():
             continue
         n_ok += 1
         for feat, gval in gold[path].items():
-            # presence-style scoring: TCM gold is present/absent; human ordinal gold (none/few/many,
-            # none/mild/strong) is normalised to absent/present so it scores too.
-            if feat in PRESENCE and (gval in ("present", "absent") or gval in ("none", "few", "many", "mild", "strong", "no", "yes")):
+            # A CORE feature with graded gold (none/light/severe, colours) is always scored
+            # categorically — even though fissure/tooth_mk are ALSO in PRESENCE for the TCM present/absent
+            # gold. Only genuinely present/absent gold, or non-core ordinal extras (red_dots none/few/many,
+            # red_tip none/mild/strong), go to presence scoring.
+            if feat in CORE and gval not in ("present", "absent"):
+                pv = s["key_characteristics"][feat]["value"]
+                cat[feat][0] += (pv == gval); cat[feat][1] += 1
+            elif feat in PRESENCE and (gval in ("present", "absent") or
+                                       gval in ("none", "few", "many", "mild", "strong", "no", "yes")):
                 pv = PRESENCE[feat](s, z)
                 gv = gval in ("present", "few", "many", "mild", "strong", "yes")
                 idx = 0 if (pv and gv) else 1 if (pv and not gv) else 2 if (not pv and gv) else 3
                 pres[feat][idx] += 1
-            elif feat in CORE:
-                pv = s["key_characteristics"][feat]["value"]
-                cat[feat][0] += (pv == gval); cat[feat][1] += 1
         if args.limit and (i + 1) % 100 == 0:
             print(f"  ...{i+1}/{len(imgs)}")
 
