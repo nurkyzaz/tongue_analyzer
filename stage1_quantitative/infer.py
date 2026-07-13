@@ -34,10 +34,14 @@ def _preprocess(img_rgb, size):
     return tf(image=img_rgb)["image"].unsqueeze(0)
 
 
-def color_calibrate(img_rgb, strength=0.6, p=6):
+def color_calibrate(img_rgb, strength=None, p=6):
     """Shades-of-Gray white balance: estimate the illuminant colour and neutralise it, so phone-photo
     colour casts don't bias the colour features (a warm/yellow cast otherwise over-reads Heat/Damp-Heat).
-    `strength` blends toward the correction (0 = off, 1 = full)."""
+    `strength` blends toward the correction (0 = off, 1 = full). A face/tongue scene averages warm/pink
+    (not grey), so FULL strength over-corrects and washes red out of the body colour — a partial strength
+    (env TIH_CC_STRENGTH, default 0.35) rescues colour casts while barely touching clean images."""
+    if strength is None:
+        strength = float(os.getenv("TIH_CC_STRENGTH", "0.35"))
     x = img_rgb.astype(np.float32)
     ill = np.power(np.mean(np.power(x, p), axis=(0, 1)), 1.0 / p)   # per-channel illuminant
     ill = ill / (ill.mean() + 1e-6)

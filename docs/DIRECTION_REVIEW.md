@@ -56,8 +56,12 @@ different problems with different ceilings and different levers.
 - **2d** Scope the **sublingual-vein** second-capture module (design only this round).
 
 ### WS3 — Real-world robustness · P1
-- **3a** Real-phone eval set across skin tones/lighting (needs user-supplied photos).
-- **3b** Turn on **color calibration** once the model is WB-robust; measure tai/zhi effect.
+- **3a** Real-phone eval set across skin tones/lighting (needs user-supplied photos). ⬜ blocked on data.
+- **3b** Color calibration ✅ measured (synthetic warm/cool casts + strength sweep, `eval_color_calib.py`).
+  Finding: helps `tai` everywhere + rescues both colours under casts, but costs `zhi` ~8pp on clean
+  images (grey-world over-corrects the warm face). **Decision: keep OFF by default** (doesn't beat the
+  honest clean metric), lowered default strength 0.6→**0.35** (the knee), **recommend enabling once
+  real-phone photos confirm net benefit**. See `docs/COLOR_CALIBRATION.md`.
 
 ### WS4 — Mapping quality · P2
 - **4a** Expand the mapping test set with more grounded combinations. ✅ 12 cases incl. flip contrasts.
