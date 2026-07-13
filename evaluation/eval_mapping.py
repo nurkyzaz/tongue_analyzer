@@ -34,7 +34,10 @@ def build_stage1(feats):
         present = feats.get(f) == "present"
         extra[f] = {"value": "present" if present else "absent",
                     "severity": 0.85 if present else 0.05, "description": EXTRA_DESC[f]}
-    return {"key_characteristics": chars, "extra_characteristics": extra,
+    zoned = {}
+    if feats.get("red_tip") in ("present", "strong"):
+        zoned = {"red_tip": {"value": "present", "severity": 0.85}, "tip_redness_delta": 4.0}
+    return {"key_characteristics": chars, "extra_characteristics": extra, "zoned_analysis": zoned,
             "quality": {"accepted": True, "reasons": []}}
 
 

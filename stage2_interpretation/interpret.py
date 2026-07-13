@@ -111,6 +111,27 @@ def coat_axis_readings(chars):
     return out
 
 
+def zoned_readings(stage1_output):
+    """Readings from the zoned colour analysis. Currently: RED TIP (Heart / upper-jiao heat) — a
+    localized sign the whole-tongue colour head averages away. Only the reliable STRONG red tip votes
+    (zoning flags red_tip.present at tip_redness_delta > 2.0; validated P=0.92 on human labels).
+    Grounded: red tip = Heat in the Heart [Sacred Lotus; Maciocia]."""
+    z = (stage1_output or {}).get("zoned_analysis", {})
+    rt = z.get("red_tip")
+    if not rt or rt.get("value") != "present":
+        return []
+    sev = float(rt.get("severity", 0.0))
+    return [{
+        "key": "red_tip", "label": "Red tip", "value": "present",
+        "severity": round(sev, 3), "rel": round(sev, 3), "band": "", "mentioned": True, "display": True,
+        "tcm_term": "舌尖红 (red tip)", "tcm": "Heat in the Heart / upper jiao",
+        "plain": "The tip of the tongue is noticeably redder than the rest — in this tradition linked to "
+                 "heat in the upper body / Heart (often stress, poor sleep, or restlessness).",
+        # localized heat sign -> small votes toward the heat patterns, weighted by strength
+        "points_to": {"yin_deficiency": 0.4 * sev, "damp_heat": 0.3 * sev},
+    }]
+
+
 def feature_readings(chars, kb, stats):
     """Per-feature reading: degree band + dual-language + DISTINCTIVENESS-weighted pattern votes."""
     readings = []
@@ -306,6 +327,7 @@ def interpret(stage1_output, metadata=None, llm: LLMClient = None):
     stats = load_stats()
     readings = (feature_readings(chars, kb, stats)
                 + coat_axis_readings(chars)
+                + zoned_readings(stage1_output)
                 + extra_readings(stage1_output.get("extra_characteristics", {}), kb, stats))
     patterns = vote_patterns(readings, kb)       # voting uses the full list (coating still votes)
     disp = [r for r in readings if r.get("display", True)]   # display hides the conflated coating

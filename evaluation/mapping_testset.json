@@ -39,6 +39,10 @@
 
     {"id": "greasy_yellow_cracked_HARD", "note": "HARD/contradictory: greasy yellow coat (damp) + cracks (yin-dry) = Damp-Heat consuming fluids (or damp-heat + yin-def)",
      "features": {"zhi": "dark", "coating": "greasy_thick", "tai": "yellow", "fissure": "severe", "red_tongue": "present"},
-     "accept": ["damp_heat", "yin_deficiency"]}
+     "accept": ["damp_heat", "yin_deficiency"]},
+
+    {"id": "red_tip_thin_coat", "note": "red tip (Heart/upper-jiao heat) on an otherwise near-normal tongue + scanty coat = heat, leans Yin-deficiency / Heart-heat",
+     "features": {"zhi": "regular", "coating": "non_greasy", "tai": "white", "red_tip": "present", "fissure": "light"},
+     "accept": ["yin_deficiency", "damp_heat"]}
   ]
 }
