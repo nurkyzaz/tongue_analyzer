@@ -561,5 +561,132 @@
    "organs": "Kidney / Intestines",
    "note": "a thick coating at the root → lower-body dampness; a pale root → Kidney 'reserve'"
   }
- }
+ },
+ "combination_rules": [
+  {
+   "id": "swollen_pale_wet_yang",
+   "when": {
+    "swollen": "present",
+    "zhi": "light"
+   },
+   "any": {
+    "moisture": "wet",
+    "coat_texture": "smooth",
+    "tai": "white"
+   },
+   "boost": {
+    "yang_deficiency": 0.6,
+    "damp_heat": -0.4
+   },
+   "cite": "SL/Mac",
+   "note": "pale + swollen + moist/thin-white = Spleen/Kidney Yang deficiency, NOT damp-heat"
+  },
+  {
+   "id": "swollen_yellow_dampheat",
+   "when": {
+    "swollen": "present",
+    "tai": "yellow"
+   },
+   "boost": {
+    "damp_heat": 0.5
+   },
+   "cite": "SL",
+   "note": "swollen + greasy-yellow = Spleen/Stomach Damp-Heat"
+  },
+  {
+   "id": "wet_suppresses_heat",
+   "when": {
+    "moisture": "wet"
+   },
+   "boost": {
+    "damp_heat": -0.4,
+    "yin_deficiency": -0.3
+   },
+   "cite": "SL",
+   "note": "a wet/glossy tongue argues AGAINST heat/dryness (heat dries the surface)"
+  },
+  {
+   "id": "pale_suppresses_heat",
+   "when": {
+    "zhi": "light"
+   },
+   "boost": {
+    "damp_heat": -0.3,
+    "yin_deficiency": -0.2
+   },
+   "cite": "SL/Mac",
+   "note": "pale body = cold/deficiency, not heat"
+  },
+  {
+   "id": "greasy_white_is_damp_not_heat",
+   "when": {
+    "coat_texture": "greasy",
+    "tai": "white"
+   },
+   "boost": {
+    "phlegm_dampness": 0.3,
+    "damp_heat": -0.3
+   },
+   "cite": "SL",
+   "note": "greasy WHITE coat = cold-damp/phlegm, not damp-heat"
+  },
+  {
+   "id": "greasy_yellow_is_damp_heat",
+   "when": {
+    "coat_texture": "greasy",
+    "tai": "yellow"
+   },
+   "boost": {
+    "damp_heat": 0.4
+   },
+   "cite": "SL",
+   "note": "greasy YELLOW coat = damp-heat"
+  },
+  {
+   "id": "dark_red_is_heat_not_stasis",
+   "when": {
+    "zhi": "dark",
+    "red_tongue": "present"
+   },
+   "boost": {
+    "blood_stasis": -0.4,
+    "damp_heat": 0.3
+   },
+   "cite": "CONSTITUTION_BENCHMARK",
+   "note": "a RED dark tongue is Heat; only PURPLE dark is stasis"
+  },
+  {
+   "id": "dark_purple_is_stasis",
+   "when": {
+    "zhi": "dark",
+    "purple_body": "present"
+   },
+   "boost": {
+    "blood_stasis": 0.5
+   },
+   "cite": "SL/Mac/Delphi",
+   "note": "purple/dusky dark body = Blood stasis"
+  },
+  {
+   "id": "red_scanty_cracked_yin",
+   "when": {
+    "red_tongue": "present",
+    "fissure": [
+     "light",
+     "severe"
+    ]
+   },
+   "any": {
+    "peeled_coating": "present",
+    "coat_texture": "smooth",
+    "coating": "non_greasy"
+   },
+   "boost": {
+    "yin_deficiency": 0.5,
+    "damp_heat": -0.3
+   },
+   "cite": "SL/Mac",
+   "note": "red + cracks + little/peeled coat = empty-heat (Yin deficiency), not damp-heat"
+  }
+ ]
 }

@@ -10,7 +10,8 @@ import json, os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "stage2_interpretation"))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "stage1_quantitative"))
 from interpret import interpret
-from labels import KEY_CHARS, LABEL_MAPS, CHAR_DESC, EXTRA_FEATURES, EXTRA_DESC
+from labels import (KEY_CHARS, LABEL_MAPS, CHAR_DESC, EXTRA_FEATURES, EXTRA_DESC,
+                    COAT_AXIS_DESC, derive_coat_axes)
 
 # severity used for GRADED features so they clear the "distinctive" gate and vote at full weight
 GRADED_SEV = {"coating": {"non_greasy": 0.15, "greasy": 0.7, "greasy_thick": 0.92},
@@ -34,6 +35,12 @@ def build_stage1(feats):
         present = feats.get(f) == "present"
         extra[f] = {"value": "present" if present else "absent",
                     "severity": 0.85 if present else 0.05, "description": EXTRA_DESC[f]}
+    # derive the coating axes (thickness × texture) like the real pipeline, so combination rules that
+    # key off coat_texture are exercised
+    ABN = {"coat_thickness": "thick", "coat_texture": "greasy"}
+    for axis, (val, conf, probs) in derive_coat_axes(chars["coating"]["probs"]).items():
+        chars[axis] = {"value": val, "confidence": conf, "description": COAT_AXIS_DESC[axis],
+                       "severity": probs[ABN[axis]], "probs": probs}
     zoned = {}
     if feats.get("red_tip") in ("present", "strong"):
         zoned["red_tip"] = {"value": "present", "severity": 0.85}

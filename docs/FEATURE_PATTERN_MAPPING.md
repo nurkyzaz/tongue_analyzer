@@ -88,9 +88,11 @@ rules.
 
 ## 4. Gap analysis vs our current KB (campaign backlog, ranked)
 
-1. **Additive independence loses context** (biggest). Our KB votes each feature independently, so it
-   can't say "swollen means yang-def *with* pale+moist but phlegm-damp *with* red+yellow." → add
-   combination rules or body-color-conditioned weights. The mapping test set (below) is the harness.
+1. **Additive independence loses context** — *now partly addressed.* Base votes are still additive, but
+   a **combination-rule layer** (`interpret.apply_combination_rules`, grounded rules in
+   `tcm_knowledge.json['combination_rules']`) fires on feature co-occurrences to correct context: the
+   same swelling flips to yang-def (pale+wet) vs damp-heat (red+yellow); wet/pale suppress heat; greasy
+   coat routes by colour; dark+red=heat vs dark+purple=stasis. Extend the rule set as new cases appear.
 2. **Sublingual veins are missing** — the single strongest objective blood-stasis sign (Delphi nomogram
    AUC 0.917, the top-weighted item). We don't capture them at all. citeturn0PMC8983216
 3. **red_tip is detected (zoning) but doesn't vote.** Wire it → Heart-heat (upper-jiao) contribution.

@@ -60,8 +60,13 @@ different problems with different ceilings and different levers.
 - **3b** Turn on **color calibration** once the model is WB-robust; measure tai/zhi effect.
 
 ### WS4 — Mapping quality · P2
-- **4a** Expand the mapping test set with more grounded combinations.
-- **4b** **Combination rules** (body-colour-conditioned weights) against the test set.
+- **4a** Expand the mapping test set with more grounded combinations. ✅ 12 cases incl. flip contrasts.
+- **4b** **Combination rules** ✅ done — `interpret.apply_combination_rules` + 9 grounded rules in
+  `tcm_knowledge.json['combination_rules']` (read RAW detections via `present_features`, so context is
+  seen even for non-distinctive features). Fixes the additive-voting blind spot: the **same swelling now
+  flips** — pale+swollen+wet → yang_deficiency, red+swollen+yellow → damp-heat. Also: wet/pale suppress
+  heat; greasy-white=damp vs greasy-yellow=damp-heat; dark+red=heat vs dark+purple=stasis; red+cracks+
+  scanty=yin. Mapping test 12/12; live on the demo.
 
 ### WS5 — Rigor & shipping · P2
 - **5a** Grow human eval + second labeler (inter-rater agreement = irreducible-noise floor).

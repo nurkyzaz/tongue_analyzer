@@ -43,6 +43,10 @@
 
     {"id": "red_tip_thin_coat", "note": "red tip (Heart/upper-jiao heat) on an otherwise near-normal tongue + scanty coat = heat, leans Yin-deficiency / Heart-heat",
      "features": {"zhi": "regular", "coating": "non_greasy", "tai": "white", "red_tip": "present", "fissure": "light"},
-     "accept": ["yin_deficiency", "damp_heat"]}
+     "accept": ["yin_deficiency", "damp_heat"]},
+
+    {"id": "swollen_red_yellow", "note": "CONTEXT FLIP: same swelling as the yang case, but with a RED body + greasy YELLOW coat = Damp-Heat (proves swelling flips meaning by body colour/coat)",
+     "features": {"zhi": "dark", "coating": "greasy", "tai": "yellow", "swollen": "present", "red_tongue": "present"},
+     "accept": ["damp_heat"]}
   ]
 }

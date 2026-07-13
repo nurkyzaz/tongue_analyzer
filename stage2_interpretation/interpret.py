@@ -220,14 +220,67 @@ def _card(kb, pid, conf):
             "confidence": round(conf, 3)}
 
 
-def vote_patterns(readings, kb, top_k=3):
+def _cond_ok(cond, present):
+    """cond: {feature: value | [values]}. present: {feature_key: value}. All must match."""
+    for k, v in cond.items():
+        pv = present.get(k)
+        if pv is None:
+            return False
+        if isinstance(v, list):
+            if pv not in v:
+                return False
+        elif pv != v:
+            return False
+    return True
+
+
+def present_features(stage1_output):
+    """Flat {feature_key: value} of RAW detections for the combination rules — read from the model
+    output directly (not the display-filtered readings), so a rule can key off a feature even when it
+    wasn't distinctive enough to surface as its own card (e.g. swelling)."""
+    p = {}
+    for ch, c in (stage1_output.get("key_characteristics") or {}).items():
+        p[ch] = c.get("value")                       # incl. coat_thickness / coat_texture in the real pipeline
+    for feat, c in (stage1_output.get("extra_characteristics") or {}).items():
+        if c.get("value") == "present":
+            p[feat] = "present"
+    z = stage1_output.get("zoned_analysis") or {}
+    if (z.get("red_tip") or {}).get("value") == "present":
+        p["red_tip"] = "present"
+    if (z.get("moisture") or {}).get("value"):
+        p["moisture"] = z["moisture"]["value"]
+    return p
+
+
+def apply_combination_rules(scores, present, kb):
+    """Context layer on top of the additive vote. TCM signs are context-dependent — swelling means
+    Yang-deficiency with a pale/wet tongue but Damp-Heat with a red/yellow one; a wet tongue argues
+    AGAINST heat. Additive per-feature votes can't express this, so grounded co-occurrence rules
+    (kb['combination_rules']) boost the contextually-correct pattern and suppress the wrong one. Each
+    rule: {id, when:{feat:val}, any?:{feat:val}, boost:{pattern:delta}, cite, note}. `any` = at least
+    one must match. Deltas are modest vs base weights; negatives clamp at 0."""
+    fired = []
+    for rule in kb.get("combination_rules", []):
+        if not _cond_ok(rule.get("when", {}), present):
+            continue
+        anyc = rule.get("any")
+        if anyc and not any(_cond_ok({k: v}, present) for k, v in anyc.items()):
+            continue
+        for p, d in rule.get("boost", {}).items():
+            scores[p] = max(0.0, scores.get(p, 0.0) + d)
+        fired.append(rule.get("id"))
+    return fired
+
+
+def vote_patterns(readings, kb, present=None, top_k=3):
     """Accumulate severity-weighted votes; map to ABSOLUTE confidence (saturating), so a weak top
     pattern reads as low confidence rather than a misleading 100%. Falls back to 'balanced' when
-    nothing is notable."""
+    nothing is notable. `present` = raw {feature: value} for the context (combination) rules."""
     scores = {}
     for r in readings:
         for p, w in r["points_to"].items():
             scores[p] = scores.get(p, 0.0) + w
+    apply_combination_rules(scores, present or {}, kb)   # context layer (see docstring)
     scores.pop("balanced", None)
     top_raw = max(scores.values()) if scores else 0.0
     ranked = sorted(scores.items(), key=lambda kv: -kv[1])[:top_k]
@@ -342,7 +395,7 @@ def interpret(stage1_output, metadata=None, llm: LLMClient = None):
                 + coat_axis_readings(chars)
                 + zoned_readings(stage1_output)
                 + extra_readings(stage1_output.get("extra_characteristics", {}), kb, stats))
-    patterns = vote_patterns(readings, kb)       # voting uses the full list (coating still votes)
+    patterns = vote_patterns(readings, kb, present_features(stage1_output))   # + context rules
     disp = [r for r in readings if r.get("display", True)]   # display hides the conflated coating
     combined = _synthesis(disp, patterns)
     sources, overview = kb["sources"], kb["overview"]
