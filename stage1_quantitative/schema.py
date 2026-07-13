@@ -19,6 +19,7 @@ class Stage1Output:
     sid: Optional[str] = None
     key_characteristics: dict = field(default_factory=dict)   # char -> Characteristic
     extra_characteristics: dict = field(default_factory=dict)  # Phase 4: 8 new multi-label features
+    zoned_analysis: dict = field(default_factory=dict)         # per-region colour (red tip, etc.)
     quality: dict = field(default_factory=dict)               # mask coverage, accepted, reasons
     mask_path: Optional[str] = None
     model_version: str = "tih-stage1-v0.1"

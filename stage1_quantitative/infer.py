@@ -80,6 +80,30 @@ class Stage1Pipeline:
             self.extra.load_state_dict(es["model"])
             self.extra.to(self.device).eval()
 
+    # tip_redness_delta (a* of tip minus whole tongue) above this => report a red tip. Chosen on the
+    # human-40 set: flags 13/38, matching visual inspection (red-tip tongues t05/t12/t29/t35…).
+    RED_TIP_THRESH = 2.0
+
+    def _zoned(self, img, mask):
+        from zoning import analyze
+        m = mask[0, 0].cpu().numpy().astype(np.uint8)
+        disp = _letterbox(img, self.size)
+        z = analyze(disp, m)
+        if not z.get("ok"):
+            return {}
+        tip = z.get("tip_redness_delta")
+        red_tip = tip is not None and tip > self.RED_TIP_THRESH
+        return {
+            "tip_redness_delta": tip,           # a*(tip) - a*(whole); + = tip redder (heat sign)
+            "redness_gradient": z.get("redness_gradient"),
+            "red_tip": {
+                "value": "present" if red_tip else "absent",
+                "severity": round(min(max((tip or 0) / 8.0, 0.0), 1.0), 4),
+                "description": "tip redder than the tongue body (upper-jiao / heart heat sign)",
+            },
+            "zones": z.get("zones", {}),
+        }
+
     @torch.no_grad()
     def __call__(self, image_path, sid=None, return_mask=False):
         img = cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2RGB) \
@@ -126,10 +150,15 @@ class Stage1Pipeline:
                                "severity": round(float(ep[k]), 4),
                                "description": EXTRA_DESC[feat]}
 
+        # Zoned colour analysis (no training): measures colour by region so a red tip / pale coated
+        # centre isn't averaged away. Surfaces the "red tip" heat sign the whole-tongue argmax misses.
+        zoned = self._zoned(img, mask)
+
         out_obj = Stage1Output(
             sid=sid,
             key_characteristics=chars,
             extra_characteristics=extra,
+            zoned_analysis=zoned,
             quality={"mask_coverage": round(coverage, 4), "accepted": accepted, "reasons": reasons},
         )
         if return_mask:

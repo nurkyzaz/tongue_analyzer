@@ -1,0 +1,21 @@
+{
+  "_comment": "Data-quality flags for the human-40 eval set (user review 2026-07-13). Excluded ids are absent from human40_labels.json so eval_human_labels.py skips them automatically.",
+  "excluded": {
+    "t15": "not a usable tongue image (bad framing/quality)",
+    "t22": "two tongues in frame — segmentation & analysis undefined"
+  },
+  "quality_flags": {
+    "t24": "tongue is rotated — kept, but a good stress case for orientation-robust zoning"
+  },
+  "partial_labels": {
+    "t05": "zhi (body colour) left unlabeled — coating too greasy to judge body colour; scored as N/A"
+  },
+  "proposed_new_label_fields": {
+    "_comment": "Fields to add in the next labeling round (user offered yes/no or scale). These become the ground truth for the new measured features.",
+    "red_tip": "none | mild | strong — is the tip visibly redder than the rest of the body?",
+    "red_dots": "none | few | many — red dots / prickles (raised red papillae) on the surface",
+    "surface_pattern": "none | present — a papillae texture/pattern strong enough that greasiness can't be judged from it",
+    "coating_obscures_body": "no | yes — coating is so thick/pale in the centre that body colour is unreadable there (see t05)",
+    "tip_shape_ambiguous": "no | yes — tip is an odd shape that could be a tooth-mark or just anatomy"
+  }
+}
