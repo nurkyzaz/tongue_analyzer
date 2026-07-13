@@ -60,17 +60,22 @@ class MultiTaskDataset(Dataset):
         return len(self.df)
 
     def _target(self, row):
-        """Return (label_idx[5], weight[5]) using gold label when available."""
+        """Return (label_idx[5], weight[5]). Weight encodes supervision: 2.0 expert-manual gold, 1.0
+        auto label, **0.0 when a characteristic is unlabeled** (e.g. partial-label TCM-Tongue rows) so
+        an unknown characteristic never injects a spurious class-0 target."""
         y = np.zeros(len(KEY_CHARS), dtype=np.int64)
-        w = np.ones(len(KEY_CHARS), dtype=np.float32)
+        w = np.zeros(len(KEY_CHARS), dtype=np.float32)
         for k, ch in enumerate(KEY_CHARS):
-            val, gold = row.get(ch), None
+            val = None
             if ch in MANUAL_CHARS:
                 mv = row.get(f"{ch}_manual")
                 if isinstance(mv, str) and mv in CLASS_TO_IDX[ch]:
-                    gold, w[k] = mv, 2.0
-            val = gold if gold is not None else val
-            y[k] = CLASS_TO_IDX[ch].get(val, 0) if isinstance(val, str) else 0
+                    val, w[k] = mv, 2.0
+            if val is None:
+                av = row.get(ch)
+                if isinstance(av, str) and av in CLASS_TO_IDX[ch]:
+                    val, w[k] = av, 1.0
+            y[k] = CLASS_TO_IDX[ch][val] if val is not None else 0
         return y, w
 
     def __getitem__(self, i):
@@ -79,5 +84,10 @@ class MultiTaskDataset(Dataset):
         mask = (cv2.imread(os.path.join(self.root, row.mask_path), cv2.IMREAD_GRAYSCALE) > 127).astype(np.float32)
         out = self.tf(image=img, mask=mask)
         y, w = self._target(row)
-        sev = torch.tensor([row[c] for c in self.sev_cols], dtype=torch.float32)
+        # TCM-Tongue rows carry no severity annotation -> NaN so the regression loss can mask them out
+        # (they'd otherwise be trained toward 0, corrupting fissure/tooth-mark severity on cracked tongues).
+        if row.get("src") == "tcm_tongue":
+            sev = torch.full((len(self.sev_cols),), float("nan"), dtype=torch.float32)
+        else:
+            sev = torch.tensor([row[c] for c in self.sev_cols], dtype=torch.float32)
         return out["image"], out["mask"].unsqueeze(0).float(), torch.from_numpy(y), torch.from_numpy(w), sev

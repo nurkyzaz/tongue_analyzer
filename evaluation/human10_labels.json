@@ -1,0 +1,12 @@
+{
+"img00": {"coating":"non_greasy","tai":"light_yellow","zhi":"regular","fissure":"light","tooth_mk":"severe"},
+"img01": {"coating":"greasy_thick","tai":"light_yellow","zhi":"light","fissure":"severe","tooth_mk":"none"},
+"img02": {"coating":"greasy","tai":"white","zhi":"light","fissure":"light","tooth_mk":"severe"},
+"img03": {"coating":"greasy_thick","tai":"light_yellow","zhi":"regular","fissure":"severe","tooth_mk":"light"},
+"img04": {"coating":"greasy","tai":"light_yellow","zhi":"regular","fissure":"light","tooth_mk":"light"},
+"img05": {"coating":"greasy","tai":"white","zhi":"light","fissure":"light","tooth_mk":"severe"},
+"img06": {"coating":"greasy_thick","tai":"yellow","zhi":"dark","fissure":"light","tooth_mk":"severe"},
+"img07": {"coating":"greasy_thick","tai":"white","zhi":"regular","fissure":"light","tooth_mk":"none"},
+"img08": {"coating":"greasy","tai":"light_yellow","zhi":"dark","fissure":"light","tooth_mk":"none"},
+"img09": {"coating":"greasy_thick","tai":"white","zhi":"regular","fissure":"light","tooth_mk":"severe"}
+}
