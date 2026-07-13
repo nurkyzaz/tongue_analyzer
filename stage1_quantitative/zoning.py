@@ -98,6 +98,21 @@ def analyze(img_rgb, mask):
     if C and E:
         out["center_coating"] = round(C["L"] - E["L"], 2)     # centre lighter than rim => coating
         out["center_desat"]   = round((abs(E["a"]) + abs(E["b"])) - (abs(C["a"]) + abs(C["b"])), 2)
+
+    # --- moisture via SPECULAR GLOSS -----------------------------------------------------------------
+    # A wet tongue mirrors the light source as small, very-bright, desaturated glints; a dry tongue is
+    # matte. We measure the fraction of tongue pixels that are specular highlights: high lightness AND
+    # low chroma (a near-neutral bright spot is a reflection, not the tongue's own colour/coating).
+    # We assert ONLY "wet" (the reliable extreme — validated on human-40: the high-gloss tongues are
+    # genuinely moist). We deliberately do NOT infer "dry" from LOW gloss: a matte photo is usually just
+    # diffuse lighting, not a dry tongue (26/38 would falsely read "dry"). True dryness needs controlled
+    # capture or a texture model — left as an honest gap. Cutoff calibrated on the human-40 distribution.
+    Lp = lab[mask][:, 0]                                  # 0..255
+    chroma = np.sqrt((lab[mask][:, 1] - 128.0) ** 2 + (lab[mask][:, 2] - 128.0) ** 2)
+    l_hi = max(210.0, np.percentile(Lp, 96))             # bright relative to THIS tongue
+    spec_frac = float(((Lp >= l_hi) & (chroma <= 14.0)).mean())
+    out["gloss"] = round(spec_frac, 4)                   # fraction of specular pixels
+    out["moisture"] = "wet" if spec_frac >= 0.020 else "normal"   # "dry" intentionally not asserted
     return out
 
 

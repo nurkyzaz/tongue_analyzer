@@ -16,6 +16,7 @@
     "red_dots": "none | few | many — red dots / prickles (raised red papillae) on the surface",
     "surface_pattern": "none | present — a papillae texture/pattern strong enough that greasiness can't be judged from it",
     "coating_obscures_body": "no | yes — coating is so thick/pale in the centre that body colour is unreadable there (see t05)",
-    "tip_shape_ambiguous": "no | yes — tip is an odd shape that could be a tooth-mark or just anatomy"
+    "tip_shape_ambiguous": "no | yes — tip is an odd shape that could be a tooth-mark or just anatomy",
+    "moisture": "dry | normal | wet — how wet/glossy the tongue surface looks (to validate the new gloss-based 'wet' detector; note: 'dry' can't be inferred from photos alone, so a human 'dry' label is especially valuable)"
   }
 }

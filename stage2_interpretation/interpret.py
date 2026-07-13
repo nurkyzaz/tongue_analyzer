@@ -117,19 +117,32 @@ def zoned_readings(stage1_output):
     (zoning flags red_tip.present at tip_redness_delta > 2.0; validated P=0.92 on human labels).
     Grounded: red tip = Heat in the Heart [Sacred Lotus; Maciocia]."""
     z = (stage1_output or {}).get("zoned_analysis", {})
+    out = []
     rt = z.get("red_tip")
-    if not rt or rt.get("value") != "present":
-        return []
-    sev = float(rt.get("severity", 0.0))
-    return [{
-        "key": "red_tip", "label": "Red tip", "value": "present",
-        "severity": round(sev, 3), "rel": round(sev, 3), "band": "", "mentioned": True, "display": True,
-        "tcm_term": "舌尖红 (red tip)", "tcm": "Heat in the Heart / upper jiao",
-        "plain": "The tip of the tongue is noticeably redder than the rest — in this tradition linked to "
-                 "heat in the upper body / Heart (often stress, poor sleep, or restlessness).",
-        # localized heat sign -> small votes toward the heat patterns, weighted by strength
-        "points_to": {"yin_deficiency": 0.4 * sev, "damp_heat": 0.3 * sev},
-    }]
+    if rt and rt.get("value") == "present":
+        sev = float(rt.get("severity", 0.0))
+        out.append({
+            "key": "red_tip", "label": "Red tip", "value": "present",
+            "severity": round(sev, 3), "rel": round(sev, 3), "band": "", "mentioned": True, "display": True,
+            "tcm_term": "舌尖红 (red tip)", "tcm": "Heat in the Heart / upper jiao",
+            "plain": "The tip of the tongue is noticeably redder than the rest — in this tradition linked to "
+                     "heat in the upper body / Heart (often stress, poor sleep, or restlessness).",
+            # localized heat sign -> small votes toward the heat patterns, weighted by strength
+            "points_to": {"yin_deficiency": 0.4 * sev, "damp_heat": 0.3 * sev},
+        })
+    mo = z.get("moisture")
+    if mo and mo.get("value") == "wet":
+        sev = float(mo.get("severity", 0.0))
+        out.append({
+            "key": "moisture", "label": "Wet / glossy surface", "value": "wet",
+            "severity": round(sev, 3), "rel": round(sev, 3), "band": "", "mentioned": True, "display": True,
+            "tcm_term": "润/滑 (moist / slippery)", "tcm": "excess or untransformed fluids",
+            "plain": "The tongue looks wet and glossy — in this tradition a sign of fluids not being fully "
+                     "transformed (often linked to a cold/damp, low-warmth tendency).",
+            # wet body -> fluids not moved: yang deficiency / dampness. (dry->yin is not measured; see zoning.py)
+            "points_to": {"yang_deficiency": 0.4 * sev, "phlegm_dampness": 0.3 * sev},
+        })
+    return out
 
 
 def feature_readings(chars, kb, stats):

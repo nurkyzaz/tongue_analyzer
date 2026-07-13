@@ -93,6 +93,7 @@ class Stage1Pipeline:
             return {}
         tip = z.get("tip_redness_delta")
         red_tip = tip is not None and tip > self.RED_TIP_THRESH
+        wet = z.get("moisture") == "wet"
         return {
             "tip_redness_delta": tip,           # a*(tip) - a*(whole); + = tip redder (heat sign)
             "redness_gradient": z.get("redness_gradient"),
@@ -100,6 +101,13 @@ class Stage1Pipeline:
                 "value": "present" if red_tip else "absent",
                 "severity": round(min(max((tip or 0) / 8.0, 0.0), 1.0), 4),
                 "description": "tip redder than the tongue body (upper-jiao / heart heat sign)",
+            },
+            "gloss": z.get("gloss"),
+            "moisture": {
+                "value": z.get("moisture", "normal"),   # "wet" | "normal" ("dry" not inferred from gloss)
+                "severity": round(min(max((z.get("gloss") or 0) / 0.04, 0.0), 1.0), 4),
+                "description": "wet/glossy surface (excess or untransformed fluids)" if wet
+                               else "no strong wet sheen detected",
             },
             "zones": z.get("zones", {}),
         }

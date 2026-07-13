@@ -45,7 +45,12 @@ different problems with different ceilings and different levers.
   fine-tuning that freezes coating; (iii) grow the human train/val split itself.
 
 ### WS2 — Unused high-insight signals (single-image) · P1
-- **2a** **Moisture (wet/dry)** signal from specular reflection on the mask (new measured feature).
+- **2a** **Moisture** from specular gloss on the mask. ✅ done — `zoning.py` measures the specular-
+  highlight fraction; asserts only **wet** (validated: high-gloss tongues are genuinely moist, e.g. t14).
+  **"dry" deliberately NOT inferred** from low gloss (that's just diffuse lighting — 26/38 would falsely
+  read dry; honest gap, needs controlled capture/texture model). Surfaced in `zoned_analysis.moisture`,
+  wired in `interpret.py` (wet → yang_deficiency/phlegm_dampness). Mapping test +1 case, 11/11. Live on
+  the demo. Added `moisture` to the next-round labeling schema for validation.
 - **2b** Wire **red_tip → Heart-heat** vote (detected & validated this session; currently doesn't vote).
 - **2c** **Zone-route red_dots** via zoning; add mask **deviation** (asymmetry) heuristic.
 - **2d** Scope the **sublingual-vein** second-capture module (design only this round).

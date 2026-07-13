@@ -36,7 +36,10 @@ def build_stage1(feats):
                     "severity": 0.85 if present else 0.05, "description": EXTRA_DESC[f]}
     zoned = {}
     if feats.get("red_tip") in ("present", "strong"):
-        zoned = {"red_tip": {"value": "present", "severity": 0.85}, "tip_redness_delta": 4.0}
+        zoned["red_tip"] = {"value": "present", "severity": 0.85}
+        zoned["tip_redness_delta"] = 4.0
+    if feats.get("moisture") == "wet":
+        zoned["moisture"] = {"value": "wet", "severity": 0.7}
     return {"key_characteristics": chars, "extra_characteristics": extra, "zoned_analysis": zoned,
             "quality": {"accepted": True, "reasons": []}}
 

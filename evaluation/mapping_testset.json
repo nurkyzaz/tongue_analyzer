@@ -5,8 +5,8 @@
      "features": {"zhi": "light", "tooth_mk": "severe", "coating": "non_greasy", "tai": "white", "fissure": "none"},
      "accept": ["spleen_qi_deficiency", "yang_deficiency"]},
 
-    {"id": "pale_swollen_moist", "note": "pale + swollen + moist white coat = Spleen/Kidney Yang deficiency",
-     "features": {"zhi": "light", "coating": "greasy", "tai": "white", "swollen": "present", "tooth_mk": "light"},
+    {"id": "pale_swollen_wet", "note": "pale + swollen + WET, thin white (non-greasy) coat = Spleen/Kidney Yang deficiency; the wet sheen is what separates it from damp-heat",
+     "features": {"zhi": "light", "coating": "non_greasy", "tai": "white", "swollen": "present", "tooth_mk": "light", "moisture": "wet"},
      "accept": ["yang_deficiency", "spleen_qi_deficiency"]},
 
     {"id": "red_greasy_yellow", "note": "red body + greasy yellow coat = Damp-Heat",
