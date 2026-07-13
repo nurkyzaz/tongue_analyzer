@@ -21,8 +21,9 @@ QUOTA = {
 }
 
 
-def pool(seed=11):
+def pool(seed=11, exclude=None):
     random.seed(seed)
+    exclude = set(exclude or [])
     items = []
     m = __import__("pandas").read_csv("data/processed/manifest.csv")
     te = m[(m.split == "test") & (m.has_mask)].sample(min(220, len(m)), random_state=seed)
@@ -31,6 +32,7 @@ def pool(seed=11):
     random.shuffle(sm); items += [(p, "SM") for p in sm[:160]]
     tc = glob.glob("data/external/tcm_tongue/shezhenv3-txt/train/images/*.jpg")
     random.shuffle(tc); items += [(p, "TCM") for p in tc[:160]]
+    items = [it for it in items if it[0] not in exclude]     # drop already-labeled images
     random.shuffle(items)
     return items
 
@@ -41,11 +43,14 @@ def main():
     ap.add_argument("--out", default="/tmp/evalset")
     ap.add_argument("--seg", default="checkpoints/seg_combined/best.pt")
     ap.add_argument("--mt", default="checkpoints/multitask_v5/best.pt")
+    ap.add_argument("--seed", type=int, default=11)
+    ap.add_argument("--exclude", default=None, help="meta.json of an existing set whose images to skip")
     args = ap.parse_args()
     pipe = Stage1Pipeline(args.seg, args.mt)
 
+    exclude = [e["path"] for e in json.load(open(args.exclude))] if args.exclude else []
     scored = []
-    for path, src in pool():
+    for path, src in pool(seed=args.seed, exclude=exclude):
         try:
             s1 = json.loads(pipe(path).to_json())
         except Exception:

@@ -7,16 +7,50 @@ works by just double-clicking the HTML file — no web server, no external image
 Regenerate whenever the eval image set changes. Images are downscaled (max 1000px, JPEG q82) to keep
 the file small while staying sharp enough to label.
 """
-import base64, io, os
+import argparse, base64, glob, io, json, os, re
 from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
-IMG_DIR = os.path.join(REPO, "data", "eval", "human40")
-OUT = os.path.join(HERE, "label_human40.html")
 MAXDIM, QUALITY = 1000, 82
 
-IDS = [f"t{i:02d}" for i in range(40) if i not in (15, 22)]  # t15 bad, t22 two tongues
+# --- field schemas ---
+FIELDS_EXTRA = [
+    {"key": "red_tip", "lab": "Red tip", "help": "Is the tip visibly redder than the rest of the body?", "opts": ["none", "mild", "strong"]},
+    {"key": "red_dots", "lab": "Red dots / prickles", "help": "Red dots or raised red papillae on the surface.", "opts": ["none", "few", "many"]},
+    {"key": "surface_pattern", "lab": "Surface pattern / texture", "help": "Texture so patterned you can't tell if it's greasy.", "opts": ["none", "present"]},
+    {"key": "coating_obscures_body", "lab": "Coating hides body colour", "help": "Centre coating too thick/pale to read the body colour.", "opts": ["no", "yes"]},
+    {"key": "tip_shape_ambiguous", "lab": "Tip shape ambiguous", "help": "Odd tip shape — could be a tooth-mark or just anatomy.", "opts": ["no", "yes"]},
+]
+FIELDS_CORE = [
+    {"key": "coating", "lab": "Coating (greasiness)", "help": "How greasy/thick is the coating?", "opts": ["non_greasy", "greasy", "greasy_thick"]},
+    {"key": "tai", "lab": "Coating colour", "help": "Colour of the coating film.", "opts": ["white", "light_yellow", "yellow"]},
+    {"key": "zhi", "lab": "Body colour", "help": "Colour of the tongue body itself (ignore coating). Leave blank if unreadable.", "opts": ["light", "regular", "dark"]},
+    {"key": "fissure", "lab": "Fissures / cracks", "help": "Cracks in the surface.", "opts": ["none", "light", "severe"]},
+    {"key": "tooth_mk", "lab": "Tooth marks", "help": "Scalloped indentations on the edges.", "opts": ["none", "light", "severe"]},
+]
+SCHEMAS = {"extra": FIELDS_EXTRA, "full": FIELDS_CORE + FIELDS_EXTRA}
+
+ap = argparse.ArgumentParser()
+ap.add_argument("--dir", default="data/eval/human40", help="image dir (repo-relative)")
+ap.add_argument("--out", default=None, help="output html (default: evaluation/label_<set>.html)")
+ap.add_argument("--mode", choices=list(SCHEMAS), default="extra")
+ap.add_argument("--exclude", default="", help="comma ids to drop, e.g. t15,t22")
+ap.add_argument("--flags", default="", help="id:reason;... e.g. t24:rotated")
+ap.add_argument("--ls-key", default=None, help="localStorage key (default from set name)")
+args = ap.parse_args()
+
+IMG_DIR = os.path.join(REPO, args.dir)
+SET = os.path.basename(args.dir.rstrip("/"))
+OUT = os.path.join(REPO, args.out) if args.out else os.path.join(HERE, f"label_{SET}.html")
+FIELDS = SCHEMAS[args.mode]
+LS_KEY = args.ls_key or f"{SET}_{args.mode}_labels_v1"
+EXCLUDE = set(x for x in args.exclude.split(",") if x)
+FLAGS = dict(kv.split(":") for kv in args.flags.split(";") if ":" in kv)
+IDS = sorted(re.sub(r"\.(jpg|jpeg|png)$", "", os.path.basename(p))
+             for p in glob.glob(os.path.join(IMG_DIR, "t*.*"))
+             if p.lower().endswith((".jpg", ".jpeg", ".png")))
+IDS = [i for i in IDS if i not in EXCLUDE]
 
 
 def encode(path):
@@ -47,7 +81,7 @@ HTML = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tongue labeling — human40 extra features</title>
+<title>Tongue labeling — __SET__</title>
 <style>
   :root { --bg:#f6f5f2; --card:#fff; --ink:#1c1a17; --mut:#7a736a; --line:#e2ddd4;
           --accent:#c0392b; --accent2:#2d7d5a; --sel:#1c1a17; }
@@ -100,7 +134,7 @@ HTML = r"""<!doctype html>
 </head>
 <body>
 <header>
-  <h1>Tongue labeling · extra features</h1>
+  <h1>Tongue labeling · <span style="color:var(--mut);font-weight:400">__SET__</span></h1>
   <div class="prog"><div id="bar"></div></div>
   <span class="progtxt" id="ptxt">0 / 0</span>
 </header>
@@ -132,16 +166,10 @@ HTML = r"""<!doctype html>
 
 <script>
 const IMAGES = __IMAGES__;
-const FLAGS = { t24: "rotated" };
+const FLAGS = __FLAGS__;
 const IDS = Object.keys(IMAGES);
-const FIELDS = [
-  {key:"red_tip",               lab:"Red tip",                  help:"Is the tip visibly redder than the rest of the body?", opts:["none","mild","strong"]},
-  {key:"red_dots",              lab:"Red dots / prickles",      help:"Red dots or raised red papillae on the surface.",       opts:["none","few","many"]},
-  {key:"surface_pattern",       lab:"Surface pattern / texture",help:"Texture so patterned you can't tell if it's greasy.",    opts:["none","present"]},
-  {key:"coating_obscures_body", lab:"Coating hides body colour",help:"Centre coating too thick/pale to read the body colour.", opts:["no","yes"]},
-  {key:"tip_shape_ambiguous",   lab:"Tip shape ambiguous",      help:"Odd tip shape — could be a tooth-mark or just anatomy.", opts:["no","yes"]},
-];
-const LS_KEY = "human40_extra_labels_v1";
+const FIELDS = __FIELDS__;
+const LS_KEY = "__LS_KEY__";
 let data = JSON.parse(localStorage.getItem(LS_KEY) || "{}");
 let cur = 0;
 
@@ -194,7 +222,7 @@ $("export").onclick=()=>{
   for(const id of IDS){ if(data[id] && Object.keys(data[id]).length) out[id]=data[id]; }
   const blob=new Blob([JSON.stringify(out,null,1)],{type:"application/json"});
   const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
-  a.download="human40_extra_labels.json"; a.click();
+  a.download="__OUTNAME__"; a.click();
 };
 $("importbtn").onclick=()=>$("importfile").click();
 $("importfile").onchange=e=>{
@@ -211,7 +239,12 @@ render();
 </html>
 """
 
-html = HTML.replace("__IMAGES__", img_js)
+html = (HTML.replace("__IMAGES__", img_js)
+            .replace("__FLAGS__", json.dumps(FLAGS))
+            .replace("__FIELDS__", json.dumps(FIELDS))
+            .replace("__LS_KEY__", LS_KEY)
+            .replace("__OUTNAME__", f"{SET}_{args.mode}_labels.json")
+            .replace("__SET__", f"{SET} · {args.mode}"))
 with open(OUT, "w") as f:
     f.write(html)
-print(f"wrote {OUT}  ({len(html)/1e6:.1f} MB, {len(images)} images embedded)")
+print(f"wrote {OUT}  ({len(html)/1e6:.1f} MB, {len(images)} images, mode={args.mode}, {len(FIELDS)} fields)")
