@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tongue labeling — human40 extra features</title>
+<style>
+  :root { --bg:#f6f5f2; --card:#fff; --ink:#1c1a17; --mut:#7a736a; --line:#e2ddd4;
+          --accent:#c0392b; --accent2:#2d7d5a; --sel:#1c1a17; }
+  @media (prefers-color-scheme: dark){
+    :root { --bg:#17150f; --card:#211e18; --ink:#efe9df; --mut:#9a9184; --line:#332e25;
+            --accent:#e05a48; --accent2:#4bbd8a; --sel:#efe9df; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+         background:var(--bg); color:var(--ink); }
+  header { position:sticky; top:0; z-index:5; background:var(--bg); border-bottom:1px solid var(--line);
+           padding:10px 18px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  header h1 { font-size:15px; margin:0; font-weight:650; }
+  .prog { flex:1; min-width:160px; height:8px; background:var(--line); border-radius:5px; overflow:hidden; }
+  .prog > div { height:100%; background:var(--accent2); width:0%; transition:width .2s; }
+  .progtxt { font-variant-numeric:tabular-nums; color:var(--mut); font-size:13px; }
+  main { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr); gap:22px;
+         max-width:1100px; margin:18px auto; padding:0 18px; align-items:start; }
+  .imgwrap { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px;
+             position:sticky; top:64px; }
+  .imgwrap img { width:100%; border-radius:8px; display:block; background:#000; }
+  .idbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+  .idbar .iid { font-weight:700; font-size:18px; letter-spacing:.5px; }
+  .idbar .flag { font-size:12px; color:var(--accent); }
+  .fields { display:flex; flex-direction:column; gap:16px; }
+  .field { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:13px 14px; }
+  .field .lab { font-weight:640; }
+  .field .help { color:var(--mut); font-size:12.5px; margin:2px 0 9px; }
+  .opts { display:flex; gap:8px; flex-wrap:wrap; }
+  .opts button { flex:1 1 auto; min-width:64px; padding:8px 10px; border:1.5px solid var(--line);
+                 background:transparent; color:var(--ink); border-radius:9px; cursor:pointer; font-size:14px; }
+  .opts button:hover { border-color:var(--mut); }
+  .opts button.on { background:var(--sel); color:var(--bg); border-color:var(--sel); font-weight:650; }
+  nav { display:flex; gap:10px; align-items:center; margin-top:4px; }
+  nav button { padding:9px 16px; border:1.5px solid var(--line); background:var(--card); color:var(--ink);
+               border-radius:9px; cursor:pointer; font-size:14px; }
+  nav button:hover { border-color:var(--mut); }
+  nav .spacer { flex:1; }
+  .foot { max-width:1100px; margin:8px auto 40px; padding:0 18px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  .foot button { padding:10px 16px; border-radius:9px; cursor:pointer; border:1.5px solid var(--line);
+                 background:var(--card); color:var(--ink); font-size:14px; }
+  .foot .primary { background:var(--accent2); border-color:var(--accent2); color:#fff; font-weight:650; }
+  .hint { color:var(--mut); font-size:12.5px; }
+  .grid-jump { display:flex; flex-wrap:wrap; gap:5px; margin-top:6px; }
+  .grid-jump button { width:34px; height:28px; padding:0; font-size:11px; border:1px solid var(--line);
+                      background:var(--card); color:var(--mut); border-radius:6px; cursor:pointer; }
+  .grid-jump button.done { background:var(--accent2); color:#fff; border-color:var(--accent2); }
+  .grid-jump button.cur { outline:2px solid var(--accent); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Tongue labeling · extra features</h1>
+  <div class="prog"><div id="bar"></div></div>
+  <span class="progtxt" id="ptxt">0 / 0</span>
+</header>
+
+<main>
+  <div class="imgwrap">
+    <div class="idbar"><span class="iid" id="iid">—</span><span class="flag" id="flag"></span></div>
+    <img id="img" alt="tongue">
+    <div class="grid-jump" id="jump"></div>
+  </div>
+  <div>
+    <div class="fields" id="fields"></div>
+    <nav>
+      <button id="prev">‹ Prev</button>
+      <button id="next">Next ›</button>
+      <span class="spacer"></span>
+      <span class="hint">keys: ←/→ nav · 1-3 pick</span>
+    </nav>
+  </div>
+</main>
+
+<div class="foot">
+  <button class="primary" id="export">⬇ Export JSON</button>
+  <label class="foot" style="margin:0;padding:0"><button id="importbtn">⬆ Import / resume</button>
+    <input type="file" id="importfile" accept="application/json" style="display:none"></label>
+  <button id="clear">Clear all</button>
+  <span class="hint" id="saved">autosaves to this browser</span>
+</div>
+
+<script>
+const IMG_DIR = "../data/eval/human40/";
+// t15 (bad image) and t22 (two tongues) intentionally excluded.
+const IDS = [];
+for (let i=0;i<40;i++){ if(i===15||i===22) continue; IDS.push("t"+String(i).padStart(2,"0")); }
+const FLAGS = { t24: "rotated" };
+const FIELDS = [
+  {key:"red_tip",               lab:"Red tip",                  help:"Is the tip visibly redder than the rest of the body?", opts:["none","mild","strong"]},
+  {key:"red_dots",              lab:"Red dots / prickles",      help:"Red dots or raised red papillae on the surface.",       opts:["none","few","many"]},
+  {key:"surface_pattern",       lab:"Surface pattern / texture",help:"Texture so patterned you can't tell if it's greasy.",    opts:["none","present"]},
+  {key:"coating_obscures_body", lab:"Coating hides body colour",help:"Centre coating too thick/pale to read the body colour.", opts:["no","yes"]},
+  {key:"tip_shape_ambiguous",   lab:"Tip shape ambiguous",      help:"Odd tip shape — could be a tooth-mark or just anatomy.", opts:["no","yes"]},
+];
+const LS_KEY = "human40_extra_labels_v1";
+let data = JSON.parse(localStorage.getItem(LS_KEY) || "{}");
+let cur = 0;
+
+const $ = id => document.getElementById(id);
+function isDone(id){ const d=data[id]; return d && FIELDS.every(f=>d[f.key]); }
+
+function tryExt(id, el){
+  // images may be .jpg or .png depending on source
+  el.onerror = ()=>{ if(!el.dataset.png){ el.dataset.png=1; el.src=IMG_DIR+id+".png"; } };
+  el.src = IMG_DIR+id+".jpg";
+}
+
+function render(){
+  const id = IDS[cur];
+  $("iid").textContent = id;
+  $("flag").textContent = FLAGS[id] ? "⚑ "+FLAGS[id] : "";
+  tryExt(id, $("img"));
+  const wrap = $("fields"); wrap.innerHTML = "";
+  const d = data[id] || (data[id]={});
+  for(const f of FIELDS){
+    const div = document.createElement("div"); div.className="field";
+    div.innerHTML = `<div class="lab">${f.lab}</div><div class="help">${f.help}</div>`;
+    const opts = document.createElement("div"); opts.className="opts";
+    f.opts.forEach((o,i)=>{
+      const b=document.createElement("button"); b.textContent=o;
+      if(d[f.key]===o) b.classList.add("on");
+      b.onclick=()=>{ d[f.key]=o; save(); render(); };
+      opts.appendChild(b);
+    });
+    div.appendChild(opts); wrap.appendChild(div);
+  }
+  // jump grid
+  const jg=$("jump"); jg.innerHTML="";
+  IDS.forEach((id2,i)=>{
+    const b=document.createElement("button"); b.textContent=id2.slice(1);
+    if(isDone(id2)) b.classList.add("done");
+    if(i===cur) b.classList.add("cur");
+    b.onclick=()=>{ cur=i; render(); };
+    jg.appendChild(b);
+  });
+  const done = IDS.filter(isDone).length;
+  $("bar").style.width = (100*done/IDS.length)+"%";
+  $("ptxt").textContent = `${done} / ${IDS.length}`;
+}
+function save(){ localStorage.setItem(LS_KEY, JSON.stringify(data)); }
+function go(d){ cur=(cur+d+IDS.length)%IDS.length; render(); }
+
+$("prev").onclick=()=>go(-1);
+$("next").onclick=()=>go(1);
+document.addEventListener("keydown",e=>{
+  if(e.key==="ArrowLeft")go(-1);
+  else if(e.key==="ArrowRight")go(1);
+  else if(["1","2","3"].includes(e.key)){
+    const d=data[IDS[cur]]||(data[IDS[cur]]={});
+    // number keys set the first still-unset field, else cycle whole card set is overkill:
+    // apply to the first field whose value differs — simplest: set field under focus order
+    const idx=+e.key-1;
+    for(const f of FIELDS){ if(idx<f.opts.length && !d[f.key]){ d[f.key]=f.opts[idx]; save(); render(); return; } }
+  }
+});
+
+$("export").onclick=()=>{
+  const out={};
+  for(const id of IDS){ if(data[id] && Object.keys(data[id]).length) out[id]=data[id]; }
+  const blob=new Blob([JSON.stringify(out,null,1)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download="human40_extra_labels.json"; a.click();
+};
+$("importbtn").onclick=()=>$("importfile").click();
+$("importfile").onchange=e=>{
+  const f=e.target.files[0]; if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{ try{ const j=JSON.parse(r.result); delete j._legend;
+    Object.assign(data,j); save(); render(); }catch(err){ alert("bad JSON: "+err); } };
+  r.readAsText(f);
+};
+$("clear").onclick=()=>{ if(confirm("Clear all labels in this browser?")){ data={}; save(); render(); } };
+render();
+</script>
+</body>
+</html>

@@ -73,3 +73,35 @@ model/labeling issue (see §4).
 `human40_notes.json` proposes 5 new yes/no-or-scale fields (`red_tip`, `red_dots`, `surface_pattern`,
 `coating_obscures_body`, `tip_shape_ambiguous`). `red_tip` labels will let us tune the +2.0 threshold
 and turn the measurement into a benchmarked feature.
+
+**Labeling tool:** `evaluation/label_human40.html` — a self-contained page (open in a browser via a
+static server rooted at the repo, e.g. `python3 -m http.server`, then
+`/evaluation/label_human40.html`). Shows each image, click-to-pick each field, autosaves to
+localStorage, "Export JSON" downloads `human40_extra_labels.json` in the exact eval format. Model
+predictions are deliberately NOT shown, to keep the labeler unbiased.
+
+## 5. Do we already have professional labels? (`evaluation/find_professional_labels.py`)
+
+**Yes, but partial and heterogeneous — not a substitute for the user's own labels.** The 40 images
+come from three sources with different annotation coverage:
+
+| source | n | professional labels held |
+|--------|--:|--------------------------|
+| TonguExpert (TE) | 14 | 8 have **manual expert grading** (`*_manual` cols in `manifest.csv`) — but SPARSE: each image has only some of {tai, zhi, fissure, tooth_mk}, and there is **no coating grade at all**. |
+| TCM-Tongue (TCM) | 12 | all 12 have **practitioner YOLO annotations** over 20 categories (`shezhenv3-txt/…/labels/*.txt`), incl. **red dots** (`hongdianshe`), fissures, tooth-marks, coating colour, red/purple/swollen tongue, and organ-zoning boxes. |
+| SM-Tongue (SM) | 14 | none — segmentation masks only. |
+
+So **20 / 40** carry some professional label; **no single image is fully labeled** on our 5-char scale.
+Coating *thickness* — our weakest and most-wanted axis — is covered by **neither** source in a usable
+form. That's exactly why the user's hand-labeling is the load-bearing eval.
+
+**Where professional and user labels overlap, agreement is high** (validates the user's labels):
+fissure *presence* agrees 9/9 (severe-vs-light differs on t04, t33); tooth-mark presence 6/6; coating
+colour 12/12; body colour 2/3 (t26 dark vs regular).
+
+**Key nuance for the coating problem:** TCM annotations separate coating **thickness** (薄 *thin* =
+`botaishe`, 厚 *thick*) from **texture** (腻 *greasy* / 滑 *slippery* = `huataishe`). Our single
+`coating` axis (`non_greasy`/`greasy`/`greasy_thick`) conflates the two, which is likely part of why
+it's the hardest axis. A future schema could split coating into thickness × texture, matching how
+professionals actually grade it. (Also note the pre-existing `build_tcm_tongue_labels.py` bug: it maps
+`botaishe`→`peeled_coating`; `botaishe` is *thin coating*, not peeled — tracked as task_d164e8d5.)
