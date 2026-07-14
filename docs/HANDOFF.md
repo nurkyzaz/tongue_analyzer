@@ -64,10 +64,10 @@ constitutions, ICD-11 patterns, disambiguations, symptoms, combos, food therapy)
 `gallery.html`), **fresh human40b** set (40 imgs, not yet labeled).
 
 ## Blocked on the user (do these when data arrives)
-1. **Label `human40b`** — open `evaluation/label_human40b.html` (double-click; full 10-field schema).
-   Then fold into the eval and re-verify every recent change on a bigger set.
+1. ✅ **human40b labeled** (2026-07-13) — folded into the eval (75 human images now). Confirmed v5 ~59%,
+   coating-split thickness 82%, red_dots; tempered red_tip. See ACCURACY_INVESTIGATION §human40b.
 2. **Real phone photos** across skin tones/lighting → settles color calibration (`eval_color_calib.py`)
-   and measures true real-world accuracy.
+   and measures true real-world accuracy. STILL NEEDED.
 
 ## Advised next steps (roughly by value)
 1. **Grow the human eval** (label human40b) — it gates everything; then re-check v5 vs recent changes.

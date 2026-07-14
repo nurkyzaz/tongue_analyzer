@@ -57,6 +57,21 @@ not a loss-weight knob. v5 remains production. `TIH_GOLD_WEIGHT` env added (defa
    **subjective threshold disagreement** (faint crack = "light" or "none"?) — needs a labeling standard,
    not more training.
 
+## Independent confirmation on human40b (2026-07-13)
+The user labeled a **second, independent** 40-image set (`human40b`, full 10-field schema). Folded into
+the eval (`build_label_store.py` now reads both sets; `eval_model.py --source human` = **75 images**).
+
+- **v5 honest accuracy holds:** human40b **56%** vs human40 61% → **combined ~59%** (coating 53 / tai 69 /
+  zhi 55 / fissure 57 / tooth_mk 57). The ~56–61% range is stable across independent sets — the honest
+  metric is trustworthy, not an artifact of one label batch. (Auto-benchmark 0.87 remains optimistic.)
+- **Coating split CONFIRMED:** thickness (thin/thick) = **82% on human40b — identical to human40**;
+  texture (smooth/greasy) 63% (vs 68%). The split is real, not overfit. Thickness is the reliable axis;
+  greasiness is the hard one.
+- **red_dots CONFIRMED:** clean none-vs-present separation (prob 0.09 none → 0.66 few).
+- **red_tip TEMPERED (honest downgrade):** on independent data the signal is marginal — "strong" tips
+  only +0.96 tip-redness (vs +3.67 on human40), precision 0.62 at the +2.0 threshold. Correct that we
+  treat it as low-confidence and only let strong tips vote; do NOT over-rely on it.
+
 ## What actually moves the needle (next)
 - **A trustworthy human/expert-labeled eval set** — the single highest-value step. Seeded here:
   `data/eval/human10` (labeled) + `data/eval/human40` (stratified to cover minorities, awaiting labels).

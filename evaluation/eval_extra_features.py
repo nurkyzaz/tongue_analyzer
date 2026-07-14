@@ -10,7 +10,12 @@ from infer import Stage1Pipeline
 from zoning import analyze
 from labels import EXTRA_FEATURES
 
-gold = json.load(open("evaluation/human40_extra_labels.json"))
+import argparse
+_ap = argparse.ArgumentParser()
+_ap.add_argument("--labels", default="evaluation/human40_extra_labels.json")
+_ap.add_argument("--images", default="data/eval/human40")
+_args = _ap.parse_args()
+gold = json.load(open(_args.labels))
 pipe = Stage1Pipeline("checkpoints/seg_combined/best.pt", "checkpoints/multitask_v5/best.pt")
 RD = EXTRA_FEATURES.index("red_dots")
 
@@ -18,7 +23,7 @@ rows = []
 for iid in sorted(gold):
     p = None
     for ext in (".jpg", ".png", ".jpeg"):
-        q = os.path.join("data/eval/human40", iid + ext)
+        q = os.path.join(_args.images, iid + ext)
         if os.path.exists(q): p = q; break
     if not p: continue
     o, m, disp = pipe(p, return_mask=True), None, None
@@ -34,7 +39,7 @@ for iid in sorted(gold):
         mask = (pipe.seg(x).sigmoid() > 0.5).float()
         rd_prob = float(torch.sigmoid(pipe.extra(x, mask))[0, RD].cpu()) if pipe.extra is not None else None
     rows.append({"id": iid, "tipd": z.get("tip_redness_delta"),
-                 "g_tip": gold[iid]["red_tip"], "rd": rd_prob, "g_dots": gold[iid]["red_dots"]})
+                 "g_tip": gold[iid].get("red_tip"), "rd": rd_prob, "g_dots": gold[iid].get("red_dots")})
 
 def mean(vs): vs=[v for v in vs if v is not None]; return sum(vs)/len(vs) if vs else float("nan")
 

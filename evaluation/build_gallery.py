@@ -12,12 +12,24 @@ from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
-IMG_DIR = os.path.join(REPO, "data", "eval", "human40")
 OUT_DIR = os.path.join(REPO, "data", "eval", "gallery")
 HTML = os.path.join(HERE, "gallery.html")
 
-CORE = json.load(open(os.path.join(HERE, "human40_labels.json")))
-EXTRA = json.load(open(os.path.join(HERE, "human40_extra_labels.json")))
+# both human-labeled sets, namespaced (they reuse t00.. ids)
+SETS = [("human40", "a"), ("human40b", "b")]
+CORE, EXTRA, SRC = {}, {}, {}
+for _set, _pfx in SETS:
+    cf = os.path.join(HERE, f"{_set}_labels.json")
+    if not os.path.exists(cf):
+        continue
+    for iid, lab in json.load(open(cf)).items():
+        key = f"{_pfx}-{iid}"
+        CORE[key] = lab
+        SRC[key] = os.path.join(REPO, "data", "eval", _set, iid + ".jpg")
+    ef = os.path.join(HERE, f"{_set}_extra_labels.json")
+    if os.path.exists(ef):
+        for iid, lab in json.load(open(ef)).items():
+            EXTRA[f"{_pfx}-{iid}"] = lab
 
 # feature -> (heading, ordered values) for the grouped reference. Core signs + the two useful extras.
 FEATURES = [
@@ -48,7 +60,7 @@ def main():
     ids = sorted(CORE)
     manifest, imgs = {}, {}
     for iid in ids:
-        src = os.path.join(IMG_DIR, iid + ".jpg")
+        src = SRC[iid]
         if not os.path.exists(src):
             continue
         lab = dict(CORE[iid]); lab.update(EXTRA.get(iid, {}))

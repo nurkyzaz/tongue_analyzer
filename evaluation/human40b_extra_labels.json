@@ -1,0 +1,263 @@
+{
+ "t00": {
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "yes"
+ },
+ "t01": {
+  "red_tip": "none",
+  "red_dots": "none",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "yes"
+ },
+ "t02": {
+  "red_tip": "none",
+  "red_dots": "none",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "yes"
+ },
+ "t03": {
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "t04": {
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "no"
+ },
+ "t05": {
+  "red_tip": "none",
+  "red_dots": "none",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "no"
+ },
+ "t06": {
+  "red_tip": "none",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "t07": {
+  "red_tip": "none",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "yes"
+ },
+ "t08": {
+  "red_dots": "none",
+  "surface_pattern": "present",
+  "tip_shape_ambiguous": "yes"
+ },
+ "t09": {
+  "red_tip": "mild",
+  "red_dots": "many",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "t10": {
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "no"
+ },
+ "t11": {
+  "red_tip": "none",
+  "red_dots": "none",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "no"
+ },
+ "t12": {
+  "red_tip": "mild",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "t13": {
+  "red_tip": "mild",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "t15": {
+  "red_tip": "mild",
+  "red_dots": "none",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "t16": {
+  "red_tip": "none",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "no"
+ },
+ "t17": {
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "t18": {
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "no"
+ },
+ "t19": {
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "yes"
+ },
+ "t20": {
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "yes"
+ },
+ "t21": {
+  "red_tip": "mild",
+  "surface_pattern": "present",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "yes"
+ },
+ "t23": {
+  "red_tip": "mild",
+  "red_dots": "none",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "t24": {
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "yes"
+ },
+ "t25": {
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "no"
+ },
+ "t26": {
+  "red_tip": "strong",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "t27": {
+  "red_tip": "none",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "t28": {
+  "red_tip": "strong",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "yes"
+ },
+ "t29": {
+  "red_tip": "none",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "t30": {
+  "red_tip": "strong",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "yes"
+ },
+ "t31": {
+  "red_tip": "none",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "yes"
+ },
+ "t32": {
+  "red_tip": "none",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "no"
+ },
+ "t33": {
+  "red_tip": "strong",
+  "red_dots": "none",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "t34": {
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "no"
+ },
+ "t35": {
+  "red_tip": "strong",
+  "red_dots": "none",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "yes"
+ },
+ "t36": {
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "present",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "t37": {
+  "red_tip": "strong",
+  "red_dots": "many",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "t38": {
+  "red_tip": "none",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "no"
+ },
+ "t39": {
+  "red_tip": "none",
+  "red_dots": "none",
+  "surface_pattern": "present",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "no"
+ }
+}

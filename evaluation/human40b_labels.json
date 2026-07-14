@@ -1,0 +1,268 @@
+{
+ "t00": {
+  "coating": "non_greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "severe"
+ },
+ "t01": {
+  "coating": "non_greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "severe",
+  "tooth_mk": "severe"
+ },
+ "t02": {
+  "coating": "non_greasy",
+  "tai": "white",
+  "zhi": "dark",
+  "fissure": "severe",
+  "tooth_mk": "light"
+ },
+ "t03": {
+  "coating": "non_greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "severe",
+  "tooth_mk": "none"
+ },
+ "t04": {
+  "coating": "non_greasy",
+  "tai": "yellow",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "light"
+ },
+ "t05": {
+  "coating": "non_greasy",
+  "tai": "light_yellow",
+  "zhi": "dark",
+  "fissure": "none",
+  "tooth_mk": "light"
+ },
+ "t06": {
+  "coating": "greasy_thick",
+  "tai": "light_yellow",
+  "zhi": "dark",
+  "fissure": "severe",
+  "tooth_mk": "none"
+ },
+ "t07": {
+  "coating": "non_greasy",
+  "tai": "white",
+  "zhi": "light",
+  "fissure": "none",
+  "tooth_mk": "severe"
+ },
+ "t08": {
+  "coating": "greasy_thick",
+  "tai": "yellow",
+  "zhi": "dark",
+  "fissure": "none",
+  "tooth_mk": "none"
+ },
+ "t09": {
+  "coating": "greasy",
+  "tai": "yellow",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "light"
+ },
+ "t10": {
+  "coating": "non_greasy",
+  "tai": "yellow",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "none"
+ },
+ "t11": {
+  "coating": "non_greasy",
+  "tai": "yellow",
+  "zhi": "dark",
+  "fissure": "none",
+  "tooth_mk": "none"
+ },
+ "t12": {
+  "coating": "greasy_thick",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "none",
+  "tooth_mk": "light"
+ },
+ "t13": {
+  "coating": "greasy_thick",
+  "tai": "white",
+  "zhi": "light",
+  "fissure": "none",
+  "tooth_mk": "light"
+ },
+ "t15": {
+  "coating": "greasy_thick",
+  "tai": "light_yellow",
+  "zhi": "regular",
+  "fissure": "none",
+  "tooth_mk": "none"
+ },
+ "t16": {
+  "coating": "non_greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "none",
+  "tooth_mk": "light"
+ },
+ "t17": {
+  "coating": "greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "light"
+ },
+ "t18": {
+  "coating": "non_greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "light"
+ },
+ "t19": {
+  "coating": "non_greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "none",
+  "tooth_mk": "light"
+ },
+ "t20": {
+  "coating": "non_greasy",
+  "tai": "yellow",
+  "zhi": "dark",
+  "fissure": "none",
+  "tooth_mk": "light"
+ },
+ "t21": {
+  "coating": "greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "none",
+  "tooth_mk": "none"
+ },
+ "t23": {
+  "coating": "greasy_thick",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "none"
+ },
+ "t24": {
+  "coating": "non_greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "light"
+ },
+ "t25": {
+  "coating": "greasy",
+  "tai": "light_yellow",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "none"
+ },
+ "t26": {
+  "coating": "greasy",
+  "tai": "white",
+  "zhi": "dark",
+  "fissure": "none",
+  "tooth_mk": "none"
+ },
+ "t27": {
+  "coating": "greasy",
+  "tai": "white",
+  "zhi": "light",
+  "fissure": "light",
+  "tooth_mk": "light"
+ },
+ "t28": {
+  "coating": "greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "none",
+  "tooth_mk": "light"
+ },
+ "t29": {
+  "coating": "greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "light"
+ },
+ "t30": {
+  "coating": "greasy_thick",
+  "tai": "light_yellow",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "light"
+ },
+ "t31": {
+  "coating": "non_greasy",
+  "tai": "light_yellow",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "light"
+ },
+ "t32": {
+  "coating": "greasy_thick",
+  "tai": "yellow",
+  "zhi": "dark",
+  "fissure": "light",
+  "tooth_mk": "none"
+ },
+ "t33": {
+  "coating": "greasy",
+  "tai": "light_yellow",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "light"
+ },
+ "t34": {
+  "coating": "non_greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "none",
+  "tooth_mk": "severe"
+ },
+ "t35": {
+  "coating": "greasy_thick",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "light"
+ },
+ "t36": {
+  "coating": "greasy",
+  "tai": "light_yellow",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "light"
+ },
+ "t37": {
+  "coating": "greasy",
+  "tai": "light_yellow",
+  "zhi": "dark",
+  "fissure": "light",
+  "tooth_mk": "none"
+ },
+ "t38": {
+  "coating": "non_greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "none",
+  "tooth_mk": "none"
+ },
+ "t39": {
+  "coating": "greasy",
+  "tai": "white",
+  "zhi": "dark",
+  "fissure": "severe",
+  "tooth_mk": "none"
+ }
+}

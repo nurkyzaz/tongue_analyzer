@@ -98,19 +98,21 @@ def rows_tonguexpert():
 
 
 def rows_human():
+    """Both human-labeled sets (human40 + human40b). Keyed on each image's REAL dataset path (from that
+    set's meta.json), so the two sets don't collide even though both reuse t00.. ids."""
     out = []
-    meta = {e["id"]: e for e in json.load(open("data/eval/human40/meta.json"))}
-    # human40 core + extra -> attach to the real dataset path so they merge with pro labels
-    for fn in ("evaluation/human40_labels.json", "evaluation/human40_extra_labels.json"):
-        if not os.path.exists(fn):
-            continue
-        d = json.load(open(fn))
-        for iid, feats in d.items():
-            if iid.startswith("_"):
+    for setname in ("human40", "human40b"):
+        meta_f = f"data/eval/{setname}/meta.json"
+        meta = {e["id"]: e for e in json.load(open(meta_f))} if os.path.exists(meta_f) else {}
+        for fn in (f"evaluation/{setname}_labels.json", f"evaluation/{setname}_extra_labels.json"):
+            if not os.path.exists(fn):
                 continue
-            path = meta[iid]["path"] if iid in meta else f"data/eval/human40/{iid}.jpg"
-            for feat, val in feats.items():
-                out.append((path, meta.get(iid, {}).get("src", "?"), "eval", feat, str(val), "human"))
+            for iid, feats in json.load(open(fn)).items():
+                if iid.startswith("_"):
+                    continue
+                path = meta[iid]["path"] if iid in meta else f"data/eval/{setname}/{iid}.jpg"
+                for feat, val in feats.items():
+                    out.append((path, meta.get(iid, {}).get("src", "?"), "eval", feat, str(val), "human"))
     return out
 
 

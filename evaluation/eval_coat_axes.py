@@ -10,8 +10,14 @@ from collections import Counter
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "stage1_quantitative"))
 from infer import Stage1Pipeline
 
-gold = json.load(open("evaluation/human40_labels.json"))
-pipe = Stage1Pipeline("checkpoints/seg_combined/best.pt", "checkpoints/multitask_v5/best.pt")
+import argparse
+ap = argparse.ArgumentParser()
+ap.add_argument("--labels", default="evaluation/human40_labels.json")
+ap.add_argument("--images", default="data/eval/human40")
+ap.add_argument("--mt", default="checkpoints/multitask_v5/best.pt")
+args = ap.parse_args()
+gold = json.load(open(args.labels))
+pipe = Stage1Pipeline("checkpoints/seg_combined/best.pt", args.mt)
 
 def to_thick(c): return "thick" if c == "greasy_thick" else "thin"
 def to_tex(c):   return "smooth" if c == "non_greasy" else "greasy"
@@ -19,7 +25,7 @@ def to_tex(c):   return "smooth" if c == "non_greasy" else "greasy"
 conf3 = [0, 0]; th = [0, 0]; tx = [0, 0]
 th_cm = Counter(); tx_cm = Counter()
 for iid in sorted(gold):
-    p = f"data/eval/human40/{iid}.jpg"
+    p = f"{args.images}/{iid}.jpg"
     if not os.path.exists(p): continue
     g = gold[iid].get("coating")
     if not g: continue

@@ -1,5 +1,5 @@
 {
- "t00": {
+ "a-t00": {
   "coating": "greasy",
   "tai": "white",
   "zhi": "dark",
@@ -11,7 +11,7 @@
   "coating_obscures_body": "no",
   "tip_shape_ambiguous": "no"
  },
- "t01": {
+ "a-t01": {
   "coating": "greasy",
   "tai": "light_yellow",
   "zhi": "light",
@@ -23,7 +23,7 @@
   "red_dots": "none",
   "red_tip": "none"
  },
- "t02": {
+ "a-t02": {
   "coating": "greasy",
   "tai": "white",
   "zhi": "regular",
@@ -35,7 +35,7 @@
   "coating_obscures_body": "no",
   "tip_shape_ambiguous": "yes"
  },
- "t03": {
+ "a-t03": {
   "coating": "greasy",
   "tai": "white",
   "zhi": "light",
@@ -47,7 +47,7 @@
   "coating_obscures_body": "yes",
   "tip_shape_ambiguous": "no"
  },
- "t04": {
+ "a-t04": {
   "coating": "non_greasy",
   "tai": "yellow",
   "zhi": "regular",
@@ -59,7 +59,7 @@
   "red_dots": "none",
   "red_tip": "mild"
  },
- "t05": {
+ "a-t05": {
   "coating": "greasy_thick",
   "tai": "yellow",
   "fissure": "light",
@@ -70,7 +70,7 @@
   "red_dots": "none",
   "red_tip": "none"
  },
- "t06": {
+ "a-t06": {
   "coating": "non_greasy",
   "tai": "light_yellow",
   "zhi": "regular",
@@ -82,7 +82,7 @@
   "coating_obscures_body": "no",
   "tip_shape_ambiguous": "no"
  },
- "t07": {
+ "a-t07": {
   "coating": "greasy_thick",
   "tai": "light_yellow",
   "zhi": "regular",
@@ -94,7 +94,7 @@
   "red_dots": "few",
   "red_tip": "mild"
  },
- "t08": {
+ "a-t08": {
   "coating": "greasy_thick",
   "tai": "white",
   "zhi": "regular",
@@ -106,7 +106,7 @@
   "red_dots": "none",
   "red_tip": "none"
  },
- "t09": {
+ "a-t09": {
   "coating": "non_greasy",
   "tai": "light_yellow",
   "zhi": "dark",
@@ -118,7 +118,7 @@
   "coating_obscures_body": "no",
   "tip_shape_ambiguous": "yes"
  },
- "t10": {
+ "a-t10": {
   "coating": "greasy",
   "tai": "white",
   "zhi": "regular",
@@ -130,7 +130,7 @@
   "red_dots": "many",
   "red_tip": "mild"
  },
- "t11": {
+ "a-t11": {
   "coating": "greasy_thick",
   "tai": "white",
   "zhi": "light",
@@ -142,7 +142,7 @@
   "red_dots": "none",
   "red_tip": "strong"
  },
- "t12": {
+ "a-t12": {
   "coating": "greasy",
   "tai": "white",
   "zhi": "light",
@@ -154,7 +154,7 @@
   "surface_pattern": "none",
   "red_dots": "few"
  },
- "t13": {
+ "a-t13": {
   "coating": "non_greasy",
   "tai": "light_yellow",
   "zhi": "regular",
@@ -166,7 +166,7 @@
   "coating_obscures_body": "no",
   "tip_shape_ambiguous": "no"
  },
- "t14": {
+ "a-t14": {
   "coating": "greasy_thick",
   "tai": "yellow",
   "zhi": "regular",
@@ -178,7 +178,7 @@
   "surface_pattern": "none",
   "coating_obscures_body": "yes"
  },
- "t16": {
+ "a-t16": {
   "coating": "greasy_thick",
   "tai": "white",
   "zhi": "light",
@@ -190,7 +190,7 @@
   "red_dots": "none",
   "red_tip": "mild"
  },
- "t17": {
+ "a-t17": {
   "coating": "non_greasy",
   "tai": "white",
   "zhi": "dark",
@@ -202,7 +202,7 @@
   "coating_obscures_body": "no",
   "tip_shape_ambiguous": "no"
  },
- "t18": {
+ "a-t18": {
   "coating": "non_greasy",
   "tai": "light_yellow",
   "zhi": "regular",
@@ -214,7 +214,7 @@
   "red_dots": "few",
   "red_tip": "mild"
  },
- "t19": {
+ "a-t19": {
   "coating": "greasy_thick",
   "tai": "white",
   "zhi": "dark",
@@ -226,7 +226,7 @@
   "coating_obscures_body": "no",
   "tip_shape_ambiguous": "no"
  },
- "t20": {
+ "a-t20": {
   "coating": "non_greasy",
   "tai": "white",
   "zhi": "light",
@@ -238,7 +238,7 @@
   "red_dots": "none",
   "red_tip": "mild"
  },
- "t21": {
+ "a-t21": {
   "coating": "non_greasy",
   "tai": "white",
   "zhi": "regular",
@@ -250,7 +250,7 @@
   "coating_obscures_body": "no",
   "tip_shape_ambiguous": "yes"
  },
- "t23": {
+ "a-t23": {
   "coating": "non_greasy",
   "tai": "yellow",
   "zhi": "light",
@@ -262,7 +262,7 @@
   "red_dots": "few",
   "red_tip": "mild"
  },
- "t24": {
+ "a-t24": {
   "coating": "greasy",
   "tai": "white",
   "zhi": "regular",
@@ -274,7 +274,7 @@
   "red_dots": "none",
   "red_tip": "mild"
  },
- "t25": {
+ "a-t25": {
   "coating": "non_greasy",
   "tai": "white",
   "zhi": "light",
@@ -286,7 +286,7 @@
   "coating_obscures_body": "yes",
   "tip_shape_ambiguous": "yes"
  },
- "t26": {
+ "a-t26": {
   "coating": "non_greasy",
   "tai": "white",
   "zhi": "regular",
@@ -298,7 +298,7 @@
   "red_dots": "few",
   "red_tip": "mild"
  },
- "t27": {
+ "a-t27": {
   "coating": "greasy",
   "tai": "white",
   "zhi": "regular",
@@ -310,7 +310,7 @@
   "coating_obscures_body": "yes",
   "tip_shape_ambiguous": "no"
  },
- "t28": {
+ "a-t28": {
   "coating": "greasy_thick",
   "tai": "white",
   "zhi": "regular",
@@ -322,7 +322,7 @@
   "red_dots": "few",
   "red_tip": "mild"
  },
- "t29": {
+ "a-t29": {
   "coating": "greasy",
   "tai": "white",
   "zhi": "regular",
@@ -334,7 +334,7 @@
   "red_dots": "few",
   "red_tip": "mild"
  },
- "t30": {
+ "a-t30": {
   "coating": "greasy_thick",
   "tai": "white",
   "zhi": "regular",
@@ -346,7 +346,7 @@
   "coating_obscures_body": "yes",
   "tip_shape_ambiguous": "yes"
  },
- "t31": {
+ "a-t31": {
   "coating": "greasy",
   "tai": "white",
   "zhi": "regular",
@@ -358,7 +358,7 @@
   "red_dots": "many",
   "red_tip": "mild"
  },
- "t32": {
+ "a-t32": {
   "coating": "non_greasy",
   "tai": "white",
   "zhi": "regular",
@@ -370,7 +370,7 @@
   "coating_obscures_body": "yes",
   "tip_shape_ambiguous": "no"
  },
- "t33": {
+ "a-t33": {
   "coating": "non_greasy",
   "tai": "light_yellow",
   "zhi": "regular",
@@ -382,7 +382,7 @@
   "red_dots": "few",
   "red_tip": "mild"
  },
- "t34": {
+ "a-t34": {
   "coating": "greasy",
   "tai": "light_yellow",
   "zhi": "light",
@@ -394,7 +394,7 @@
   "coating_obscures_body": "yes",
   "tip_shape_ambiguous": "no"
  },
- "t35": {
+ "a-t35": {
   "coating": "greasy_thick",
   "tai": "light_yellow",
   "zhi": "dark",
@@ -406,7 +406,7 @@
   "coating_obscures_body": "yes",
   "tip_shape_ambiguous": "yes"
  },
- "t36": {
+ "a-t36": {
   "coating": "non_greasy",
   "tai": "white",
   "zhi": "regular",
@@ -418,7 +418,7 @@
   "surface_pattern": "none",
   "coating_obscures_body": "no"
  },
- "t37": {
+ "a-t37": {
   "coating": "greasy",
   "tai": "white",
   "zhi": "regular",
@@ -430,7 +430,7 @@
   "coating_obscures_body": "yes",
   "tip_shape_ambiguous": "no"
  },
- "t38": {
+ "a-t38": {
   "coating": "greasy",
   "tai": "white",
   "zhi": "regular",
@@ -442,7 +442,7 @@
   "red_dots": "none",
   "red_tip": "mild"
  },
- "t39": {
+ "a-t39": {
   "coating": "greasy",
   "tai": "light_yellow",
   "zhi": "regular",
@@ -453,5 +453,456 @@
   "surface_pattern": "none",
   "red_dots": "none",
   "red_tip": "mild"
+ },
+ "b-t00": {
+  "coating": "non_greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "severe",
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "yes"
+ },
+ "b-t01": {
+  "coating": "non_greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "severe",
+  "tooth_mk": "severe",
+  "red_tip": "none",
+  "red_dots": "none",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "yes"
+ },
+ "b-t02": {
+  "coating": "non_greasy",
+  "tai": "white",
+  "zhi": "dark",
+  "fissure": "severe",
+  "tooth_mk": "light",
+  "red_tip": "none",
+  "red_dots": "none",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "yes"
+ },
+ "b-t03": {
+  "coating": "non_greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "severe",
+  "tooth_mk": "none",
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t04": {
+  "coating": "non_greasy",
+  "tai": "yellow",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "light",
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t05": {
+  "coating": "non_greasy",
+  "tai": "light_yellow",
+  "zhi": "dark",
+  "fissure": "none",
+  "tooth_mk": "light",
+  "red_tip": "none",
+  "red_dots": "none",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t06": {
+  "coating": "greasy_thick",
+  "tai": "light_yellow",
+  "zhi": "dark",
+  "fissure": "severe",
+  "tooth_mk": "none",
+  "red_tip": "none",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t07": {
+  "coating": "non_greasy",
+  "tai": "white",
+  "zhi": "light",
+  "fissure": "none",
+  "tooth_mk": "severe",
+  "red_tip": "none",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "yes"
+ },
+ "b-t08": {
+  "coating": "greasy_thick",
+  "tai": "yellow",
+  "zhi": "dark",
+  "fissure": "none",
+  "tooth_mk": "none",
+  "red_dots": "none",
+  "surface_pattern": "present",
+  "tip_shape_ambiguous": "yes"
+ },
+ "b-t09": {
+  "coating": "greasy",
+  "tai": "yellow",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "light",
+  "red_tip": "mild",
+  "red_dots": "many",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t10": {
+  "coating": "non_greasy",
+  "tai": "yellow",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "none",
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t11": {
+  "coating": "non_greasy",
+  "tai": "yellow",
+  "zhi": "dark",
+  "fissure": "none",
+  "tooth_mk": "none",
+  "red_tip": "none",
+  "red_dots": "none",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t12": {
+  "coating": "greasy_thick",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "none",
+  "tooth_mk": "light",
+  "red_tip": "mild",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t13": {
+  "coating": "greasy_thick",
+  "tai": "white",
+  "zhi": "light",
+  "fissure": "none",
+  "tooth_mk": "light",
+  "red_tip": "mild",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t15": {
+  "coating": "greasy_thick",
+  "tai": "light_yellow",
+  "zhi": "regular",
+  "fissure": "none",
+  "tooth_mk": "none",
+  "red_tip": "mild",
+  "red_dots": "none",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t16": {
+  "coating": "non_greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "none",
+  "tooth_mk": "light",
+  "red_tip": "none",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t17": {
+  "coating": "greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "light",
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t18": {
+  "coating": "non_greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "light",
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t19": {
+  "coating": "non_greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "none",
+  "tooth_mk": "light",
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "yes"
+ },
+ "b-t20": {
+  "coating": "non_greasy",
+  "tai": "yellow",
+  "zhi": "dark",
+  "fissure": "none",
+  "tooth_mk": "light",
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "yes"
+ },
+ "b-t21": {
+  "coating": "greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "none",
+  "tooth_mk": "none",
+  "red_tip": "mild",
+  "surface_pattern": "present",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "yes"
+ },
+ "b-t23": {
+  "coating": "greasy_thick",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "none",
+  "red_tip": "mild",
+  "red_dots": "none",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t24": {
+  "coating": "non_greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "light",
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "yes"
+ },
+ "b-t25": {
+  "coating": "greasy",
+  "tai": "light_yellow",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "none",
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t26": {
+  "coating": "greasy",
+  "tai": "white",
+  "zhi": "dark",
+  "fissure": "none",
+  "tooth_mk": "none",
+  "red_tip": "strong",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t27": {
+  "coating": "greasy",
+  "tai": "white",
+  "zhi": "light",
+  "fissure": "light",
+  "tooth_mk": "light",
+  "red_tip": "none",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t28": {
+  "coating": "greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "none",
+  "tooth_mk": "light",
+  "red_tip": "strong",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "yes"
+ },
+ "b-t29": {
+  "coating": "greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "light",
+  "red_tip": "none",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t30": {
+  "coating": "greasy_thick",
+  "tai": "light_yellow",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "light",
+  "red_tip": "strong",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "yes"
+ },
+ "b-t31": {
+  "coating": "non_greasy",
+  "tai": "light_yellow",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "light",
+  "red_tip": "none",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "yes"
+ },
+ "b-t32": {
+  "coating": "greasy_thick",
+  "tai": "yellow",
+  "zhi": "dark",
+  "fissure": "light",
+  "tooth_mk": "none",
+  "red_tip": "none",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t33": {
+  "coating": "greasy",
+  "tai": "light_yellow",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "light",
+  "red_tip": "strong",
+  "red_dots": "none",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t34": {
+  "coating": "non_greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "none",
+  "tooth_mk": "severe",
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t35": {
+  "coating": "greasy_thick",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "light",
+  "red_tip": "strong",
+  "red_dots": "none",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "yes"
+ },
+ "b-t36": {
+  "coating": "greasy",
+  "tai": "light_yellow",
+  "zhi": "regular",
+  "fissure": "light",
+  "tooth_mk": "light",
+  "red_tip": "mild",
+  "red_dots": "few",
+  "surface_pattern": "present",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t37": {
+  "coating": "greasy",
+  "tai": "light_yellow",
+  "zhi": "dark",
+  "fissure": "light",
+  "tooth_mk": "none",
+  "red_tip": "strong",
+  "red_dots": "many",
+  "surface_pattern": "none",
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t38": {
+  "coating": "non_greasy",
+  "tai": "white",
+  "zhi": "regular",
+  "fissure": "none",
+  "tooth_mk": "none",
+  "red_tip": "none",
+  "red_dots": "few",
+  "surface_pattern": "none",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "no"
+ },
+ "b-t39": {
+  "coating": "greasy",
+  "tai": "white",
+  "zhi": "dark",
+  "fissure": "severe",
+  "tooth_mk": "none",
+  "red_tip": "none",
+  "red_dots": "none",
+  "surface_pattern": "present",
+  "coating_obscures_body": "no",
+  "tip_shape_ambiguous": "no"
  }
 }
