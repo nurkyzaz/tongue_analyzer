@@ -101,5 +101,39 @@
   {"id":"symptom:dizzy_palpitations_pale","source":"CCMQ (Wang Qi); Maciocia",
    "text":"Dizziness, palpitations, poor sleep, dry skin/hair, scanty periods and a pale complexion point to a BLOOD-DEFICIENCY (under-nourished) tendency — on the tongue a pale, thin, dry-ish body. Blood-nourishing foods and enough rest are the supports."},
   {"id":"symptom:sighing_bloating_stress","source":"CCMQ (Wang Qi); Maciocia",
-   "text":"Frequent sighing, chest or rib fullness, bloating that comes with mood, irritability or low mood, and a lump-in-throat feeling point to a QI-STAGNATION (stuck energy, stress) tendency — the tongue is often near-normal or slightly dark. Movement, stress relief and qi-moving foods are the supports."}
+   "text":"Frequent sighing, chest or rib fullness, bloating that comes with mood, irritability or low mood, and a lump-in-throat feeling point to a QI-STAGNATION (stuck energy, stress) tendency — the tongue is often near-normal or slightly dark. Movement, stress relief and qi-moving foods are the supports."},
+
+  {"id":"combo:spleen_qi_with_dampness","source":"Maciocia; Sacred Lotus",
+   "text":"Spleen-qi deficiency + Dampness (very common combo): weak digestion can't move fluids, so damp accumulates. Tongue: PALE, SWOLLEN, TOOTH-MARKED body WITH a greasy coating. Read as 'weak-plus-damp' — support digestion (warm cooked meals, don't overeat) AND ease damp (less greasy/sweet/cold-raw)."},
+  {"id":"combo:liver_qi_invading_spleen","source":"Maciocia; Sacred Lotus",
+   "text":"Liver-qi stagnation invading the Spleen (Liver-Spleen disharmony): stress disrupts digestion — bloating, alternating loose/hard stool, irritability that worsens with tension. Tongue: often near-normal or slightly dark body, sometimes with redder SIDES. Move qi (stress relief, movement) and steady digestion."},
+  {"id":"combo:yin_def_with_damp_heat","source":"Maciocia",
+   "text":"Yin deficiency + Damp-heat (a mixed dry-and-damp picture): a RED body with CRACKS (yin depletion) yet a GREASY YELLOW patch (damp-heat) at the same time. Handle gently — clear damp-heat without strong drying, and nourish yin without heavy/greasy tonics. A case where the tongue looks contradictory."},
+  {"id":"combo:qi_and_blood_deficiency","source":"Maciocia; Sacred Lotus",
+   "text":"Qi and Blood deficiency together (Qi generates Blood, so they often co-occur): tiredness and breathlessness PLUS dizziness, pallor, palpitations, poor sleep. Tongue: PALE, THIN, sometimes tooth-marked. Build both with warm, nourishing, easy-to-digest food and real rest."},
+  {"id":"combo:spleen_kidney_yang_deficiency","source":"Maciocia; Sacred Lotus",
+   "text":"Spleen + Kidney Yang deficiency (deep cold): cold limbs, cold/sore lower back and knees, early-morning loose stool, puffiness, low drive. Tongue: PALE, SWOLLEN, WET. The coldest/most-deficient end of the spectrum — warm and tonify strongly, keep the core warm."},
+
+  {"id":"disambig:excess_vs_deficient_heat","source":"Sacred Lotus; Maciocia",
+   "text":"Excess heat vs Deficient (empty) heat, both red-tongued: EXCESS heat = a full, bright RED body with a THICK (often yellow) coat and strong signs (thirst, constipation, restlessness); DEFICIENT heat = a red body with LITTLE or PEELED coat and CRACKS (yin-deficiency), milder, worse at night. Coat thickness is the key: thick=excess, scanty=deficient."},
+  {"id":"disambig:damp_cold_vs_damp_heat","source":"Sacred Lotus; Maciocia",
+   "text":"Damp-cold vs Damp-heat, both greasy-coated and heavy: DAMP-COLD = a WHITE greasy coat, pale/normal body, feeling cold, heavy and sluggish; DAMP-HEAT = a YELLOW greasy coat, red body, bitter/sticky mouth, warmth and irritability. Coating colour (white vs yellow) divides them."},
+  {"id":"disambig:exterior_vs_interior","source":"Sacred Lotus; Maciocia",
+   "text":"Coating depth reads how deep/old a condition is: a THIN coat over a normal body = mild or recent ('exterior'); a THICK coat with a changed body colour = deeper or longer-standing ('interior'). A coat thickening over days suggests moving inward; thinning suggests resolving."},
+
+  {"id":"food:warming_for_yang_cold","source":"CCMQ (Wang Qi); Chinese food therapy",
+   "text":"Food therapy for a COLD / Yang-deficiency tendency (pale, swollen, wet tongue; cold limbs): favour WARMING foods — ginger, cinnamon, cloves, lamb, beef, walnut, well-cooked over raw; limit iced drinks, raw salads and excess cold-natured fruit. Keep the belly and feet warm."},
+  {"id":"food:cooling_for_heat_damp","source":"CCMQ (Wang Qi); Chinese food therapy",
+   "text":"Food therapy for a HEAT / Damp-heat tendency (red body, greasy yellow coat; oily skin, bitter mouth): favour COOLING, draining foods — mung/green bean, cucumber, celery, barley, watermelon, bitter greens; limit alcohol, fried/greasy food, spicy heat and late nights."},
+  {"id":"food:qi_tonics","source":"CCMQ (Wang Qi); Chinese food therapy",
+   "text":"Food therapy for a QI-deficiency tendency (pale, tooth-marked tongue; tiredness): qi-tonic foods — rice and congee, sweet potato, pumpkin, dates, mushrooms, chicken — eaten warm and well-cooked, on a regular schedule, without overeating or crash-dieting."},
+  {"id":"food:blood_nourishing","source":"CCMQ (Wang Qi); Chinese food therapy",
+   "text":"Food therapy for a BLOOD-deficiency tendency (pale, thin tongue; dizziness, palpitations): blood-nourishing foods — dark leafy greens, beetroot, black sesame, goji berries, dates, eggs, (liver) — with enough sleep, since Blood is restored by rest."},
+  {"id":"food:damp_draining","source":"CCMQ (Wang Qi); Chinese food therapy",
+   "text":"Food therapy for a phlegm-DAMPNESS tendency (swollen, greasy-coated tongue; heaviness): damp-draining foods — barley, adzuki/red bean, millet, radish, mushrooms; limit dairy, sweets, greasy and cold-raw food; move daily to help fluids circulate."},
+  {"id":"food:qi_moving","source":"CCMQ (Wang Qi); Chinese food therapy",
+   "text":"Food therapy for a QI-STAGNATION tendency (stress, bloating, near-normal tongue): qi-moving foods — citrus peel, radish, hawthorn, mint, kumquat, jasmine tea; alongside movement, fresh air and stress relief, since stuck qi eases with flow."},
+
+  {"id":"modern:sleep_stress_tongue","source":"clinical literature (association)",
+   "text":"Modern association (not causation): poor sleep and high stress are described alongside a redder tongue TIP and a thicker/greasier coating. In this tradition tip-heat links to the Heart (stress, sleep) and coating to digestion. An association to explore, not a diagnosis."}
 ]

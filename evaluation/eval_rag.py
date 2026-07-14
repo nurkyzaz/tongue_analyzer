@@ -24,6 +24,12 @@ CASES = [
     ("coating turning yellow, feeling hot and thirsty", ["yellow_coating", "damp_heat", "white_vs_yellow"]),
     ("tongue coating wiped off easily, glossy patch", ["rooted", "peeled", "rootless"]),
     ("red spots on the tip of the tongue", ["red_dots", "red tip", "red_tip"]),
+    ("stress makes my bloating and digestion worse", ["liver_qi", "qi_stagnation", "spleen"]),
+    ("cold lower back, early morning loose stool, puffy", ["spleen_kidney_yang", "yang"]),
+    ("what foods help a cold constitution", ["warming", "yang"]),
+    ("what to eat for damp heat and oily skin", ["cooling", "damp_heat", "damp"]),
+    ("red tongue, thick yellow coat, thirst, constipation", ["excess_vs_deficient", "damp_heat", "yellow"]),
+    ("pale swollen tongue with greasy coating, tired", ["spleen_qi_with_dampness", "phlegm", "spleen"]),
 ]
 
 
