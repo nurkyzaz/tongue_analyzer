@@ -40,6 +40,17 @@
   .conf-tag::before{content:"⚑ ";opacity:.8}
   .confnote{font-size:12px;color:var(--mut);line-height:1.5;background:var(--card2);border:1px solid var(--line);
     border-radius:10px;padding:11px 13px;margin-top:12px}
+  .found{font-size:16px;line-height:1.5;margin:4px 0 12px;font-weight:600}
+  .normline{font-size:12px;color:var(--mut);margin:6px 0 2px}
+  .rec{background:linear-gradient(135deg,rgba(49,196,141,.13),rgba(109,177,255,.07));border:1px solid var(--line);
+    border-radius:14px;padding:15px 16px;margin:2px 0 14px}
+  .rec h3{margin:0 0 8px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
+  .rec .maybe{font-size:13px;color:var(--mut);margin:0 0 10px}
+  .rec .maybe b{color:var(--fg)}
+  .rec ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+  .rec li{font-size:14px;line-height:1.5;padding-left:22px;position:relative}
+  .rec li::before{content:"🌿";position:absolute;left:0}
+  .prec{font-size:12px;color:var(--acc);margin-top:6px;line-height:1.5}
   .pat{background:var(--card2);border:1px solid var(--line);border-left:3px solid var(--acc);border-radius:10px;padding:11px;margin:9px 0}
   .pat .nm{font-weight:700;color:#fff;font-size:14px}.pat .pn{color:var(--acc);font-size:12.5px;margin-bottom:4px}
   .pat .ex{font-size:13px;line-height:1.5;color:#cdd8e2}
@@ -95,11 +106,12 @@
   <div class="card hidden" id="results">
     <div id="framing" class="badge">…</div>
     <img id="overlay" style="width:100%;border-radius:12px;margin:12px 0"/>
+    <div id="foundText" class="found"></div>
+    <div id="recCard"></div>
     <div id="headline" class="headline"></div>
-    <div id="card"></div>
-    <div id="overview" class="prose" style="color:var(--mut);margin-top:6px"></div>
-    <h2>Your signs, one by one</h2><div id="signs"></div>
+    <h2>Your signs</h2><div id="signs"></div><div id="normalLine" class="normline"></div>
     <h2>What they suggest together</h2><div id="combined" class="prose"></div><div id="patterns"></div>
+    <div id="overview" class="prose" style="color:var(--mut);margin-top:10px;font-size:12px"></div>
     <div id="followup"></div>
     <div id="confNote" class="confnote"></div>
     <div id="sources" class="src"></div><div class="disc" id="disc"></div>
@@ -139,55 +151,18 @@ function signCard(f){
 function patCard(p){
   const sym=(p.associated_symptoms||[]).map(s=>`<span class="chip">${s}</span>`).join('');
   const recs=[...(p.recommendations?.diet||[]),...(p.recommendations?.lifestyle||[])].slice(0,4);
-  const rec=recs.length?`<div class="rec">🌿 ${recs.join(' · ')}</div>`:'';
+  const rec=recs.length?`<div class="prec">🌿 ${recs.join(' · ')}</div>`:'';
   const mod=p.modern_correlation?`<div style="font-size:12px;color:var(--blue);margin-top:5px">🔬 Modern view: ${p.modern_correlation}</div>`:'';
   return `<div class="pat"><div class="nm">${p.tcm_name} · <span style="color:var(--mut);font-weight:600">${Math.round(p.confidence*100)}%</span></div>
     <div class="pn">${p.plain_name}</div><div class="ex">${p.explanation||''}</div>${mod}${sym?`<div style="margin-top:6px">${sym}</div>`:''}${rec}</div>`;
 }
-function renderCard(card){
-  if(!card){$('card').innerHTML='';return;}
-  const hl=(card.highlights||[]).map(h=>`<div class="hlrow"><span>${h.label}</span><span>${h.score}/100</span></div><div class="bar"><i style="width:${h.score}%"></i></div>`).join('');
-  $('card').innerHTML=`<div class="tc" id="tc">
-    <div class="brand">👅 TONGUEINSIGHT</div><div class="kick">YOUR TONGUE TYPE</div>
-    <div class="emoji">${card.emoji||'✨'}</div><div class="name">${card.type_name||''}</div>
-    <div class="blurb">“${card.blurb||''}”</div>
-    <div class="ring"><b>${card.balance_score}</b> /100 balance</div>
-    <div class="hl">${hl}</div>
-    <div class="cta">Curious what yours says? Scan your tongue →</div></div>
-    <div class="row"><button id="dl" class="primary">📥 Download card</button><button id="shareBtn">🔗 Share</button></div>`;
-  $('dl').onclick=()=>drawShareCard(card);
-  $('shareBtn').onclick=async()=>{const t=`My tongue type: ${card.type_name} — balance ${card.balance_score}/100`;
-    try{await navigator.share({title:'My Tongue Type',text:t,url:location.href});}
-    catch(e){try{await navigator.clipboard.writeText(t+' '+location.href);alert('Copied to clipboard!');}catch(_){}}};
-}
-function roundRect(x,rx,ry,w,h,r){x.beginPath();x.moveTo(rx+r,ry);x.arcTo(rx+w,ry,rx+w,ry+h,r);x.arcTo(rx+w,ry+h,rx,ry+h,r);x.arcTo(rx,ry+h,rx,ry,r);x.arcTo(rx,ry,rx+w,ry,r);x.closePath();}
-function drawShareCard(card){
-  const W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
-  const g=x.createRadialGradient(W/2,0,80,W/2,300,1100);g.addColorStop(0,'#1c3b31');g.addColorStop(.55,'#14202b');g.addColorStop(1,'#0f1720');
-  x.fillStyle=g;x.fillRect(0,0,W,H);x.fillStyle='#31c48d';x.fillRect(0,0,W,10);x.textAlign='center';
-  x.fillStyle='#31c48d';x.font='700 34px system-ui';x.fillText('👅  T O N G U E I N S I G H T',W/2,96);
-  x.fillStyle='#93a4b3';x.font='600 30px system-ui';x.fillText('Y O U R   T O N G U E   T Y P E',W/2,168);
-  x.font='150px system-ui';x.fillText(card.emoji||'✨',W/2,370);
-  x.fillStyle='#ffffff';x.font='800 84px system-ui';x.fillText(card.type_name||'',W/2,470);
-  x.fillStyle='#cfe9dd';x.font='italic 40px system-ui';x.fillText('“'+(card.blurb||'')+'”',W/2,540);
-  // score ring
-  const cx=W/2,cy=760,r=150;x.lineWidth=26;x.lineCap='round';
-  x.strokeStyle='#17303a';x.beginPath();x.arc(cx,cy,r,0,2*Math.PI);x.stroke();
-  x.strokeStyle='#31c48d';x.beginPath();x.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+2*Math.PI*(card.balance_score/100));x.stroke();
-  x.fillStyle='#e8eef4';x.font='800 96px system-ui';x.fillText(card.balance_score,cx,cy+22);
-  x.fillStyle='#93a4b3';x.font='700 28px system-ui';x.fillText('BALANCE',cx,cy+68);
-  // highlights
-  let y=1010;x.textAlign='left';
-  (card.highlights||[]).slice(0,3).forEach(h=>{
-    x.fillStyle='#e8eef4';x.font='600 36px system-ui';x.fillText(h.label,120,y);
-    x.textAlign='right';x.fillStyle='#f6c453';x.fillText(h.score+'/100',960,y);x.textAlign='left';
-    x.fillStyle='#17222c';roundRect(x,120,y+18,840,20,10);x.fill();
-    x.fillStyle='#f6c453';roundRect(x,120,y+18,840*Math.max(0.02,h.score/100),20,10);x.fill();y+=104;});
-  x.textAlign='center';x.fillStyle='#93a4b3';x.font='700 32px system-ui';
-  x.fillText('Scan your tongue → '+location.host,W/2,H-92);
-  x.fillStyle='#5a6b7b';x.font='22px system-ui';
-  x.fillText('Educational · a traditional-medicine perspective · not a diagnosis',W/2,H-48);
-  c.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='my-tongue-type.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000);});
+function renderRec(rec){
+  const el=$('recCard');
+  if(!rec||(!(rec.actions||[]).length && !(rec.conditions||[]).length)){el.innerHTML='';return;}
+  const cond=(rec.conditions||[]).map(c=>`<b>${c.name}</b>`).join(', ');
+  const maybe=cond?`<div class="maybe">What this may point to (exploratory, not a diagnosis): ${cond}.</div>`:'';
+  const acts=(rec.actions||[]).map(a=>`<li>${a}</li>`).join('');
+  el.innerHTML=`<div class="rec"><h3>🌿 What you might try</h3>${maybe}<ul>${acts}</ul></div>`;
 }
 function renderFollowup(fu){
   const box=$('followup');box.innerHTML='';if(!fu||!fu.length)return;
@@ -208,11 +183,16 @@ function render(d){
   $('loading').classList.add('hidden');$('results').classList.remove('hidden');$('retryRow').classList.remove('hidden');
   const f=d.framing||{},fb=$('framing');fb.textContent=f.message||'';fb.className='badge '+(f.status==='ok'?'ok':f.status==='error'?'err':'warn');
   $('overlay').src=d.overlay_png||'';const it=d.interpretation||{};
+  $('foundText').textContent=it.findings_text||'';
+  renderRec(it.recommendation);
   $('headline').innerHTML=md(it.headline||'');
-  renderCard(it.card);
   $('overview').textContent=it.overview||'';
   $('confNote').textContent=it.confidence_note||'';
-  $('signs').innerHTML=(it.features||[]).map(signCard).join('');
+  // S4: show only the NOTABLE signs; summarise the rest in one line
+  const feats=it.features||[], notable=feats.filter(f=>f.notable);
+  $('signs').innerHTML=notable.map(signCard).join('');
+  const normal=feats.filter(f=>!f.notable&&f.label).map(f=>f.label.toLowerCase());
+  $('normalLine').textContent=normal.length?('Within a typical range: '+[...new Set(normal)].join(', ')+'.'):'';
   $('combined').innerHTML=md(it.combined);
   $('patterns').innerHTML=(it.patterns||[]).filter(p=>p.id!=='balanced').map(patCard).join('');
   renderFollowup(it.followup);

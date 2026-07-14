@@ -687,6 +687,22 @@
    },
    "cite": "SL/Mac",
    "note": "red + cracks + little/peeled coat = empty-heat (Yin deficiency), not damp-heat"
+  },
+  {
+   "id": "thick_greasy_cracks_maybe_coating",
+   "when": {
+    "coat_texture": "greasy",
+    "coat_thickness": "thick",
+    "fissure": [
+     "light",
+     "severe"
+    ]
+   },
+   "boost": {
+    "yin_deficiency": -0.6
+   },
+   "cite": "user-observed; Maciocia (coating vs body cracks)",
+   "note": "cracks on a THICK GREASY coat may be cracks in the COATING, not true body fissures — discount the Yin-deficiency reading that fissures would otherwise drive"
   }
  ]
 }

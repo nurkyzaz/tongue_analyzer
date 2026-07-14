@@ -379,6 +379,106 @@ def _confidence_note(disp):
     return note
 
 
+# ---- salient findings (S1/S2): the present, notable signs in plain words, ranked by prominence ----
+_PHRASE = {
+    ("zhi", "dark"): "a red or dark body", ("zhi", "light"): "a pale body",
+    ("tai", "yellow"): "a yellow coating", ("tai", "light_yellow"): "a slightly yellow coating",
+    ("coat_texture", "greasy"): "a greasy coating", ("coat_thickness", "thick"): "a thick coating",
+    ("red_tip", "present"): "a redder tip", ("moisture", "wet"): "a wet, glossy surface",
+}
+_PHRASE_KEY = {
+    "fissure": "cracks", "tooth_mk": "tooth-marked (scalloped) edges", "red_dots": "red spots",
+    "swollen": "a swollen body", "peeled_coating": "a peeled/patchy coating",
+    "purple_body": "a purple/dusky body", "thin": "a thin body", "red_tongue": "a red body",
+    "slippery_coating": "a wet/slippery coating", "black_coating": "a grey/dark coating",
+}
+# concrete, plain, finding-specific actions (over-ride the generic pattern recs)
+_ACTION = {
+    ("zhi", "light"): "favour iron-rich, blood-nourishing foods (red meat, dark leafy greens, beetroot) and get enough sleep",
+    ("zhi", "dark"): "favour cooling foods (cucumber, mung bean, pear) and ease off spicy/fried food, alcohol and late nights",
+    ("coat_texture", "greasy"): "keep meals lighter, warm and well-cooked; cut back on greasy, sweet, cold and raw food",
+    ("coat_thickness", "thick"): "eat lighter and don't overeat; add gentle daily movement to help clear the heaviness",
+    ("tai", "yellow"): "favour cooling, light foods and cut back on alcohol, fried food and late nights",
+    ("fissure", "present"): "drink more water and prioritise rest — this tradition links cracks to dryness/depletion",
+    ("tooth_mk", "present"): "favour warm, well-cooked, easy-to-digest meals and avoid overeating",
+    ("red_tip", "present"): "wind down before bed and manage stress — the tip links to the Heart/upper body",
+    ("moisture", "wet"): "favour warming, well-cooked foods and go easy on cold/raw food and iced drinks",
+}
+
+
+def _is_notable(r):
+    if r["key"] in ("tai", "zhi"):
+        return r["value"] not in ("white", "regular")     # non-default colour = worth surfacing
+    return bool(r.get("mentioned"))
+
+
+def _finding_phrase(r, coat_crack_caveat=False):
+    k, v = r["key"], r["value"]
+    if (k, v) in _PHRASE:
+        return _PHRASE[(k, v)]
+    if k == "fissure":
+        return "cracks (possibly in the thick coating)" if coat_crack_caveat else "cracks"
+    return _PHRASE_KEY.get(k)
+
+
+# rank signs by prominence WEIGHTED by how much we trust the detector, so reliable signs (body colour,
+# cracks) lead and the marginal ones (red_tip, moisture) sink rather than heading the description.
+_REL_W = {"reliable": 1.0, "moderate": 0.6, "tentative": 0.45}
+# clinical priority tier — the primary signs always lead the description; the marginal zoned signals
+# (red_tip, moisture — known to be weak) come last, so they never head the findings.
+_TIER = {"zhi": 0, "coat_texture": 0, "coat_thickness": 0, "tai": 0, "fissure": 0, "tooth_mk": 0,
+         "red_tip": 2, "moisture": 2}   # everything else (extras) = tier 1
+
+
+def build_findings(disp, present):
+    """Ranked list of the notable PRESENT signs: {key,value,phrase,prominence,confidence}."""
+    # cracks on a thick greasy coat may be coating cracks, not body fissures (t08 feedback)
+    coat_crack = (present.get("coat_thickness") == "thick" and present.get("coat_texture") == "greasy")
+    out = []
+    for r in disp:
+        r["notable"] = _is_notable(r)
+        if not r["notable"]:
+            continue
+        ph = _finding_phrase(r, coat_crack and r["key"] == "fissure")
+        if not ph:
+            continue
+        w = _REL_W.get(RELIABILITY.get(r["key"], "moderate"), 0.6)
+        prom = float(r.get("rel", 0) or 0) * w
+        out.append({"key": r["key"], "value": r["value"], "phrase": ph, "tier": _TIER.get(r["key"], 1),
+                    "prominence": round(prom, 3), "confidence": r.get("confidence", "")})
+    out.sort(key=lambda x: (x["tier"], -x["prominence"]))   # primary signs lead, marginal ones last
+    return out
+
+
+def findings_text(findings):
+    if not findings:
+        return "Your tongue looks close to a balanced picture — no single sign stands out today."
+    ph = [f["phrase"] for f in findings[:4]]
+    body = ph[0] if len(ph) == 1 else ", ".join(ph[:-1]) + " and " + ph[-1]
+    return "Your tongue shows " + body + "."
+
+
+def build_recommendation(findings, patterns, kb):
+    """The Recommendation card: ranked findings -> likely condition(s) -> specific actions."""
+    conditions = [{"name": p["plain_name"], "confidence": round(p["confidence"], 2)}
+                  for p in patterns[:2] if p["id"] != "balanced"]
+    actions, seen = [], set()
+    for f in findings:
+        if f["key"] == "fissure" and "possibly" in f["phrase"]:
+            continue                                    # coating-crack caveat -> skip the dryness action
+        key = (f["key"], "present" if f["value"] not in ("dark", "light", "yellow", "light_yellow",
+                                                          "greasy", "thick", "wet") else f["value"])
+        a = _ACTION.get((f["key"], f["value"])) or _ACTION.get(key)
+        if a and a not in seen:
+            actions.append(a); seen.add(a)
+        if len(actions) >= 3:
+            break
+    if not actions and patterns and patterns[0]["id"] != "balanced":     # fall back to grounded pattern recs
+        rec = patterns[0].get("recommendations", {})
+        actions = (rec.get("diet", []) + rec.get("lifestyle", []))[:2]
+    return {"findings": [f["phrase"] for f in findings[:3]], "conditions": conditions, "actions": actions}
+
+
 def _markdown(readings, patterns, combined, sources, headline="", confidence_note=""):
     L = ([f"**At a glance:** {headline}", ""] if headline else [])
     L += ["**Your signs, one by one**"]
@@ -547,6 +647,10 @@ def interpret(stage1_output, metadata=None, llm: LLMClient = None):
     headline = _headline(disp, patterns)
     confidence_note = _confidence_note(disp)
     combined = _synthesis(disp, patterns)
+    present = present_features(stage1_output)
+    findings = build_findings(disp, present)          # sets r["notable"] on disp
+    found_text = findings_text(findings)
+    recommendation = build_recommendation(findings, patterns, kb)
     sources, overview = kb["sources"], kb["overview"]
 
     llm = llm or LLMClient()
@@ -556,8 +660,8 @@ def interpret(stage1_output, metadata=None, llm: LLMClient = None):
 
     return {
         "overview": overview, "headline": headline, "confidence_note": confidence_note,
+        "findings_text": found_text, "findings": findings, "recommendation": recommendation,
         "features": disp, "patterns": patterns,
-        "card": build_card(disp, patterns),
         "regions": kb.get("regions", {}),
         "combined": combined, "sources": sources, "report": report, "disclaimer": DISCLAIMER,
         # follow-up flow: questions for the top non-balanced pattern

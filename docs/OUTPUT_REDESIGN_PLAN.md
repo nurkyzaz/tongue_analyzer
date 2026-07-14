@@ -71,6 +71,17 @@ is most of the feedback. They do **not** raise feature-detection accuracy (that'
 domain-adaptation / rubric track in `DIRECTION_REVIEW.md`). The two tracks are complementary: this one
 makes the output trustworthy and actionable *given* the model; that one slowly improves the model.
 
-## Suggested order
-S3 + S2 + S4 together (the visible redesign) → S5 (quick correctness win) → S6/S7 (content depth). Then
-re-demo on the gallery and iterate.
+## Status
+- ✅ **S2** findings_text — plain "Your tongue shows … a red or dark body …" (fixes t00 redness, t12 pale).
+- ✅ **S3** Recommendation card replaces the share/Tongue-Type card — findings → likely condition(s) →
+  specific actions ("cracks → drink water & rest"; "pale → iron-rich foods").
+- ✅ **S4** show only NOTABLE signs (reliability-weighted + clinical priority tiers so body-colour/coating
+  lead and marginal red_tip/moisture sink), with a one-line "within a typical range: …" summary.
+- ✅ **S5** coating-crack hedge — thick greasy + cracks → phrase "cracks (possibly in the thick coating)",
+  suppress the spurious Yin vote (KB rule `thick_greasy_cracks_maybe_coating`), and skip the dryness
+  action (t08 now leads phlegm/damp, not yin).
+- ⬜ **S1** salient-findings object — done as `findings`/`build_findings` (prominence = rel × reliability,
+  tiered).
+- ⬜ **S6** symptom narrative + varied symptoms · ⬜ **S7** reduce digestion over-firing — NEXT.
+
+## Suggested order (done: S2+S3+S4+S5) → next S6/S7 (content depth), then re-demo on the gallery.
