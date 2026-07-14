@@ -43,8 +43,12 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
 ## Phase 3 — Stage 2 interpretation
 - ✅ LLM adapter (`llm_client.py`) — backend-agnostic (none / OpenAI-compatible vLLM/API via env)
 - ✅ Seed TCM knowledge base + rule-based retrieval (`knowledge_base/tcm_patterns.json`)
-- ✅ JSON→report generator (`interpret.py`) — template now, LLM-polish when a backend is set
-- ⬜ Upgrade retrieval to FAISS embeddings + expand KB (once LLM backend chosen)
+- ✅ JSON→report generator (`interpret.py`) — deterministic template + graded language + pattern voting
+- ✅ **Combination rules** for context-dependent mapping (`interpret.apply_combination_rules`, tested by
+  `evaluation/eval_mapping.py`)
+- ✅ **Grounded RAG+LLM narrative** — rule backbone + a TRUE vector RAG (faiss + nomic-embed via Ollama +
+  TF-IDF hybrid) over a 102-chunk cited corpus (`knowledge_cards.json`); retrieval hit@4 96%
+  (`evaluation/eval_rag.py`). See `docs/RAG_LLM_INTERPRETATION.md`.
 
 ## Phase 4 — Integration
 - ✅ `pipeline.py` orchestrator (image[+metadata] → quantitative JSON + report) — **end-to-end works**
@@ -54,8 +58,24 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
 
 ## Phase 5–7 — Optimize / evaluate / deploy
 - ⬜ ONNX export + benchmarks · metrics · API hardening + disclaimers
+- ⬜ Deployment: containerize FastAPI (CPU-fast, 0.34s/img) → thin client / PWA; on-device is v2
 
-## Waiting on team
-- vLLM `:8000` API key + shared-capacity confirmation
-- GPU0 exclusivity confirmation
-- Preferred Stage-2 LLM backend
+---
+
+## Current state (2026-07-13) — see `docs/HANDOFF.md` for the full picture
+**Production:** seg_combined + **multitask_v5** (v6/v7/v8 all lost to v5 on the honest human metric) +
+extra_features. **Honest accuracy ~61% vs human** (`eval_model.py --source human`); coating weakest.
+**Stage-1 additions:** coating split thickness×texture (thickness 82% vs conflated 55%), red-tip &
+moisture signals (`zoning.py`). **Stage-2:** combination rules (mapping test 12/12) + graded/honest
+report (headline, distinctiveness, per-sign confidence) + grounded RAG+LLM (Ollama gemma3 + nomic-embed,
+102-chunk corpus, retrieval 96%). **Testing:** human40 (labeled), human40b (40 imgs, NOT yet labeled),
+merged `label_store`, mapping_testset, eval_rag, labeled `data/eval/gallery/`. **Demo** live on :7860 with
+LLM+RAG.
+
+**Blocked on user data:** label human40b (`evaluation/label_human40b.html`); real-phone photos for color
+calibration + true real-world accuracy. **Next-value:** grow the human eval → re-verify; cleaner coating
+labels (not loss re-weighting); grow RAG corpus; hallucination-rate eval before LLM-default; deploy.
+
+## Was waiting on team (resolved / moot)
+- vLLM `:8000` key — not obtained; using **local Ollama** (gemma3 + nomic-embed, no auth) instead.
+- GPU0 has been usable throughout. Stage-2 LLM backend = Ollama (env-swappable).

@@ -13,22 +13,28 @@ photo ─► [Stage 1: feature detection]  ─► structured JSON ─► [Stage 
             segmentation + graded features                    grounded TCM knowledge base (+ optional LLM)
 ```
 
-## Status (2026-07-09)
+## Status (2026-07-13)
 
-**Working end-to-end**, with a clear improvement path.
+**Working end-to-end**, honestly measured. **New agents / contributors: start with
+[docs/HANDOFF.md](docs/HANDOFF.md).**
 
 | Component | State |
 |---|---|
-| Segmentation (U-Net++, TonguExpert + SM-Tongue) | ✅ Dice 0.994 clinical / **0.975 real photos** |
-| Feature model (5 characteristics, multi-task) | ✅ test macro-F1 **0.735** — *categorical only (see below)* |
-| Interpretation (grounded TCM KB, LLM-optional) | ✅ per-feature + combined patterns |
-| FastAPI service + web demo (camera guide, mask overlay, examples gallery) | ✅ runs on casper |
-| **Known limitation** | outputs feel generic on near-normal tongues — **fix designed in [IMPROVEMENT_PLAN](docs/IMPROVEMENT_PLAN.md)** (predict *degree*, not just class) |
+| Segmentation (U-Net++, TonguExpert + SM-Tongue) | ✅ **0.975 real-photo Dice** (`seg_combined`) |
+| Feature model (5 core + 8 extra, multi-task) | ✅ **production = `multitask_v5`**; ~61% vs HUMAN labels (auto-benchmark 0.87 is optimistic) |
+| Stage-1 signals | ✅ coating split thickness×texture, red-tip, moisture (`zoning.py`) |
+| Interpretation (rule engine + KB) | ✅ distinctiveness-weighted votes + **combination rules** (context-aware) + honest graded report |
+| Grounded RAG + LLM narrative | ✅ rule backbone + **true vector RAG** (102-chunk cited corpus, retrieval 96%) + local-LLM narrative (Ollama) |
+| FastAPI service + web demo | ✅ live on casper `:7860` (camera guide, mask overlay, examples), cloudflared HTTPS tunnel |
+| **Honest metric** | promote a change only if it beats v5 on the **human** eval / mapping test — not on val/auto |
 
 ## Docs (read these)
 
-- **[docs/IMPROVEMENT_PLAN.md](docs/IMPROVEMENT_PLAN.md)** — why outputs feel generic + the plan to fix
-  sensitivity, dual-language interpretation, and the optional follow-up-question flow. **Start here.**
+- **[docs/HANDOFF.md](docs/HANDOFF.md)** — self-contained project state, where it runs, and next steps. **Start here.**
+- **[docs/DIRECTION_REVIEW.md](docs/DIRECTION_REVIEW.md)** — the assessment + workstream plan (WS1–6) with statuses.
+- **[docs/RAG_LLM_INTERPRETATION.md](docs/RAG_LLM_INTERPRETATION.md)** — the hybrid rule+RAG+LLM interpretation layer.
+- **[docs/ACCURACY_INVESTIGATION.md](docs/ACCURACY_INVESTIGATION.md)** — why the model misreads and what actually helps.
+- **[docs/IMPROVEMENT_PLAN.md](docs/IMPROVEMENT_PLAN.md)** — the original sensitivity/interpretation plan (largely delivered).
 - **[docs/TCM_RESEARCH.md](docs/TCM_RESEARCH.md)** — how TCM literature categorizes features, and the
   reputable open resources (WHO ICD-11, CCMQ, SymMap) we ground the knowledge base in.
 - **[docs/RESOURCES.md](docs/RESOURCES.md)** — audit of every external dataset/model, with licensing flags.
