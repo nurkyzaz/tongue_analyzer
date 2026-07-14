@@ -23,6 +23,37 @@ GRADED = {"coating", "fissure", "tooth_mk"}   # features whose meaning scales wi
 GRADED_DISPLAY = GRADED | {"coat_thickness", "coat_texture"}   # + display axes, for text synthesis
 MENTION_REL = 0.6                              # surface a graded feature only if its population rank >= this
 
+# How trustworthy each detector is (from the human-40 + practitioner benchmarks) — so the report can be
+# HONEST: state reliable reads plainly, hedge the tentative ones. Not shown as jargon; mapped to words.
+RELIABILITY = {
+    "tai": "reliable", "fissure": "reliable", "red_dots": "reliable", "coat_thickness": "reliable",
+    "zhi": "moderate", "tooth_mk": "moderate", "peeled_coating": "moderate", "red_tip": "moderate",
+    "moisture": "moderate",
+    "coat_texture": "tentative", "coating": "tentative", "red_tongue": "tentative",
+    "purple_body": "tentative", "swollen": "tentative", "thin": "tentative",
+    "black_coating": "tentative", "slippery_coating": "tentative",
+}
+CONF_WORD = {"reliable": "clear read", "moderate": "", "tentative": "less certain — worth confirming"}
+
+
+# features whose `rel` IS a genuine population percentile-rank (from reference_stats). The coat axes,
+# red_tip and moisture carry a probability/severity in `rel`, NOT a percentile — so no percentile hook.
+_PERCENTILE_OK = {"fissure", "tooth_mk", "peeled_coating", "red_tongue", "purple_body", "swollen",
+                  "thin", "red_dots", "black_coating", "slippery_coating"}
+
+
+def _pctl_phrase(key, rel):
+    """Turn a population percentile-rank (rel, 0-1) into a friendly distinctiveness hook, or '' if this
+    feature isn't graded on a population curve."""
+    if key not in _PERCENTILE_OK or rel is None:
+        return ""
+    p = round(rel * 100)
+    if p >= 85:
+        return f"more pronounced than ~{p}% of tongues"
+    if p >= 70:
+        return f"more pronounced than most (top ~{100 - p}%)"
+    return ""
+
 
 STATS_PATH = os.path.join(os.path.dirname(__file__), "knowledge_base", "reference_stats.json")
 
@@ -292,26 +323,63 @@ def vote_patterns(readings, kb, present=None, top_k=3):
 
 
 def _synthesis(readings, patterns):
-    noted = [r for r in readings if r["mentioned"] and r["key"] in GRADED_DISPLAY and r["band"] != "none"]
     if patterns and patterns[0]["id"] != "balanced":
         lead = patterns[0]
-        txt = (f"Taken together, your signs most align with **{lead['tcm_name']}** "
+        txt = (f"Taken together, your signs lean toward **{lead['tcm_name']}** "
                f"— in plain terms, *{lead['plain_name']}*. {lead['explanation']}")
+        syms = lead.get("associated_symptoms") or []
+        if syms:
+            txt += f" People with this tendency often notice {', '.join(s.lower() for s in syms[:4])}."
         if len(patterns) > 1 and patterns[1]["id"] != "balanced":
-            txt += f" There are also secondary hints of {patterns[1]['tcm_name']}."
+            txt += f" There are also lighter hints of {patterns[1]['plain_name']}."
         return txt
     return ("Your tongue looks close to the balanced picture — no strong traditional pattern stands "
-            "out. The notes above describe each sign on its own.")
+            "out today. The notes below describe each sign on its own.")
 
 
-def _markdown(readings, patterns, combined, sources):
-    L = ["**Your signs, one by one**"]
+def _headline(disp, patterns):
+    """Lead insight: the single most distinctive sign + the overall lean, so the user gets the point in
+    one line before the detail."""
+    notable = [r for r in disp if r.get("mentioned")]
+    top_pat = patterns[0] if patterns else None
+    if not notable:
+        return ("Your tongue looks close to a balanced picture today — no single sign stands out "
+                "strongly. That's generally a good thing in this tradition.")
+    top = max(notable, key=lambda r: float(r.get("rel", 0)))
+    hook = _pctl_phrase(top["key"], float(top.get("rel", 0)))
+    lead = f"The sign that stands out most is your **{top['label'].lower()}**" + (f" — {hook}." if hook else ".")
+    if top_pat and top_pat["id"] != "balanced":
+        lead += f" Overall, your tongue leans toward **{top_pat['plain_name']}**."
+    return lead
+
+
+def _confidence_note(disp):
+    """Honest framing: name the reads that are less certain, and that this is a snapshot."""
+    tent = sorted({r["label"].lower() for r in disp
+                   if r.get("mentioned") and RELIABILITY.get(r["key"]) == "tentative"})
+    note = ("This is a snapshot — a tongue can shift day to day, and this reflects one traditional "
+            "framework, not a medical test.")
+    if tent:
+        note += (" A couple of reads are less certain and worth confirming: " + ", ".join(tent) +
+                 ". The optional questions below help pin them down.")
+    return note
+
+
+def _markdown(readings, patterns, combined, sources, headline="", confidence_note=""):
+    L = ([f"**At a glance:** {headline}", ""] if headline else [])
+    L += ["**Your signs, one by one**"]
+    normal = []
     for r in readings:
         deg = f"{r['band']} " if r["band"] and r["band"] != "none" else ""
         if r["key"] in GRADED_DISPLAY and not r["mentioned"]:
-            L.append(f"- **{r['label']}:** {r['plain']}")
-        else:
-            L.append(f"- **{deg}{r['tcm_term'] or r['value']}** — *TCM:* {r['tcm']}. *In plain terms:* {r['plain']}")
+            normal.append(r["label"].lower())          # summarise the un-notable ones in one line
+            continue
+        dist = f" _(more distinctive — {r['pctl_phrase']})_" if r.get("pctl_phrase") else ""
+        tcm = f" *TCM:* {r['tcm']}." if r.get("tcm") else ""
+        conf = f" _[{r['confidence']}]_" if r.get("confidence") else ""
+        L.append(f"- **{deg}{r['tcm_term'] or r['value']}**{dist} —{tcm} *In plain terms:* {r['plain']}{conf}")
+    if normal:
+        L.append(f"- _Within a typical range:_ {', '.join(normal)}.")
     L += ["", "**What they suggest together**", combined]
     if patterns and patterns[0]["id"] != "balanced":
         p = patterns[0]
@@ -322,6 +390,8 @@ def _markdown(readings, patterns, combined, sources):
         recs = (rec.get("diet", []) + rec.get("lifestyle", []))[:4]
         if recs:
             L += ["", "**Traditional wellness notes**"] + [f"- {x}" for x in recs]
+    if confidence_note:
+        L += ["", "**How sure is this?** " + confidence_note]
     L += ["", "**Grounding:** " + "; ".join(sources[:4]), "", "**Note**", DISCLAIMER]
     return "\n".join(L)
 
@@ -397,15 +467,23 @@ def interpret(stage1_output, metadata=None, llm: LLMClient = None):
                 + extra_readings(stage1_output.get("extra_characteristics", {}), kb, stats))
     patterns = vote_patterns(readings, kb, present_features(stage1_output))   # + context rules
     disp = [r for r in readings if r.get("display", True)]   # display hides the conflated coating
+    for r in disp:                                           # per-sign distinctiveness + honesty tags
+        rel = r.get("rel")
+        r["pct"] = round(float(rel) * 100) if (rel is not None and r["key"] not in ("tai", "zhi")) else None
+        r["pctl_phrase"] = _pctl_phrase(r["key"], float(rel) if rel is not None else None)
+        r["confidence"] = CONF_WORD.get(RELIABILITY.get(r["key"], "moderate"), "")
+    headline = _headline(disp, patterns)
+    confidence_note = _confidence_note(disp)
     combined = _synthesis(disp, patterns)
     sources, overview = kb["sources"], kb["overview"]
 
     llm = llm or LLMClient()
     report = (_llm_narrative(disp, patterns, sources, llm) if llm.enabled else None) \
-        or _markdown(disp, patterns, combined, sources)
+        or _markdown(disp, patterns, combined, sources, headline, confidence_note)
 
     return {
-        "overview": overview, "features": disp, "patterns": patterns,
+        "overview": overview, "headline": headline, "confidence_note": confidence_note,
+        "features": disp, "patterns": patterns,
         "card": build_card(disp, patterns),
         "regions": kb.get("regions", {}),
         "combined": combined, "sources": sources, "report": report, "disclaimer": DISCLAIMER,
