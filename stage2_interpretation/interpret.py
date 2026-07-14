@@ -396,24 +396,68 @@ def _markdown(readings, patterns, combined, sources, headline="", confidence_not
     return "\n".join(L)
 
 
-def _llm_narrative(readings, patterns, sources, llm):
+def fired_rule_notes(present, kb):
+    """The combination rules that fire for THIS tongue, as grounded context for the LLM — this is the
+    'why these signs together mean X' reasoning, already cited."""
+    out = []
+    for rule in kb.get("combination_rules", []):
+        if not _cond_ok(rule.get("when", {}), present):
+            continue
+        anyc = rule.get("any")
+        if anyc and not any(_cond_ok({k: v}, present) for k, v in anyc.items()):
+            continue
+        if rule.get("note"):
+            out.append(rule["note"])
+    return out
+
+
+def _llm_narrative(readings, patterns, sources, llm, present=None, kb=None):
+    """RAG-style GROUNDED narrative: the rule engine already decided the patterns + confidence; the LLM
+    only re-expresses the SUPPLIED grounding (detected signs + their reliability/distinctiveness + the
+    combination reasoning + the pattern knowledge) into a nuanced, warm read. It is forbidden from adding
+    signs/patterns/claims or diagnosing. Backbone stays deterministic + testable; this is the language."""
+    notable = [r for r in readings if r.get("mentioned")]
     grounding = {
-        "features": [{"sign": r["label"], "degree": r["band"], "tcm": r["tcm"], "plain": r["plain"]}
-                     for r in readings],
-        "patterns": [{"tcm_name": p["tcm_name"], "plain_name": p["plain_name"],
-                      "explanation": p["explanation"], "symptoms": p["associated_symptoms"],
-                      "recommendations": p["recommendations"]} for p in patterns[:2]],
+        "detected_signs": [{"sign": r["label"], "value": r.get("tcm_term") or r.get("value"),
+                            "degree": r.get("band") or "", "distinctiveness": r.get("pctl_phrase") or "",
+                            "reliability": r.get("confidence") or "reliable", "plain_meaning": r["plain"]}
+                           for r in notable],
+        "why_together": fired_rule_notes(present or {}, kb or {}),   # the cited combination reasoning
+        # when 'balanced' leads, the tongue is near-normal -> DON'T feed weak secondary patterns (the LLM
+        # would over-narrate them); leave leaning_pattern empty so it honestly says "balanced".
+        "leaning_pattern": [] if (patterns and patterns[0]["id"] == "balanced") else
+                            [{"name": p["plain_name"], "tcm_name": p["tcm_name"],
+                              "confidence_pct": round(p["confidence"] * 100),
+                              "explanation": p["explanation"], "often_noticed": p.get("associated_symptoms", []),
+                              "modern_view": p.get("modern_correlation", ""),
+                              "wellness_notes": p.get("recommendations", {})} for p in patterns[:2]
+                             if p["id"] != "balanced"],
         "sources": sources,
     }
-    system = ("You are a careful TCM wellness educator. Using ONLY the grounding, write a warm, "
-              "specific report: (1) each detected sign with its degree, its TCM term AND a plain-language "
-              "gloss; (2) what they suggest together; (3) plain-language associations; (4) specific "
-              "traditional wellness notes. Never invent signs/patterns/claims beyond the grounding, and "
-              "never state a diagnosis. Frame as one tradition's perspective.")
-    user = ("Grounding:\n" + json.dumps(grounding, ensure_ascii=False, indent=2) +
-            "\n\nWrite it in Markdown, ending with a reminder to consult a professional.")
-    text = llm.chat(system, user, max_tokens=1000)
-    return (text + "\n\n**Note**\n" + DISCLAIMER) if text else None
+    system = (
+        "You are a careful traditional-Chinese-medicine WELLNESS EDUCATOR writing for a layperson about "
+        "their tongue photo. You will be given GROUNDING (the signs a vision model detected, how reliable "
+        "and distinctive each is, the cited reasoning for how they combine, and the leaning pattern the "
+        "system computed). RULES YOU MUST FOLLOW:\n"
+        "1. Use ONLY facts in the grounding. NEVER add a sign, pattern, symptom, cause, or number that is "
+        "not there. If unsure, say less.\n"
+        "2. This is NOT a medical diagnosis. Never name a disease or tell them what they 'have'. Frame "
+        "everything as 'in this tradition, ... is associated with ...'.\n"
+        "3. HEDGE on any sign whose reliability says 'less certain', and invite them to confirm with the "
+        "follow-up questions.\n"
+        "4. Be warm, specific and concise — connect the signs to everyday experience the grounding lists, "
+        "and weave them into ONE story rather than a flat list.\n"
+        "5. The headline and read must reflect the leaning_pattern given. If leaning_pattern is EMPTY, the "
+        "tongue looks balanced — say that plainly and do NOT invent a pattern. Draw wellness suggestions "
+        "only from the wellness_notes provided. 'distinctiveness' is how this sign compares to other "
+        "people's tongues, not a location on the tongue.")
+    user = ("GROUNDING (the only facts you may use):\n" + json.dumps(grounding, ensure_ascii=False, indent=2) +
+            "\n\nWrite ~150-230 words of Markdown: a one-line headline reflecting the leaning pattern (or "
+            "'a balanced picture' if none), then the woven read, then a short 'in this tradition you might "
+            "try' note drawn only from wellness_notes. Do NOT restate the rules or JSON. End with one line "
+            "reminding this is educational, not a diagnosis.")
+    text = llm.chat(system, user, max_tokens=700)
+    return (text.strip() + "\n\n**Note**\n" + DISCLAIMER) if text else None
 
 
 # Shareable "tongue type" archetypes (one per lead pattern). Evocative but non-scary, educational.
@@ -478,7 +522,8 @@ def interpret(stage1_output, metadata=None, llm: LLMClient = None):
     sources, overview = kb["sources"], kb["overview"]
 
     llm = llm or LLMClient()
-    report = (_llm_narrative(disp, patterns, sources, llm) if llm.enabled else None) \
+    report = (_llm_narrative(disp, patterns, sources, llm, present_features(stage1_output), kb)
+              if llm.enabled else None) \
         or _markdown(disp, patterns, combined, sources, headline, confidence_note)
 
     return {
