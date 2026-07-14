@@ -479,6 +479,24 @@ def build_recommendation(findings, patterns, kb):
     return {"findings": [f["phrase"] for f in findings[:3]], "conditions": conditions, "actions": actions}
 
 
+def build_symptoms(patterns):
+    """A fuller, varied symptom picture: combine the associated symptoms of the top TWO patterns (deduped)
+    so it isn't always just the lead pattern's one-liner (e.g. only 'poor digestion')."""
+    items, seen = [], set()
+    for p in patterns[:2]:
+        if p["id"] == "balanced":
+            continue
+        for s in p.get("associated_symptoms", []):
+            k = s.lower().strip()
+            if k not in seen:
+                items.append(s); seen.add(k)
+    items = items[:8]
+    text = ("In this tradition, a tongue like this is often seen alongside some of: " +
+            ", ".join(s.lower() for s in items) + ". (These are associations to explore — not a diagnosis, "
+            "and not everyone will have them.)") if items else ""
+    return {"items": items, "text": text}
+
+
 def _markdown(readings, patterns, combined, sources, headline="", confidence_note=""):
     L = ([f"**At a glance:** {headline}", ""] if headline else [])
     L += ["**Your signs, one by one**"]
@@ -651,6 +669,7 @@ def interpret(stage1_output, metadata=None, llm: LLMClient = None):
     findings = build_findings(disp, present)          # sets r["notable"] on disp
     found_text = findings_text(findings)
     recommendation = build_recommendation(findings, patterns, kb)
+    symptoms = build_symptoms(patterns)
     sources, overview = kb["sources"], kb["overview"]
 
     llm = llm or LLMClient()
@@ -661,6 +680,7 @@ def interpret(stage1_output, metadata=None, llm: LLMClient = None):
     return {
         "overview": overview, "headline": headline, "confidence_note": confidence_note,
         "findings_text": found_text, "findings": findings, "recommendation": recommendation,
+        "symptoms": symptoms,
         "features": disp, "patterns": patterns,
         "regions": kb.get("regions", {}),
         "combined": combined, "sources": sources, "report": report, "disclaimer": DISCLAIMER,

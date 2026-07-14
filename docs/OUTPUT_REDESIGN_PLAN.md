@@ -82,6 +82,10 @@ makes the output trustworthy and actionable *given* the model; that one slowly i
   action (t08 now leads phlegm/damp, not yin).
 - ⬜ **S1** salient-findings object — done as `findings`/`build_findings` (prominence = rel × reliability,
   tiered).
-- ⬜ **S6** symptom narrative + varied symptoms · ⬜ **S7** reduce digestion over-firing — NEXT.
+- ✅ **S6** symptom picture — a "You might also notice" block combining the top-2 patterns' symptoms
+  (deduped, up to 8) so it's never just one line like "poor digestion". Enriched each pattern's
+  `associated_symptoms` to 5–8 varied items.
+- **S7 — reframed by user:** poor digestion is genuinely common, so DON'T rebalance the voting; the fix is
+  presenting MORE symptoms beyond it (done via S6). S7 as "reduce over-firing" is dropped.
 
 ## Suggested order (done: S2+S3+S4+S5) → next S6/S7 (content depth), then re-demo on the gallery.

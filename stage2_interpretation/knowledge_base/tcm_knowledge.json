@@ -227,7 +227,9 @@
     "loose stools",
     "poor appetite",
     "pale complexion",
-    "(in this tradition, associated with low iron / anemia tendencies)"
+    "(in this tradition, associated with low iron / anemia tendencies)",
+    "catching colds easily",
+    "cold hands or a soft, quiet voice"
    ],
    "modern_correlation": "traditionally overlaps with functional digestive complaints and low-iron / fatigue presentations — educational only, not a diagnosis; a doctor can check iron/ferritin",
    "followup_questions": [
@@ -266,7 +268,9 @@
     "puffiness / water retention",
     "phlegm or mucus",
     "sluggish digestion, heaviness after meals",
-    "tendency to gain weight easily"
+    "tendency to gain weight easily",
+    "a sticky or coated feeling in the mouth",
+    "feeling mentally foggy or unmotivated"
    ],
    "followup_questions": [
     {
@@ -303,7 +307,9 @@
     "a bitter or sticky taste in the mouth",
     "feeling warm, flushed or irritable",
     "oily skin or breakouts",
-    "thirst"
+    "thirst",
+    "loose or sticky stools",
+    "a general heaviness in the body"
    ],
    "followup_questions": [
     {
@@ -339,7 +345,9 @@
     "dry mouth or throat",
     "warm palms/soles or feeling hot in the evening",
     "restless or poor sleep, night sweats",
-    "feeling run-down despite rest"
+    "feeling run-down despite rest",
+    "dry skin or eyes",
+    "a thirst for cold drinks"
    ],
    "followup_questions": [
     {
@@ -372,7 +380,9 @@
     "feeling cold easily; cold hands and feet",
     "low energy",
     "preference for warm food/drinks",
-    "possible puffiness"
+    "possible puffiness",
+    "frequent urination or early-morning loose stools",
+    "cold or achy lower back and knees"
    ],
    "followup_questions": [
     {
@@ -441,7 +451,10 @@
    "associated_symptoms": [
     "fixed, sharp or stabbing aches (same spot)",
     "cold extremities",
-    "dark spots or dull complexion"
+    "dark spots or dull complexion",
+    "easy bruising",
+    "dark under-eye circles",
+    "dull or darkish lips"
    ],
    "followup_questions": [
     {
@@ -524,7 +537,9 @@
    "associated_symptoms": [
     "allergies or hay fever",
     "hives or sensitive skin",
-    "reactions to foods or environment"
+    "reactions to foods or environment",
+    "asthma or wheeze",
+    "sensitivity to weather, pollen or certain medicines"
    ],
    "modern_correlation": "overlaps with atopic / allergic tendencies (educational, not a diagnosis)",
    "followup_questions": [

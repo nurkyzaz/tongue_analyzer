@@ -51,6 +51,8 @@
   .rec li{font-size:14px;line-height:1.5;padding-left:22px;position:relative}
   .rec li::before{content:"🌿";position:absolute;left:0}
   .prec{font-size:12px;color:var(--acc);margin-top:6px;line-height:1.5}
+  .symwrap{display:flex;flex-wrap:wrap;gap:7px;margin-top:2px}
+  .symnote{font-size:11.5px;color:var(--mut);margin-top:8px}
   .pat{background:var(--card2);border:1px solid var(--line);border-left:3px solid var(--acc);border-radius:10px;padding:11px;margin:9px 0}
   .pat .nm{font-weight:700;color:#fff;font-size:14px}.pat .pn{color:var(--acc);font-size:12.5px;margin-bottom:4px}
   .pat .ex{font-size:13px;line-height:1.5;color:#cdd8e2}
@@ -111,6 +113,7 @@
     <div id="headline" class="headline"></div>
     <h2>Your signs</h2><div id="signs"></div><div id="normalLine" class="normline"></div>
     <h2>What they suggest together</h2><div id="combined" class="prose"></div><div id="patterns"></div>
+    <div id="symptoms"></div>
     <div id="overview" class="prose" style="color:var(--mut);margin-top:10px;font-size:12px"></div>
     <div id="followup"></div>
     <div id="confNote" class="confnote"></div>
@@ -194,6 +197,10 @@ function render(d){
   const normal=feats.filter(f=>!f.notable&&f.label).map(f=>f.label.toLowerCase());
   $('normalLine').textContent=normal.length?('Within a typical range: '+[...new Set(normal)].join(', ')+'.'):'';
   $('combined').innerHTML=md(it.combined);
+  const sym=it.symptoms||{};
+  $('symptoms').innerHTML=(sym.items&&sym.items.length)
+    ? `<h2>You might also notice</h2><div class="symwrap">${sym.items.map(s=>`<span class="chip">${s}</span>`).join('')}</div><div class="symnote">Associations to explore — not a diagnosis, and not everyone will have them.</div>`
+    : '';
   $('patterns').innerHTML=(it.patterns||[]).filter(p=>p.id!=='balanced').map(patCard).join('');
   renderFollowup(it.followup);
   $('sources').innerHTML=(it.sources&&it.sources.length)?'Grounding: '+it.sources.join(' · '):'';
