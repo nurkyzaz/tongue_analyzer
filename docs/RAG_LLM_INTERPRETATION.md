@@ -35,13 +35,30 @@ features ─► [rule engine]  ─► pattern + confidence  ─┐  (determinist
                                               user-facing report
 ```
 
-## Is this "RAG"?
-It's **structured retrieval** from our curated KB (`tcm_knowledge.json`): for a given tongue we assemble
-exactly the relevant grounded facts — the detected signs, the combination rules that fired, the leaning
-pattern's description/symptoms/recommendations/modern-correlation, and the sources — and hand *only* those
-to the LLM. For a small, hand-curated, cited KB this is **more grounded than vector-RAG** (no retrieval
-hallucination). A true vector-RAG over a larger corpus becomes worth it only once we have a bigger
-*licensable* corpus (classical texts like Maciocia are copyrighted — can't be vendored/retrieved verbatim).
+## Retrieval: structured facts + a TRUE vector RAG
+Two layers of retrieval feed the LLM:
+1. **Structured retrieval** — the exact grounded facts for this tongue (detected signs, the combination
+   rules that fired, the rule-computed leaning pattern + its symptoms/recs/modern-view). Deterministic,
+   no retrieval hallucination.
+2. **Vector RAG** (`rag.py`, `build_corpus.py`) — a real semantic retriever over an embedded knowledge
+   **corpus** (`knowledge_base/corpus.jsonl`): 48 cited chunks = the KB's feature/pattern/rule/zoning
+   content PLUS **authored disambiguation cards** (the reasoning that tells similar pictures apart:
+   "damp-heat vs phlegm-damp", "why a pale tongue is ambiguous", "yang-def vs phlegm-damp when swollen",
+   "what the tongue cannot tell you"). Chunks are embedded with a local model (**nomic-embed-text** via
+   Ollama, 768-d, no auth) into a **faiss** cosine index. At inference we embed a query built from the
+   tongue's signs + leaning pattern and retrieve the top-k cited chunks into the grounding as
+   `reference_notes` — so the LLM reasons over *combinations and disambiguations* from sourced material,
+   not its parametric memory. Retrieval quality is strong (e.g. "pale swollen wet tongue" → the
+   yang-def-vs-phlegm-damp card @0.81). Degrades gracefully: no index/embedder → no `reference_notes`,
+   structured grounding still stands.
+
+   **The corpus is the crux, and it's legitimately-sourced:** our own authored summaries citing public
+   references — NOT copyrighted texts (Maciocia etc. can't be vendored verbatim). It starts small (48
+   chunks) and is the thing to grow: add more cited cards + open-access literature (ICD-11 / CCMQ
+   descriptions, CC-BY papers) and rebuild the index. Value scales with corpus quality.
+
+   Build: `python stage2_interpretation/build_corpus.py && python stage2_interpretation/rag.py --build`
+   (index cached to `corpus_vecs.npy`; git-ignored artifact).
 
 ## How to enable
 LLM is OFF by default (deterministic template). Enable by pointing the backend-agnostic `LLMClient` at any

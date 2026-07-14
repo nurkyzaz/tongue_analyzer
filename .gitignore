@@ -53,3 +53,8 @@ evaluation/label_*.html
 
 # merged label store is a build artifact (needs server-side datasets to build)
 data/processed/label_store.csv
+
+# RAG corpus build artifacts (regenerate: build_corpus.py + rag.py --build)
+stage2_interpretation/knowledge_base/corpus.jsonl
+stage2_interpretation/knowledge_base/corpus_vecs.npy
+stage2_interpretation/knowledge_base/corpus_meta.json

@@ -14,6 +14,20 @@ import os
 
 from llm_client import LLMClient
 
+_RETRIEVER = None
+
+
+def _retriever():
+    """Lazy singleton RAG retriever; None if unavailable (no index / import fails) so callers degrade."""
+    global _RETRIEVER
+    if _RETRIEVER is None:
+        try:
+            from rag import Retriever
+            _RETRIEVER = Retriever()
+        except Exception:
+            _RETRIEVER = False
+    return _RETRIEVER or None
+
 KB_PATH = os.path.join(os.path.dirname(__file__), "knowledge_base", "tcm_knowledge.json")
 DISCLAIMER = ("Educational summary exploring the traditional-Chinese-medicine tongue-reading "
               "framework — not a medical diagnosis, and not validated by modern clinical evidence. "
@@ -417,6 +431,16 @@ def _llm_narrative(readings, patterns, sources, llm, present=None, kb=None):
     combination reasoning + the pattern knowledge) into a nuanced, warm read. It is forbidden from adding
     signs/patterns/claims or diagnosing. Backbone stays deterministic + testable; this is the language."""
     notable = [r for r in readings if r.get("mentioned")]
+    # --- true RAG: retrieve cited knowledge for THIS tongue (disambiguation/nuance the structured facts
+    #     don't carry), so the LLM reasons over combinations from sourced material ---
+    reference_notes = []
+    rtv = _retriever()
+    if rtv is not None:
+        lead = patterns[0]["plain_name"] if (patterns and patterns[0]["id"] != "balanced") else ""
+        query = "; ".join(r.get("tcm_term") or r.get("value") or r["label"] for r in notable) \
+            + (f"; leaning {lead}" if lead else "")
+        reference_notes = [{"note": h["text"], "source": h["source"]}
+                           for h in rtv.retrieve(query, k=5)]
     grounding = {
         "detected_signs": [{"sign": r["label"], "value": r.get("tcm_term") or r.get("value"),
                             "degree": r.get("band") or "", "distinctiveness": r.get("pctl_phrase") or "",
@@ -432,6 +456,7 @@ def _llm_narrative(readings, patterns, sources, llm, present=None, kb=None):
                               "modern_view": p.get("modern_correlation", ""),
                               "wellness_notes": p.get("recommendations", {})} for p in patterns[:2]
                              if p["id"] != "balanced"],
+        "reference_notes": reference_notes,     # retrieved, cited knowledge (RAG)
         "sources": sources,
     }
     system = (
@@ -450,7 +475,10 @@ def _llm_narrative(readings, patterns, sources, llm, present=None, kb=None):
         "5. The headline and read must reflect the leaning_pattern given. If leaning_pattern is EMPTY, the "
         "tongue looks balanced — say that plainly and do NOT invent a pattern. Draw wellness suggestions "
         "only from the wellness_notes provided. 'distinctiveness' is how this sign compares to other "
-        "people's tongues, not a location on the tongue.")
+        "people's tongues, not a location on the tongue.\n"
+        "6. Use 'reference_notes' (retrieved reference knowledge) to reason about how these particular "
+        "signs combine and to tell apart similar-looking patterns — but still assert only what the "
+        "grounding supports, and prefer the computed leaning_pattern.")
     user = ("GROUNDING (the only facts you may use):\n" + json.dumps(grounding, ensure_ascii=False, indent=2) +
             "\n\nWrite ~150-230 words of Markdown: a one-line headline reflecting the leaning pattern (or "
             "'a balanced picture' if none), then the woven read, then a short 'in this tradition you might "
