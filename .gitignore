@@ -58,3 +58,6 @@ data/processed/label_store.csv
 stage2_interpretation/knowledge_base/corpus.jsonl
 stage2_interpretation/knowledge_base/corpus_vecs.npy
 stage2_interpretation/knowledge_base/corpus_meta.json
+
+# labeled gallery reference (build artifact w/ embedded images)
+evaluation/gallery.html
