@@ -72,6 +72,13 @@ different problems with different ceilings and different levers.
   heat; greasy-white=damp vs greasy-yellow=damp-heat; dark+red=heat vs dark+purple=stasis; red+cracks+
   scanty=yin. Mapping test 12/12; live on the demo.
 
+### WS7 — Output redesign from demo feedback · P0 (see `docs/OUTPUT_REDESIGN_PLAN.md`)
+The demo trial showed the *text* diagnosis is good but the *feature display* feels off. Pivot Stage-2
+output to: **ranked salient PRESENT features → plain-text "what we found" → likely condition(s) →
+specific actionable recommendation.** Remove the share/"Tongue Type" card; add a Recommendation card;
+show only notable features; hedge coating-crack-vs-fissure; add a symptom narrative; reduce
+"poor-digestion" over-firing. Stage-2 only (no retrain); highest impact on perceived quality.
+
 ### WS5 — Rigor & shipping · P2
 - **5a** Grow human eval + second labeler (inter-rater agreement = irreducible-noise floor).
 - **5b** Resolve commercial licensing (SM-Tongue, TonguExpert).
