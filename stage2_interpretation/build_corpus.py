@@ -11,11 +11,12 @@ import json, os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 KB = os.path.join(HERE, "knowledge_base", "tcm_knowledge.json")
+CARDS_FILE = os.path.join(HERE, "knowledge_base", "knowledge_cards.json")
 OUT = os.path.join(HERE, "knowledge_base", "corpus.jsonl")
 
-# --- authored disambiguation / nuance cards: how to tell similar tongue pictures apart, and the honest
-#     limits. Grounded in the same references; these are the reasoning a good practitioner applies. ---
-CARDS = [
+# Authored cards now live in knowledge_cards.json (growable, cited): CCMQ constitutions, ICD-11 patterns,
+# similar-pattern disambiguations, modern correlations, and nuance/limits. _LEGACY kept as fallback only.
+_LEGACY = [
     ("damp-heat vs phlegm-damp",
      "Both damp-heat and phlegm-dampness show a thick, greasy tongue coating. The deciding factor is HEAT: "
      "a YELLOW coating and/or a RED tongue body means damp-HEAT (heat + damp); a WHITE coating with a "
@@ -105,15 +106,21 @@ def chunks_from_kb(kb):
     return out
 
 
+def load_cards():
+    if os.path.exists(CARDS_FILE):
+        return [(c["id"], c["text"], c.get("source", "")) for c in json.load(open(CARDS_FILE))]
+    return [(f"card:{t.replace(' ', '_')}", body, src) for t, body, src in _LEGACY]
+
+
 def main():
     kb = json.load(open(KB))
-    rows = chunks_from_kb(kb)
-    rows += [(f"card:{t.replace(' ', '_')}", body, src) for t, body, src in CARDS]
+    kb_rows = chunks_from_kb(kb)
+    cards = load_cards()
+    rows = kb_rows + cards
     with open(OUT, "w") as f:
         for cid, text, src in rows:
             f.write(json.dumps({"id": cid, "text": text, "source": src}, ensure_ascii=False) + "\n")
-    print(f"wrote {OUT}  ({len(rows)} chunks: {sum('card:' in r[0] for r in rows)} authored cards + "
-          f"{len(rows)-sum('card:' in r[0] for r in rows)} from KB)")
+    print(f"wrote {OUT}  ({len(rows)} chunks: {len(cards)} authored cards + {len(kb_rows)} from KB)")
 
 
 if __name__ == "__main__":

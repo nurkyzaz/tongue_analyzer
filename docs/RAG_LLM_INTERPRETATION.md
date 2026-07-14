@@ -41,10 +41,13 @@ Two layers of retrieval feed the LLM:
    rules that fired, the rule-computed leaning pattern + its symptoms/recs/modern-view). Deterministic,
    no retrieval hallucination.
 2. **Vector RAG** (`rag.py`, `build_corpus.py`) — a real semantic retriever over an embedded knowledge
-   **corpus** (`knowledge_base/corpus.jsonl`): 48 cited chunks = the KB's feature/pattern/rule/zoning
-   content PLUS **authored disambiguation cards** (the reasoning that tells similar pictures apart:
-   "damp-heat vs phlegm-damp", "why a pale tongue is ambiguous", "yang-def vs phlegm-damp when swollen",
-   "what the tongue cannot tell you"). Chunks are embedded with a local model (**nomic-embed-text** via
+   **corpus** (`knowledge_base/corpus.jsonl`): **71 cited chunks** = 39 from the KB (feature/pattern/
+   rule/zoning) + **32 authored cards** (`knowledge_base/knowledge_cards.json`): the **9 CCMQ
+   constitutions** (traits + tongue + tendencies + diet/lifestyle), **ICD-11 Ch.26 pattern** cards (with
+   codes), **similar-pattern disambiguations** (qi-vs-blood def, yin-vs-damp-heat, stasis-vs-heat,
+   spleen-qi-vs-yang, damp-heat-vs-phlegm-damp…), **modern-correlation** cards (framed as associations),
+   and nuance/limits ("why a pale tongue is ambiguous", "what the tongue cannot tell you"). Chunks are
+   embedded with a local model (**nomic-embed-text** via
    Ollama, 768-d, no auth) into a **faiss** cosine index. At inference we embed a query built from the
    tongue's signs + leaning pattern and retrieve the top-k cited chunks into the grounding as
    `reference_notes` — so the LLM reasons over *combinations and disambiguations* from sourced material,
@@ -53,9 +56,13 @@ Two layers of retrieval feed the LLM:
    structured grounding still stands.
 
    **The corpus is the crux, and it's legitimately-sourced:** our own authored summaries citing public
-   references — NOT copyrighted texts (Maciocia etc. can't be vendored verbatim). It starts small (48
-   chunks) and is the thing to grow: add more cited cards + open-access literature (ICD-11 / CCMQ
-   descriptions, CC-BY papers) and rebuild the index. Value scales with corpus quality.
+   references (ICD-11, CCMQ/Wang Qi, Delphi, SymMap, Maciocia/Sacred Lotus) — NOT copyrighted texts
+   verbatim. It's the thing to keep growing: add more cited cards to `knowledge_cards.json` (open-access
+   CC-BY papers, more disambiguation pairs, per-zone detail) and rebuild. Value scales with corpus quality.
+
+   **Retrieval quality** is tracked by `evaluation/eval_rag.py` (query → is a relevant chunk in top-k):
+   currently **hit@4 = 80%** (10 canonical queries); the misses still surface related chunks. Rerun after
+   each corpus change so growth doesn't regress retrieval.
 
    Build: `python stage2_interpretation/build_corpus.py && python stage2_interpretation/rag.py --build`
    (index cached to `corpus_vecs.npy`; git-ignored artifact).
