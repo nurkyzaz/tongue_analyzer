@@ -16,6 +16,14 @@ CASES = [
     ("oily skin, acne, sticky stools, humid weather", ["damp_heat"]),
     ("bloating, worry, overthinking, mood swings", ["qi_stagnation"]),
     ("thick greasy white coating, heavy limbs, overweight", ["phlegm_dampness", "phlegm-damp"]),
+    ("cold hands and feet, worse after cold food", ["yang", "cold_limbs"]),
+    ("night sweats, warm palms, thirsty for cold drinks", ["yin", "night_sweats"]),
+    ("bloating after meals, loose stools, poor appetite", ["spleen_qi", "bloating_loose", "qi_deficiency"]),
+    ("foggy head, phlegm, sticky mouth, puffiness", ["phlegm", "phlegm_heaviness"]),
+    ("fixed stabbing pain, purple tongue, dark veins", ["blood_stasis"]),
+    ("coating turning yellow, feeling hot and thirsty", ["yellow_coating", "damp_heat", "white_vs_yellow"]),
+    ("tongue coating wiped off easily, glossy patch", ["rooted", "peeled", "rootless"]),
+    ("red spots on the tip of the tongue", ["red_dots", "red tip", "red_tip"]),
 ]
 
 

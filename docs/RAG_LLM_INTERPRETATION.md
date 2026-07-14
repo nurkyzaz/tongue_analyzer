@@ -40,14 +40,18 @@ Two layers of retrieval feed the LLM:
 1. **Structured retrieval** — the exact grounded facts for this tongue (detected signs, the combination
    rules that fired, the rule-computed leaning pattern + its symptoms/recs/modern-view). Deterministic,
    no retrieval hallucination.
-2. **Vector RAG** (`rag.py`, `build_corpus.py`) — a real semantic retriever over an embedded knowledge
-   **corpus** (`knowledge_base/corpus.jsonl`): **71 cited chunks** = 39 from the KB (feature/pattern/
-   rule/zoning) + **32 authored cards** (`knowledge_base/knowledge_cards.json`): the **9 CCMQ
+2. **Hybrid vector RAG** (`rag.py`, `build_corpus.py`) — retrieval fuses **semantic** (embeddings) +
+   **lexical** (TF-IDF) ranks via Reciprocal Rank Fusion, so exact terms ("peeled", "cracks",
+   "tooth-marks") aren't drowned out by common words like "coating" (this lifted retrieval **hit@4
+   80%→94%**). Degrades gracefully: no embedder → lexical-only (works offline). Over an embedded knowledge
+   **corpus** (`knowledge_base/corpus.jsonl`): **87 cited chunks** = 39 from the KB (feature/pattern/
+   rule/zoning) + **48 authored cards** (`knowledge_base/knowledge_cards.json`): the **9 CCMQ
    constitutions** (traits + tongue + tendencies + diet/lifestyle), **ICD-11 Ch.26 pattern** cards (with
    codes), **similar-pattern disambiguations** (qi-vs-blood def, yin-vs-damp-heat, stasis-vs-heat,
    spleen-qi-vs-yang, damp-heat-vs-phlegm-damp…), **modern-correlation** cards (framed as associations),
-   and nuance/limits ("why a pale tongue is ambiguous", "what the tongue cannot tell you"). Chunks are
-   embedded with a local model (**nomic-embed-text** via
+   and nuance/limits ("why a pale tongue is ambiguous", "what the tongue cannot tell you"), plus
+   **symptom-anchored cards** (cold limbs→yang, night sweats→yin, bloating→spleen-qi…) that match how a
+   user actually describes themselves. Chunks are embedded with a local model (**nomic-embed-text** via
    Ollama, 768-d, no auth) into a **faiss** cosine index. At inference we embed a query built from the
    tongue's signs + leaning pattern and retrieve the top-k cited chunks into the grounding as
    `reference_notes` — so the LLM reasons over *combinations and disambiguations* from sourced material,
@@ -61,8 +65,9 @@ Two layers of retrieval feed the LLM:
    CC-BY papers, more disambiguation pairs, per-zone detail) and rebuild. Value scales with corpus quality.
 
    **Retrieval quality** is tracked by `evaluation/eval_rag.py` (query → is a relevant chunk in top-k):
-   currently **hit@4 = 80%** (10 canonical queries); the misses still surface related chunks. Rerun after
-   each corpus change so growth doesn't regress retrieval.
+   currently **hit@4 = 94%** (17/18 queries) with hybrid retrieval; the single "miss" still surfaces
+   relevant chunks (a strict-keyword false negative). Rerun after each corpus change so growth doesn't
+   regress retrieval.
 
    Build: `python stage2_interpretation/build_corpus.py && python stage2_interpretation/rag.py --build`
    (index cached to `corpus_vecs.npy`; git-ignored artifact).

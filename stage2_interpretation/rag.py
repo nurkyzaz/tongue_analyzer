@@ -48,39 +48,53 @@ def build_index():
 
 
 class Retriever:
-    """Loads the cached index; retrieve(query, k) -> list of {id, text, source, score}. No-op if the index
-    or embedder is missing (returns [])."""
+    """HYBRID retriever: fuses semantic (embeddings) + lexical (TF-IDF) ranks via Reciprocal Rank Fusion.
+    Semantic captures meaning; lexical catches exact terms ('peeled', 'cracks', 'tooth-marks') that a
+    coating-heavy query would otherwise let dominate. retrieve(query,k) -> [{id,text,source,score}].
+    Degrades: no embedder -> lexical-only (works offline); no index -> []."""
     def __init__(self):
         self.ok = os.path.exists(VECS) and os.path.exists(META)
-        if self.ok:
-            self.vecs = np.load(VECS)
-            self.meta = json.load(open(META))
-            try:
-                import faiss
-                self.index = faiss.IndexFlatIP(self.vecs.shape[1])   # cosine (vectors are normalized)
-                self.index.add(self.vecs)
-            except Exception:
-                self.index = None
+        if not self.ok:
+            return
+        self.vecs = np.load(VECS)
+        self.meta = json.load(open(META))
+        # lexical index over the SAME chunks (refit at load; corpus is small). id text helps exact terms.
+        try:
+            from sklearn.feature_extraction.text import TfidfVectorizer
+            corpus_txt = [m["id"].split(":", 1)[-1].replace("_", " ") + ". " + m["text"] for m in self.meta]
+            self.tfidf = TfidfVectorizer(stop_words="english", ngram_range=(1, 2), min_df=1)
+            self.lex = self.tfidf.fit_transform(corpus_txt)
+        except Exception:
+            self.tfidf = None
 
-    def retrieve(self, query, k=5, min_score=0.35):
+    @staticmethod
+    def _ranks(scores, n):
+        order = np.argsort(-scores)[:n]
+        return {int(i): r for r, i in enumerate(order)}
+
+    def retrieve(self, query, k=5, pool=15, rrf=60):
         if not self.ok:
             return []
+        sem_rank, lex_rank = {}, {}
         q = embed(query)
-        if q is None:
+        if q is not None:
+            sem_rank = self._ranks(self.vecs @ q, pool)
+        if self.tfidf is not None:
+            lex_scores = (self.lex @ self.tfidf.transform([query]).T).toarray().ravel()
+            lex_rank = self._ranks(lex_scores, pool)
+        if not sem_rank and not lex_rank:
             return []
-        if self.index is not None:
-            D, I = self.index.search(q[None, :], k)
-            hits = [(int(i), float(d)) for i, d in zip(I[0], D[0]) if i >= 0]
-        else:
-            sims = self.vecs @ q
-            idx = np.argsort(-sims)[:k]
-            hits = [(int(i), float(sims[i])) for i in idx]
+        # Reciprocal Rank Fusion across whichever lists we have
+        fused = {}
+        for ranks in (sem_rank, lex_rank):
+            for i, r in ranks.items():
+                fused[i] = fused.get(i, 0.0) + 1.0 / (rrf + r)
+        top = sorted(fused, key=lambda i: -fused[i])[:k]
         out = []
-        for i, s in hits:
-            if s < min_score:
-                continue
+        for i in top:
             m = self.meta[i]
-            out.append({"id": m["id"], "text": m["text"], "source": m.get("source", ""), "score": round(s, 3)})
+            out.append({"id": m["id"], "text": m["text"], "source": m.get("source", ""),
+                        "score": round(fused[i], 4)})
         return out
 
 
