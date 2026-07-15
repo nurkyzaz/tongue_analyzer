@@ -25,26 +25,27 @@ MANUAL_CHARS = {"tai", "zhi", "fissure", "tooth_mk"}  # coating has no manual co
 GOLD_WEIGHT = float(os.getenv("TIH_GOLD_WEIGHT", "2.0"))
 
 
-def _tf(size, train):
+def _tf(size, train, wb=True):
     aug = [A.LongestMaxSize(max_size=size),
            A.PadIfNeeded(size, size, border_mode=cv2.BORDER_CONSTANT, value=0, mask_value=0)]
     if train:
         aug += [A.HorizontalFlip(p=0.5),
                 A.ShiftScaleRotate(0.08, 0.15, 20, border_mode=cv2.BORDER_CONSTANT,
                                    value=0, mask_value=0, p=0.7),
-                A.RandomBrightnessContrast(0.3, 0.3, p=0.6),
-                # white-balance robustness: MILD per-channel shifts simulate illuminant/colour-temperature
-                # casts, WITHOUT rotating hue (which would corrupt the tai/zhi colour labels themselves).
-                A.RGBShift(r_shift_limit=14, g_shift_limit=10, b_shift_limit=14, p=0.5),
-                A.HueSaturationValue(hue_shift_limit=6, sat_shift_limit=18, val_shift_limit=12, p=0.4),
-                A.RandomGamma((80, 120), p=0.4),
+                A.RandomBrightnessContrast(0.3, 0.3, p=0.6)]
+        if wb:
+            # white-balance robustness: MILD per-channel shifts simulate illuminant/colour-temperature
+            # casts, WITHOUT rotating hue. Disable (--no-wb) to train straight on the labels' own colours.
+            aug += [A.RGBShift(r_shift_limit=14, g_shift_limit=10, b_shift_limit=14, p=0.5),
+                    A.HueSaturationValue(hue_shift_limit=6, sat_shift_limit=18, val_shift_limit=12, p=0.4)]
+        aug += [A.RandomGamma((80, 120), p=0.4),
                 A.ImageCompression(quality_lower=40, quality_upper=95, p=0.3)]
     aug += [A.Normalize(IMAGENET_MEAN, IMAGENET_STD), ToTensorV2()]
     return A.Compose(aug)
 
 
 class MultiTaskDataset(Dataset):
-    def __init__(self, manifest_csv, data_root, split, size=384, severity_csv=None):
+    def __init__(self, manifest_csv, data_root, split, size=384, severity_csv=None, wb=True):
         df = pd.read_csv(manifest_csv)
         df = df[(df.split == split) & (df.has_mask)].reset_index(drop=True)
         self.sev_cols = list(SEVERITY_KEYS)
@@ -57,7 +58,7 @@ class MultiTaskDataset(Dataset):
         df[self.sev_cols] = df[self.sev_cols].fillna(0.0)
         self.df = df
         self.root = data_root
-        self.tf = _tf(size, split == "train")
+        self.tf = _tf(size, split == "train", wb=wb)
 
     def __len__(self):
         return len(self.df)

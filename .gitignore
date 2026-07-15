@@ -61,3 +61,7 @@ stage2_interpretation/knowledge_base/corpus_meta.json
 
 # labeled gallery reference (build artifact w/ embedded images)
 evaluation/gallery.html
+
+# human-label training artifacts (regenerate: build_human_manifest.py)
+data/processed/human_manifest.csv
+data/eval/human_masks/

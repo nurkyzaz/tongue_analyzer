@@ -44,11 +44,13 @@ def main():
     ap.add_argument("--seg", default="checkpoints/seg_combined/best.pt")
     ap.add_argument("--mt", default="checkpoints/multitask_v5/best.pt")
     ap.add_argument("--seed", type=int, default=11)
-    ap.add_argument("--exclude", default=None, help="meta.json of an existing set whose images to skip")
+    ap.add_argument("--exclude", default=None, help="comma-sep meta.json files whose images to skip")
     args = ap.parse_args()
     pipe = Stage1Pipeline(args.seg, args.mt)
 
-    exclude = [e["path"] for e in json.load(open(args.exclude))] if args.exclude else []
+    exclude = []
+    for mf in (args.exclude.split(",") if args.exclude else []):
+        exclude += [e["path"] for e in json.load(open(mf.strip()))]
     scored = []
     for path, src in pool(seed=args.seed, exclude=exclude):
         try:

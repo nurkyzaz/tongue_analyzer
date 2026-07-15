@@ -130,12 +130,15 @@ def main():
     ap.add_argument("--severity-csv", default="data/processed/severity.csv")
     ap.add_argument("--sev-weight", type=float, default=5.0, help="weight for severity regression loss")
     ap.add_argument("--max-steps", type=int, default=0)
+    ap.add_argument("--init", default=None, help="checkpoint to warm-start from (fine-tune, e.g. multitask_v5/best.pt)")
+    ap.add_argument("--no-wb", action="store_true", help="disable the white-balance colour augmentation (train on the labels' own colours)")
     args = ap.parse_args()
     os.makedirs(args.out, exist_ok=True)
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
-    tr = MultiTaskDataset(args.manifest, args.data_root, "train", args.img_size, severity_csv=args.severity_csv)
-    va = MultiTaskDataset(args.manifest, args.data_root, "val", args.img_size, severity_csv=args.severity_csv)
+    wb = not args.no_wb
+    tr = MultiTaskDataset(args.manifest, args.data_root, "train", args.img_size, severity_csv=args.severity_csv, wb=wb)
+    va = MultiTaskDataset(args.manifest, args.data_root, "val", args.img_size, severity_csv=args.severity_csv, wb=wb)
     Ytr = sample_labels(tr.df)
     if args.sampler == "rarity":
         sw = rarity_weights(tr.df)
@@ -150,6 +153,10 @@ def main():
     print(f"train={len(tr)} val={len(va)} device={device} encoder={args.encoder} size={args.img_size}", flush=True)
 
     model = MultiTaskTongueNet(args.encoder, pretrained=True).to(device)
+    if args.init:                                      # warm-start for fine-tuning on cleaner labels
+        st = torch.load(args.init, map_location=device, weights_only=False)
+        model.load_state_dict(st["model"], strict=False)
+        print(f"warm-started from {args.init}", flush=True)
     cw = class_weights(Ytr, device, mode=args.cw_mode, clamp=(0.5, args.cw_clamp_max))
     losses = {ch: FocalLoss(gamma=2.0, class_weight=cw[ch]).to(device) for ch in KEY_CHARS}
     ema = EMA(model, args.ema_decay) if args.ema else None
