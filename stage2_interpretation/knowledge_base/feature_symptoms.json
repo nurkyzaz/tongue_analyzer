@@ -1,0 +1,21 @@
+{
+ "_about": "DIRECT feature(value) -> plain symptoms it traditionally suggests (Maciocia / Sacred Lotus). interpret.build_symptoms attributes these to the present signs. Merged into the KB by load_kb.",
+ "zhi=light":        ["tiredness or low energy", "feeling cold easily", "a pale complexion", "dizziness, especially on standing"],
+ "zhi=dark":         ["feeling warm or flushed", "thirst", "restlessness or irritability", "poor or light sleep"],
+ "tai=yellow":       ["feeling warm", "a bitter or sticky taste in the mouth", "thirst"],
+ "tai=light_yellow": ["a touch of warmth or mild heat"],
+ "coat_texture=greasy":   ["sluggish digestion", "heaviness after meals", "phlegm or mucus", "a foggy or heavy head"],
+ "coat_thickness=thick":  ["fullness or bloating", "poor appetite", "a heavy, weighed-down feeling"],
+ "fissure=present":  ["dry mouth or throat", "thirst", "poor or restless sleep", "feeling run-down despite rest"],
+ "tooth_mk=present": ["tiredness, especially after meals", "bloating or fullness after eating", "loose stools"],
+ "red_tip=present":  ["poor sleep", "feeling stressed or wound-up", "restlessness"],
+ "red_dots=present": ["feeling hot", "skin breakouts or oiliness"],
+ "moisture=wet":     ["feeling cold", "puffiness or water retention"],
+ "swollen=present":  ["puffiness / water retention", "a heavy, sluggish feeling", "tiredness"],
+ "thin=present":     ["fatigue", "dizziness", "dry skin or hair"],
+ "purple_body=present":     ["fixed or sharp aches (same spot)", "cold hands and feet", "a dull or dark complexion"],
+ "peeled_coating=present":  ["dryness", "thirst", "feeling depleted or run-down"],
+ "red_tongue=present":      ["feeling warm", "thirst", "irritability"],
+ "slippery_coating=present":["a wet, cold or sluggish feeling", "puffiness"],
+ "black_coating=present":   ["a marked internal cold/heat sign — worth a professional check"]
+}

@@ -74,7 +74,13 @@ STATS_PATH = os.path.join(os.path.dirname(__file__), "knowledge_base", "referenc
 
 def load_kb(path=KB_PATH):
     with open(path, encoding="utf-8") as f:
-        return json.load(f)
+        kb = json.load(f)
+    # feature->symptom map lives in a side file (merge it in); tolerate absence
+    fs = os.path.join(os.path.dirname(path), "feature_symptoms.json")
+    if "feature_symptoms" not in kb and os.path.exists(fs):
+        with open(fs, encoding="utf-8") as f:
+            kb["feature_symptoms"] = {k: v for k, v in json.load(f).items() if not k.startswith("_")}
+    return kb
 
 
 def load_stats(path=STATS_PATH):
@@ -479,22 +485,39 @@ def build_recommendation(findings, patterns, kb):
     return {"findings": [f["phrase"] for f in findings[:3]], "conditions": conditions, "actions": actions}
 
 
-def build_symptoms(patterns):
-    """A fuller, varied symptom picture: combine the associated symptoms of the top TWO patterns (deduped)
-    so it isn't always just the lead pattern's one-liner (e.g. only 'poor digestion')."""
-    items, seen = [], set()
-    for p in patterns[:2]:
-        if p["id"] == "balanced":
+def _symptom_key(f):
+    """Normalise a finding to its feature_symptoms key."""
+    k, v = f["key"], f["value"]
+    if k in ("zhi", "tai", "coat_texture", "coat_thickness"):
+        return f"{k}={v}"
+    if k == "moisture":
+        return "moisture=wet"
+    return f"{k}=present"          # graded (fissure/tooth_mk) + extras
+
+
+def build_symptoms(findings, patterns, kb):
+    """DIRECT feature -> symptom mapping: each present sign contributes the symptoms it traditionally
+    suggests, ATTRIBUTED to that sign (personalised & transparent, reflects THIS tongue). Supplemented
+    from the lead pattern only if the feature layer is sparse. Keeps the pattern/condition output too."""
+    fs = kb.get("feature_symptoms", {})
+    by_sign, items, seen = [], [], set()
+    for f in findings[:4]:            # top signs already ranked (primary signs lead)
+        if f["key"] == "fissure" and "possibly" in f["phrase"]:
+            continue                  # coating-crack caveat -> don't attribute dryness symptoms
+        syms = fs.get(_symptom_key(f))
+        if not syms:
             continue
-        for s in p.get("associated_symptoms", []):
-            k = s.lower().strip()
-            if k not in seen:
-                items.append(s); seen.add(k)
-    items = items[:8]
-    text = ("In this tradition, a tongue like this is often seen alongside some of: " +
-            ", ".join(s.lower() for s in items) + ". (These are associations to explore — not a diagnosis, "
-            "and not everyone will have them.)") if items else ""
-    return {"items": items, "text": text}
+        by_sign.append({"sign": f["phrase"], "symptoms": syms})
+        for s in syms:
+            if s.lower() not in seen:
+                items.append(s); seen.add(s.lower())
+    if len(items) < 4 and patterns and patterns[0]["id"] != "balanced":   # supplement if sparse
+        for s in patterns[0].get("associated_symptoms", []):
+            if s.lower() not in seen:
+                items.append(s); seen.add(s.lower())
+            if len(items) >= 6:
+                break
+    return {"by_sign": by_sign, "items": items[:10]}
 
 
 def _markdown(readings, patterns, combined, sources, headline="", confidence_note=""):
@@ -669,7 +692,7 @@ def interpret(stage1_output, metadata=None, llm: LLMClient = None):
     findings = build_findings(disp, present)          # sets r["notable"] on disp
     found_text = findings_text(findings)
     recommendation = build_recommendation(findings, patterns, kb)
-    symptoms = build_symptoms(patterns)
+    symptoms = build_symptoms(findings, patterns, kb)
     sources, overview = kb["sources"], kb["overview"]
 
     llm = llm or LLMClient()

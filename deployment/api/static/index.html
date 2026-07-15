@@ -51,8 +51,11 @@
   .rec li{font-size:14px;line-height:1.5;padding-left:22px;position:relative}
   .rec li::before{content:"🌿";position:absolute;left:0}
   .prec{font-size:12px;color:var(--acc);margin-top:6px;line-height:1.5}
-  .symwrap{display:flex;flex-wrap:wrap;gap:7px;margin-top:2px}
   .symnote{font-size:11.5px;color:var(--mut);margin-top:8px}
+  .symrow{display:flex;gap:8px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  .symsign{font-weight:650;min-width:120px;flex:none}
+  .symarrow{color:var(--acc);flex:none}
+  .symlist{color:var(--blue);line-height:1.45}
   .pat{background:var(--card2);border:1px solid var(--line);border-left:3px solid var(--acc);border-radius:10px;padding:11px;margin:9px 0}
   .pat .nm{font-weight:700;color:#fff;font-size:14px}.pat .pn{color:var(--acc);font-size:12.5px;margin-bottom:4px}
   .pat .ex{font-size:13px;line-height:1.5;color:#cdd8e2}
@@ -198,9 +201,10 @@ function render(d){
   $('normalLine').textContent=normal.length?('Within a typical range: '+[...new Set(normal)].join(', ')+'.'):'';
   $('combined').innerHTML=md(it.combined);
   const sym=it.symptoms||{};
-  $('symptoms').innerHTML=(sym.items&&sym.items.length)
-    ? `<h2>You might also notice</h2><div class="symwrap">${sym.items.map(s=>`<span class="chip">${s}</span>`).join('')}</div><div class="symnote">Associations to explore — not a diagnosis, and not everyone will have them.</div>`
-    : '';
+  if(sym.by_sign&&sym.by_sign.length){
+    const rows=sym.by_sign.map(b=>`<div class="symrow"><span class="symsign">${b.sign}</span><span class="symarrow">→</span><span class="symlist">${b.symptoms.join(' · ')}</span></div>`).join('');
+    $('symptoms').innerHTML=`<h2>What these signs may go with</h2>${rows}<div class="symnote">A direct read of your signs → associated experiences. Exploratory, not a diagnosis, and not everyone will have them.</div>`;
+  } else $('symptoms').innerHTML='';
   $('patterns').innerHTML=(it.patterns||[]).filter(p=>p.id!=='balanced').map(patCard).join('');
   renderFollowup(it.followup);
   $('sources').innerHTML=(it.sources&&it.sources.length)?'Grounding: '+it.sources.join(' · '):'';
