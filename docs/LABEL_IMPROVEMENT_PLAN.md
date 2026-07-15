@@ -22,7 +22,28 @@ just in **TonguExpert's convention**, which differs from the target/user convent
 
 ## The four paths (researched)
 
-### Path A — Phenotype-anchored relabeling  ★ RECOMMENDED, directly "improves the labels"
+### UPDATE (user: "trust the expert labels, use their definitions, no calibration")
+Measured v5 directly against the **expert (L1 manual) labels** on the held-out test set (n=250):
+**tai 94% · zhi 78% · fissure 96% · tooth_mk 82%.** So *by the expert standard*:
+- The labels are **already expert-standard at scale** (auto labels are 97% expert-consistent; TonguExpert
+  has no published threshold "definition" — the labels ARE the experts' judgments), and **v5 already
+  matches the experts at 78–96%.**
+- The big "errors" you saw are mostly **you-vs-expert** disagreement (you're not a TCM expert, as you
+  noted) — the model-vs-expert gap is much smaller. So relabeling has **little headroom on tai/fissure**
+  (already 94–96%); some remains on **zhi (78%) / tooth_mk (82%)**.
+- Where the model DOES slip is **real photos**: coating-colour on the SM (phone-like) set was 57% vs 74%
+  on clinical — a **domain gap**, not a label problem.
+
+**Revised recommendation (no calibration, trust experts):**
+1. **Adopt the EXPERT labels as the accuracy standard + training target** (drop chasing your convention).
+   By this standard v5 is the baseline at 78–96%. Report accuracy vs experts, not vs your labels.
+2. Relabeling from phenotypes (below) is **de-prioritised** — the color/coating labels are already
+   expert-standard; it can't beat 94–96%. (Kept for reference / for zhi if we ever get more expert zhi
+   labels.) v8 already gold-weighted the sparse expert labels and did NOT beat v5, consistent with this.
+3. **The real remaining lever is the real-photo DOMAIN gap → Path C (self-supervised / domain-adaptive
+   pretraining)**, which is exactly the SSL path. This is now the evidence-based next step.
+
+### Path A (original) — Phenotype-anchored relabeling  [de-prioritised per the update above]
 Re-derive the categorical colour labels for the ~6k TonguExpert images by **thresholding their objective
 colour phenotypes**, with thresholds **calibrated to the target convention on the human anchors**:
 - `tai` white/light-yellow/yellow ← coating **b\*** (yellowness) cut-points tuned so anchor-white↔low-b*,
