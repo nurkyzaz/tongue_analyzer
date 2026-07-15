@@ -62,11 +62,21 @@ teacher on the improved + human labels, **pseudo-label** the full ~15k with **co
 strong augmentation**, train a student, iterate. Propagates the target convention to non-TE and real-photo
 images without hand-labeling. [Noisy Student; FixMatch]
 
-### Path C — Self-supervised pretraining (the fallback; domain gap)
-**DINOv2 fine-tune or MAE** pretraining on all ~15k **unlabeled** tongues → then fine-tune on the improved
-labels. Best for the **clinical→phone domain gap** (SM real photos). Evidence: DINOv2 fine-tune beats
-ImageNet pretraining on medical classification; MAE is robust under low labels. **Still needs labels at the
-end** — so it complements A/B (which supply them), it doesn't replace them. [DINOv2; MAE refs]
+### Path C — Self-supervised pretraining (the fallback; domain gap)  ❌ TRIED, DID NOT HELP (2026-07-13)
+Built `ssl_pretrain.py`: SimCLR-style, **colour-preserving** aug, on ~13.5k unlabeled tongues (loss
+3.3→1.69). Fine-tuned the multitask heads from that encoder, **--no-wb** (per user, no WB-aug). Result:
+- **vs EXPERT test: a WASH** (tai 94=94, zhi 81=81, fissure 95→90, tooth_mk 82→86).
+- **By source (the whole point): WORSE** — TCM tai 75→39%, zhi 54→39%; SM zhi 60→45%. The domain gap
+  *widened*.
+Why: (1) the SSL pool is **clinical-dominated** (5992 TE vs 2175 SM), so the encoder stays clinical-biased —
+SSL can't manufacture real-photo robustness from data it doesn't have; (2) **removing WB-aug** (the
+`--no-wb` the user asked for) took away the one thing that WAS giving v5 real-photo colour robustness, and
+SSL didn't replace it. Net: val improved (0.73→0.78 on the TE val) but **generalisation to TCM/SM got
+worse** — better on the train domain, worse elsewhere. **v5 stays production.**
+**Real conclusion:** the real-photo colour gap can't be closed by SSL on the *existing* (clinical-heavy)
+images. It needs **actual real phone photos** — to pretrain on and/or fine-tune on. That is the true
+blocker (WS3a), not the method. The `ssl_resnet34` encoder + `ssl_pretrain.py` are kept and become useful
+*once* we have a real-photo corpus to pretrain on. [DINOv2; MAE refs]
 
 ### Path D — Confident-learning audit (cheap sanity, low expected value)
 Run **Cleanlab** to flag images where the model confidently disagrees with the auto label. Since labels
