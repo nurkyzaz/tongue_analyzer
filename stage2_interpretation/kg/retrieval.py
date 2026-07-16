@@ -13,11 +13,30 @@ dictionary lookups (fits the cheap-deploy budget).
     r.patterns          # ranked [{id, name, score, evidence:[...], symptoms, recs, sections}]
     r.context_cards()   # grounded, citation-tagged lines ready to drop into the matcher prompt
 """
+import math
 import os
 import sys
+from collections import defaultdict
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from kg.graph import KnowledgeGraph  # noqa: E402
+
+# --- graph-RAG scoring calibration (PLAN §7-A) ------------------------------
+# The micro layer cites the same (feature->pattern) from many book sections; a naive sum lets a
+# frequently-discussed pattern dominate, and treats a generic feature (points to 6 patterns) like a
+# specific one (points to 1). Two corrections, applied ONLY in graph-RAG scoring (the seed rule
+# engine's hand-tuned weights are untouched — parity-locked):
+#   1. corroboration is sublinear: n citations -> base + CORROB*ln(n), capped, not n*base.
+#   2. distinctiveness (IDF): a feature's vote is scaled by ln(1 + P / df), where df = the number of
+#      distinct patterns that feature points to across the whole graph. Rare/specific -> counts more.
+_CORROB = 0.28          # weight of each extra corroborating citation (log-scaled)
+_CORROB_CAP = 0.8       # max corroboration bonus on top of the base weight
+# Distinctiveness is a GENTLE multiplier centred on 1.0 (a feature of typical breadth ~ df=3 is
+# unchanged); specific features (df=1) get a modest lift, broad ones a modest cut. Deliberately mild
+# so it nudges the ranking rather than flipping it — the concrete fix is the sublinear corroboration
+# above; IDF only breaks ties. Clamped so nothing dominates or vanishes.
+_IDF_W = 0.55           # strength of the distinctiveness nudge (0 = off)
+_IDF_MIN, _IDF_MAX = 0.65, 1.55
 
 # edges we walk out from the entry features to reach the grounded neighbourhood
 _RAG_RELS = {"points_to", "argues_against", "is_value_of", "has_symptom", "recommends",
@@ -26,15 +45,20 @@ _RAG_RELS = {"points_to", "argues_against", "is_value_of", "has_symptom", "recom
 # Interim Stage-1 -> graph-vocab bridge. Stage-1 emits the coating-split keys and a few different
 # value words than the seed KB. A proper fix is the WHO-IST ontology spine (WS-A); until then this
 # small alias + a presence-fallback lets graph-RAG run on real Stage-1 output. Keep it explicit.
-_FEATURE_ALIAS = {"coat_texture": "coating", "coat_thickness": "coating", "coat_color": "tai",
+_FEATURE_ALIAS = {"coat_texture": "coating", "coat_color": "tai",
                   "coating_color": "tai", "body_color": "zhi", "cracks": "fissure",
                   "teeth_marks": "tooth_mk", "teethmark": "tooth_mk"}
-# features the graph models as a single presence node (any positive value -> "present")
+# features the graph models as a single presence node (a positive value -> "present")
 _BINARY = {"coating", "fissure", "tooth_mk", "red_dots", "swollen", "thin", "peeled_coating",
            "red_tongue", "purple_body", "black_coating", "slippery_coating"}
+# for features whose graph presence-node means one SPECIFIC value, only that value counts as positive
+# (the seed `coating` node = a *greasy* coat; a thin/clean coat is not that node).
+_POSITIVE_VALUES = {"coat_texture": {"greasy", "sticky", "slippery"}}
 _VALUE_ALIAS = {("zhi", "pale"): "light", ("zhi", "red"): "dark", ("zhi", "purple"): "dark",
                 ("tai", "light-yellow"): "light_yellow", ("tai", "grey"): "yellow"}
-# Stage-1 "not present" values we never turn into an entry node
+# Stage-1 "not present" values we never turn into an entry node. NB: `coat_thickness` (thick/thin) is
+# intentionally NOT aliased — the graph has no thickness-only node yet, so it stays "missing" (an
+# honest KB gap for the WHO-IST spine, not a false greasy-coat signal).
 _ABSENT = {"none", "absent", "no", "normal", "regular", "0", "", None}
 
 
@@ -76,10 +100,27 @@ class Retrieval:
 class GraphRAG:
     def __init__(self, graph):
         self.g = graph
+        self._n_patterns = max(1, len(graph.nodes_of_type("pattern")))
+        self._df = self._degree_freq()      # feature/value node -> # distinct patterns it points to
+        self._idf_ref = math.log(1 + self._n_patterns / 3.0)   # a df~3 feature -> multiplier 1.0
 
     @classmethod
     def load(cls, path=None):
         return cls(KnowledgeGraph.load(path) if path else KnowledgeGraph.load())
+
+    def _degree_freq(self):
+        df = defaultdict(set)
+        for e in self.g.edges:
+            if e["rel"] in ("points_to", "argues_against") and e["dst"].startswith("pattern:"):
+                df[e["src"]].add(e["dst"])
+        return {k: len(v) for k, v in df.items()}
+
+    def _idf(self, node_id):
+        """Gentle distinctiveness multiplier centred on 1.0 (IDF-style but bounded)."""
+        df = self._df.get(node_id, 1)
+        raw = math.log(1 + self._n_patterns / df)
+        mult = 1.0 + _IDF_W * (raw - self._idf_ref) / self._idf_ref
+        return max(_IDF_MIN, min(_IDF_MAX, mult))
 
     # ---- entry nodes ----------------------------------------------------
     def _entry_ids(self, present):
@@ -91,6 +132,8 @@ class GraphRAG:
             val = (str(val0).strip().lower() if val0 is not None else "")
             if val in _ABSENT:
                 continue
+            if feat0 in _POSITIVE_VALUES and val not in _POSITIVE_VALUES[feat0]:
+                continue                       # e.g. a smooth/clean texture is not the greasy-coat node
             feat = _FEATURE_ALIAS.get(feat0, feat0)
             val = _VALUE_ALIAS.get((feat, val), val)
             if feat in _BINARY:
@@ -107,39 +150,46 @@ class GraphRAG:
 
     # ---- ranking --------------------------------------------------------
     def _rank(self, entries, entry_set, reached, induced):
-        """Score every pattern reachable from the entries by summed signed evidence, and attach the
-        cited edges + 2-hop context (symptoms/recs/questions/sections) that justify it."""
-        patterns = {}
+        """Score every pattern reachable from the entries, aggregating each (feature->pattern) group
+        with sublinear corroboration and IDF distinctiveness (PLAN §7-A), and attach the cited edges
+        + 2-hop context (symptoms/recs/questions/sections) that justify it."""
+        groups = defaultdict(list)            # (src_feature, pattern, rel) -> [edges]
         for e in induced:
             if e["rel"] not in ("points_to", "argues_against"):
                 continue
-            if e["src"] not in entry_set:          # only count evidence coming from a detected feature
+            if e["src"] not in entry_set or not e["dst"].startswith("pattern:"):
                 continue
-            pid = e["dst"]
-            if not pid.startswith("pattern:"):
-                continue
-            feat, val = self._decode(e["src"])
-            w = e.get("weight", 1.0)
-            signed = w if e["rel"] == "points_to" else -w
+            groups[(e["src"], e["dst"], e["rel"])].append(e)
+
+        patterns = {}
+        for (src, pid, rel), es in groups.items():
+            feat, val = self._decode(src)
+            base = max(e.get("weight", 1.0) for e in es)       # representative, not a sum
+            n = len(es)
+            corrob = min(_CORROB_CAP, _CORROB * math.log(n)) if n > 1 else 0.0
+            idf = self._idf(src)
+            w = (base + corrob) * idf
+            signed = w if rel == "points_to" else -w
             p = patterns.setdefault(pid, {"id": pid, "name": self._name(pid), "score": 0.0,
                                           "evidence": [], "symptoms": [], "recs": [], "questions": [],
                                           "sections": []})
             p["score"] += signed
-            snip = self.g.snippet(e["snippet"]) if e.get("snippet") else None
-            p["evidence"].append({"feature": feat, "value": val, "weight": w,
-                                  "polarity": e["rel"], "sources": e.get("sources", []),
-                                  "snippet": (snip or {}).get("text", "") if snip else "",
-                                  "layer": (e.get("cond") or {}).get("layer", "seed")})
-        # 2-hop context per surviving pattern (dedupe evidence: same feature+snippet+source once)
-        for pid, p in patterns.items():
-            seen, uniq = set(), []
-            for ev in p["evidence"]:
-                k = (ev["feature"], ev["value"], ev["polarity"], ev["snippet"], tuple(ev["sources"]))
-                if k in seen:
+            seen = set()                                       # dedupe citations within the group
+            for e in sorted(es, key=lambda x: -x.get("weight", 1.0)):
+                snip = self.g.snippet(e["snippet"]) if e.get("snippet") else None
+                key = (e.get("snippet"), tuple(e.get("sources", [])))
+                if key in seen:
                     continue
-                seen.add(k)
-                uniq.append(ev)
-            p["evidence"] = sorted(uniq, key=lambda x: (-x["weight"], x["polarity"] == "argues_against"))
+                seen.add(key)
+                p["evidence"].append({"feature": feat, "value": val, "weight": e.get("weight", 1.0),
+                                      "polarity": rel, "sources": e.get("sources", []),
+                                      "snippet": (snip or {}).get("text", "") if snip else "",
+                                      "layer": (e.get("cond") or {}).get("layer", "seed"),
+                                      "n_cites": n, "contribution": round(signed, 3)})
+        # 2-hop context per surviving pattern
+        for pid, p in patterns.items():
+            p["evidence"].sort(key=lambda x: (-abs(x["contribution"]), -x["weight"],
+                                              x["polarity"] == "argues_against"))
             p["symptoms"] = [self._name(s) for s in self.g.symptoms_for_pattern(pid) if s in reached]
             p["recs"] = [self._name(r) for r in self.g.recs_for_pattern(pid) if r in reached]
             p["questions"] = [self._name(q) for q, _ in self.g.questions_for_pattern(pid) if q in reached]
