@@ -11,15 +11,28 @@ interactive refinement pass (WS-B) both query.
 |---|---|---|---|
 | **seed** | `tcm_knowledge.json` | every fact, re-typed | ✅ done (`build_kg.py`) |
 | **macro** | Gerlach hierarchy (`parse_book.py` → `book_sections.json`) | `section_of` + `section:` nodes (184) | ✅ done |
-| **micro** | qwen2.5:14b triplets from Gerlach ch.2–4, cited + snippet | `points_to`/`argues_against` + `attested_in` + `snippets` | ✅ done (72 cited edges; 49 candidates held for review) |
+| **micro** | qwen2.5:14b triplets from Gerlach ch.2–7, cited + snippet | `points_to`/`argues_against` + `attested_in` + `snippets` | ✅ done (120 cited edges; 50 candidates held for review) |
 
 ## Current graph (seed + macro + micro)
 
 ```
-nodes 360   edges 572   rules 10   snippets 72
-edges: points_to 93 (27 seed + 66 book-cited), argues_against 6, evidence_for 76,
-       has_symptom 55, recommends 39, section_of 184, attested_in 72, probes 21, ...
+nodes 363   edges 671   rules 10   snippets 120
+edges: points_to 135 (27 seed + 108 book-cited), argues_against 12, evidence_for 76,
+       has_symptom 55, recommends 39, section_of 184, attested_in 120, probes 21, ...
 ```
+
+Micro layer covers Gerlach ch.2–4 (feature chapters) + ch.5–7 (clinical cases) — 88 new triplets
+from ch.5–7 folded in 2026-07-16.
+
+## WS-C graph-RAG retrieval (`retrieval.py`)
+
+`GraphRAG.retrieve(present_features)` returns a **connected 2-hop subgraph** around the detected
+feature nodes (via `KnowledgeGraph.neighborhood`), ranks the patterns it reaches by signed evidence
+(`points_to` − `argues_against`), and attaches the cited book edges (source + verbatim snippet) plus
+the 2-hop symptom/rec/question context. `Retrieval.context_cards()` flattens it into grounded,
+citation-tagged lines ready to drop into the WS-C matcher prompt — relationships, not isolated facts.
+An interim Stage-1→graph vocab alias bridges the coating-split keys until the WHO-IST spine lands.
+Sanity gate: `evaluation/eval_graph_rag.py` (3/3 strict cases; 1 documented calibration gap → §7-A).
 
 Micro edges are tagged `cond.layer="micro"`, carry a book citation + a `snippet` id, and COEXIST with
 the seed rule weights (rule engine keeps using seed edges; the WS-C matcher can prefer cited micro

@@ -153,6 +153,37 @@ class KnowledgeGraph:
     def snippet(self, snippet_id):
         return self.snippets.get(snippet_id)
 
+    def neighborhood(self, seeds, hops=2, rels=None, directed=True):
+        """BFS from `seeds` (node ids) up to `hops` edges. Follows out-edges (plus in-edges when
+        `directed=False`). Returns (reached_node_ids:set, induced_edges:list) — every edge whose
+        endpoints are both reached (so inverse links like symptom->pattern come back even under a
+        directed walk). This is the WS-C graph-RAG substrate: a connected 2-hop subgraph around the
+        detected features instead of isolated facts."""
+        reached = set(s for s in seeds if s in self.nodes)
+        frontier = set(reached)
+        for _ in range(max(0, hops)):
+            nxt = set()
+            for nid in frontier:
+                for e in self._out.get(nid, []):
+                    if rels and e["rel"] not in rels:
+                        continue
+                    if e["dst"] not in reached:
+                        nxt.add(e["dst"])
+                if not directed:
+                    for e in self._in.get(nid, []):
+                        if rels and e["rel"] not in rels:
+                            continue
+                        if e["src"] not in reached:
+                            nxt.add(e["src"])
+            nxt -= reached
+            reached |= nxt
+            frontier = nxt
+            if not frontier:
+                break
+        induced = [e for e in self.edges
+                   if e["src"] in reached and e["dst"] in reached and (not rels or e["rel"] in rels)]
+        return reached, induced
+
     def stats(self):
         rels = defaultdict(int)
         for e in self.edges:

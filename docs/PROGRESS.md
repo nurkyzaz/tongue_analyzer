@@ -55,6 +55,12 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
   edges (WS-B lever). Micro layer: offline extractor `micro_extract.py` (casper, free) + `normalize.py`;
   **qwen2.5:14b chosen** over gemma3:4b on Gerlach ch.2 (more faithful, 0 junk). Next: full ch.2–4 run +
   `add_micro_layer`.
+  **Micro layer now covers Gerlach ch.2–7** (added ch.5–7 clinical cases 2026-07-16, +88 triplets):
+  graph = **363 nodes / 671 edges / 120 cited edges / 120 snippets** (parity OK).
+- 🔄 **WS-C graph-RAG retrieval — built** (`kg/retrieval.py` + `graph.neighborhood`): 2-hop subgraph
+  around detected features → ranked patterns with cited book evidence + `context_cards()` for the
+  matcher prompt. Gate `evaluation/eval_graph_rag.py` 3/3 strict (1 known calibration gap → PLAN §7-A).
+  **Next in WS-C:** the cite-or-abstain LLM matcher (JSON-mode) over these cards, shadow mode.
 - ⬜ WS-C grounded cite-or-abstain matcher (shadow → ensemble) · ⬜ WS-B refinement engine (symptom evidence
   + information-gain questions) · ⬜ WS-D RAGAS eval gate.
 
