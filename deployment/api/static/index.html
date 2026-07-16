@@ -2,226 +2,587 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-<title>TongueInsight — Tongue Reading (educational)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"/>
+<title>計五味 · Savor — 舌 · Tongue reading (educational)</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet"/>
 <style>
-  :root{--bg:#0f1720;--card:#18222e;--card2:#141d27;--fg:#e8eef4;--mut:#93a4b3;--acc:#31c48d;--warn:#f6c453;--err:#f16a6a;--line:#26333f;--chip:#213142;--blue:#6db1ff}
-  *{box-sizing:border-box}
-  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
-  .wrap{max-width:640px;margin:0 auto;padding:16px}
-  h1{font-size:21px;margin:8px 0 2px} h2{font-size:16px;margin:18px 0 8px}
-  .sub{color:var(--mut);font-size:13px;margin-bottom:12px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
-  .frame{position:relative;width:100%;aspect-ratio:1/1;background:#000;border-radius:12px;overflow:hidden}
-  video,#shot{width:100%;height:100%;object-fit:cover;display:block}#shot{display:none}
-  .guide{position:absolute;inset:0;pointer-events:none}
-  .hint{position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:12px;color:#dfe8f0;text-shadow:0 1px 3px #000}
-  .row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-  button{flex:1;min-width:110px;border:0;border-radius:10px;padding:11px;font-size:14px;font-weight:600;cursor:pointer;background:#243444;color:var(--fg)}
-  button.primary{background:var(--acc);color:#04120b} button:disabled{opacity:.5;cursor:default}
-  .badge{display:inline-block;padding:6px 10px;border-radius:8px;font-size:13px;font-weight:600}
-  .ok{background:rgba(49,196,141,.15);color:var(--acc)}.warn{background:rgba(246,196,83,.15);color:var(--warn)}.err{background:rgba(241,106,106,.15);color:var(--err)}
-  .sign{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px;margin:8px 0}
-  .sign.faint{opacity:.9}
-  .sign .top{display:flex;justify-content:space-between;font-size:13px;align-items:baseline;gap:8px}
-  .deg{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--warn);font-weight:700}
-  .score{font-size:13px;font-weight:700;color:var(--warn);white-space:nowrap}.score small{color:var(--mut);font-weight:600}
-  .sign .val{font-weight:700;color:#fff}
-  .bar{height:7px;background:#0c1218;border-radius:5px;margin:6px 0;overflow:hidden}.bar>i{display:block;height:100%;background:var(--warn);border-radius:5px}
-  .tcm{font-size:13px;color:#cdd8e2;line-height:1.45}.tcm b{color:#fff}
-  .plain{font-size:13px;color:var(--blue);line-height:1.45;margin-top:3px}
-  .healthy{font-size:13px;color:var(--mut);padding:5px 2px}
-  .headline{background:linear-gradient(135deg,rgba(49,196,141,.12),rgba(109,177,255,.08));border:1px solid var(--line);
-    border-left:3px solid var(--acc);border-radius:12px;padding:13px 15px;margin:4px 0 12px;font-size:15px;line-height:1.5}
-  .headline strong{color:#fff}
-  .dist{display:inline-block;font-size:10.5px;color:var(--acc);background:rgba(49,196,141,.12);border-radius:6px;
-    padding:1px 7px;margin-left:6px;font-weight:600;letter-spacing:.01em;vertical-align:middle}
-  .conf-tag{display:inline-block;font-size:11px;color:var(--warn);margin-top:6px}
-  .conf-tag::before{content:"⚑ ";opacity:.8}
-  .confnote{font-size:12px;color:var(--mut);line-height:1.5;background:var(--card2);border:1px solid var(--line);
-    border-radius:10px;padding:11px 13px;margin-top:12px}
-  .found{font-size:16px;line-height:1.5;margin:4px 0 12px;font-weight:600}
-  .normline{font-size:12px;color:var(--mut);margin:6px 0 2px}
-  .rec{background:linear-gradient(135deg,rgba(49,196,141,.13),rgba(109,177,255,.07));border:1px solid var(--line);
-    border-radius:14px;padding:15px 16px;margin:2px 0 14px}
-  .rec h3{margin:0 0 8px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
-  .rec .maybe{font-size:13px;color:var(--mut);margin:0 0 10px}
-  .rec .maybe b{color:var(--fg)}
-  .rec ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
-  .rec li{font-size:14px;line-height:1.5;padding-left:22px;position:relative}
-  .rec li::before{content:"🌿";position:absolute;left:0}
-  .prec{font-size:12px;color:var(--acc);margin-top:6px;line-height:1.5}
-  .symnote{font-size:11.5px;color:var(--mut);margin-top:8px}
-  .symrow{display:flex;gap:8px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--line);font-size:13.5px}
-  .symsign{font-weight:650;min-width:120px;flex:none}
-  .symarrow{color:var(--acc);flex:none}
-  .symlist{color:var(--blue);line-height:1.45}
-  .pat{background:var(--card2);border:1px solid var(--line);border-left:3px solid var(--acc);border-radius:10px;padding:11px;margin:9px 0}
-  .pat .nm{font-weight:700;color:#fff;font-size:14px}.pat .pn{color:var(--acc);font-size:12.5px;margin-bottom:4px}
-  .pat .ex{font-size:13px;line-height:1.5;color:#cdd8e2}
-  .chip{display:inline-block;background:var(--chip);color:#bcd;border-radius:20px;padding:2px 9px;font-size:11px;margin:3px 3px 0 0}
-  .rec{font-size:12.5px;color:#bcd;background:rgba(49,196,141,.08);border-radius:8px;padding:8px;margin-top:7px}
-  .qa{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:11px;margin:8px 0}
-  .qa .q{font-size:13.5px;margin-bottom:7px}.qbtns{display:flex;gap:6px}.qbtns button{flex:1;padding:7px;font-size:13px}.qbtns button.sel{background:var(--acc);color:#04120b}
-  .conf{font-size:13px;margin-top:8px}.conf b{color:var(--acc)}
-  .prose{font-size:14px;line-height:1.55}.prose strong{color:#fff}
-  .src{color:var(--mut);font-size:11px;line-height:1.5;margin-top:8px}
-  .disc{color:var(--mut);font-size:11px;margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
-  /* shareable tongue-type card */
-  .tc{position:relative;border-radius:16px;padding:20px 18px;text-align:center;overflow:hidden;
-      background:radial-gradient(120% 90% at 50% 0%, #1c3b31 0%, #14202b 55%, #0f1720 100%);border:1px solid #2b4a3e}
-  .tc .brand{font-size:12px;letter-spacing:.14em;color:var(--acc);font-weight:700}
-  .tc .kick{font-size:12px;letter-spacing:.18em;color:var(--mut);margin-top:10px}
-  .tc .emoji{font-size:64px;line-height:1.1;margin:6px 0}
-  .tc .name{font-size:30px;font-weight:800;color:#fff}
-  .tc .blurb{font-size:14px;font-style:italic;color:#cfe9dd;margin:4px 0 12px}
-  .tc .ring{font-size:15px;color:var(--mut)} .tc .ring b{font-size:40px;color:var(--acc);font-weight:800}
-  .tc .hl{margin-top:12px;text-align:left}
-  .tc .hlrow{display:flex;justify-content:space-between;font-size:12.5px;color:#dfe8f0;margin:8px 2px 3px}
-  .tc .cta{margin-top:14px;font-size:12px;color:var(--mut)}
-  .ex-item{display:flex;gap:12px;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:10px}
-  .ex-item img{width:104px;height:104px;object-fit:cover;border-radius:8px;flex-shrink:0}
-  .ex-item .exb{font-size:12.5px;line-height:1.45}.ex-item .ext{font-weight:700;color:#fff;font-size:13.5px;margin-bottom:2px}
-  .hidden{display:none} input[type=file]{display:none}
+  :root{
+    --ground:#0A0A0B; --phone:#000; --card:#1C1C1E; --panel:#0E0E0F;
+    --fg:#fff; --mut:#8E8E93; --dim:#636366; --faint:#48484A;
+    --teal:#3ABF9E; --amber:#E8B33A; --red:#E5484D;
+    --line:#38383A; --line2:#262628; --hair:#161618;
+    --serif:'Noto Sans TC',serif; --sans:-apple-system,BlinkMacSystemFont,'SF Pro Text','Noto Sans TC',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--ground);color:var(--fg);font-family:var(--sans);
+    min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px}
+  a{color:var(--teal);text-decoration:none}
+  input[type=file]{display:none}
+  @keyframes scanmove{0%{top:9%}50%{top:85%}100%{top:9%}}
+  @media (prefers-reduced-motion:reduce){.scan{animation:none;top:47%}}
+  .scan{position:absolute;left:0;right:0;height:2px;animation:scanmove 1.4s ease-in-out infinite;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent)}
+
+  /* phone shell */
+  .phone{width:393px;max-width:100vw;height:852px;max-height:96vh;border-radius:52px;background:var(--phone);
+    border:8px solid #1a1a1c;box-shadow:0 30px 70px rgba(0,0,0,.6);overflow:hidden;position:relative}
+  @media (max-width:440px){body{padding:0}.phone{width:100vw;height:100vh;max-height:100vh;border-radius:0;border:0}}
+  .statusbar{position:absolute;top:0;left:0;right:0;z-index:8;display:flex;justify-content:space-between;align-items:center;
+    padding:16px 30px 10px;font-size:14px;font-weight:600;background:var(--phone)}
+  .statusbar .sig{color:var(--mut);font-weight:500;letter-spacing:.04em}
+  .scroll{position:absolute;left:0;right:0;top:46px;bottom:0;overflow-y:auto;scrollbar-width:none;padding-bottom:96px}
+  .scroll::-webkit-scrollbar{display:none}
+  .pad{padding:0 20px}
+  .screen{display:none}
+  .screen.on{display:block}
+
+  /* nav */
+  .nav{position:absolute;left:16px;right:16px;bottom:16px;height:60px;border-radius:30px;border:1px solid var(--line2);
+    background:rgba(20,20,22,.86);backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:space-around;z-index:5}
+  .nav div{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:9.5px;color:var(--dim);flex:1}
+  .nav div.on{color:#fff}
+  .nav .ic{font-size:16px;line-height:1;font-family:var(--serif)}
+
+  /* kicker / labels */
+  .kick{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);font-weight:600;font-family:var(--serif)}
+  .yiji{display:flex;flex-direction:column;gap:14px}
+  .yrow{display:flex;gap:12px;align-items:flex-start}
+  .stamp{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:6px;
+    border:1.5px solid var(--mut);color:var(--mut);font-family:var(--serif);font-size:13px;font-weight:700;flex:0 0 auto;line-height:1}
+  .stamp.yi{border-color:#fff;color:#fff}
+  .zh{font-family:var(--serif)} .cap{color:var(--mut);font-size:12.5px;display:block;margin-top:2px}
+  .btn{width:100%;height:56px;border-radius:28px;border:0;font-size:16px;font-weight:600;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:9px;font-family:inherit}
+  .btn.white{background:#fff;color:#000}
+  .btn.ghost{background:none;color:#fff;border:1px solid #fff;height:44px;border-radius:22px;font-size:13px;font-weight:500}
+  .btn.small{height:44px;border-radius:22px;font-size:13.5px}
+  .btn:disabled{opacity:.4;cursor:default}
+  .outline{border:1px solid var(--line);border-radius:14px}
+
+  /* hero */
+  .frame{position:relative;width:100%;aspect-ratio:1/1;border-radius:18px;background:var(--panel);overflow:hidden;
+    display:flex;align-items:center;justify-content:center}
+  .frame video,.frame img{width:100%;height:100%;object-fit:cover;display:block}
+  .guideoval{position:absolute;inset:0;pointer-events:none}
+  .framehint{position:absolute;left:8px;right:8px;bottom:10px;text-align:center;font-size:12px;color:#dfe8f0;text-shadow:0 1px 3px #000}
+
+  /* reading */
+  .head-zh{font-family:var(--serif);font-size:27px;font-weight:500;letter-spacing:.02em;line-height:1.25}
+  .head-en{font-size:13px;color:var(--mut);margin-top:8px;line-height:1.5}
+  .pcard{background:var(--card);border-radius:15px;padding:14px 15px}
+  .pcard .ptop{display:flex;align-items:baseline;gap:9px}
+  .pcard .pzh{font-family:var(--serif);font-weight:500}
+  .pcard .pen{font-size:11.5px;color:var(--mut)}
+  .pcard .pw{margin-left:auto;font-size:11px;color:var(--dim);letter-spacing:.03em}
+  .chips{display:flex;gap:6px;margin-top:11px;flex-wrap:wrap;align-items:center}
+  .chip{font-family:var(--serif);font-size:12px;border:1px solid var(--line);border-radius:6px;padding:3px 8px;color:#fff}
+  .track3{height:3px;border-radius:2px;background:#2A2A2C;margin-top:12px;overflow:hidden}
+  .track3 i{display:block;height:100%;background:#fff}
+  .why{margin-top:9px;font-size:11.5px;color:var(--dim);line-height:1.5}
+  .why b{color:var(--mut);font-weight:500}
+  .narr{font-size:12px;color:var(--mut);line-height:1.55;margin:12px 2px 0}
+  .refined{font-size:11px;color:var(--teal);letter-spacing:.03em}
+
+  /* six signs */
+  .signs{background:var(--card);border-radius:16px;padding:6px 15px}
+  .srow{display:flex;align-items:center;gap:13px;padding:13px 2px;border-bottom:1px solid var(--hair)}
+  .srow:last-child{border-bottom:0}
+  .sglyph{font-family:var(--serif);font-size:20px;width:28px;flex:0 0 auto}
+  .smeta{flex:0 0 84px}
+  .smeta .en{font-size:10px;color:var(--dim);letter-spacing:.05em;text-transform:uppercase;display:block}
+  .smeta .val{font-family:var(--serif);font-size:13px;margin-top:2px;display:block}
+  .strack{flex:1;position:relative;height:16px;display:flex;align-items:center}
+  .rail{width:100%;height:4px;border-radius:2px;opacity:.85;
+    background:linear-gradient(90deg,var(--teal) 0%,var(--teal) 28%,var(--amber) 30%,var(--amber) 38%,var(--red) 41%,var(--red) 100%)}
+  .band{position:absolute;height:10px;border-radius:5px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2)}
+  .knob{position:absolute;width:11px;height:11px;border-radius:6px;background:#fff;box-shadow:0 0 0 2px #000}
+  .snum{width:26px;text-align:right;font-size:13px;font-weight:600;flex:0 0 auto}
+  .ends{display:flex;justify-content:space-between;padding:9px 4px 0;font-size:10px;color:var(--dim)}
+
+  .disc{margin-top:22px;padding:0 2px;font-size:10.5px;line-height:1.65;color:var(--dim)}
+  .topbar{display:flex;justify-content:space-between;align-items:center;padding:6px 2px 2px}
+  .tbtn{border:1px solid var(--line);border-radius:16px;padding:7px 14px;font-size:12.5px;color:var(--mut);cursor:pointer;background:none;font-family:inherit}
+  .tbtn.done{color:#fff}
+  .degbanner{margin-top:14px;padding:11px 14px;border:1px solid var(--line);border-radius:12px;display:flex;align-items:center;gap:10px;
+    font-size:12px;color:var(--mut);line-height:1.5}
+  .degdot{width:6px;height:6px;border-radius:3px;background:var(--amber);flex:0 0 auto}
+
+  /* analysing ticker */
+  .trow{display:flex;align-items:center;gap:13px;padding:10px 4px;border-bottom:1px solid var(--hair)}
+  .tmark{width:16px;font-size:12px;text-align:center;flex:0 0 auto}
+  .tzh{font-family:var(--serif);font-size:15px;width:38px}
+  .ten{font-size:12.5px}
+
+  /* refine */
+  .qopt{height:52px;border-radius:13px;border:1px solid var(--line);background:none;color:#fff;font-size:15px;cursor:pointer;
+    font-family:var(--serif);text-align:left;padding:0 16px;display:flex;align-items:center;width:100%}
+  .qopt.sel{border-color:#fff;background:var(--card)}
+  .qopt .en{font-family:var(--sans);font-size:11.5px;color:var(--mut);margin-left:auto}
+
+  /* sources sheet */
+  .sheet{position:absolute;inset:0;z-index:20;display:none}
+  .sheet.on{display:block}
+  .sheet .scrim{position:absolute;inset:0;background:rgba(0,0,0,.55)}
+  .sheet .panel{position:absolute;left:0;right:0;bottom:0;background:#141416;border-radius:26px 26px 52px 52px;
+    padding:10px 22px 34px;max-height:82%;overflow-y:auto;scrollbar-width:none}
+  .grab{width:38px;height:4px;border-radius:2px;background:var(--line);margin:6px auto 18px}
+  .srcref{border:1px solid #2A2A2C;border-radius:11px;padding:12px 13px}
+  .srcref .bk{font-size:13px;font-weight:600}
+  .srcref .loc{font-size:11.5px;color:var(--mut);margin-top:3px;line-height:1.45}
+  .srcref .snip{margin-top:10px;padding:10px 12px;border-left:2px solid var(--line);background:var(--panel);
+    border-radius:0 8px 8px 0;font-size:12px;color:#C7C7CC;line-height:1.5;font-style:italic}
+  .mt24{margin-top:24px} .mt22{margin-top:22px} .mt20{margin-top:20px} .mt14{margin-top:14px} .mt12{margin-top:12px}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <h1>TongueInsight <span style="color:var(--acc)">Reading</span></h1>
-  <div class="sub">Align your tongue in the oval and capture. An <b>educational</b> look at what the traditional Chinese-medicine tongue-reading framework associates with your tongue — not a diagnosis.</div>
+<div class="phone">
+  <div class="statusbar"><span>9:41</span><span class="sig">◐ · LTE ▮</span></div>
 
-  <div class="card">
-    <div class="frame">
-      <video id="cam" autoplay playsinline muted></video><img id="shot"/>
-      <svg class="guide" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <ellipse cx="50" cy="50" rx="30" ry="38" fill="none" stroke="#ffd24a" stroke-width="0.7" stroke-dasharray="3 2"/>
-        <line x1="50" y1="8" x2="50" y2="16" stroke="#ffd24a" stroke-width="0.5"/><line x1="50" y1="84" x2="50" y2="92" stroke="#ffd24a" stroke-width="0.5"/>
-        <g stroke="#ffffffaa" stroke-width="0.7" fill="none"><path d="M6 16 V6 H16"/><path d="M84 6 H94 V16"/><path d="M94 84 V94 H84"/><path d="M16 94 H6 V84"/></g>
-      </svg>
-      <div class="hint" id="hint">Position the tip of your tongue near the bottom of the oval</div>
+  <!-- ══ CAPTURE ══ -->
+  <div class="scroll screen on" id="s-capture">
+    <div class="pad">
+      <div style="text-align:center;padding:24px 0 6px">
+        <div style="font-family:var(--serif);font-size:52px;font-weight:400;letter-spacing:.1em;line-height:1">舌</div>
+        <div style="font-size:13px;color:var(--mut);margin-top:12px;letter-spacing:.03em">今日舌象 · Today's tongue</div>
+      </div>
+
+      <div class="frame" style="margin-top:22px">
+        <video id="cam" autoplay playsinline muted style="display:none"></video>
+        <img id="shot" style="display:none"/>
+        <svg class="guideoval" id="oval" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <ellipse cx="50" cy="50" rx="30" ry="38" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="0.5" stroke-dasharray="3 2"/>
+        </svg>
+        <div class="framehint" id="framehint" style="display:none">Position your tongue in the oval</div>
+        <div id="placeholder" style="font-family:var(--serif);font-size:15px;color:var(--dim);text-align:center;padding:20px">
+          自然光下，起床後<br><span style="font-family:var(--sans);font-size:12.5px">Point the camera at your tongue</span>
+        </div>
+      </div>
+
+      <div class="outline" style="background:var(--card);border:0;border-radius:18px;padding:20px 18px;margin-top:22px">
+        <div style="font-family:var(--serif);font-size:14px;color:var(--mut);display:flex;justify-content:space-between;margin-bottom:16px">
+          <span id="today"><b style="color:#fff;font-weight:500">舌診</b>　拍攝準備</span>
+          <span>清晨 · best window</span>
+        </div>
+        <div class="yiji" id="captureYiji"></div>
+      </div>
+
+      <button class="btn white" id="startBtn" style="margin-top:20px"><span class="zh">拍攝</span> · Take photo</button>
+      <div style="display:flex;gap:10px;margin-top:10px">
+        <button class="btn small" id="snapBtn" disabled style="background:var(--card);color:#fff;flex:1">Capture</button>
+        <button class="btn small" id="upBtn" style="background:none;color:#fff;border:1px solid var(--line);flex:1">Upload photo</button>
+        <input type="file" id="file" accept="image/*"/>
+      </div>
     </div>
-    <div class="row">
-      <button id="startBtn" class="primary">Start camera</button>
-      <button id="snapBtn" disabled>Capture</button>
-      <button id="upBtn">Upload photo</button><input type="file" id="file" accept="image/*"/>
-    </div>
-    <div class="row hidden" id="retryRow"><button id="retry">↺ Retake</button></div>
   </div>
 
-  <div class="card hidden" id="results">
-    <div id="framing" class="badge">…</div>
-    <img id="overlay" style="width:100%;border-radius:12px;margin:12px 0"/>
-    <div id="foundText" class="found"></div>
-    <div id="recCard"></div>
-    <div id="headline" class="headline"></div>
-    <h2>Your signs</h2><div id="signs"></div><div id="normalLine" class="normline"></div>
-    <h2>What they suggest together</h2><div id="combined" class="prose"></div><div id="patterns"></div>
-    <div id="symptoms"></div>
-    <div id="overview" class="prose" style="color:var(--mut);margin-top:10px;font-size:12px"></div>
-    <div id="followup"></div>
-    <div id="confNote" class="confnote"></div>
-    <div id="sources" class="src"></div><div class="disc" id="disc"></div>
+  <!-- ══ ANALYSING ══ -->
+  <div class="scroll screen" id="s-analyzing">
+    <div class="pad">
+      <div class="kick" style="margin:26px 4px 14px">Reading your tongue</div>
+      <div class="frame">
+        <img id="shot2" style="display:none"/>
+        <svg viewBox="0 0 200 200" style="width:72%;height:72%" aria-hidden="true">
+          <defs><linearGradient id="tgA" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5A3038"/><stop offset="55%" stop-color="#7E3E45"/><stop offset="100%" stop-color="#93494F"/></linearGradient></defs>
+          <path d="M100 18 C58 18 40 52 40 92 C40 140 66 184 100 184 C134 184 160 140 160 92 C160 52 142 18 100 18 Z" fill="url(#tgA)"/>
+          <path d="M100 18 C58 18 40 52 40 92 C40 140 66 184 100 184 C134 184 160 140 160 92 C160 52 142 18 100 18 Z" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1" stroke-dasharray="3 3"/>
+        </svg>
+        <div class="scan"></div>
+      </div>
+      <div id="ticker" style="margin-top:20px;display:flex;flex-direction:column"></div>
+      <div class="outline mt22" style="padding:15px 16px;font-size:12.5px;line-height:1.6;color:var(--mut)">
+        <b style="color:#fff;font-family:var(--serif);font-weight:500">舌象日日不同。</b> A tongue shifts with sleep, food, water and the weather. One reading is a snapshot, not a verdict.
+      </div>
+    </div>
   </div>
-  <div class="card hidden" id="loading">Analyzing…</div>
 
-  <h2>What different tongues mean</h2>
-  <div class="sub" style="margin-top:-4px">Real examples from the dataset, read by the model.</div>
-  <div id="examples"></div><div class="src" id="exAttr"></div>
+  <!-- ══ READING ══ -->
+  <div class="scroll screen" id="s-reading">
+    <div class="pad" style="padding-top:6px">
+      <div class="topbar">
+        <button class="tbtn" id="srcBtn">◪ Sources</button>
+        <button class="tbtn done" id="doneBtn">Done</button>
+      </div>
+      <div class="frame mt12" id="heroFrame"><img id="overlay" style="display:none"/></div>
+
+      <div id="degrade" class="degbanner" style="display:none">
+        <span class="degdot"></span><span>The plain-language summary is offline right now. Your findings and links are all here.</span>
+      </div>
+
+      <div style="margin-top:20px;padding:0 2px">
+        <div class="head-zh" id="headZh"></div>
+        <div class="head-en" id="headEn"></div>
+      </div>
+
+      <div class="kick mt24" style="margin-bottom:12px">傳統上多與… · Traditionally associated with</div>
+      <div id="linkage" style="display:flex;flex-direction:column;gap:11px"></div>
+      <div class="narr" id="narr"></div>
+
+      <div id="refineStrip" class="outline mt14" style="padding:15px;display:none">
+        <div style="font-size:13px;line-height:1.55;color:var(--mut)" id="refineWhy"></div>
+        <button class="btn white small" id="refineBtn" style="margin-top:13px">Answer <span id="refineN">2</span> questions →</button>
+      </div>
+
+      <div class="kick mt24" style="margin-bottom:12px">六項舌徵 · The signs</div>
+      <div class="signs" id="signs"></div>
+      <div class="ends"><span>輕 Mild</span><span>顯 Pronounced</span></div>
+      <div id="normalLine" style="font-size:12px;color:var(--dim);margin-top:10px;padding:0 2px"></div>
+
+      <div id="adviceBlock" style="display:none">
+        <div class="kick mt24" style="margin-bottom:12px">今日宜忌 · For today</div>
+        <div style="background:var(--card);border-radius:16px;padding:16px 15px">
+          <div class="yiji" id="adviceYiji"></div>
+        </div>
+      </div>
+
+      <div class="disc" id="disc"></div>
+    </div>
+  </div>
+
+  <!-- ══ REFINE ══ -->
+  <div class="scroll screen" id="s-refine">
+    <div class="pad">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 2px 2px">
+        <a href="#" id="refBack" style="color:var(--mut);font-size:13px">‹ Back</a>
+        <a href="#" id="refSkip" style="color:var(--mut);font-size:13px">Skip</a>
+      </div>
+      <div class="kick" id="refSep" style="margin:30px 2px 4px;color:var(--dim)"></div>
+      <div style="font-size:10px;color:var(--dim);letter-spacing:.1em;margin:20px 2px 0" id="refStep"></div>
+      <div style="font-family:var(--serif);font-size:22px;line-height:1.45;margin-top:10px" id="refQ"></div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:22px" id="refOpts"></div>
+      <div style="margin-top:20px;font-size:12px;color:var(--dim);line-height:1.65;border-top:1px solid #1A1A1C;padding-top:16px">
+        <b style="color:var(--mut);font-weight:500">Why this one?</b> <span id="refWhy"></span>
+      </div>
+      <div class="outline mt22" style="padding:14px 16px;font-size:12px;line-height:1.6;color:var(--mut)">
+        Your answers stay on your device and only adjust this reading. <b style="color:#fff;font-weight:500">They don't change your Body type.</b>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SOURCES SHEET ══ -->
+  <div class="sheet" id="sheet">
+    <div class="scrim" id="scrim"></div>
+    <div class="panel">
+      <div class="grab"></div>
+      <div style="display:flex;align-items:baseline;justify-content:space-between">
+        <span style="font-family:var(--serif);font-size:20px;font-weight:500">出處 · Sources</span>
+        <a href="#" id="srcDone" style="font-size:13px;color:var(--mut)">Done</a>
+      </div>
+      <div style="font-size:12px;color:var(--mut);margin-top:8px;line-height:1.55">Where each link comes from. Reference only.</div>
+      <div id="srcRows" style="display:flex;flex-direction:column;gap:16px;margin-top:20px"></div>
+      <div style="margin-top:20px;font-size:10.5px;color:var(--dim);line-height:1.6;border-top:1px solid #222;padding-top:14px">
+        Normalised against the WHO International Standard Terminologies (2022). Citations only — quoted text shown only where the licence allows.
+      </div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <div><span class="ic">⌂</span>Home</div>
+    <div><span class="ic">↗</span>Move</div>
+    <div class="on"><span class="ic">舌</span>Tongue</div>
+    <div><span class="ic">◐</span>Body</div>
+    <div><span class="ic">⚙</span>Me</div>
+  </div>
 </div>
 
 <script>
-const $=id=>document.getElementById(id), md=s=>(s||'').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
-const GRADED=['coating','coat_thickness','coat_texture','fissure','tooth_mk','peeled_coating','red_tongue','purple_body','swollen','thin','red_dots','black_coating','slippery_coating'];
-let stream=null;
+const $=id=>document.getElementById(id);
+const md=s=>(s||'').replace(/\*\*(.+?)\*\*/g,'<b style="color:#fff">$1</b>').replace(/\[[^\]]*\]/g,'');
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+let stream=null, lastData=null, refineState=null;
 
-async function startCam(){try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:720},height:{ideal:720}}});
-  $('cam').srcObject=stream;$('cam').style.display='block';$('shot').style.display='none';$('snapBtn').disabled=false;$('startBtn').textContent='Camera on';}
-  catch(e){$('hint').textContent='Camera unavailable (needs https/localhost). Use “Upload photo”.';}}
+/* ---- static capture guidance (宜/忌) ---- */
+const CAPTURE_YIJI=[
+  {s:'宜',zh:'自然光下拍攝',en:'Daylight, near a window'},
+  {s:'宜',zh:'起床後、進食前',en:'After waking, before eating'},
+  {s:'忌',zh:'刷舌、咖啡、有色食物',en:'Brushing, coffee, food that stains'},
+  {s:'忌',zh:'用力伸舌超過十秒',en:'Holding it out hard, or over 10s'},
+];
+function yijiRow(r){
+  return `<div class="yrow"><span class="stamp ${r.s==='宜'?'yi':''}">${r.s}</span>
+    <span style="padding-top:2px"><span class="zh" style="font-size:14.5px">${r.zh}</span><span class="cap">${r.en}</span></span></div>`;
+}
+$('captureYiji').innerHTML=CAPTURE_YIJI.map(yijiRow).join('');
+
+/* ---- feature → short Chinese glyph (column marker) ---- */
+const GLYPH={coating:'苔',coat_thickness:'苔',coat_texture:'苔',tai:'苔色',zhi:'舌色',fissure:'裂',
+  tooth_mk:'齒',red_dots:'點',swollen:'胖',thin:'瘦',red_tongue:'紅',purple_body:'紫',
+  peeled_coating:'剝',black_coating:'苔色',slippery_coating:'苔',red_tip:'尖',moisture:'潤'};
+const GRADED=new Set(['coating','coat_thickness','coat_texture','fissure','tooth_mk','peeled_coating',
+  'red_tongue','purple_body','swollen','thin','red_dots','black_coating','slippery_coating','red_tip','moisture']);
+function weightWord(c){return c>=0.6?'strong':c>=0.35?'possible':'faint';}
+
+/* ---- bilingual maps: the KB emits English terms; the design is Chinese-first ---- */
+const ZH_PATTERN={yin_deficiency:'陰虛',yang_deficiency:'陽虛',qi_deficiency:'氣虛',blood_deficiency:'血虛',
+  phlegm_dampness:'痰濕',damp_heat:'濕熱',blood_stasis:'血瘀',qi_stagnation:'氣滯',liver_qi_stagnation:'肝鬱',
+  spleen_qi_deficiency:'脾虛',spleen_deficiency:'脾虛',heat:'熱盛',excess_heat:'實熱',cold:'寒',
+  damp:'濕困',balanced:'平和',lung_heat:'肺熱',heart_heat:'心火'};
+// feature (key + value) → short Chinese term for chips / sign values
+const ZH_VAL={
+  'zhi:pale':'舌淡','zhi:red':'舌紅','zhi:purple':'舌紫','zhi:dark':'舌暗','zhi:crimson':'絳',
+  'tai:white':'白苔','tai:yellow':'黃苔','tai:grey':'灰苔','tai:gray':'灰苔','tai:black':'黑苔',
+  'coat_thickness:thick':'厚苔','coat_thickness:thin':'薄苔',
+  'coat_texture:greasy':'膩苔','coating:greasy':'厚膩苔','coating:present':'有苔',
+  'fissure:present':'裂紋','tooth_mk:present':'齒痕','red_dots:present':'紅點',
+  'swollen:present':'胖大','thin:present':'瘦薄','peeled_coating:present':'剝苔',
+  'red_tongue:present':'舌紅','purple_body:present':'舌紫','red_tip:present':'尖紅',
+  'slippery_coating:present':'滑苔','black_coating:present':'黑苔',
+  'moisture:wet':'潤','moisture:dry':'燥苔'};
+const ZH_KEY={coating:'苔',coat_texture:'膩苔',coat_thickness:'苔',tai:'苔色',zhi:'舌色',fissure:'裂紋',
+  tooth_mk:'齒痕',red_dots:'紅點',swollen:'胖大',thin:'瘦薄',peeled_coating:'剝苔',red_tip:'尖紅',moisture:'潤燥'};
+function zhFeature(f){ return ZH_VAL[f.key+':'+f.value] || ZH_KEY[f.key] || f.tcm_term || f.value || ''; }
+function zhPattern(p){ return ZH_PATTERN[p.id] || p.tcm_name || p.id; }
+
+/* ---- screen switching ---- */
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');
+  const sc=$(id);if(sc)sc.scrollTop=0;}
+
+/* ---- camera / upload ---- */
+async function startCam(){
+  try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:720},height:{ideal:720}}});
+    $('cam').srcObject=stream;$('cam').style.display='block';$('placeholder').style.display='none';$('framehint').style.display='block';
+    $('snapBtn').disabled=false;}
+  catch(e){$('placeholder').innerHTML='Camera unavailable (needs https/localhost).<br>Use Upload photo.';}
+}
 function toURL(el,w,h){const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(el,0,0,w,h);return c.toDataURL('image/jpeg',0.92);}
-async function analyze(u){$('results').classList.add('hidden');$('loading').classList.remove('hidden');
-  try{const r=await fetch('/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:u})});render(await r.json());}catch(e){$('loading').textContent='Error: '+e;}}
 
-function signCard(f){
-  const graded=GRADED.includes(f.key);
-  if(graded&&!f.mentioned) return `<div class="healthy">✓ <b>${f.label}:</b> ${f.plain}</div>`;
-  const pct=Math.round((f.severity||0)*100);
-  const deg=f.band&&f.band!=='none'?`<span class="deg">${f.band}</span>`:'';
-  const score=graded?`<span class="score">${pct}<small>/100</small></span>`:'';
-  const bar=graded?`<div class="bar"><i style="width:${pct}%"></i></div>`:'';
-  const dist=f.pctl_phrase?`<span class="dist">${f.pctl_phrase}</span>`:'';
-  const tcm=f.tcm?`<div class="tcm"><b>TCM:</b> ${f.tcm}</div>`:'';
-  const conf=f.confidence?`<div class="conf-tag">${f.confidence}</div>`:'';
-  return `<div class="sign ${f.band==='faint'?'faint':''}"><div class="top"><span>${deg} ${f.tcm_term||f.value}${dist}</span>${score}</div>
-    ${bar}${tcm}<div class="plain">In plain terms: ${f.plain||''}</div>${conf}</div>`;
+/* ---- analysing ticker (honest: reflects the real 6 signs) ---- */
+const TICKER=[
+  {zh:'舌面',en:'Locating tongue…',done:'Tongue located'},
+  {zh:'苔',en:'Reading coating…',done:'Coating'},
+  {zh:'苔色',en:'Coating colour…',done:'Coating colour'},
+  {zh:'舌色',en:'Body colour…',done:'Body colour'},
+  {zh:'裂紋',en:'Cracks…',done:'Cracks'},
+  {zh:'齒痕',en:'Tooth marks…',done:'Tooth marks'},
+];
+function runTicker(){
+  let step=0;const el=$('ticker');
+  const draw=()=>{el.innerHTML=TICKER.map((t,i)=>{
+    const done=step>i, live=step===i;
+    const mk=done?'✓':(live?'◍':'·'), c=(done||live)?'#fff':'var(--faint)';
+    const en=done?t.done:(live?t.en:t.zh);
+    return `<div class="trow"><span class="tmark" style="color:${c}">${mk}</span>
+      <span class="tzh" style="color:${c}">${t.zh}</span>
+      <span class="ten" style="color:${done?'var(--mut)':(live?'#fff':'var(--faint)')}">${en}</span></div>`;}).join('');};
+  draw();
+  const iv=setInterval(()=>{step++;draw();if(step>TICKER.length)clearInterval(iv);},220);
 }
-function patCard(p){
-  const sym=(p.associated_symptoms||[]).map(s=>`<span class="chip">${s}</span>`).join('');
-  const recs=[...(p.recommendations?.diet||[]),...(p.recommendations?.lifestyle||[])].slice(0,4);
-  const rec=recs.length?`<div class="prec">🌿 ${recs.join(' · ')}</div>`:'';
-  const mod=p.modern_correlation?`<div style="font-size:12px;color:var(--blue);margin-top:5px">🔬 Modern view: ${p.modern_correlation}</div>`:'';
-  return `<div class="pat"><div class="nm">${p.tcm_name} · <span style="color:var(--mut);font-weight:600">${Math.round(p.confidence*100)}%</span></div>
-    <div class="pn">${p.plain_name}</div><div class="ex">${p.explanation||''}</div>${mod}${sym?`<div style="margin-top:6px">${sym}</div>`:''}${rec}</div>`;
+
+async function analyze(u){
+  show('s-analyzing');runTicker();
+  if(u){$('shot2').src=u;}
+  try{
+    const r=await fetch('/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:u})});
+    setTimeout(async()=>renderReading(await r.json()),1200);
+  }catch(e){alert('Error: '+e);show('s-capture');}
 }
-function renderRec(rec){
-  const el=$('recCard');
-  if(!rec||(!(rec.actions||[]).length && !(rec.conditions||[]).length)){el.innerHTML='';return;}
-  const cond=(rec.conditions||[]).map(c=>`<b>${c.name}</b>`).join(', ');
-  const maybe=cond?`<div class="maybe">What this may point to (exploratory, not a diagnosis): ${cond}.</div>`:'';
-  const acts=(rec.actions||[]).map(a=>`<li>${a}</li>`).join('');
-  el.innerHTML=`<div class="rec"><h3>🌿 What you might try</h3>${maybe}<ul>${acts}</ul></div>`;
+
+/* ---- evidence chips: features whose vote points at this pattern ---- */
+function chipsFor(pid,features){
+  return (features||[]).filter(f=>f.points_to&&f.points_to[pid]>0)
+    .sort((a,b)=>b.points_to[pid]-a.points_to[pid])
+    .map(zhFeature).filter(Boolean).slice(0,4);
 }
-function renderFollowup(fu){
-  const box=$('followup');box.innerHTML='';if(!fu||!fu.length)return;
-  const f=fu[0],answers={};
-  const head=document.createElement('div');
-  head.innerHTML=`<h2>Refine (optional)</h2><div class="sub" style="margin-top:-4px">In this tradition, <b>${f.plain_name}</b> often goes with the following — does any match you? Exploratory, not a diagnosis.</div>`;box.appendChild(head);
-  const conf=document.createElement('div');conf.className='conf';
-  const setConf=v=>conf.innerHTML=`Confidence in <b>${f.pattern}</b>: <b>${Math.round(v*100)}%</b>`;setConf(f.base_confidence);
-  f.questions.forEach((q,i)=>{const el=document.createElement('div');el.className='qa';
-    el.innerHTML=`<div class="q">${q.q}</div><div class="qbtns"><button data-a="1">Yes</button><button data-a="0">No</button></div>`;
-    el.querySelectorAll('button').forEach(b=>b.onclick=async()=>{el.querySelectorAll('button').forEach(z=>z.classList.remove('sel'));b.classList.add('sel');
-      answers[i]={weight:q.weight,answer:b.dataset.a==='1'};
-      const r=await fetch('/refine',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({base_confidence:f.base_confidence,answers:Object.values(answers)})});
-      setConf((await r.json()).confidence);});box.appendChild(el);});
-  box.appendChild(conf);
+
+function renderReading(d){
+  lastData=d;
+  const it=d.interpretation||{};
+  const feats=(it.features||[]);
+  const notable=feats.filter(f=>f.notable);
+  const pats=(it.patterns||[]).filter(p=>p.id!=='balanced');
+
+  // hero — the segmentation overlay is the hero; fall back to a quiet tongue glyph if none
+  const heroSvg=`<svg viewBox="0 0 200 200" style="width:74%;height:74%" aria-hidden="true">
+    <defs><linearGradient id="tgH" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6B3A40"/><stop offset="50%" stop-color="#8A464C"/><stop offset="100%" stop-color="#9C5157"/></linearGradient></defs>
+    <path d="M100 18 C58 18 40 52 40 92 C40 140 66 184 100 184 C134 184 160 140 160 92 C160 52 142 18 100 18 Z" fill="url(#tgH)"/>
+    <path d="M100 30 C68 30 52 58 52 94 C52 134 74 170 100 170 C126 170 148 134 148 94 C148 58 132 30 100 30 Z" fill="rgba(238,236,228,.32)"/></svg>`;
+  const ov=$('overlay'), hf=$('heroFrame');
+  hf.querySelectorAll('svg').forEach(s=>s.remove());
+  if(d.overlay_png){ov.src=d.overlay_png;ov.style.display='block';}
+  else{ov.style.display='none';hf.insertAdjacentHTML('beforeend',heroSvg);}
+  // headline: Chinese from notable signs, English subtitle from findings_text
+  const zhHead=notable.map(zhFeature).filter(Boolean).slice(0,3).join('　')||'舌象平和';
+  $('headZh').innerHTML=zhHead;
+  $('headEn').textContent=it.findings_text||'A calm, even tongue today — nothing standing out.';
+
+  // degraded (narrator offline → no report from LLM)
+  $('degrade').style.display=(it.report? 'none':'flex');
+
+  // linkage cards
+  const lk=$('linkage');
+  if(!pats.length){
+    lk.innerHTML=`<div class="pcard"><div style="font-size:14px;color:#fff;font-family:var(--serif)">無明顯偏頗</div>
+      <div style="font-size:12.5px;color:var(--mut);margin-top:7px;line-height:1.55">No pattern is standing out strongly enough to name today. A clean tongue is just a clean tongue.</div></div>`;
+    $('narr').textContent='';
+  }else{
+    lk.innerHTML=pats.slice(0,3).map((p,i)=>{
+      const chips=chipsFor(p.id,feats);
+      const op=i===0?1:(i===1?0.6:0.45);
+      const bar=Math.round((p.confidence||0)*100);
+      const zhSize=i===0?'17px':'15px';
+      const chipHtml=chips.length?`<div class="chips"><span style="color:var(--dim);font-size:11px">←</span>${chips.map(c=>`<span class="chip">${c}</span>`).join('')}</div>`:'';
+      const why=(p.reasoning&&p.reasoning.length)
+        ? `<div class="why"><b>為何 · Why</b> ${p.reasoning.map(r=>r.note).join(' · ')}</div>`:'';
+      return `<div class="pcard" style="opacity:${op}">
+        <div class="ptop"><span class="pzh" style="font-size:${zhSize}">${zhPattern(p)}</span>
+          <span class="pen">${p.plain_name||p.tcm_name||''}</span><span class="pw">${weightWord(p.confidence)}</span></div>
+        ${chipHtml}${why}
+        <div class="track3"><i style="width:${bar}%"></i></div></div>`;
+    }).join('');
+    $('narr').innerHTML=md(it.combined||'');
+  }
+
+  // refine strip — only when a top-2 is genuinely close and questions exist
+  const fu=(it.followup||[])[0];
+  const close=pats.length>=2 && (pats[1].confidence/(pats[0].confidence||1))>=0.55;
+  if(fu && fu.questions && fu.questions.length && close){
+    $('refineStrip').style.display='block';
+    $('refineN').textContent=Math.min(2,fu.questions.length);
+    $('refineWhy').innerHTML=`<span style="font-family:var(--serif);color:#fff">${notable[0]?zhFeature(notable[0]):'苔膩'}</span> supports both readings, and yours sits on the line. A couple of questions would settle it.`;
+    refineState={fu,i:0,answers:{},conf:fu.base_confidence,top:pats[0],second:pats[1]};
+  }else{
+    $('refineStrip').style.display='none';refineState=fu?{fu,i:0,answers:{},conf:fu.base_confidence,top:pats[0]}:null;
+  }
+
+  // six signs
+  const sg=$('signs');
+  if(!notable.length){
+    sg.innerHTML=`<div style="padding:15px 2px;font-size:12.5px;color:var(--dim)">
+      <span class="zh">苔色 · 舌色 · 齒痕 · 裂紋 · 紅點</span> — nothing notable</div>`;
+  }else{
+    sg.innerHTML=notable.slice(0,6).map(f=>{
+      const pct=Math.round((f.severity||0)*100);
+      const bandW=18, bandL=clamp(pct-9,2,100-bandW);
+      const strong=f.band&&f.band!=='faint';
+      const col=strong?'#fff':'var(--mut)';
+      return `<div class="srow">
+        <span class="sglyph" style="color:${col}">${GLYPH[f.key]||'舌'}</span>
+        <span class="smeta"><span class="en">${f.label||f.key}</span><span class="val" style="color:${col}">${zhFeature(f)}</span></span>
+        <span class="strack"><span class="rail"></span>
+          <span class="band" style="left:${bandL}%;width:${bandW}%"></span>
+          <span class="knob" style="left:${clamp(pct,0,97)}%"></span></span>
+        <span class="snum" style="color:${col}">${pct}</span></div>`;
+    }).join('');
+  }
+  const norm=feats.filter(f=>!f.notable&&f.label&&GRADED.has(f.key)).map(f=>f.label.toLowerCase());
+  $('normalLine').textContent=norm.length?('Within a typical range: '+[...new Set(norm)].join(', ')+'.'):'';
+
+  // advice 宜 (our recommendations are "try" items → 宜 stamps)
+  const rec=it.recommendation||{};
+  const acts=(rec.actions||[]).slice(0,4);
+  if(acts.length){
+    $('adviceBlock').style.display='block';
+    $('adviceYiji').innerHTML=acts.map(a=>`<div class="yrow"><span class="stamp yi">宜</span>
+      <span style="padding-top:2px"><span class="zh" style="font-size:14.5px">${a}</span></span></div>`).join('');
+  }else $('adviceBlock').style.display='none';
+
+  $('disc').textContent=it.disclaimer||'Traditional associations from the TCM literature, for learning — not a diagnosis.';
+
+  // sources sheet content
+  buildSources(it);
+  show('s-reading');
 }
-function render(d){
-  $('loading').classList.add('hidden');$('results').classList.remove('hidden');$('retryRow').classList.remove('hidden');
-  const f=d.framing||{},fb=$('framing');fb.textContent=f.message||'';fb.className='badge '+(f.status==='ok'?'ok':f.status==='error'?'err':'warn');
-  $('overlay').src=d.overlay_png||'';const it=d.interpretation||{};
-  $('foundText').textContent=it.findings_text||'';
-  renderRec(it.recommendation);
-  $('headline').innerHTML=md(it.headline||'');
-  $('overview').textContent=it.overview||'';
-  $('confNote').textContent=it.confidence_note||'';
-  // S4: show only the NOTABLE signs; summarise the rest in one line
-  const feats=it.features||[], notable=feats.filter(f=>f.notable);
-  $('signs').innerHTML=notable.map(signCard).join('');
-  const normal=feats.filter(f=>!f.notable&&f.label).map(f=>f.label.toLowerCase());
-  $('normalLine').textContent=normal.length?('Within a typical range: '+[...new Set(normal)].join(', ')+'.'):'';
-  $('combined').innerHTML=md(it.combined);
-  const sym=it.symptoms||{};
-  if(sym.by_sign&&sym.by_sign.length){
-    const rows=sym.by_sign.map(b=>`<div class="symrow"><span class="symsign">${b.sign}</span><span class="symarrow">→</span><span class="symlist">${b.symptoms.join(' · ')}</span></div>`).join('');
-    $('symptoms').innerHTML=`<h2>What these signs may go with</h2>${rows}<div class="symnote">A direct read of your signs → associated experiences. Exploratory, not a diagnosis, and not everyone will have them.</div>`;
-  } else $('symptoms').innerHTML='';
-  $('patterns').innerHTML=(it.patterns||[]).filter(p=>p.id!=='balanced').map(patCard).join('');
-  renderFollowup(it.followup);
-  $('sources').innerHTML=(it.sources&&it.sources.length)?'Grounding: '+it.sources.join(' · '):'';
-  $('disc').textContent=it.disclaimer||'';
-  window.scrollTo({top:$('results').offsetTop-10,behavior:'smooth'});
+
+/* ---- sources sheet ---- */
+function buildSources(it){
+  const rows=[];
+  (it.patterns||[]).filter(p=>p.id!=='balanced').slice(0,3).forEach(p=>{
+    const refs=(p.reasoning||[]).filter(r=>r.cite).map(r=>({book:r.cite,loc:r.note,snip:''}));
+    (it.sources||[]).slice(0,2).forEach(s=>refs.push({book:s,loc:'',snip:''}));
+    if(refs.length) rows.push({zh:zhPattern(p),en:p.tcm_name||p.plain_name||'',refs});
+  });
+  if(!rows.length && (it.sources||[]).length){
+    rows.push({zh:'出處',en:'Grounding',refs:(it.sources||[]).map(s=>({book:s,loc:'',snip:''}))});
+  }
+  $('srcRows').innerHTML=rows.map(r=>`
+    <div><div style="display:flex;align-items:baseline;gap:8px;margin-bottom:10px">
+      <span style="font-family:var(--serif);font-size:16px;font-weight:500">${r.zh}</span>
+      <span style="font-size:11.5px;color:var(--mut)">${r.en}</span></div>
+    <div style="display:flex;flex-direction:column;gap:9px">${r.refs.map(x=>`
+      <div class="srcref"><div class="bk">${x.book}</div>${x.loc?`<div class="loc">${x.loc}</div>`:''}
+      ${x.snip?`<div class="snip">${x.snip}</div>`:''}</div>`).join('')}</div></div>`).join('')
+    || '<div style="color:var(--mut);font-size:12.5px">Grounding citations appear here for each reading.</div>';
 }
-$('startBtn').onclick=startCam;
-$('snapBtn').onclick=()=>{const v=$('cam'),u=toURL(v,v.videoWidth||512,v.videoHeight||512);$('shot').src=u;$('shot').style.display='block';$('cam').style.display='none';analyze(u);};
+
+/* ---- refine flow ---- */
+function renderRefine(){
+  const st=refineState;if(!st){show('s-reading');return;}
+  const q=st.fu.questions[st.i];
+  const n=Math.min(2,st.fu.questions.length);
+  const sepZh=st.second?`分辨 ${zhPattern(st.top)} 與 ${zhPattern(st.second)} · Separating them`:`補問 ${zhPattern(st.top)} · Refining`;
+  $('refSep').textContent=sepZh;
+  $('refStep').textContent=`${st.i+1} / ${n}`;
+  $('refQ').innerHTML=`${q.q}`;
+  $('refWhy').textContent=q.why||'Of everything we could ask, this splits the two readings most sharply — we pick the question that tells us the most.';
+  $('refOpts').innerHTML=`
+    <button class="qopt" data-a="1">是 · Yes<span class="en">Often</span></button>
+    <button class="qopt" data-a="0">否 · No<span class="en">No</span></button>`;
+  $('refOpts').querySelectorAll('.qopt').forEach(b=>b.onclick=async()=>{
+    st.answers[st.i]={weight:q.weight,answer:b.dataset.a==='1'};
+    try{const r=await fetch('/refine',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({base_confidence:st.fu.base_confidence,answers:Object.values(st.answers)})});
+      st.conf=(await r.json()).confidence;}catch(e){}
+    if(st.i<n-1){st.i++;renderRefine();}else{applyRefine();}
+  });
+  show('s-refine');
+}
+function applyRefine(){
+  // reflect the refined confidence on the top linkage card + a "refined" marker
+  const it=(lastData||{}).interpretation||{};
+  const card=$('linkage').firstElementChild;
+  if(card){
+    const bar=card.querySelector('.track3 i');if(bar)bar.style.width=Math.round(refineState.conf*100)+'%';
+    if(!card.querySelector('.refined')){const t=card.querySelector('.ptop');
+      const m=document.createElement('span');m.className='refined';m.style.marginLeft='auto';m.textContent='已補問 · refined';
+      const pw=card.querySelector('.pw');if(pw)pw.replaceWith(m);}
+  }
+  $('refineStrip').style.display='none';
+  show('s-reading');
+}
+
+/* ---- wire up ---- */
+$('startBtn').onclick=()=>{ if(!stream){startCam();} else {
+  const v=$('cam');const u=toURL(v,v.videoWidth||512,v.videoHeight||512);$('shot').src=u;analyze(u);} };
+$('snapBtn').onclick=()=>{const v=$('cam');const u=toURL(v,v.videoWidth||512,v.videoHeight||512);$('shot').src=u;analyze(u);};
 $('upBtn').onclick=()=>$('file').click();
 $('file').onchange=e=>{const fl=e.target.files[0];if(!fl)return;const rd=new FileReader();
-  rd.onload=()=>{const im=new Image();im.onload=()=>{$('shot').src=im.src;$('shot').style.display='block';$('cam').style.display='none';analyze(toURL(im,im.naturalWidth,im.naturalHeight));};im.src=rd.result;};rd.readAsDataURL(fl);};
-$('retry').onclick=()=>{$('results').classList.add('hidden');$('retryRow').classList.add('hidden');$('shot').style.display='none';if(stream)$('cam').style.display='block';};
-fetch('/examples').then(r=>r.json()).then(d=>{$('exAttr').textContent=d.attribution||'';
-  $('examples').innerHTML=(d.examples||[]).map(e=>{const signs=Object.values(e.characteristics||{}).map(c=>`${(c.description||'').split(' ')[0]}: <b>${c.value}</b>`).join(' · ');
-    return `<div class="ex-item"><img src="/static/examples/${e.file}" alt="${e.title}"/><div class="exb"><div class="ext">${e.title}</div>
-      <div style="color:var(--mut);margin-bottom:4px">${signs}</div><div>${e.focus_meaning||''}</div>
-      ${e.patterns&&e.patterns[0]?`<div style="margin-top:4px;color:#bcd">→ <b>${e.patterns[0].tcm_name||e.patterns[0].name||''}</b></div>`:''}</div></div>`;}).join('');});
+  rd.onload=()=>{const im=new Image();im.onload=()=>analyze(toURL(im,im.naturalWidth,im.naturalHeight));im.src=rd.result;};rd.readAsDataURL(fl);};
+$('doneBtn').onclick=()=>show('s-capture');
+$('srcBtn').onclick=()=>$('sheet').classList.add('on');
+$('srcDone').onclick=e=>{e.preventDefault();$('sheet').classList.remove('on');};
+$('scrim').onclick=()=>$('sheet').classList.remove('on');
+$('refineBtn').onclick=()=>renderRefine();
+$('refBack').onclick=e=>{e.preventDefault();show('s-reading');};
+$('refSkip').onclick=e=>{e.preventDefault();show('s-reading');};
+
+/* ---- offline demo fixture (?demo=1): renders the flagship state with no model box ---- */
+if(new URLSearchParams(location.search).has('demo')){
+  const demo={overlay_png:'',interpretation:{
+    findings_text:'Thick, greasy white coating with clear tooth marks along both edges.',
+    disclaimer:'Traditional associations from the TCM literature, for learning — not a diagnosis. See a clinician if something worries you.',
+    combined:'Your findings vote most strongly for a **damp, phlegm-heavy** picture — the coating sits on the line between the two.',
+    report:'ok',
+    sources:['Gerlach, TCM Tongue Diagnosis Explained','WHO IST 2022'],
+    features:[
+      {key:'coat_texture',label:'Coating',tcm_term:'厚膩苔',value:'greasy',severity:0.69,band:'pronounced',notable:true,points_to:{phlegm_damp:0.9,damp_heat:0.6}},
+      {key:'tooth_mk',label:'Tooth marks',tcm_term:'齒痕',value:'present',severity:0.62,band:'clear',notable:true,points_to:{phlegm_damp:0.7,spleen_qi:0.8}},
+      {key:'tai',label:'Coat colour',tcm_term:'白',value:'white',severity:0.39,band:'clear',notable:true,points_to:{phlegm_damp:0.4}},
+      {key:'red_dots',label:'Red dots',tcm_term:'尖紅點',value:'present',severity:0.27,band:'faint',notable:true,points_to:{damp_heat:0.6}},
+    ],
+    patterns:[
+      {id:'phlegm_damp',tcm_name:'痰濕',plain_name:'Phlegm-Dampness',confidence:0.74,
+        reasoning:[{note:'greasy thick coating reads as damp-phlegm gathering',cite:'Gerlach p.61'}]},
+      {id:'damp_heat',tcm_name:'濕熱',plain_name:'Damp-Heat',confidence:0.41,
+        reasoning:[{note:'red points at the tip lean the damp toward heat',cite:'Gerlach p.72'}]},
+    ],
+    recommendation:{actions:['溫熱早餐 · a warm breakfast','飯後散步二十分 · a 20-min walk after eating','少冰飲生冷 · ease off iced & raw-cold food']},
+    followup:[{pattern_id:'phlegm_damp',tcm_name:'痰濕',plain_name:'Phlegm-Dampness',base_confidence:0.74,
+      questions:[{q:'口中黏膩時，會覺得苦嗎？ · When your mouth feels sticky, does it also taste bitter?',weight:0.4,
+        why:'A bitter taste splits these two most sharply — 濕熱 usually carries it, 痰濕 usually doesn’t.'},
+        {q:'小便偏黃嗎？ · Is your urine on the darker, yellow side lately?',weight:0.35,
+        why:'Yellow urine leans the picture toward heat.'}]}],
+  }};
+  renderReading(demo);
+}
 </script>
 </body>
 </html>

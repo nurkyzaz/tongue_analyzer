@@ -63,6 +63,15 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
 - ✅ Quality gate (mask-coverage reject) wired in
 - ✅ FastAPI service + web demo (`deployment/api`): live-camera **framing guide oval**, upload,
   **visible mask overlay**, framing feedback, characteristic bars, wellness report. Live on `:7860`.
+- ✅ **WS-F phone demo (2026-07-16):** `deployment/api/static/index.html` rebuilt to the
+  `TongueInsight.dc.html` design — 393-wide phone shell, Chinese-first (Noto Sans TC), pure-black ground.
+  Screens: **Capture** (宜/忌 guide) → **Analysing** (6-sign ticker) → **Reading** (annotated hero,
+  傳統上多與 linkage cards with **evidence chips derived from `feature.points_to`** + cited 為何·Why rows +
+  confidence bars, 六項舌徵 banded tracks, 今日宜忌 advice, degraded-narrator banner) → **Refine**
+  (info-gain questions, one per screen → re-render with 已補問·refined marker) → **Sources sheet**
+  (per-pattern citations, WHO-IST note). Wired to existing `/analyze` + `/refine`. Adds `?demo=1`
+  offline fixture (renders the flagship state with **no model box** — for local review + a community
+  fallback). Verified via DOM: all 4 screens + refine + sources flows.
 
 ## Phase 5–7 — Optimize / evaluate / deploy
 - ⬜ ONNX export + benchmarks · metrics · API hardening + disclaimers

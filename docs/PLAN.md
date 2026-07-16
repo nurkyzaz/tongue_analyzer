@@ -7,6 +7,13 @@ docs (to be archived — see §6). Deep history stays in `docs/PROGRESS.md` and 
 The project is an **educational, non-diagnostic** wellness feature (計五味 / Savor): tongue photo →
 detected features → a grounded TCM "constitution leaning," framed as *"traditionally associated with…"*.
 
+**Positioning (2026-07-16):** we are building this as a **free community tool** — anyone can use it to
+help make sense of their own tongue. We have (or are receiving) permission to ground it on internet
+resources; the running list of usable sources + licenses is in **[INTERNET_RESOURCES.md](INTERNET_RESOURCES.md)**.
+**Two goals in tension, both held:** (1) a genuinely-grounded, insightful reading; (2) **cheap mobile
+deployment** — the shipped setup must stay light (thin client + cheap CPU box). Every enhancement below
+is filtered through that second lens (§7).
+
 ### Progress since v2 (updated 2026-07-16)
 - **WS-G cleanup — done** (§6). **WS-A knowledge graph — in progress:** seed + macro layers built and
   parity-verified (`stage2_interpretation/kg/`, 359 nodes / 427 edges incl. the WS-B `evidence_for`
@@ -188,3 +195,72 @@ All moves were `git mv` (history preserved); nothing was destroyed.
 
 **Left in place (your call):** `design.zip` (15 KB, harmless — the unzipped `design/` is untracked too).
 **Still TODO:** `docs/ARCHITECTURE.md` needs a refresh (still describes the dropped SAM/MMIR-TCM plan).
+
+---
+
+## 7. Evaluated enhancement backlog (2026-07-16)
+
+The recommended A–E enhancement set, each scored through the **deployment-light lens** (goal 2: cheap
+mobile ship). **Verdict key:** ✅ accept (in scope) · ⏸ defer (value unclear / too heavy for cheap ship) ·
+🔬 accept-as-eval-gated (adopt only if it beats v5/rules on the honest metric). Most of the KB work is
+**offline/build-time** → it compiles into static data and adds **zero runtime weight**, so it's cheap to
+accept. Runtime additions (extra LLM calls, big models, re-rankers) are where we hold the line.
+
+### 🔴 A · Knowledge base & mapping — **highest leverage, all offline → ACCEPT**
+| Item | Verdict | Note |
+|---|---|---|
+| Finish Gerlach ch.5–6; parse Maciocia, Oriental Tongue Diagnosis | ✅ | offline; Maciocia adds alternative interpretations (pale→Blood-def) |
+| WHO IST 2022 as **ontology spine** (canonical bilingual node names) | ✅ | enables bilingual output + clean merging; the normalization backbone |
+| Chinese textbooks (朱文锋, 李灿东) | ✅ pending-rights | greasy-coat subtypes etc. — confirm usage rights first |
+| Recalibrate weights = empirical distinctiveness (∝ 1/corpus-freq) | ✅ | once the KG has hundreds of cited triplets; rare findings count more |
+| Expand combination rules (red_tip+white→Heart-Lung heat; purple+dry→Heat-stasis vs purple+moist→Cold-stasis) | ✅ | tiny static rules, high precision |
+| **Negation rules** (thick **but peeled** → Stomach-Yin damage, not Damp-heat) | ✅ | fixes real false-positives |
+| **Symptom→pattern edges** section (fatigue→Qi-def, thirst→Yin-def) | ✅ | **required for WS-B**; already partly seeded as `evidence_for` |
+
+### 🟠 B · Stage-1 feature extraction — **accept only the light/geometry parts**
+| Item | Verdict | Note |
+|---|---|---|
+| **Moisture** wet↔dry classifier | ✅ (geometry, no retrain) | extend `zoning.py` specular-gloss; unlocks wet→phlegm/yang-def, dry→yin-def/heat (3–4 ambiguous combos) |
+| **Location-aware cracks/dots** (route tip/centre/sides/root → organs) | ✅ (post-process) | crack_centre→spleen, crack_sides→liver, dots_tip→heart-heat = 4 new KB edges; cheap routing on existing detections |
+| Full Stage-1 **retrain** / drop SM-Tongue for a moisture head | ⏸ | Stage-1 is **frozen** (label ceiling; v5 beat v6/v7/v8). Adds weight+time for little honest gain. Revisit only with real phone data. |
+
+### 🟡 C · RAG & LLM pipeline — **graph-RAG + structured output in; extra calls & big models out**
+| Item | Verdict | Note |
+|---|---|---|
+| **Graph RAG** — retrieve 2-hop subgraph around detected feature nodes | ✅ | the whole reason we built the KG; gives the LLM relationships, not isolated facts. No runtime weight. |
+| **Structured output / JSON-mode** (cite-or-abstain schema via `response_format`) | ✅ | removes parse errors, zero cost — do with WS-C |
+| Cross-encoder re-ranker (ms-marco-MiniLM-L-6) | 🔬 | ~22M params, CPU-ok; adopt only if it lifts hit@1 measurably (WS-D). Borderline weight. |
+| HyDE (hypothetical-answer retrieval) | ⏸ | extra LLM call/request — conflicts with the one-call cheap-serve budget. Keep as optional edge-case path. |
+| Swap to qwen32b / deepseek-r1:14b for **serving** | ⏸ | too heavy for cheap deploy. Use big models **offline for extraction only**; serve small model / template. |
+| Self-consistency (3× sample + majority vote) | ⏸ | 3× cost. Note as opt-in for flagged high-ambiguity cases only. |
+| WS-B **information-gain question selection** | ✅ | already core plan; KG has the `evidence_for`/`probes` edges |
+
+### 🟢 D · Evaluation & safety — **the gate, all offline → ACCEPT**
+| Item | Verdict | Note |
+|---|---|---|
+| **RAGAS** (faithfulness, context precision/recall) as hallucination gate | ✅ | faithfulness < 0.85 → block LLM, fall back to template |
+| Expand `eval_mapping.py` 12 → 50+ combos (incl. Maciocia cases) | ✅ | cover new-KG edge cases |
+| Blind TCM-expert review (pre-commercial) | ✅ | template vs RAG-LLM vs ground truth; factual-error rate |
+
+### 🔵 E · Deployment & UX — **accept; SSE streaming optional**
+| Item | Verdict | Note |
+|---|---|---|
+| Surface **citations** (Sources sheet) — book + loc, zh chars + translation | ✅ | design already has the sheet (§5); wire `sources`/`reasoning` cites |
+| Licensing for snippets (citation-only vs citation+snippet states) | ✅ | architecture supports both; gate on the grant |
+| Containerize with CPU (bake checkpoints) | ✅ | per DEPLOYMENT.md |
+| `/v2/analyze` **SSE streaming** ("generating…") | ⏸ nice-to-have | non-blocking UX; not required for v1 |
+| **Feedback loop** — optional 👍/👎 + free-text ("was this helpful?") | ✅ | cheap; the **community signal** to recalibrate KB weights (A) over time |
+
+**Net effect on the shipped bundle:** all ✅ items are either offline (compile to static KG/JSON) or
+zero-added-weight runtime logic (graph lookups, JSON-mode, one lightweight classifier head in geometry).
+The deferred (⏸) items are exactly the ones that would inflate per-request cost or model size. So the
+backlog is fully compatible with goal 2 (cheap mobile ship).
+
+### Updated sequence
+```
+WS-A (KB: finish books + WHO spine + weights/negation/symptom edges)  ← accept-all, offline
+   └─► WS-C (graph-RAG + JSON-mode matcher, shadow)  ─► WS-D (RAGAS + 50-combo gate)  ─► WS-E (deploy)
+   └─► WS-B (symptom edges + info-gain questions)
+WS-F (phone demo/UX — the design bundle, in progress) runs in parallel.
+Stage-1 geometry adds (moisture, crack/dot location) slot into WS-A as new edges — light, no retrain.
+```

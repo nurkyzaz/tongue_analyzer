@@ -97,7 +97,17 @@ Prior rounds (pushed): coating split thickness×texture, red-tip/moisture, combi
 5. **WS-E deploy** — containerize FastAPI on a cheap CPU box (0.34s/img); narrator off-box; template is the
    always-on fallback. **Licensing before ship:** seg uses SM-Tongue (CC-BY-NC) → retrain without it or
    license; DINOv3 gated (DINOv2 fallback); surface book snippets to users only if the grant allows.
-6. **WS-F output design** — user-led; a design bundle already exists in `prompt-execution-request/`.
+6. **WS-F output design — phone demo BUILT (2026-07-16).** `deployment/api/static/index.html` now
+   recreates the `prompt-execution-request/project/TongueInsight.dc.html` design as a live phone UI
+   (Capture → Analysing → Reading → Refine → Sources), wired to `/analyze` + `/refine`, with a `?demo=1`
+   offline fixture. See PROGRESS.md Phase 4. Remaining design polish: 十日之間 trend (needs app-side
+   history storage — intentionally omitted rather than fabricated), citation+snippet licensing toggle.
+
+**Plan additions (2026-07-16):** community-tool framing + a usable-sources list in
+[`INTERNET_RESOURCES.md`](INTERNET_RESOURCES.md); an **evaluated enhancement backlog** (the A–E
+recommendations, each scored through a *cheap-mobile-deploy* lens) in [`PLAN.md`](PLAN.md) §7 — accept all
+offline KB work + graph-RAG + JSON-mode + feedback loop; defer per-request-heavy items (HyDE,
+32B serving model, self-consistency, full Stage-1 retrain).
 
 ## Map of the important files
 - **Plan (SoT):** `docs/PLAN.md`. Architecture: `docs/ARCHITECTURE.md`. Status board: `docs/PROGRESS.md`.

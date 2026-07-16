@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TongueInsight — 舌 tab mockup</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+
+  :root{
+    --bg:#000000;
+    --card:#1C1C1E;
+    --card2:#2C2C2E;
+    --hair:#38383A;
+    --fg:#FFFFFF;
+    --fg2:#8E8E93;
+    --fg3:#636366;
+    --seal:#C8342E;
+    --mild:#3ABF9E;
+    --mid:#E8B33A;
+    --strong:#E5484D;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:#0A0A0B;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Noto Sans TC",system-ui,sans-serif;
+    color:var(--fg);
+    padding:32px 24px 64px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .page-head{max-width:1400px;margin:0 auto 28px;}
+  .page-head h1{font-size:15px;font-weight:600;letter-spacing:.02em;}
+  .page-head p{font-size:13px;color:var(--fg2);margin-top:6px;max-width:70ch;line-height:1.5;}
+
+  .rail{
+    display:flex;gap:22px;overflow-x:auto;padding-bottom:20px;
+    max-width:1400px;margin:0 auto;
+    scrollbar-width:thin;
+  }
+  .col{flex:0 0 auto;}
+  .col > .cap{
+    font-size:11px;color:var(--fg3);letter-spacing:.08em;text-transform:uppercase;
+    margin-bottom:9px;font-weight:600;
+  }
+  .col > .cap b{color:var(--fg2);font-weight:600;}
+
+  .phone{
+    width:330px;height:700px;border-radius:38px;background:var(--bg);
+    border:1px solid #2A2A2C;overflow-y:auto;overflow-x:hidden;position:relative;
+    scrollbar-width:none;
+  }
+  .phone::-webkit-scrollbar{display:none;}
+
+  .status{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:14px 20px 4px;font-size:12px;font-weight:600;color:var(--fg);
+    position:sticky;top:0;background:var(--bg);z-index:5;
+  }
+  .status .r{color:var(--fg2);font-weight:500;letter-spacing:.04em;}
+
+  .body{padding:0 16px 90px;}
+
+  /* ── shared atoms ─────────────────────────── */
+  .eyebrow{
+    font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--fg3);font-weight:600;margin:22px 4px 10px;
+  }
+  .card{background:var(--card);border-radius:16px;padding:16px;}
+
+  .stamp{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:22px;height:22px;border-radius:5px;border:1.5px solid var(--fg);
+    font-family:"Noto Sans TC",serif;font-size:12px;font-weight:700;
+    flex:0 0 auto;line-height:1;
+  }
+  .stamp.no{border-color:var(--fg2);color:var(--fg2);}
+
+  .han{font-family:"Noto Sans TC",serif;}
+
+  /* ── capture ──────────────────────────────── */
+  .brandmark{text-align:center;padding:26px 0 4px;}
+  .brandmark .glyph{
+    font-family:"Noto Sans TC",serif;font-size:44px;font-weight:400;
+    letter-spacing:.08em;line-height:1;
+  }
+  .brandmark .sub{font-size:12px;color:var(--fg2);margin-top:9px;letter-spacing:.02em;}
+
+  .almanac{
+    background:var(--card);border-radius:16px;padding:18px 16px;margin-top:24px;
+  }
+  .almanac .date{
+    font-family:"Noto Sans TC",serif;font-size:13px;color:var(--fg2);
+    display:flex;justify-content:space-between;margin-bottom:14px;
+  }
+  .almanac .date b{color:var(--fg);font-weight:500;}
+  .yiji{display:flex;flex-direction:column;gap:11px;}
+  .yiji .row{display:flex;gap:11px;align-items:flex-start;}
+  .yiji .row .txt{font-size:13.5px;line-height:1.45;padding-top:2px;}
+  .yiji .row .txt .zh{font-family:"Noto Sans TC",serif;}
+  .yiji .row .txt .en{color:var(--fg2);font-size:12px;display:block;margin-top:1px;}
+
+  .shoot{
+    margin-top:20px;width:100%;height:52px;border-radius:26px;
+    background:var(--fg);color:#000;border:0;
+    font-size:15px;font-weight:600;letter-spacing:.01em;
+    display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;
+  }
+  .shoot .zh{font-family:"Noto Sans TC",serif;}
+
+  .lastread{
+    margin-top:16px;display:flex;align-items:center;gap:10px;
+    padding:12px 14px;border:1px solid var(--hair);border-radius:12px;
+  }
+  .lastread .dot{width:6px;height:6px;border-radius:3px;background:var(--fg3);}
+  .lastread .t{font-size:12px;color:var(--fg2);flex:1;}
+  .lastread .t b{color:var(--fg);font-weight:500;}
+  .lastread .chev{color:var(--fg3);font-size:14px;}
+
+  /* ── analyzing ────────────────────────────── */
+  .tongue-hero{
+    width:100%;border-radius:16px;background:#0E0E0F;
+    aspect-ratio:1/1;position:relative;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .tongue-hero svg{width:70%;height:70%;}
+  .scanline{
+    position:absolute;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);
+    animation:scan 1.4s ease-in-out infinite;
+  }
+  @keyframes scan{0%{top:12%}50%{top:88%}100%{top:12%}}
+  @media (prefers-reduced-motion:reduce){.scanline{animation:none;top:50%}}
+
+  .ticker{margin-top:18px;display:flex;flex-direction:column;gap:0;}
+  .ticker .tk{
+    display:flex;align-items:center;gap:12px;padding:9px 4px;
+    border-bottom:1px solid #1A1A1C;
+  }
+  .ticker .tk:last-child{border-bottom:0;}
+  .ticker .tk .mark{
+    width:15px;font-size:11px;color:var(--fg3);text-align:center;flex:0 0 auto;
+  }
+  .ticker .tk.done .mark{color:var(--fg);}
+  .ticker .tk .zh{font-family:"Noto Sans TC",serif;font-size:14px;width:34px;color:var(--fg3);}
+  .ticker .tk.done .zh{color:var(--fg);}
+  .ticker .tk .en{font-size:12px;color:var(--fg3);}
+  .ticker .tk.done .en{color:var(--fg2);}
+  .ticker .tk.live .zh,.ticker .tk.live .en{color:var(--fg);}
+  .ticker .tk.live .mark{color:var(--fg);}
+
+  .note{
+    margin-top:20px;padding:13px 14px;border:1px solid var(--hair);border-radius:12px;
+    font-size:12px;line-height:1.55;color:var(--fg2);
+  }
+  .note b{color:var(--fg);font-weight:500;}
+
+  /* ── result ───────────────────────────────── */
+  .topbar{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:6px 4px 2px;
+  }
+  .topbar .pill{
+    border:1px solid var(--hair);border-radius:16px;padding:6px 13px;
+    font-size:12px;color:var(--fg);display:flex;align-items:center;gap:6px;
+  }
+  .topbar .pill.ghost{color:var(--fg2);}
+
+  .hero-wrap{margin-top:12px;position:relative;}
+  .callout{position:absolute;pointer-events:none;}
+  .callout .lbl{
+    font-size:10px;background:rgba(0,0,0,.72);border:1px solid rgba(255,255,255,.28);
+    border-radius:5px;padding:2.5px 6px;white-space:nowrap;
+    font-family:"Noto Sans TC",serif;letter-spacing:.02em;
+  }
+  .callout .lead{position:absolute;background:rgba(255,255,255,.4);height:1px;}
+  .ring{
+    position:absolute;border:1px solid rgba(255,255,255,.55);border-radius:50%;
+  }
+
+  .headline{margin-top:20px;padding:0 4px;}
+  .headline .lede{
+    font-family:"Noto Sans TC",serif;font-size:26px;font-weight:500;
+    letter-spacing:.02em;line-height:1.25;
+  }
+  .headline .en{font-size:13px;color:var(--fg2);margin-top:7px;line-height:1.5;}
+
+  /* linkage chips */
+  .link{margin-top:14px;display:flex;flex-direction:column;gap:10px;}
+  .link .pat{
+    background:var(--card);border-radius:14px;padding:13px 14px;
+  }
+  .link .pat .top{display:flex;align-items:baseline;gap:9px;}
+  .link .pat .top .zh{font-family:"Noto Sans TC",serif;font-size:17px;font-weight:500;}
+  .link .pat .top .en{font-size:11.5px;color:var(--fg2);}
+  .link .pat .top .w{margin-left:auto;font-size:11px;color:var(--fg3);letter-spacing:.03em;}
+  .link .pat .because{
+    display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;align-items:center;
+  }
+  .link .pat .because .arrow{color:var(--fg3);font-size:11px;margin-right:1px;}
+  .link .pat .because .ev{
+    font-family:"Noto Sans TC",serif;font-size:11.5px;
+    border:1px solid var(--hair);border-radius:5px;padding:3px 7px;color:var(--fg);
+  }
+  .link .pat.second{opacity:.62;}
+  .link .pat.second .top .zh{font-size:15px;}
+
+  .bar{height:2px;border-radius:1px;background:#2A2A2C;margin-top:11px;overflow:hidden;}
+  .bar i{display:block;height:100%;background:var(--fg);}
+
+  /* signs */
+  .sign{
+    display:flex;align-items:center;gap:12px;padding:13px 4px;
+    border-bottom:1px solid #161618;
+  }
+  .sign:last-child{border-bottom:0;}
+  .sign .zh{font-family:"Noto Sans TC",serif;font-size:19px;width:26px;flex:0 0 auto;}
+  .sign .meta{flex:0 0 78px;}
+  .sign .meta .en{font-size:10px;color:var(--fg3);letter-spacing:.05em;text-transform:uppercase;}
+  .sign .meta .val{font-family:"Noto Sans TC",serif;font-size:13.5px;margin-top:2px;}
+  .sign .track{flex:1;position:relative;height:16px;display:flex;align-items:center;}
+  .sign .track .rail2{
+    width:100%;height:4px;border-radius:2px;
+    background:linear-gradient(90deg,var(--mild) 0%,var(--mild) 28%,var(--mid) 30%,var(--mid) 38%,var(--strong) 41%,var(--strong) 100%);
+    opacity:.85;
+  }
+  .sign .track .band{
+    position:absolute;height:10px;border-radius:5px;
+    background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);
+  }
+  .sign .track .knob{
+    position:absolute;width:11px;height:11px;border-radius:6px;background:#fff;
+    box-shadow:0 0 0 2px #000;
+  }
+  .sign .num{width:26px;text-align:right;font-size:13px;font-weight:600;flex:0 0 auto;}
+  .sign.quiet .zh,.sign.quiet .meta .val{color:var(--fg3);}
+  .sign.quiet .num{color:var(--fg3);font-weight:500;}
+
+  .scale-key{
+    display:flex;justify-content:space-between;padding:8px 4px 0;
+    font-size:10px;color:var(--fg3);
+  }
+
+  .more{
+    margin-top:12px;width:100%;padding:12px;border:1px solid var(--hair);
+    border-radius:12px;background:none;color:var(--fg2);font-size:12.5px;
+    cursor:pointer;font-family:inherit;
+  }
+
+  /* refine strip */
+  .refine{
+    margin-top:14px;border:1px solid var(--hair);border-radius:14px;padding:15px 14px;
+  }
+  .refine .q{font-size:13px;line-height:1.5;color:var(--fg2);}
+  .refine .q .zh{font-family:"Noto Sans TC",serif;color:var(--fg);}
+  .refine .go{
+    margin-top:12px;width:100%;height:42px;border-radius:21px;
+    background:var(--fg);color:#000;border:0;font-size:13.5px;font-weight:600;
+    cursor:pointer;font-family:inherit;
+  }
+
+  /* advice */
+  .advice .card{padding:15px 14px;}
+  .advice .yiji{gap:12px;}
+  .advice .addbtn{
+    margin-top:14px;width:100%;height:42px;border-radius:21px;
+    border:1px solid var(--fg);background:none;color:var(--fg);
+    font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;
+  }
+  .advice .addbtn .zh{font-family:"Noto Sans TC",serif;}
+
+  /* trend */
+  .trend .card{padding:16px 14px;}
+  .trend .lbl{font-size:12px;color:var(--fg2);line-height:1.5;}
+  .trend .lbl b{color:var(--fg);font-weight:500;}
+  .trend .spark{margin-top:14px;height:44px;width:100%;}
+
+  .disclaimer{
+    margin-top:22px;padding:0 4px;font-size:10.5px;line-height:1.6;color:var(--fg3);
+  }
+
+  /* refine sheet */
+  .sheet-q{margin-top:8px;}
+  .sheet-q .n{font-size:10px;color:var(--fg3);letter-spacing:.08em;}
+  .sheet-q .txt{
+    font-family:"Noto Sans TC",serif;font-size:19px;line-height:1.45;margin-top:8px;
+  }
+  .sheet-q .txt .en{
+    display:block;font-family:inherit;font-size:12px;color:var(--fg2);margin-top:6px;
+  }
+  .opts{display:flex;flex-direction:column;gap:9px;margin-top:18px;}
+  .opts button{
+    height:48px;border-radius:12px;border:1px solid var(--hair);background:none;
+    color:var(--fg);font-size:14px;cursor:pointer;font-family:"Noto Sans TC",serif;
+    text-align:left;padding:0 15px;display:flex;align-items:center;gap:10px;
+  }
+  .opts button .en{font-family:-apple-system,sans-serif;font-size:11px;color:var(--fg2);margin-left:auto;}
+  .opts button.sel{border-color:var(--fg);background:var(--card);}
+  .why{
+    margin-top:16px;font-size:11.5px;color:var(--fg3);line-height:1.6;
+    border-top:1px solid #1A1A1C;padding-top:14px;
+  }
+  .why b{color:var(--fg2);font-weight:500;}
+
+  /* nav */
+  .nav{
+    position:absolute;bottom:12px;left:14px;right:14px;height:56px;
+    border-radius:28px;border:1px solid #262628;background:rgba(20,20,22,.92);
+    backdrop-filter:blur(12px);
+    display:flex;align-items:center;justify-content:space-around;
+  }
+  .nav .it{
+    display:flex;flex-direction:column;align-items:center;gap:3px;
+    font-size:9.5px;color:var(--fg3);flex:1;
+  }
+  .nav .it .ic{font-size:15px;line-height:1;}
+  .nav .it.on{color:var(--fg);}
+  .nav .it.on .pillbg{
+    position:absolute;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <h1>TongueInsight — the 舌 tab, in Savor's existing language</h1>
+  <p>Pure black, hairline rules, Chinese-first with English underneath, 宜/忌 stamps, and the Mild→Pronounced track lifted verbatim from the Body type tab. No health score, no share-your-score, no paywall on the reading. Hero is the segmentation mask — the thing you built that nobody else has.</p>
+</div>
+
+<div class="rail">
+
+<!-- ══════════════ 1 · CAPTURE ══════════════ -->
+<div class="col">
+  <div class="cap"><b>1</b> · Capture — 宜/忌 instead of a tips list</div>
+  <div class="phone">
+    <div class="status"><span>12:26</span><span class="r">LTE ▮</span></div>
+    <div class="body">
+      <div class="brandmark">
+        <div class="glyph han">舌</div>
+        <div class="sub">今日舌象 · Today's tongue</div>
+      </div>
+
+      <div class="almanac">
+        <div class="date han">
+          <span><b>七月十六</b> 　週四</span>
+          <span>清晨 · best window</span>
+        </div>
+        <div class="yiji">
+          <div class="row">
+            <span class="stamp han">宜</span>
+            <span class="txt"><span class="zh">自然光下拍攝</span><span class="en">Daylight, near a window</span></span>
+          </div>
+          <div class="row">
+            <span class="stamp han">宜</span>
+            <span class="txt"><span class="zh">起床後、進食前</span><span class="en">After waking, before eating</span></span>
+          </div>
+          <div class="row">
+            <span class="stamp no han">忌</span>
+            <span class="txt"><span class="zh">刷舌、咖啡、有色食物</span><span class="en">Brushing, coffee, food that stains</span></span>
+          </div>
+          <div class="row">
+            <span class="stamp no han">忌</span>
+            <span class="txt"><span class="zh">用力伸舌超過十秒</span><span class="en">Holding it out hard, or over 10s</span></span>
+          </div>
+        </div>
+      </div>
+
+      <button class="shoot"><span class="zh">拍攝</span> · Take photo</button>
+
+      <div class="lastread">
+        <span class="dot"></span>
+        <span class="t">Last reading <b>3 days ago</b> · 苔白膩</span>
+        <span class="chev">›</span>
+      </div>
+    </div>
+    <div class="nav">
+      <div class="it"><span class="ic">⌂</span>Home</div>
+      <div class="it"><span class="ic">↗</span>Move</div>
+      <div class="it on"><span class="ic">👅</span>舌 Tongue</div>
+      <div class="it"><span class="ic">◍</span>Body type</div>
+      <div class="it"><span class="ic">⚙</span>Settings</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ 2 · ANALYZING ══════════════ -->
+<div class="col">
+  <div class="cap"><b>2</b> · Analyzing — 6 real signs, ~1.5s, no fake progress bar</div>
+  <div class="phone">
+    <div class="status"><span>12:27</span><span class="r">LTE ▮</span></div>
+    <div class="body">
+      <div class="eyebrow">Reading your tongue</div>
+      <div class="tongue-hero">
+        <svg viewBox="0 0 200 200" aria-hidden="true">
+          <defs>
+            <linearGradient id="tg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#5A3038"/>
+              <stop offset="55%" stop-color="#7E3E45"/>
+              <stop offset="100%" stop-color="#93494F"/>
+            </linearGradient>
+          </defs>
+          <path d="M100 18 C58 18 40 52 40 92 C40 140 66 184 100 184 C134 184 160 140 160 92 C160 52 142 18 100 18 Z" fill="url(#tg)"/>
+          <path d="M100 40 C82 40 70 62 70 92 C70 132 84 168 100 168" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="2"/>
+          <path d="M100 18 C58 18 40 52 40 92 C40 140 66 184 100 184 C134 184 160 140 160 92 C160 52 142 18 100 18 Z" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1" stroke-dasharray="3 3"/>
+        </svg>
+        <div class="scanline"></div>
+      </div>
+
+      <div class="ticker">
+        <div class="tk done"><span class="mark">✓</span><span class="zh">舌面</span><span class="en">Tongue located</span></div>
+        <div class="tk done"><span class="mark">✓</span><span class="zh">苔</span><span class="en">Coating — thick, greasy</span></div>
+        <div class="tk done"><span class="mark">✓</span><span class="zh">苔色</span><span class="en">Coating colour — white</span></div>
+        <div class="tk live"><span class="mark">◍</span><span class="zh">舌色</span><span class="en">Body colour…</span></div>
+        <div class="tk"><span class="mark">·</span><span class="zh">裂紋</span><span class="en">Cracks</span></div>
+        <div class="tk"><span class="mark">·</span><span class="zh">齒痕</span><span class="en">Tooth marks</span></div>
+        <div class="tk"><span class="mark">·</span><span class="zh">紅點</span><span class="en">Red dots</span></div>
+      </div>
+
+      <div class="note">
+        <b>舌象日日不同。</b> A tongue shifts with sleep, food, water and the weather. One reading is a snapshot, not a verdict — the pattern across readings is what's worth watching.
+      </div>
+    </div>
+    <div class="nav">
+      <div class="it"><span class="ic">⌂</span>Home</div>
+      <div class="it"><span class="ic">↗</span>Move</div>
+      <div class="it on"><span class="ic">👅</span>舌 Tongue</div>
+      <div class="it"><span class="ic">◍</span>Body type</div>
+      <div class="it"><span class="ic">⚙</span>Settings</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ 3 · READING ══════════════ -->
+<div class="col">
+  <div class="cap"><b>3</b> · The reading — mask hero, linkage, signs, 宜/忌, trend</div>
+  <div class="phone">
+    <div class="status"><span>12:28</span><span class="r">LTE ▮</span></div>
+    <div class="body">
+      <div class="topbar">
+        <span class="pill ghost">📖 Sources</span>
+        <span class="pill">Done</span>
+      </div>
+
+      <div class="hero-wrap">
+        <div class="tongue-hero">
+          <svg viewBox="0 0 200 200" aria-hidden="true">
+            <defs>
+              <linearGradient id="tg2" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#6B3A40"/>
+                <stop offset="50%" stop-color="#8A464C"/>
+                <stop offset="100%" stop-color="#9C5157"/>
+              </linearGradient>
+            </defs>
+            <path d="M100 18 C58 18 40 52 40 92 C40 140 66 184 100 184 C134 184 160 140 160 92 C160 52 142 18 100 18 Z" fill="url(#tg2)"/>
+            <!-- coating -->
+            <path d="M100 30 C68 30 52 58 52 94 C52 134 74 170 100 170 C126 170 148 134 148 94 C148 58 132 30 100 30 Z" fill="rgba(238,236,228,.32)"/>
+            <!-- tooth-mark scallops, left edge -->
+            <path d="M43 78 q9 8 0 16 q9 8 0 16 q9 8 0 16" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.4"/>
+            <path d="M157 78 q-9 8 0 16 q-9 8 0 16 q-9 8 0 16" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.4"/>
+            <!-- red dots at tip -->
+            <circle cx="92" cy="156" r="2.4" fill="#D4535B"/>
+            <circle cx="106" cy="162" r="2" fill="#D4535B"/>
+            <circle cx="99" cy="149" r="1.8" fill="#D4535B"/>
+          </svg>
+          <!-- callouts, only where zoning.py actually gives us a location -->
+          <div class="ring" style="left:62%;top:70%;width:44px;height:34px;"></div>
+          <div class="callout" style="left:76%;top:63%;"><span class="lbl">紅點</span></div>
+          <div class="ring" style="left:12%;top:38%;width:20px;height:52px;border-radius:10px;"></div>
+          <div class="callout" style="left:3%;top:26%;"><span class="lbl">齒痕</span></div>
+        </div>
+      </div>
+
+      <div class="headline">
+        <div class="lede">苔白厚膩<br>齒痕明顯</div>
+        <div class="en">Thick, greasy white coating with clear tooth marks along both edges.</div>
+      </div>
+
+      <div class="eyebrow">傳統上多與… · Traditionally associated with</div>
+      <div class="link">
+        <div class="pat">
+          <div class="top">
+            <span class="zh">痰濕</span>
+            <span class="en">Phlegm-Dampness</span>
+            <span class="w">strong</span>
+          </div>
+          <div class="because">
+            <span class="arrow">←</span>
+            <span class="ev">苔厚膩</span>
+            <span class="ev">齒痕</span>
+            <span class="ev">舌體胖</span>
+          </div>
+          <div class="bar"><i style="width:74%"></i></div>
+        </div>
+        <div class="pat second">
+          <div class="top">
+            <span class="zh">濕熱</span>
+            <span class="en">Damp-Heat</span>
+            <span class="w">possible</span>
+          </div>
+          <div class="because">
+            <span class="arrow">←</span>
+            <span class="ev">苔厚膩</span>
+            <span class="ev">尖紅點</span>
+          </div>
+          <div class="bar"><i style="width:41%"></i></div>
+        </div>
+      </div>
+
+      <div class="refine">
+        <div class="q">
+          <span class="zh">苔膩</span> supports both readings — the coating colour is what usually separates them, and yours sits on the line. Two questions would settle it.
+        </div>
+        <button class="go">Answer 2 questions →</button>
+      </div>
+
+      <div class="eyebrow">六項舌徵 · The six signs</div>
+      <div class="card" style="padding:6px 14px;">
+        <div class="sign">
+          <span class="zh">苔</span>
+          <span class="meta"><span class="en">Coating</span><span class="val">厚膩 Greasy</span></span>
+          <span class="track">
+            <span class="rail2"></span>
+            <span class="band" style="left:58%;width:22%"></span>
+            <span class="knob" style="left:66%"></span>
+          </span>
+          <span class="num">69</span>
+        </div>
+        <div class="sign">
+          <span class="zh">齒</span>
+          <span class="meta"><span class="en">Tooth marks</span><span class="val">明顯 Clear</span></span>
+          <span class="track">
+            <span class="rail2"></span>
+            <span class="band" style="left:52%;width:20%"></span>
+            <span class="knob" style="left:60%"></span>
+          </span>
+          <span class="num">62</span>
+        </div>
+        <div class="sign">
+          <span class="zh">苔色</span>
+          <span class="meta"><span class="en">Coat colour</span><span class="val">偏白 White-ish</span></span>
+          <span class="track">
+            <span class="rail2"></span>
+            <span class="band" style="left:26%;width:26%"></span>
+            <span class="knob" style="left:37%"></span>
+          </span>
+          <span class="num">39</span>
+        </div>
+        <div class="sign quiet">
+          <span class="zh">點</span>
+          <span class="meta"><span class="en">Red dots</span><span class="val">尖部少許 A few, tip</span></span>
+          <span class="track">
+            <span class="rail2"></span>
+            <span class="band" style="left:16%;width:18%"></span>
+            <span class="knob" style="left:24%"></span>
+          </span>
+          <span class="num">27</span>
+        </div>
+      </div>
+      <div class="scale-key"><span>輕 Mild</span><span>顯 Pronounced</span></div>
+
+      <button class="more">舌色 · 裂紋 — nothing notable　Show anyway ›</button>
+
+      <div class="eyebrow trend">十日之間 · Across your last 10</div>
+      <div class="trend">
+        <div class="card">
+          <div class="lbl"><b>苔膩 has been climbing for six days.</b> Single readings wobble; this run doesn't. Your Body type baseline is 氣虛質 — the tongue's been leaning 痰濕 on top of it.</div>
+          <svg class="spark" viewBox="0 0 260 44" preserveAspectRatio="none" aria-hidden="true">
+            <polyline points="4,32 32,30 60,27 88,29 116,24 144,20 172,17 200,15 228,12 256,10"
+              fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+            <polyline points="4,32 32,30 60,27 88,29 116,24 144,20 172,17 200,15 228,12 256,10"
+              fill="none" stroke="rgba(255,255,255,.12)" stroke-width="9" stroke-linecap="round"/>
+            <circle cx="256" cy="10" r="2.6" fill="#fff"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="eyebrow">今日宜忌 · For today</div>
+      <div class="advice">
+        <div class="card">
+          <div class="yiji">
+            <div class="row">
+              <span class="stamp han">宜</span>
+              <span class="txt"><span class="zh">溫熱早餐</span><span class="en">A warm breakfast — congee, soup</span></span>
+            </div>
+            <div class="row">
+              <span class="stamp han">宜</span>
+              <span class="txt"><span class="zh">飯後散步二十分</span><span class="en">20 min walk after eating</span></span>
+            </div>
+            <div class="row">
+              <span class="stamp no han">忌</span>
+              <span class="txt"><span class="zh">冰飲、生冷</span><span class="en">Iced drinks, raw and cold food</span></span>
+            </div>
+            <div class="row">
+              <span class="stamp no han">忌</span>
+              <span class="txt"><span class="zh">濃味重油</span><span class="en">Heavy, oily, strongly flavoured</span></span>
+            </div>
+          </div>
+          <button class="addbtn"><span class="zh">加入今日</span> · Add to today's routine</button>
+        </div>
+      </div>
+
+      <div class="disclaimer">
+        These are traditional associations from the TCM literature, offered for learning and daily habit — not a diagnosis, not medical advice. Tap Sources to see where each reading comes from. If something about your health worries you, see a clinician.
+      </div>
+    </div>
+    <div class="nav">
+      <div class="it"><span class="ic">⌂</span>Home</div>
+      <div class="it"><span class="ic">↗</span>Move</div>
+      <div class="it on"><span class="ic">👅</span>舌 Tongue</div>
+      <div class="it"><span class="ic">◍</span>Body type</div>
+      <div class="it"><span class="ic">⚙</span>Settings</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ 4 · REFINE ══════════════ -->
+<div class="col">
+  <div class="cap"><b>4</b> · Refine — after the reading, only when top-2 are close</div>
+  <div class="phone">
+    <div class="status"><span>12:29</span><span class="r">LTE ▮</span></div>
+    <div class="body">
+      <div class="topbar">
+        <span class="pill ghost">‹ Back</span>
+        <span class="pill ghost">Skip</span>
+      </div>
+
+      <div class="eyebrow" style="margin-top:26px;">Separating 痰濕 from 濕熱</div>
+
+      <div class="sheet-q">
+        <div class="n">1 / 2</div>
+        <div class="txt">口中黏膩時，會覺得苦嗎？
+          <span class="en">When your mouth feels sticky, does it also taste bitter?</span>
+        </div>
+        <div class="opts">
+          <button class="sel">會，常有苦味 <span class="en">Often</span></button>
+          <button>偶爾 <span class="en">Sometimes</span></button>
+          <button>不會，只是黏 <span class="en">No — just sticky</span></button>
+        </div>
+      </div>
+
+      <div class="why">
+        <b>Why this one?</b> Of everything we could ask, a bitter taste splits these two readings most sharply — 濕熱 usually carries it, 痰濕 usually doesn't. We pick the question that tells us the most, so there are only ever two.
+      </div>
+
+      <div class="note" style="margin-top:26px;">
+        Your answers stay on your device and only adjust this reading. <b>They don't change your Body type</b> — that comes from the quiz.
+      </div>
+    </div>
+    <div class="nav">
+      <div class="it"><span class="ic">⌂</span>Home</div>
+      <div class="it"><span class="ic">↗</span>Move</div>
+      <div class="it on"><span class="ic">👅</span>舌 Tongue</div>
+      <div class="it"><span class="ic">◍</span>Body type</div>
+      <div class="it"><span class="ic">⚙</span>Settings</div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
