@@ -1,0 +1,407 @@
+<style>
+  :root{
+    --paper:#F6F1E7; --raised:#FCF9F2; --ink:#26221D; --ink-soft:#7A7166;
+    --line:#E4DBCB; --seal:#C0453A;
+    --wood:#5E7F6E; --fire:#C0453A; --earth:#D6A24E; --metal:#B9B2A6; --water:#3C4A57;
+    --ok:#5E7F6E; --note:#C9932F; --attn:#C0453A;
+    --shadow:0 18px 40px -22px rgba(38,34,29,.45);
+    --serif:"Noto Serif TC","Songti TC","STSong",serif;
+    --sans:"PingFang HK","Noto Sans TC",system-ui,-apple-system,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{ --paper:#171410; --raised:#241f18; --ink:#EDE6D8; --ink-soft:#A79E8F;
+      --line:#38322A; --seal:#D96A57; --note:#E0B25A; --shadow:0 18px 44px -20px rgba(0,0,0,.7); }
+  }
+  :root[data-theme="dark"]{ --paper:#171410; --raised:#241f18; --ink:#EDE6D8; --ink-soft:#A79E8F;
+    --line:#38322A; --seal:#D96A57; --note:#E0B25A; --shadow:0 18px 44px -20px rgba(0,0,0,.7); }
+  :root[data-theme="light"]{ --paper:#F6F1E7; --raised:#FCF9F2; --ink:#26221D; --ink-soft:#7A7166;
+    --line:#E4DBCB; --seal:#C0453A; --note:#C9932F; --shadow:0 18px 40px -22px rgba(38,34,29,.45); }
+
+  *{box-sizing:border-box}
+  body{margin:0}
+  .wrap{
+    font-family:var(--sans); color:var(--ink);
+    background:
+      radial-gradient(120% 80% at 12% -10%, color-mix(in srgb,var(--seal) 6%,transparent), transparent 60%),
+      var(--paper);
+    padding:48px clamp(16px,5vw,64px) 72px; min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  .masthead{max-width:900px; margin:0 auto 40px}
+  .kicker{font-family:var(--serif); font-size:13px; letter-spacing:.42em; text-transform:uppercase;
+    color:var(--seal); margin:0 0 14px}
+  .masthead h1{font-family:var(--serif); font-weight:600; font-size:clamp(30px,5vw,46px);
+    line-height:1.15; margin:0 0 14px; text-wrap:balance}
+  .masthead h1 .flav{color:var(--seal)}
+  .lede{font-size:16px; line-height:1.65; color:var(--ink-soft); max-width:60ch; margin:0}
+  .lede b{color:var(--ink); font-weight:600}
+
+  .legend{display:flex; flex-wrap:wrap; gap:8px; margin:22px 0 0}
+  .fl{display:inline-flex; align-items:center; gap:7px; font-size:12.5px; color:var(--ink-soft);
+    background:var(--raised); border:1px solid var(--line); border-radius:999px; padding:5px 11px 5px 8px}
+  .fl i{width:11px; height:11px; border-radius:50%; display:inline-block}
+
+  .rail{display:flex; gap:30px; overflow-x:auto; padding:8px 4px 30px; max-width:1180px; margin:0 auto;
+    scroll-snap-type:x proximity}
+  .col{scroll-snap-align:start; flex:0 0 auto; width:300px}
+  .cap{font-size:13px; color:var(--ink-soft); margin:14px 4px 0; text-align:center; line-height:1.5}
+  .cap b{color:var(--ink); font-weight:600; display:block; font-family:var(--serif); font-size:14px}
+
+  /* phone */
+  .phone{width:300px; height:640px; background:var(--raised); border-radius:38px; border:1px solid var(--line);
+    box-shadow:var(--shadow); position:relative; overflow:hidden; display:flex; flex-direction:column}
+  .notch{position:absolute; top:0; left:50%; transform:translateX(-50%); width:120px; height:26px;
+    background:var(--ink); border-radius:0 0 16px 16px; z-index:9; opacity:.9}
+  .status{display:flex; justify-content:space-between; align-items:center; padding:11px 22px 5px;
+    font-size:12px; font-weight:600; letter-spacing:.02em; z-index:8; font-variant-numeric:tabular-nums}
+  .screen{flex:1; overflow:hidden; display:flex; flex-direction:column}
+  .pad{padding:6px 18px 18px; display:flex; flex-direction:column; gap:12px; overflow:hidden}
+
+  .app-head{display:flex; align-items:baseline; justify-content:space-between; margin-top:2px}
+  .app-head .d{font-family:var(--serif); font-size:22px; font-weight:600}
+  .app-head .sub{font-size:12px; color:var(--ink-soft)}
+
+  .chip-const{display:inline-flex; align-items:center; gap:8px; align-self:flex-start;
+    background:color-mix(in srgb,var(--earth) 16%,var(--raised)); border:1px solid color-mix(in srgb,var(--earth) 40%,var(--line));
+    color:var(--ink); border-radius:999px; padding:6px 12px; font-size:12.5px}
+  .chip-const i{width:8px;height:8px;border-radius:50%;background:var(--earth)}
+
+  .card{background:var(--paper); border:1px solid var(--line); border-radius:18px; padding:14px}
+  .habit{display:flex; align-items:center; gap:11px; font-size:13.5px}
+  .box{width:20px;height:20px;border-radius:7px;border:1.5px solid var(--line); flex:0 0 auto; display:grid; place-items:center}
+  .box.done{background:var(--wood); border-color:var(--wood); color:#fff}
+  .habit.done span{color:var(--ink-soft); text-decoration:line-through}
+  .habit .t{font-size:11px;color:var(--ink-soft); margin-left:auto}
+
+  /* tongue feature card (home) */
+  .tcard{position:relative; background:
+      radial-gradient(120% 120% at 85% -20%, color-mix(in srgb,var(--seal) 14%,transparent), transparent 55%),
+      var(--paper);
+    border:1px solid color-mix(in srgb,var(--seal) 26%,var(--line)); border-radius:20px; padding:16px; overflow:hidden}
+  .tcard .eyebrow{font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--seal); font-family:var(--serif)}
+  .tcard h3{font-family:var(--serif); font-weight:600; font-size:19px; margin:6px 0 3px}
+  .tcard p{margin:0; font-size:12.5px; color:var(--ink-soft); line-height:1.5}
+  .tcard .row{display:flex; align-items:center; justify-content:space-between; margin-top:14px}
+  .btn{background:var(--seal); color:#fff; border:none; border-radius:999px; padding:9px 20px;
+    font-size:13.5px; font-weight:600; font-family:var(--sans); display:inline-flex; gap:7px; align-items:center}
+  .last{font-size:11.5px; color:var(--ink-soft)}
+  .seal-mark{position:absolute; top:14px; right:14px; width:40px; height:40px; border-radius:10px;
+    border:1.5px solid var(--seal); color:var(--seal); display:grid; place-items:center; font-family:var(--serif);
+    font-size:19px; opacity:.9; transform:rotate(-4deg)}
+
+  /* capture screen */
+  .cam{flex:1; background:linear-gradient(180deg,#20242a,#171b20); position:relative; display:flex;
+    flex-direction:column; align-items:center; color:#f4efe6}
+  .cam .top{width:100%; text-align:center; padding:14px; font-size:13px; color:#e8e0d2}
+  .oval{position:absolute; top:50%; left:50%; transform:translate(-50%,-56%); width:150px; height:200px;
+    border:2px dashed rgba(244,239,230,.65); border-radius:50% 50% 48% 48%/60% 60% 40% 40%}
+  .tongue-mini{position:absolute; top:50%; left:50%; transform:translate(-50%,-54%); width:104px; height:150px;
+    background:radial-gradient(60% 55% at 50% 30%, #e79b93, #cf6f68 70%, #b8564f);
+    border-radius:50% 50% 48% 48%/58% 58% 42% 42%; box-shadow:inset 0 -14px 26px rgba(120,40,40,.4)}
+  .tongue-mini::after{content:""; position:absolute; inset:16px 22px 40px; border-radius:50%;
+    background:radial-gradient(closest-side, rgba(246,241,231,.72), rgba(246,241,231,.2) 70%, transparent);}
+  .fb{position:absolute; bottom:118px; left:50%; transform:translateX(-50%); background:color-mix(in srgb,var(--wood) 90%,#000);
+    color:#fff; font-size:12px; padding:6px 13px; border-radius:999px; display:flex; gap:6px; align-items:center; white-space:nowrap}
+  .guide-chip{position:absolute; bottom:158px; left:50%; transform:translateX(-50%); background:rgba(23,20,16,.72);
+    color:#f4efe6; font-size:12px; padding:6px 13px; border-radius:999px; border:1px solid rgba(244,239,230,.18)}
+  .cam .bottom{margin-top:auto; width:100%; display:flex; justify-content:center; padding:22px 0 26px}
+  .shutter{width:62px;height:62px;border-radius:50%;background:#f4efe6; border:4px solid rgba(244,239,230,.35)}
+
+  /* reading (loading) */
+  .loading{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:26px; text-align:center; padding:24px}
+  .wash{width:120px;height:120px;border-radius:50%;
+    background:radial-gradient(closest-side, color-mix(in srgb,var(--seal) 30%,var(--paper)), var(--paper));
+    border:1px solid var(--line); position:relative; animation:breathe 3.4s ease-in-out infinite}
+  .wash::after{content:"脷"; position:absolute; inset:0; display:grid; place-items:center; font-family:var(--serif);
+    font-size:40px; color:var(--seal)}
+  @keyframes breathe{0%,100%{transform:scale(.94); opacity:.75} 50%{transform:scale(1.04); opacity:1}}
+  @media (prefers-reduced-motion:reduce){ .wash{animation:none} }
+  .loading h3{font-family:var(--serif); font-weight:600; font-size:20px; margin:0}
+  .loading p{margin:0; font-size:13px; color:var(--ink-soft)}
+  .dots{display:flex; gap:6px}
+  .dots i{width:6px;height:6px;border-radius:50%;background:var(--seal); opacity:.4}
+
+  /* results */
+  .scroll{overflow-y:auto; overflow-x:hidden}
+  .result-head{display:flex; align-items:baseline; justify-content:space-between}
+  .result-head h2{font-family:var(--serif); font-weight:600; font-size:20px; margin:0}
+  .result-head .dt{font-size:11.5px; color:var(--ink-soft); font-variant-numeric:tabular-nums}
+  .tongue-stage{position:relative; height:150px; display:flex; justify-content:center; align-items:center}
+  .tongue-big{width:120px; height:150px; position:relative;
+    background:radial-gradient(58% 52% at 50% 32%, #e2938b, #cf6f68 68%, #b8564f);
+    border-radius:50% 50% 48% 48%/58% 58% 42% 42%; box-shadow:inset 0 -16px 30px rgba(120,40,40,.42)}
+  .coat{position:absolute; inset:15px 20px 42px; border-radius:50%;
+    background:radial-gradient(closest-side, rgba(238,231,214,.82), rgba(230,222,201,.5) 72%, transparent)}
+  .tip-red{position:absolute; left:50%; bottom:14px; transform:translateX(-50%); width:34px;height:24px; border-radius:50%;
+    background:radial-gradient(closest-side, rgba(190,70,60,.55), transparent 70%)}
+  .pin{position:absolute; display:flex; align-items:center; gap:5px; font-size:10.5px; white-space:nowrap}
+  .pin b{width:9px;height:9px;border-radius:50%; border:2px solid var(--raised); box-shadow:0 0 0 1px currentColor}
+  .pin span{background:var(--raised); border:1px solid var(--line); border-radius:6px; padding:1px 6px; color:var(--ink)}
+  .pin.p1{top:20px; left:8px; color:var(--earth)}
+  .pin.p2{top:64px; right:2px; color:var(--fire)}
+  .pin.p3{bottom:26px; left:6px; color:var(--water)}
+
+  .headline{background:color-mix(in srgb,var(--seal) 8%,var(--paper)); border:1px solid color-mix(in srgb,var(--seal) 20%,var(--line));
+    border-radius:16px; padding:13px 14px}
+  .headline .lead{font-family:var(--serif); font-size:16px; font-weight:600; line-height:1.45}
+  .headline .en{font-size:11.5px; color:var(--ink-soft); margin-top:3px}
+
+  .sect{font-family:var(--serif); font-size:12px; letter-spacing:.06em; color:var(--ink-soft); margin:2px 2px -2px}
+  .finding{display:flex; gap:11px; padding:11px 0; border-bottom:1px solid var(--line)}
+  .finding:last-child{border-bottom:none}
+  .fbar-wrap{flex:1; min-width:0}
+  .fname{font-size:13.5px; font-weight:600; display:flex; align-items:center; gap:7px}
+  .tag{font-size:10px; padding:1px 7px; border-radius:999px; color:#fff; font-weight:600; flex:0 0 auto}
+  .fen{font-size:11px; color:var(--ink-soft); margin:2px 0 7px; line-height:1.45}
+  .bar{height:6px; border-radius:999px; background:var(--line); overflow:hidden}
+  .bar i{display:block; height:100%; border-radius:999px}
+  .fscore{font-size:10.5px; color:var(--ink-soft); margin-top:4px; font-variant-numeric:tabular-nums}
+
+  .lean{display:flex; align-items:center; gap:10px; background:color-mix(in srgb,var(--earth) 14%,var(--paper));
+    border:1px solid color-mix(in srgb,var(--earth) 36%,var(--line)); border-radius:16px; padding:12px 14px}
+  .lean .big{font-family:var(--serif); font-size:22px; font-weight:600; color:var(--ink)}
+  .lean .txt{font-size:11.5px; color:var(--ink-soft); line-height:1.45}
+
+  .yiji{display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--line); border-radius:16px; overflow:hidden}
+  .yiji > div{padding:12px 13px}
+  .yiji .yi{background:color-mix(in srgb,var(--wood) 12%,var(--paper))}
+  .yiji .ji{background:color-mix(in srgb,var(--seal) 9%,var(--paper)); border-left:1px solid var(--line)}
+  .yh{font-family:var(--serif); font-size:20px; font-weight:600; display:flex; align-items:center; gap:6px; margin-bottom:8px}
+  .yh.g{color:var(--wood)} .yh.r{color:var(--seal)}
+  .yiji li{list-style:none; font-size:12px; line-height:1.7; color:var(--ink)}
+  .yiji ul{margin:0; padding:0}
+
+  .symp{display:flex; flex-wrap:wrap; gap:6px}
+  .symp span{font-size:11.5px; background:var(--paper); border:1px solid var(--line); border-radius:999px; padding:4px 10px; color:var(--ink-soft)}
+
+  .note{font-size:11px; color:var(--ink-soft); line-height:1.55; display:flex; gap:8px; padding:11px 12px;
+    background:var(--paper); border:1px dashed var(--line); border-radius:12px}
+  .note .i{color:var(--seal); flex:0 0 auto; font-family:var(--serif)}
+
+  .dist{font-size:11.5px; color:var(--ink-soft); text-align:center; font-style:italic}
+
+  /* history */
+  .h-item{display:flex; gap:12px; align-items:center; padding:11px 0; border-bottom:1px solid var(--line)}
+  .h-thumb{width:44px;height:54px;border-radius:10px; flex:0 0 auto;
+    background:radial-gradient(58% 52% at 50% 32%, #e2938b, #cf6f68 70%, #b8564f);
+    box-shadow:inset 0 -8px 14px rgba(120,40,40,.4)}
+  .h-item .m{flex:1}
+  .h-item .m b{font-size:13.5px; font-family:var(--serif)}
+  .h-item .m div{font-size:11px; color:var(--ink-soft); font-variant-numeric:tabular-nums}
+  .h-item .ln{font-size:11px; padding:3px 9px; border-radius:999px; color:#fff}
+  .spark{margin-top:6px}
+  .metric-lab{display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-soft); margin-bottom:6px}
+  .metric-lab b{color:var(--ink); font-family:var(--serif); font-size:13px}
+
+  .footer{max-width:900px; margin:34px auto 0; font-size:12.5px; color:var(--ink-soft); line-height:1.6;
+    border-top:1px solid var(--line); padding-top:18px}
+  .footer b{color:var(--ink)}
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <p class="kicker">計五味 · 新功能提案</p>
+    <h1>舌診 — 你把脷，就係<span class="flav">五味</span>嘅量度器</h1>
+    <p class="lede">影一張脷相，就多一個角度睇你嘅<b>體質</b>，同問卷一齊餵入同一個引擎。溫柔、零壓力、廣東話 — 每個讀數都係「傳統上多與…有關」，<b>education，唔係診斷</b>。以下係五個畫面嘅設計稿。</p>
+    <div class="legend">
+      <span class="fl"><i style="background:var(--wood)"></i>酸 · 木</span>
+      <span class="fl"><i style="background:var(--fire)"></i>苦 · 火</span>
+      <span class="fl"><i style="background:var(--earth)"></i>甘 · 土</span>
+      <span class="fl"><i style="background:var(--metal)"></i>辛 · 金</span>
+      <span class="fl"><i style="background:var(--water)"></i>鹹 · 水</span>
+      <span class="fl" style="border-style:dashed"><i style="background:var(--seal)"></i>朱砂印 · 主色</span>
+    </div>
+  </header>
+
+  <div class="rail">
+
+    <!-- 1 HOME -->
+    <div class="col">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status"><span>9:41</span><span>五味 ●●● ⌁</span></div>
+        <div class="screen"><div class="pad">
+          <div class="app-head"><div><div class="d">今日</div></div><div class="sub">7月15日 · 星期二</div></div>
+          <div class="chip-const"><i></i>你嘅體質 · 濕熱偏頗</div>
+          <div class="card" style="padding:8px 14px">
+            <div class="habit done"><span class="box done">✓</span><span>朝早一杯暖水</span><span class="t">早</span></div>
+            <div class="habit"><span class="box"></span><span>行多兩個站</span><span class="t">午</span></div>
+          </div>
+          <div class="tcard">
+            <div class="seal-mark">脷</div>
+            <div class="eyebrow">今日舌診</div>
+            <h3>睇下今日條脷</h3>
+            <p>30 秒，望一望你把脷想同你講咩。</p>
+            <div class="row">
+              <span class="last">上次 · 3 日前</span>
+              <button class="btn">開始 →</button>
+            </div>
+          </div>
+          <div class="card" style="display:flex;gap:10px;align-items:center;padding:11px 14px">
+            <span style="font-family:var(--serif);color:var(--seal);font-size:18px">宜</span>
+            <span style="font-size:12.5px;color:var(--ink-soft)">今日宜清淡 · 少凍飲</span>
+          </div>
+        </div></div>
+      </div>
+      <p class="cap"><b>1 · 今日 Home</b>舌診卡坐落每日習慣之中</p>
+    </div>
+
+    <!-- 2 CAPTURE -->
+    <div class="col">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status" style="color:#f4efe6;position:absolute;left:0;right:0"><span>9:41</span><span>五味 ●●● ⌁</span></div>
+        <div class="screen">
+          <div class="cam">
+            <div class="top" style="margin-top:24px">影脷相 · 對準框框</div>
+            <div class="oval"></div>
+            <div class="tongue-mini"></div>
+            <div class="guide-chip">自然光最好，唔使太用力</div>
+            <div class="fb">✓ 位置啱晒，可以影</div>
+            <div class="bottom"><div class="shutter"></div></div>
+          </div>
+        </div>
+      </div>
+      <p class="cap"><b>2 · 影脷相 Capture</b>橢圓導引 + 即時對位提示</p>
+    </div>
+
+    <!-- 3 READING -->
+    <div class="col">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status"><span>9:41</span><span>五味 ●●● ⌁</span></div>
+        <div class="screen">
+          <div class="loading">
+            <div class="wash"></div>
+            <div>
+              <h3>望聞問切…</h3>
+              <p>而家望緊你把脷</p>
+            </div>
+            <div class="dots"><i></i><i></i><i></i></div>
+          </div>
+        </div>
+      </div>
+      <p class="cap"><b>3 · 望緊 Reading it</b>~3 秒，水墨呼吸動畫，唔催逼</p>
+    </div>
+
+    <!-- 4 RESULT -->
+    <div class="col">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status"><span>9:41</span><span>五味 ●●● ⌁</span></div>
+        <div class="screen"><div class="pad scroll">
+          <div class="result-head"><h2>你的舌象</h2><span class="dt">7月15日</span></div>
+
+          <div class="tongue-stage">
+            <div class="tongue-big"><div class="coat"></div><div class="tip-red"></div></div>
+            <div class="pin p1"><b></b><span>苔厚膩</span></div>
+            <div class="pin p2"><b></b><span>脷邊紅</span></div>
+            <div class="pin p3"><b></b><span>脷尖偏紅</span></div>
+          </div>
+
+          <div class="headline">
+            <div class="lead">脷苔偏厚膩，脷質偏紅 — 整體傳統上多與「濕熱」有關。</div>
+            <div class="en">Thick greasy coating with a reddish body — leans damp-heat.</div>
+          </div>
+
+          <div class="sect">主要觀察 · FINDINGS</div>
+
+          <div class="finding">
+            <div class="fbar-wrap">
+              <div class="fname">脷苔偏厚膩 <span class="tag" style="background:var(--earth)">甘·土</span></div>
+              <div class="fen">Thick, greasy coating · 傳統上多與「濕」有關</div>
+              <div class="bar"><i style="width:72%;background:var(--earth)"></i></div>
+              <div class="fscore">明顯度 72 / 100 · 比約 68% 嘅人明顯</div>
+            </div>
+          </div>
+
+          <div class="finding">
+            <div class="fbar-wrap">
+              <div class="fname">脷質偏紅 <span class="tag" style="background:var(--fire)">苦·火</span></div>
+              <div class="fen">Reddish body colour · 傳統上多與「熱」有關</div>
+              <div class="bar"><i style="width:58%;background:var(--fire)"></i></div>
+              <div class="fscore">明顯度 58 / 100</div>
+            </div>
+          </div>
+
+          <div class="finding">
+            <div class="fbar-wrap">
+              <div class="fname">脷尖偏紅 <span class="tag" style="background:var(--fire)">苦·火</span></div>
+              <div class="fen">Redder tip · 傳統多與「心／上焦」有關 · <span style="color:var(--note)">較輕微，可再留意</span></div>
+              <div class="bar"><i style="width:34%;background:var(--fire)"></i></div>
+              <div class="fscore">明顯度 34 / 100</div>
+            </div>
+          </div>
+
+          <div class="sect">傾向 · LEANING</div>
+          <div class="lean">
+            <div class="big">濕熱</div>
+            <div class="txt">Damp-heat · 傳統上與呢個體質有關。同你嘅問卷結果一致 ✓</div>
+          </div>
+
+          <div class="sect">今日宜忌 · 起居</div>
+          <div class="yiji">
+            <div class="yi"><div class="yh g">宜</div><ul>
+              <li>清淡飲食</li><li>綠豆 · 冬瓜</li><li>早啲瞓</li></ul></div>
+            <div class="ji"><div class="yh r">忌</div><ul>
+              <li>煎炸熱氣</li><li>凍飲甜品</li><li>捱夜</li></ul></div>
+          </div>
+
+          <div class="sect">你可能亦會留意</div>
+          <div class="symp">
+            <span>口氣重</span><span>易攰</span><span>大便黐</span><span>皮膚出油</span><span>瞓極唔夠</span>
+          </div>
+
+          <p class="dist">呢張脷嘅苔，比約三分二人厚。</p>
+
+          <div class="note"><span class="i">按</span><span>脷象只係一刻嘅快照，會隨飲食、瞓眠而變。呢個係 education 用途，唔係醫學診斷 — 有唔舒服請睇註冊中醫。</span></div>
+        </div></div>
+      </div>
+      <p class="cap"><b>4 · 你的舌象 Reading</b>核心畫面 — 直接對應分析引擎輸出</p>
+    </div>
+
+    <!-- 5 HISTORY -->
+    <div class="col">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status"><span>9:41</span><span>五味 ●●● ⌁</span></div>
+        <div class="screen"><div class="pad scroll">
+          <div class="result-head"><h2>舌診紀錄</h2><span class="dt">近一個月</span></div>
+
+          <div class="card">
+            <div class="metric-lab"><span><b>脷苔厚度</b>趨勢</span><span>清淡咗 ↓</span></div>
+            <svg class="spark" viewBox="0 0 240 60" width="100%" height="52" aria-label="脷苔厚度趨勢">
+              <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="var(--earth)" stop-opacity=".28"/>
+                <stop offset="1" stop-color="var(--earth)" stop-opacity="0"/></linearGradient></defs>
+              <path d="M6,14 L58,10 L110,26 L162,30 L214,42 L234,44 L234,58 L6,58 Z" fill="url(#g)"/>
+              <path d="M6,14 L58,10 L110,26 L162,30 L214,42 L234,44" fill="none" stroke="var(--earth)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="234" cy="44" r="4" fill="var(--earth)" stroke="var(--raised)" stroke-width="2"/>
+            </svg>
+          </div>
+
+          <div class="sect">紀錄</div>
+          <div class="h-item"><div class="h-thumb"></div>
+            <div class="m"><b>今日 · 7月15日</b><div>脷苔偏厚膩 · 脷質偏紅</div></div>
+            <span class="ln" style="background:var(--earth)">濕熱</span></div>
+          <div class="h-item"><div class="h-thumb" style="filter:saturate(.85)"></div>
+            <div class="m"><b>7月12日</b><div>脷苔厚 · 脷邊紅</div></div>
+            <span class="ln" style="background:var(--earth)">濕熱</span></div>
+          <div class="h-item"><div class="h-thumb" style="filter:saturate(.7) brightness(1.05)"></div>
+            <div class="m"><b>7月8日</b><div>脷苔偏白 · 有齒印</div></div>
+            <span class="ln" style="background:var(--water)">氣虛</span></div>
+
+          <div class="note" style="margin-top:4px"><span class="i">按</span><span>影多幾次先睇到規律。冇壓力 — 唔記得影都冇問題。</span></div>
+        </div></div>
+      </div>
+      <p class="cap"><b>5 · 紀錄 History</b>習慣式趨勢，唔係醫療圖表</p>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <b>設計思路：</b>唔行通用「cream + serif + terracotta」養生模板，而係揸緊<b>通勝 / 五味</b>語言 —
+    脷係量度五味嘅器官，每個觀察標返佢對應嘅五行色，朱砂印節制咁用。配色同字體係<b>佔位值</b>，
+    請用 Canva 真值替換（見 <b>BRAND.md</b>）。淺／深色主題都做齊，數字用 tabular-nums。
+  </div>
+</div>

@@ -65,3 +65,6 @@ evaluation/gallery.html
 # human-label training artifacts (regenerate: build_human_manifest.py)
 data/processed/human_manifest.csv
 data/eval/human_masks/
+
+# Licensed TCM literature (copyrighted books + source papers) — process locally, never commit
+tongue_lit/
