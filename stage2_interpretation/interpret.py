@@ -551,9 +551,10 @@ def _markdown(readings, patterns, combined, sources, headline="", confidence_not
     return "\n".join(L)
 
 
-def fired_rule_notes(present, kb):
-    """The combination rules that fire for THIS tongue, as grounded context for the LLM — this is the
-    'why these signs together mean X' reasoning, already cited."""
+def fired_rules_structured(present, kb):
+    """The combination rules that FIRE for this tongue, with their note, citation and pattern boosts —
+    the 'why these signs together mean X' reasoning, already cited. Basis for both the LLM grounding
+    and the app's tap-to-see-why on each linkage card."""
     out = []
     for rule in kb.get("combination_rules", []):
         if not _cond_ok(rule.get("when", {}), present):
@@ -561,9 +562,21 @@ def fired_rule_notes(present, kb):
         anyc = rule.get("any")
         if anyc and not any(_cond_ok({k: v}, present) for k, v in anyc.items()):
             continue
-        if rule.get("note"):
-            out.append(rule["note"])
+        out.append({"id": rule.get("id"), "note": rule.get("note", ""),
+                    "cite": rule.get("cite", ""), "boost": rule.get("boost", {})})
     return out
+
+
+def fired_rule_notes(present, kb):
+    """Back-compat: just the note strings (used as LLM grounding)."""
+    return [r["note"] for r in fired_rules_structured(present, kb) if r["note"]]
+
+
+def reasoning_for_pattern(pid, fired):
+    """The cited combination-rule notes that positively SUPPORT this pattern — the 'why' the app shows
+    when a linkage card is tapped."""
+    return [{"note": r["note"], "cite": r["cite"]}
+            for r in fired if r["note"] and r["boost"].get(pid, 0) > 0]
 
 
 def _llm_narrative(readings, patterns, sources, llm, present=None, kb=None):
@@ -689,6 +702,9 @@ def interpret(stage1_output, metadata=None, llm: LLMClient = None):
     confidence_note = _confidence_note(disp)
     combined = _synthesis(disp, patterns)
     present = present_features(stage1_output)
+    fired = fired_rules_structured(present, kb)        # "show the reasoning": cited combination rules
+    for p in patterns:                                 # attach each card's own why (rules supporting it)
+        p["reasoning"] = reasoning_for_pattern(p["id"], fired)
     findings = build_findings(disp, present)          # sets r["notable"] on disp
     found_text = findings_text(findings)
     recommendation = build_recommendation(findings, patterns, kb)
@@ -705,6 +721,7 @@ def interpret(stage1_output, metadata=None, llm: LLMClient = None):
         "findings_text": found_text, "findings": findings, "recommendation": recommendation,
         "symptoms": symptoms,
         "features": disp, "patterns": patterns,
+        "reasoning": [{"note": r["note"], "cite": r["cite"]} for r in fired if r["note"]],
         "regions": kb.get("regions", {}),
         "combined": combined, "sources": sources, "report": report, "disclaimer": DISCLAIMER,
         # follow-up flow: questions for the top non-balanced pattern

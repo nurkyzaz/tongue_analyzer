@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#0A0A0B;color:#fff;font-family:-apple-system,'SF Pro Text','Noto Sans TC',system-ui,sans-serif;padding:40px 24px 80px}
+  .tc{font-family:'Noto Sans TC',serif}
+  .wrap{max-width:820px;margin:0 auto}
+  h1{font-family:'Noto Sans TC',serif;font-size:26px;font-weight:500;letter-spacing:.04em}
+  .sub{font-size:13.5px;color:#8E8E93;line-height:1.6;margin-top:10px;max-width:600px}
+  .lbl{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#636366;font-weight:700;margin:40px 0 18px}
+  .phone{width:393px;border-radius:40px;background:#000;border:8px solid #1a1a1c;box-shadow:0 30px 70px rgba(0,0,0,.6);overflow:hidden}
+  .screen{padding:22px 20px 30px}
+  .cap{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#636366;font-weight:600;margin:6px 2px 12px;font-family:'Noto Sans TC',serif}
+  .card{background:#1C1C1E;border-radius:15px;padding:14px 15px;margin-bottom:11px}
+  .prow{display:flex;align-items:baseline;gap:9px}
+  .pzh{font-family:'Noto Sans TC',serif;font-weight:500;font-size:17px}
+  .pen{font-size:11.5px;color:#8E8E93}
+  .pw{margin-left:auto;font-size:11px;color:#636366;letter-spacing:.03em}
+  .chips{display:flex;gap:6px;margin-top:11px;flex-wrap:wrap;align-items:center}
+  .arrow{color:#636366;font-size:11px}
+  .chip{font-family:'Noto Sans TC',serif;font-size:12px;border:1px solid #38383A;border-radius:6px;padding:3px 8px;color:#fff}
+  .bar{height:3px;border-radius:2px;background:#2A2A2C;margin-top:12px;overflow:hidden}
+  .bar i{display:block;height:100%;background:#fff}
+  /* the new atom: the reasoning disclosure */
+  .why{margin-top:12px;border-top:1px solid #2A2A2C;padding-top:11px}
+  .whytog{display:flex;align-items:center;gap:7px;font-size:12px;color:#8E8E93;cursor:pointer;user-select:none}
+  .whytog .tri{transition:transform .18s;color:#636366;font-size:10px}
+  details[open] .tri{transform:rotate(90deg)}
+  .whytog .tcx{font-family:'Noto Sans TC',serif;color:#fff}
+  details>summary{list-style:none}
+  details>summary::-webkit-details-marker{display:none}
+  .reason{display:flex;gap:9px;margin-top:11px;font-size:12.5px;line-height:1.5;color:#C7C7CC}
+  .reason .dot{color:#3ABF9E;flex:0 0 auto;margin-top:1px}
+  .reason .cite{color:#636366;font-size:10.5px;white-space:nowrap}
+  .note{font-size:12px;color:#8E8E93;line-height:1.55;margin:12px 2px 0}
+  .caption{font-size:12.5px;color:#8E8E93;line-height:1.6;margin-top:16px;max-width:360px}
+  .caption b{color:#fff;font-weight:500}
+  .kbd{background:#1C1C1E;border:1px solid #38383A;border-radius:5px;padding:1px 6px;font-size:11px;color:#fff}
+  .col{display:flex;gap:44px;flex-wrap:wrap;align-items:flex-start}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>計五味 · Savor — linkage card, with the reasoning</h1>
+  <p class="sub">A variant of the <b style="color:#fff">傳統上多與…</b> block from screen 3a. Each pattern
+  card gains a quiet <b style="color:#fff">為何 · Why</b> disclosure that reveals the <i>cited combination
+  rules</i> that produced the reading — the same <code>reasoning</code> the backend now emits per pattern
+  (<code>interpret.py</code>). Colour, tokens and type are unchanged from the deck. Everything here comes
+  from the rule engine; nothing is invented.</p>
+
+  <div class="lbl">Variant · reasoning revealed on the flagship (ambiguous top-2) reading</div>
+  <div class="col">
+    <div class="phone"><div class="screen">
+      <div class="cap">傳統上多與… · Traditionally associated with</div>
+
+      <!-- top pattern: expanded reasoning -->
+      <div class="card">
+        <div class="prow"><span class="pzh">痰濕</span><span class="pen">Phlegm-Dampness</span><span class="pw">strong</span></div>
+        <div class="chips"><span class="arrow">←</span><span class="chip">苔厚膩</span><span class="chip">齒痕</span><span class="chip">舌體胖</span></div>
+        <div class="bar"><i style="width:74%"></i></div>
+        <div class="why">
+          <details open>
+            <summary class="whytog"><span class="tri">▶</span><span>為何這樣讀？ · <span class="tcx">Why this reading</span></span></summary>
+            <div class="reason"><span class="dot">·</span><span>厚膩的舌苔，傳統上讀作濕與痰在體內停聚。<span style="color:#8E8E93"> A thick, greasy coating reads as damp and phlegm gathering.</span> <span class="cite">Maciocia</span></span></div>
+            <div class="reason"><span class="dot">·</span><span>苔色偏白而非黃，屬寒濕，不作濕熱。<span style="color:#8E8E93"> A white (not yellow) coating is cold-damp, not damp-heat.</span> <span class="cite">Sacred Lotus</span></span></div>
+            <div class="reason"><span class="dot">·</span><span>舌體胖加齒痕，指向脾運不足、水濕不化。<span style="color:#8E8E93"> A swollen body with tooth marks points to the spleen not moving fluids.</span> <span class="cite">Gerlach §2.3</span></span></div>
+          </details>
+        </div>
+      </div>
+
+      <!-- second pattern: collapsed -->
+      <div class="card" style="opacity:.62">
+        <div class="prow"><span class="pzh" style="font-size:15px">濕熱</span><span class="pen">Damp-Heat</span><span class="pw">possible</span></div>
+        <div class="chips"><span class="arrow">←</span><span class="chip">苔厚膩</span><span class="chip">尖紅點</span></div>
+        <div class="bar"><i style="width:41%"></i></div>
+        <div class="why">
+          <details>
+            <summary class="whytog"><span class="tri">▶</span><span>為何仍列出？ · <span class="tcx">Why it's still here</span></span></summary>
+            <div class="reason"><span class="dot">·</span><span>膩苔兩者共有；此讀僅差在是否有熱象。<span style="color:#8E8E93"> A greasy coating fits both — only the heat signs separate them.</span> <span class="cite">rule: greasy-coat-ambiguous</span></span></div>
+          </details>
+        </div>
+      </div>
+
+      <div class="note">Your findings vote most strongly for a damp, phlegm-heavy picture — the coating sits on the line between the two.</div>
+    </div></div>
+
+    <div class="caption">
+      <p><b>The interaction.</b> The card looks exactly like the deck by default. Tapping <span class="kbd">為何 · Why</span> expands the cited rules that fired for <i>this</i> tongue — no new screen, no jargon dump.</p>
+      <p style="margin-top:14px"><b>Why it's worth it.</b> Almost every tongue app shows only a label. Showing the <i>reasoning</i>, cited, is the trust move — and it costs us nothing: the rule engine already computes these notes (<code>reasoning_for_pattern</code>), each carrying a source.</p>
+      <p style="margin-top:14px"><b>Honesty holds.</b> Only rules that actually fired appear; a clear top-1 reading with no combination rules simply shows no <span class="kbd">Why</span> row. Never manufactured.</p>
+      <p style="margin-top:14px;color:#636366">Sample copy above is illustrative; live text is the KB's own cited rule notes + the Gerlach book edges just added to the knowledge graph.</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
