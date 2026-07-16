@@ -217,6 +217,17 @@ accept. Runtime additions (extra LLM calls, big models, re-rankers) are where we
 | **Negation rules** (thick **but peeled** → Stomach-Yin damage, not Damp-heat) | ✅ | fixes real false-positives |
 | **Symptom→pattern edges** section (fatigue→Qi-def, thirst→Yin-def) | ✅ | **required for WS-B**; already partly seeded as `evidence_for` |
 
+**Status of "Update `tcm_knowledge.json` itself" (2026-07-16) — NOT started at the file level.**
+The §7-A **weight recalibration is done but in the graph-RAG scoring layer** (`kg/retrieval.py`:
+sublinear corroboration + IDF distinctiveness) — deliberately *not* in `tcm_knowledge.json`, whose seed
+weights stay hand-tuned and parity-locked so the production rule engine is unchanged. The file-level
+edits are still **pending**: the current 10 combination rules do **not** yet include the new
+Heart-Lung-heat (`red_tip+white`), pale+thin→Blood-def override, or the purple **dry vs moist**
+heat-/cold-stasis split; there are **no negation rules** (thick-but-peeled → Stomach-Yin damage); and
+there is **no dedicated user-symptom→pattern section** (symptoms live per-pattern as
+`associated_symptoms`, which the KG already turns into `evidence_for` edges — the WS-B lever exists, but
+a first-class symptom section does not). These are the next WS-A file edits.
+
 ### 🟠 B · Stage-1 feature extraction — **accept only the light/geometry parts**
 | Item | Verdict | Note |
 |---|---|---|

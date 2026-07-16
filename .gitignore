@@ -76,3 +76,7 @@ stage2_interpretation/knowledge_base/kg_graph.json
 stage2_interpretation/kg/kg_triplets_review.html
 stage2_interpretation/knowledge_base/book_triplets.json
 stage2_interpretation/knowledge_base/book_triplets_qwen.json
+
+# reproducible eval outputs (numbers live in docs/PROGRESS.md)
+evaluation/shadow_matcher_results.json
+evaluation/faithfulness_results.json

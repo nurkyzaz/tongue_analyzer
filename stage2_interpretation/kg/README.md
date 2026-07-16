@@ -47,6 +47,12 @@ abstains. Falls back to the graph-RAG ranking when no LLM is configured (the deg
 **shadow mode** — `matcher.py --shadow` scores it against the rule engine's vote (top-1 agreement +
 Jaccard) so promotion is on the numbers, not decided in advance. The rule engine stays production.
 
+**Shadow run on real Stage-1 output** (`evaluation/eval_shadow_matcher.py`, human40, 40 imgs):
+hallucination-rate **0.0**, top-1 agreement **0.50** vs the rule engine, mean Jaccard 0.48, abstain 0.0
+— disagreements almost all within-family (phlegm ↔ spleen-qi ↔ yin ↔ damp-heat). Verdict: safe, but
+not a clear win → **ensemble** (matcher for cited evidence + a second-opinion prior), don't replace the
+rule ranker. Narrative faithfulness gate (`evaluation/eval_faithfulness.py`): **0.936 → PASS**.
+
 Micro edges are tagged `cond.layer="micro"`, carry a book citation + a `snippet` id, and COEXIST with
 the seed rule weights (rule engine keeps using seed edges; the WS-C matcher can prefer cited micro
 edges). 49 `candidate` triplets — real signs our detector can't observe (sublingual veins) or Gerlach

@@ -66,10 +66,19 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
   `llm_client.response_format`): consumes the graph-RAG cards, LLM (qwen2.5:14b, temp 0) picks patterns
   grounded ONLY in the retrieved facts, cite-or-abstain validated (drops anything outside the subgraph).
   Verified on casper: damp-heat 0.98 (tai=yellow+red_dots → *Maciocia*), phlegm-damp 0.71 (→ *Gerlach
-  §4.2.4*), 0 hallucinations. `matcher.py --shadow` scores it vs the rule engine (top-1 agree + Jaccard);
-  synthetic-case run = 2/5 top-1 (disagreements within-family). **Next:** shadow-run on the labeled
-  gallery's real Stage-1 outputs; then promote to ensemble on the numbers.
-- ⬜ WS-B refinement engine (symptom evidence + information-gain questions) · ⬜ WS-D RAGAS eval gate.
+  §4.2.4*), 0 hallucinations.
+- ✅ **WS-C shadow run on REAL Stage-1 output** (`evaluation/eval_shadow_matcher.py`, human40, 40 imgs):
+  **hallucination_rate 0.0** (cite-or-abstain held on every image), **top-1 agreement 0.50** vs the rule
+  engine, mean Jaccard 0.48, abstain 0.0. Disagreements are almost all **within-family** (phlegm ↔
+  spleen-qi ↔ yin ↔ damp-heat). **Verdict: safe but not clearly better than rules → ensemble (use the
+  matcher for cited evidence + a second-opinion prior), do NOT wholesale-replace the rule ranker.**
+- ✅ **WS-D RAGAS-style faithfulness gate** (`evaluation/eval_faithfulness.py`, 12 imgs): local
+  claim-grounding judge over the LLM narrative → **faithfulness 0.936 (73/78 claims)**, threshold 0.85 →
+  **GATE PASS** (LLM narrator may default ON). The 5 flagged claims are soft symptom/wellness
+  extrapolations, not false diagnoses. Env `TIH_FAITHFULNESS_MIN` sets the gate; `<0.85` ⇒ template only.
+- ⬜ **"Update tcm_knowledge.json itself"** (new combination rules / negation rules / symptom section) —
+  NOT started; see PLAN §7-A status note. · ⬜ WS-B refinement engine (symptom evidence + info-gain
+  questions; KG edges already exist). · ⬜ WS-C ensemble wiring (rule prior × matcher, per the shadow verdict).
 
 ## Phase 4 — Integration
 - ✅ `pipeline.py` orchestrator (image[+metadata] → quantitative JSON + report) — **end-to-end works**

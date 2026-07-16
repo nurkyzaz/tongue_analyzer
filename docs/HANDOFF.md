@@ -109,6 +109,20 @@ recommendations, each scored through a *cheap-mobile-deploy* lens) in [`PLAN.md`
 offline KB work + graph-RAG + JSON-mode + feedback loop; defer per-request-heavy items (HyDE,
 32B serving model, self-consistency, full Stage-1 retrain).
 
+**Stage-2 RAG progress (2026-07-16):**
+- WS-A: KG micro layer now covers Gerlach **ch.2–7** (120 cited edges / 120 snippets). §7-A weight
+  recalibration applied **in the graph-RAG layer** (`kg/retrieval.py`) — seed `tcm_knowledge.json`
+  weights untouched. **"Update `tcm_knowledge.json` itself" (new rules / negation / symptom section)
+  is NOT started** — see PLAN §7-A status note.
+- WS-C: **graph-RAG retrieval** (`kg/retrieval.py`, `graph.neighborhood`) + **grounded cite-or-abstain
+  matcher** (`kg/matcher.py`, JSON-mode). **Shadow run on real human40 (40 imgs):** hallucination-rate
+  **0.0**, top-1 agreement **0.50** vs rules, Jaccard 0.48, disagreements within-family. **Verdict:
+  ensemble (cited evidence + prior), don't replace the rule ranker.**
+- WS-D: **RAGAS-style faithfulness gate** (`evaluation/eval_faithfulness.py`) — local claim-grounding
+  judge over the LLM narrative. **faithfulness 0.936 (12 imgs) → GATE PASS** (`<0.85 ⇒ template only`,
+  env `TIH_FAITHFULNESS_MIN`).
+- Rule engine remains **production**; the matcher runs in shadow. Promote on the numbers.
+
 ## Map of the important files
 - **Plan (SoT):** `docs/PLAN.md`. Architecture: `docs/ARCHITECTURE.md`. Status board: `docs/PROGRESS.md`.
 - Knowledge graph (WS-A): `stage2_interpretation/kg/` (`graph.py`, `build_kg.py`, `parse_book.py`,
