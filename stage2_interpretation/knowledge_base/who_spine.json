@@ -1,0 +1,184 @@
+{
+ "_meta": {
+  "source": "WHO International Standard Terminologies on Traditional Chinese Medicine (2022), ISBN 9789240042322",
+  "license": "CC BY-NC-SA 3.0 IGO — terminology (code/term/中文/pinyin) is attributable; definitions omitted",
+  "built_from": "who_terms.py extraction of the WHO IST PDF; codes hand-verified",
+  "note": "Ontology spine: our node keys -> WHO canonical code + bilingual name. balanced & special_diathesis are CCMQ 体质 (constitution) terms, NOT in WHO IST, so they carry source=ccmq and no who_code."
+ },
+ "patterns": {
+  "spleen_qi_deficiency": {
+   "who_code": "1195",
+   "en": "Spleen qi deficiency pattern",
+   "zh": "脾气虚证",
+   "pinyin": "pí qì xū zhèng"
+  },
+  "phlegm_dampness": {
+   "who_code": "1066",
+   "en": "Damp phlegm pattern",
+   "zh": "湿痰证",
+   "pinyin": "shī tán zhèng"
+  },
+  "damp_heat": {
+   "who_code": "1040",
+   "en": "Damp-heat pattern",
+   "zh": "湿热证",
+   "pinyin": "shī rè zhèng"
+  },
+  "yin_deficiency": {
+   "who_code": "1096",
+   "en": "Yin deficiency pattern",
+   "zh": "阴虚证",
+   "pinyin": "yīn xū zhèng"
+  },
+  "yang_deficiency": {
+   "who_code": "1092",
+   "en": "Yang deficiency pattern",
+   "zh": "阳虚证",
+   "pinyin": "yáng xū zhèng"
+  },
+  "blood_deficiency": {
+   "who_code": "1112",
+   "en": "Blood deficiency pattern",
+   "zh": "血虚证",
+   "pinyin": "xuè xū zhèng"
+  },
+  "blood_stasis": {
+   "who_code": "1113",
+   "en": "Blood stasis pattern",
+   "zh": "血瘀证",
+   "pinyin": "xuè yū zhèng"
+  },
+  "qi_stagnation": {
+   "who_code": "1240",
+   "en": "Liver qi stagnation pattern",
+   "zh": "肝郁气滞证",
+   "pinyin": "gān yù qì zhì zhèng"
+  },
+  "balanced": {
+   "who_code": null,
+   "source": "ccmq",
+   "en": "Balanced (gentle) constitution",
+   "zh": "平和质",
+   "pinyin": "píng hé zhì"
+  },
+  "special_diathesis": {
+   "who_code": null,
+   "source": "ccmq",
+   "en": "Special (allergic) constitution",
+   "zh": "特禀质",
+   "pinyin": "tè bǐng zhì"
+  }
+ },
+ "features": {
+  "red_tongue": {
+   "who_code": "645",
+   "en": "Red tongue",
+   "zh": "红舌",
+   "pinyin": "hóng shé"
+  },
+  "purple_body": {
+   "who_code": "647",
+   "en": "Purple tongue",
+   "zh": "紫舌",
+   "pinyin": "zǐ shé"
+  },
+  "swollen": {
+   "who_code": "660",
+   "en": "Swollen tongue",
+   "zh": "肿胀舌",
+   "pinyin": "zhǒng zhàng shé"
+  },
+  "thin": {
+   "who_code": "656",
+   "en": "Thin tongue",
+   "zh": "瘦薄舌",
+   "pinyin": "shòu báo shé"
+  },
+  "fissure": {
+   "who_code": "658",
+   "en": "Fissured tongue",
+   "zh": "裂纹舌",
+   "pinyin": "liè wén shé"
+  },
+  "tooth_mk": {
+   "who_code": "659",
+   "en": "Teeth-marked tongue",
+   "zh": "齿痕舌",
+   "pinyin": "chǐ hén shé"
+  },
+  "red_dots": {
+   "who_code": "657",
+   "en": "Spotted tongue (red prickles)",
+   "zh": "点刺舌",
+   "pinyin": "diǎn cì shé"
+  },
+  "peeled_coating": {
+   "who_code": "685",
+   "en": "Peeled tongue coating",
+   "zh": "花剥苔",
+   "pinyin": "huā bāo tāi"
+  },
+  "slippery_coating": {
+   "who_code": "676",
+   "en": "Slippery coating",
+   "zh": "滑苔",
+   "pinyin": "huá tāi"
+  },
+  "black_coating": {
+   "who_code": "699",
+   "en": "Black coating",
+   "zh": "黑苔",
+   "pinyin": "hēi tāi"
+  }
+ },
+ "values": {
+  "zhi=light": {
+   "who_code": "642",
+   "en": "Pale white tongue",
+   "zh": "淡白舌",
+   "pinyin": "dàn bái shé"
+  },
+  "zhi=regular": {
+   "who_code": "644",
+   "en": "Pale red (normal) tongue",
+   "zh": "淡红舌",
+   "pinyin": "dàn hóng shé"
+  },
+  "zhi=dark": {
+   "who_code": "646",
+   "en": "Crimson tongue",
+   "zh": "绛舌",
+   "pinyin": "jiàng shé"
+  },
+  "tai=white": {
+   "who_code": "691",
+   "en": "White coating",
+   "zh": "白苔",
+   "pinyin": "bái tāi"
+  },
+  "tai=yellow": {
+   "who_code": "696",
+   "en": "Yellow coating",
+   "zh": "黄苔",
+   "pinyin": "huáng tāi"
+  },
+  "coating=non_greasy": {
+   "who_code": "674",
+   "en": "Thin coating",
+   "zh": "薄苔",
+   "pinyin": "báo tāi"
+  },
+  "coating=greasy": {
+   "who_code": "682",
+   "en": "Greasy coating",
+   "zh": "腻苔",
+   "pinyin": "nì tāi"
+  },
+  "coating=greasy_thick": {
+   "who_code": "675",
+   "en": "Thick coating",
+   "zh": "厚苔",
+   "pinyin": "hòu tāi"
+  }
+ }
+}

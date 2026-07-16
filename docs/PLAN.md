@@ -15,14 +15,21 @@ deployment** — the shipped setup must stay light (thin client + cheap CPU box)
 is filtered through that second lens (§7).
 
 ### Progress since v2 (updated 2026-07-16)
-- **WS-G cleanup — done** (§6). **WS-A knowledge graph — in progress:** seed + macro layers built and
-  parity-verified (`stage2_interpretation/kg/`, 359 nodes / 427 edges incl. the WS-B `evidence_for`
-  edges); micro extraction running on casper (free) — **qwen2.5:14b** chosen over gemma3:4b (more
-  faithful, uses our vocab, 0 junk). Next in WS-A: full Gerlach ch.2–4 run → `add_micro_layer`.
+- **WS-G cleanup — done** (§6). **WS-A knowledge graph — substantially done:** seed + WHO-spine + macro +
+  micro layers all built and parity-verified (`stage2_interpretation/kg/`, **605 nodes / 1245 edges /
+  282 cited snippets**). Micro layer extracted with **qwen2.5:14b** (free, on casper) from **three
+  licensed books** — Gerlach (ch.2–7, decimal), Oriental Tongue Diagnosis + Maciocia (title-heading
+  parser, all sections) — **282 cited feature→pattern edges, 0 junk**, 98 candidates held (60 signs our
+  detector can't observe, e.g. sublingual veins). **WHO-IST 2022 ontology spine** (`who_terms.py` →
+  `who_spine.json`) tags 25 pattern/feature nodes with canonical code + 中文 + pīnyīn for bilingual
+  output. Remaining WS-A polish: expand the alias map for Gerlach's Latin candidates; Chinese textbooks
+  blocked (no source files). Next major step: **WS-C grounded matcher** over this graph.
 - **WS-F output design:** a Claude Design handoff bundle (Savor 舌 tab) is in `prompt-execution-request/`;
   it maps 1:1 onto WS-B (Refine flow), WS-C (linkage cards + confidence bars), and the Sources sheet
   (citation-only / citation+snippet licensing states). Iterating on it collaboratively.
 - Not yet started: WS-C (grounded matcher, shadow), WS-B (refinement engine), WS-D (RAGAS gate), WS-E (deploy).
+  The KG (`kg_graph.json`) is **not yet wired into serving** — it feeds `retrieval.py` + the graph-RAG
+  gate in shadow; the live demo still runs the rule engine + RAG corpus. WS-C flips serving onto the graph.
 
 ---
 

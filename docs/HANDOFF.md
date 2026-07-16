@@ -84,10 +84,13 @@ Prior rounds (pushed): coating split thickness×texture, red-tip/moisture, combi
    and measures true real-world accuracy. STILL NEEDED.
 
 ## Advised next steps (per PLAN.md sequence)
-1. **Finish WS-A:** run the full Gerlach chapters 2–4 micro-extraction with **qwen2.5:14b** on casper
-   (free, ~15 min), expand `normalize.py`'s alias map to catch its candidates, then write
-   `build_kg.add_micro_layer` (validated against real triplets) so the graph gets cited book edges.
-   (Later: WHO-terminology ontology spine; parse Maciocia too.)
+1. **WS-A — substantially done.** Micro layer folds **3 books** (Gerlach ch.2–7 + Oriental + Maciocia,
+   `--mode title` for the un-numbered ones) = **282 cited edges, 0 junk**; **WHO-IST ontology spine**
+   (`who_terms.py`→`who_spine.json`) tags 25 nodes with code + 中文 + pīnyīn. Graph 605 nodes / 1245 edges
+   / 282 snippets, parity OK. Remaining polish: broaden `normalize.py` aliases for Gerlach's Latin
+   candidates (ira/ventus/repletio — held on purpose, no honest map); Chinese textbooks blocked (no
+   source files). To add a book: `parse_book.py [--mode title]` → `micro_extract.py --book-id X
+   --chapters all` on casper → `build_kg.py --verify` (globs all `book_triplets_*.json`).
 2. **WS-C grounded matcher** in *shadow mode* — LLM cite-or-abstain over the KG, logged alongside the rule
    engine on the gallery; promote on the numbers. Add raw confidence % back to the output (quick win).
 3. **WS-B refinement engine** — symptom-evidence re-scoring + information-gain question selection over the
@@ -110,10 +113,10 @@ offline KB work + graph-RAG + JSON-mode + feedback loop; defer per-request-heavy
 32B serving model, self-consistency, full Stage-1 retrain).
 
 **Stage-2 RAG progress (2026-07-16):**
-- WS-A: KG micro layer now covers Gerlach **ch.2–7** (120 cited edges / 120 snippets). §7-A weight
-  recalibration applied **in the graph-RAG layer** (`kg/retrieval.py`) — seed `tcm_knowledge.json`
-  weights untouched. **"Update `tcm_knowledge.json` itself" (new rules / negation / symptom section)
-  is NOT started** — see PLAN §7-A status note.
+- WS-A: KG micro layer now covers **3 books** — Gerlach ch.2–7 + Oriental Tongue Diagnosis + Maciocia
+  (**282 cited edges / 282 snippets, 0 junk**); **WHO-IST 2022 ontology spine** tags 25 nodes with
+  canonical code + 中文 + pīnyīn (`who_terms.py`, `who_spine.json`). Graph 605 nodes / 1245 edges. §7-A
+  weight recalibration applied **in the graph-RAG layer** (`kg/retrieval.py`) — seed weights untouched.
 - WS-C: **graph-RAG retrieval** (`kg/retrieval.py`, `graph.neighborhood`) + **grounded cite-or-abstain
   matcher** (`kg/matcher.py`, JSON-mode). **Shadow run on real human40 (40 imgs):** hallucination-rate
   **0.0**, top-1 agreement **0.50** vs rules, Jaccard 0.48, disagreements within-family. **Verdict:
@@ -126,7 +129,9 @@ offline KB work + graph-RAG + JSON-mode + feedback loop; defer per-request-heavy
 ## Map of the important files
 - **Plan (SoT):** `docs/PLAN.md`. Architecture: `docs/ARCHITECTURE.md`. Status board: `docs/PROGRESS.md`.
 - Knowledge graph (WS-A): `stage2_interpretation/kg/` (`graph.py`, `build_kg.py`, `parse_book.py`,
-  `micro_extract.py`, `normalize.py`, `review_triplets.py`, `README.md`).
+  `micro_extract.py`, `normalize.py`, `who_terms.py`, `retrieval.py`, `matcher.py`, `README.md`).
+  Curated data: `knowledge_base/{book_sections.json, who_spine.json}` (tracked); `book_triplets_*.json`,
+  `who_terms.json`, `kg_graph.json` are git-ignored rebuildable artifacts.
 - Living mapping refs: `docs/FEATURE_MAPPING_REFERENCE.md`, `docs/FEATURE_PATTERN_MAPPING.md`,
   `docs/LABEL_STORE.md`, `docs/BENCHMARK.md`, `docs/LABELING_GUIDE.md`.
 - Historical detail (accuracy/RAG/coating/color investigations): `docs/archive/`.

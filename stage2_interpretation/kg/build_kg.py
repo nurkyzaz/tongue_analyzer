@@ -27,6 +27,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 KB = os.path.join(HERE, "..", "knowledge_base", "tcm_knowledge.json")
 KB_DIR = os.path.join(HERE, "..", "knowledge_base")
 SECTIONS = os.path.join(KB_DIR, "book_sections.json")
+WHO_SPINE = os.path.join(KB_DIR, "who_spine.json")
 OUT = os.path.join(KB_DIR, "kg_graph.json")
 
 
@@ -222,6 +223,27 @@ def add_micro_layer(g, triplets_file, kb, book_titles=None):
     return n_edge, len(res["candidate"]), len(res["junk"])
 
 
+def add_who_spine(g, spine):
+    """Attach the WHO-IST canonical code + bilingual name onto pattern / feature / value nodes.
+
+    The spine normalises our ad-hoc English node keys to a stable identifier (WHO-IST 2022 code) plus
+    Chinese + pinyin, so the KG can emit bilingual output and future books merge onto shared codes
+    instead of English strings. Stored under node `props.who` (non-structural metadata) — changes no
+    edge/weight, so parity is untouched. balanced/special_diathesis carry CCMQ 体质 terms (no WHO code).
+    """
+    n = miss = 0
+    groups = (("patterns", "pattern:%s"), ("features", "feature:%s"), ("values", "value:%s"))
+    for key, tmpl in groups:
+        for our_key, entry in spine.get(key, {}).items():
+            nid = tmpl % our_key
+            if nid not in g.nodes:
+                miss += 1
+                continue
+            g.nodes[nid].setdefault("props", {})["who"] = entry
+            n += 1
+    return n, miss
+
+
 def verify_parity(g, kb):
     """Assert the graph is a strict superset of the KB. Returns list of problems (empty = ok)."""
     problems = []
@@ -289,6 +311,11 @@ def main():
         "framing": "Educational only — 'traditionally associated with…', never a diagnosis.",
     })
     seed_from_kb(g, kb)
+    if os.path.exists(WHO_SPINE):
+        n_who, n_miss = add_who_spine(g, json.load(open(WHO_SPINE)))
+        g.meta["layers"].append("who-spine")
+        print("added WHO-IST spine: %d nodes tagged with canonical code + bilingual name%s"
+              % (n_who, " (%d spine keys had no matching node)" % n_miss if n_miss else ""))
     book_titles = {}
     if os.path.exists(SECTIONS):
         n_sec = add_macro_layer(g, SECTIONS)

@@ -10,13 +10,14 @@ interactive refinement pass (WS-B) both query.
 | Layer | Source | rel / nodes added | Status |
 |---|---|---|---|
 | **seed** | `tcm_knowledge.json` | every fact, re-typed | ✅ done (`build_kg.py`) |
+| **who-spine** | WHO IST 2022 (`who_terms.py` → `who_spine.json`) | `props.who` code + 中文 + pinyin on 25 nodes | ✅ done |
 | **macro** | 3-book hierarchies (`parse_book.py` → `book_sections.json`) | `section_of` + `section:` nodes (406) | ✅ done |
 | **micro** | qwen2.5:14b triplets from 3 books, cited + snippet | `points_to`/`argues_against` + `attested_in` + `snippets` | ✅ done (282 cited edges; 98 candidates held for review) |
 
-## Current graph (seed + macro + micro)
+## Current graph (seed + who-spine + macro + micro)
 
 ```
-nodes 605   edges 1245   rules 15   snippets 282
+nodes 605   edges 1245   rules 15   snippets 282   who-tagged nodes 25
 edges: points_to 283 (27 seed + 256 book-cited), argues_against 26, evidence_for 94,
        has_symptom 55, recommends 39, section_of 406, attested_in 282, probes 21, ...
 ```
@@ -30,6 +31,25 @@ Micro layer folds **three licensed books** (each mined independently into its ow
 
 Books with no decimal numbering are parsed by `--mode title` (flush-left capitalised heading lines);
 each heading becomes its own "chapter" so `micro_extract.py --chapters all` mines the whole book.
+
+## WHO-IST ontology spine (`who_terms.py` → `who_spine.json`)
+
+The WHO *International Standard Terminologies on TCM* (2022) is a numbered bilingual glossary. We use
+it **not as a triplet source** but as an **ontology spine**: `who_terms.py` extracts every entry
+header (code, English, 简体中文, pīnyīn — CC BY-NC-SA terminology, definitions dropped) into a
+git-ignored index `who_terms.json`; the hand-verified `who_spine.json` maps each of our 10 patterns +
+tongue-sign features/values to a WHO code + bilingual name. `build_kg.add_who_spine` tags those onto
+`node.props.who` (25 nodes) so the graph can emit **bilingual output** and future books merge onto
+stable WHO codes instead of ad-hoc English strings. `balanced` / `special_diathesis` are CCMQ 体质
+(constitution) terms — absent from WHO IST — so they carry `source:"ccmq"` and no `who_code`. This is
+metadata only (no edges/weights) → parity is untouched.
+
+```bash
+pdftotext -layout tongue_lit/9789240042322-eng.pdf who.txt
+python stage2_interpretation/kg/who_terms.py --src who.txt              # -> who_terms.json (index)
+python stage2_interpretation/kg/who_terms.py --src who.txt --find "pale tongue"   # look up a term
+# who_spine.json is the tracked curated map; build_kg folds it automatically
+```
 
 ## WS-C graph-RAG retrieval (`retrieval.py`)
 

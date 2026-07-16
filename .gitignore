@@ -80,3 +80,6 @@ stage2_interpretation/knowledge_base/book_triplets_*.json
 # reproducible eval outputs (numbers live in docs/PROGRESS.md)
 evaluation/shadow_matcher_results.json
 evaluation/faithfulness_results.json
+
+# WHO IST derived index (rebuildable via who_terms.py; who_spine.json is the tracked curated map)
+stage2_interpretation/knowledge_base/who_terms.json

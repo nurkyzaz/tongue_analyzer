@@ -49,14 +49,18 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
 - ✅ **Grounded RAG+LLM narrative** — rule backbone + a TRUE vector RAG (faiss + nomic-embed via Ollama +
   TF-IDF hybrid) over a 102-chunk cited corpus (`knowledge_cards.json`); retrieval hit@4 96%
   (`evaluation/eval_rag.py`). See `docs/archive/RAG_LLM_INTERPRETATION.md`.
-- 🔄 **WS-A macro-micro knowledge graph** (`stage2_interpretation/kg/`, the Stage-2 overhaul — PLAN.md §3):
-  seed layer from `tcm_knowledge.json` with `--verify` **superset parity**; macro layer = Gerlach's 184
-  book sections (`parse_book.py`); graph = 359 nodes / 427 edges / 10 rules incl. inverse `evidence_for`
-  edges (WS-B lever). Micro layer: offline extractor `micro_extract.py` (casper, free) + `normalize.py`;
-  **qwen2.5:14b chosen** over gemma3:4b on Gerlach ch.2 (more faithful, 0 junk). Next: full ch.2–4 run +
-  `add_micro_layer`.
-  **Micro layer now covers Gerlach ch.2–7** (added ch.5–7 clinical cases 2026-07-16, +88 triplets):
-  graph = **363 nodes / 671 edges / 120 cited edges / 120 snippets** (parity OK).
+- ✅ **WS-A macro-micro knowledge graph** (`stage2_interpretation/kg/`, the Stage-2 overhaul — PLAN.md §3):
+  seed layer from `tcm_knowledge.json` with `--verify` **superset parity**; macro layer = 3-book section
+  hierarchies (`parse_book.py`, `--mode decimal` for Gerlach + `--mode title` for the narrative books);
+  inverse `evidence_for` edges (WS-B lever). Micro layer: offline extractor `micro_extract.py` (casper,
+  free) + `normalize.py`, **qwen2.5:14b** (more faithful than gemma3:4b, 0 junk).
+  **Micro layer now folds THREE licensed books** (each → own `book_triplets_<id>.json`, merged by
+  `build_kg.py`): Gerlach ch.2–7 (121 edges), Oriental Tongue Diagnosis (93), Maciocia (68) =
+  **282 cited feature→pattern edges, 0 junk**, 98 candidates held (60 = signs we can't observe, e.g.
+  sublingual veins). **WHO-IST 2022 ontology spine** (`who_terms.py`→`who_spine.json`) tags 25
+  pattern/feature nodes with canonical code + 中文 + pīnyīn (bilingual output; parity untouched).
+  Graph = **605 nodes / 1245 edges / 282 snippets / 15 rules** (parity OK). Gates: mapping 17/17,
+  graph-RAG 4/4. **KG not wired into serving yet** — feeds retrieval + gate in shadow (WS-C flips it live).
 - ✅ **WS-C graph-RAG retrieval** (`kg/retrieval.py` + `graph.neighborhood`): 2-hop subgraph around
   detected features → ranked patterns with cited book evidence + `context_cards()` for the matcher.
   **§7-A re-weighting applied** (sublinear corroboration + gentle IDF distinctiveness, seed weights
