@@ -57,12 +57,19 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
   `add_micro_layer`.
   **Micro layer now covers Gerlach ch.2–7** (added ch.5–7 clinical cases 2026-07-16, +88 triplets):
   graph = **363 nodes / 671 edges / 120 cited edges / 120 snippets** (parity OK).
-- 🔄 **WS-C graph-RAG retrieval — built** (`kg/retrieval.py` + `graph.neighborhood`): 2-hop subgraph
-  around detected features → ranked patterns with cited book evidence + `context_cards()` for the
-  matcher prompt. Gate `evaluation/eval_graph_rag.py` 3/3 strict (1 known calibration gap → PLAN §7-A).
-  **Next in WS-C:** the cite-or-abstain LLM matcher (JSON-mode) over these cards, shadow mode.
-- ⬜ WS-C grounded cite-or-abstain matcher (shadow → ensemble) · ⬜ WS-B refinement engine (symptom evidence
-  + information-gain questions) · ⬜ WS-D RAGAS eval gate.
+- ✅ **WS-C graph-RAG retrieval** (`kg/retrieval.py` + `graph.neighborhood`): 2-hop subgraph around
+  detected features → ranked patterns with cited book evidence + `context_cards()` for the matcher.
+  **§7-A re-weighting applied** (sublinear corroboration + gentle IDF distinctiveness, seed weights
+  untouched): gate `evaluation/eval_graph_rag.py` **4/4** unambiguous cases; the pale+toothmark→spleen
+  gap now resolves to rank 2.
+- ✅ **WS-C grounded cite-or-abstain matcher — built + shadow-run** (`kg/matcher.py`, JSON-mode via
+  `llm_client.response_format`): consumes the graph-RAG cards, LLM (qwen2.5:14b, temp 0) picks patterns
+  grounded ONLY in the retrieved facts, cite-or-abstain validated (drops anything outside the subgraph).
+  Verified on casper: damp-heat 0.98 (tai=yellow+red_dots → *Maciocia*), phlegm-damp 0.71 (→ *Gerlach
+  §4.2.4*), 0 hallucinations. `matcher.py --shadow` scores it vs the rule engine (top-1 agree + Jaccard);
+  synthetic-case run = 2/5 top-1 (disagreements within-family). **Next:** shadow-run on the labeled
+  gallery's real Stage-1 outputs; then promote to ensemble on the numbers.
+- ⬜ WS-B refinement engine (symptom evidence + information-gain questions) · ⬜ WS-D RAGAS eval gate.
 
 ## Phase 4 — Integration
 - ✅ `pipeline.py` orchestrator (image[+metadata] → quantitative JSON + report) — **end-to-end works**

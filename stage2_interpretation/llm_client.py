@@ -23,8 +23,10 @@ class LLMClient:
     def enabled(self):
         return self.backend != "none"
 
-    def chat(self, system, user, temperature=0.3, max_tokens=700):
-        """Return the assistant text, or None if no backend is configured."""
+    def chat(self, system, user, temperature=0.3, max_tokens=700, response_format=None):
+        """Return the assistant text, or None if no backend is configured. `response_format` is passed
+        through to OpenAI-compatible servers (e.g. {"type": "json_object"} for JSON-mode; Ollama +
+        vLLM both honour it) so the grounded matcher can enforce a strict schema (PLAN §7-C)."""
         if not self.enabled:
             return None
         payload = {
@@ -34,6 +36,8 @@ class LLMClient:
             "temperature": temperature,
             "max_tokens": max_tokens,
         }
+        if response_format:
+            payload["response_format"] = response_format
         req = urllib.request.Request(
             self.base_url.rstrip("/") + "/chat/completions",
             data=json.dumps(payload).encode(),

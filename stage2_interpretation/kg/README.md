@@ -32,7 +32,20 @@ feature nodes (via `KnowledgeGraph.neighborhood`), ranks the patterns it reaches
 the 2-hop symptom/rec/question context. `Retrieval.context_cards()` flattens it into grounded,
 citation-tagged lines ready to drop into the WS-C matcher prompt — relationships, not isolated facts.
 An interim Stage-1→graph vocab alias bridges the coating-split keys until the WHO-IST spine lands.
-Sanity gate: `evaluation/eval_graph_rag.py` (3/3 strict cases; 1 documented calibration gap → §7-A).
+Scoring is calibrated per §7-A: **sublinear corroboration** (many book citations of one edge add
+log-scaled, not linearly) + a **gentle IDF distinctiveness** multiplier (bounded 0.65–1.55; specific
+features count more) — applied only here, the seed rule-engine weights stay parity-locked. Sanity
+gate: `evaluation/eval_graph_rag.py` (4/4 unambiguous cases).
+
+## WS-C grounded cite-or-abstain matcher (`matcher.py`)
+
+`GroundedMatcher.match(present)` feeds the graph-RAG `context_cards()` to an LLM (JSON-mode via
+`llm_client.response_format`, temperature 0) that selects the best-supported patterns **using only the
+retrieved cited facts**. Cite-or-abstain is enforced in code: a proposed pattern is dropped unless it
+was reachable in the retrieved subgraph AND grounded in a detected feature; if none survive, it
+abstains. Falls back to the graph-RAG ranking when no LLM is configured (the degraded path). Runs in
+**shadow mode** — `matcher.py --shadow` scores it against the rule engine's vote (top-1 agreement +
+Jaccard) so promotion is on the numbers, not decided in advance. The rule engine stays production.
 
 Micro edges are tagged `cond.layer="micro"`, carry a book citation + a `snippet` id, and COEXIST with
 the seed rule weights (rule engine keeps using seed edges; the WS-C matcher can prefer cited micro
