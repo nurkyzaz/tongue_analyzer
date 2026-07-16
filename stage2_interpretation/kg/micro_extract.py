@@ -49,25 +49,31 @@ def _vocab(kb):
     return feats, pats
 
 
-def build_prompt(kb, section, text):
+# Gerlach uses Latin guiding-criteria terms; other books (Maciocia, Oriental) use plain TCM English.
+LATIN_HINT = (
+    " Gerlach's Latin terms map roughly: calor/heat->damp_heat or yin_deficiency, "
+    "algor/cold->yang_deficiency, humor/humidity & pituita/phlegm->phlegm_dampness, "
+    "xue-stasis->blood_stasis;")
+
+
+def build_prompt(kb, section, text, book_name="Gerlach", latin_hint=True):
     feats, pats = _vocab(kb)
     feat_lines = "\n".join("  - %s (%s): values %s" % (k, v["label"], v["values"]) for k, v in feats.items())
     pat_lines = "\n".join("  - %s (%s)" % (k, v) for k, v in pats.items())
     return (
         "CANONICAL TONGUE FEATURES (map each sign to the closest key; if none fits use "
         "\"other:<short label>\"):\n%s\n\n"
-        "CANONICAL PATTERNS (map each pattern/guiding-criterion to the closest key; Gerlach's Latin "
-        "terms map roughly: calor/heat->damp_heat or yin_deficiency, algor/cold->yang_deficiency, "
-        "humor/humidity & pituita/phlegm->phlegm_dampness, xue-stasis->blood_stasis; if none fits use "
+        "CANONICAL PATTERNS (map each pattern/guiding-criterion to the closest key;%s if none fits use "
         "\"other:<short label>\"):\n%s\n\n"
-        "BOOK SECTION  [Gerlach §%s — %s]:\n\"\"\"\n%s\n\"\"\"\n\n"
+        "BOOK SECTION  [%s §%s — %s]:\n\"\"\"\n%s\n\"\"\"\n\n"
         "Extract every tongue-sign -> pattern relationship EXPLICITLY stated in this section. Return "
         "JSON: {\"triplets\": [{\"feature\": \"<key or other:...>\", \"value\": \"<value or present>\", "
         "\"pattern\": \"<key or other:...>\", \"polarity\": \"supports|argues_against\", "
         "\"context\": \"<gating co-signs or null>\", \"snippet\": \"<verbatim phrase copied from the "
         "section, <=200 chars>\"}]}. The snippet MUST be copied verbatim from the section text. If "
         "nothing is explicitly stated, return {\"triplets\": []}."
-        % (feat_lines, pat_lines, section["num"], section["title"], text)
+        % (feat_lines, LATIN_HINT if latin_hint else "", pat_lines,
+           book_name, section["num"], section["title"], text)
     )
 
 
@@ -112,27 +118,32 @@ def validate_triplets(raw, text):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--book-id", default="gerlach")
-    ap.add_argument("--chapters", default="2,3,4", help="comma list of chapters to mine")
+    ap.add_argument("--chapters", default="2,3,4",
+                    help="comma list of chapters to mine, or 'all' (title-parsed books)")
     ap.add_argument("--min-chars", type=int, default=200, help="skip near-empty sections")
     ap.add_argument("--limit", type=int, default=0, help="cap sections (0 = all)")
     ap.add_argument("--dry-run", action="store_true", help="print one prompt and exit (no LLM)")
-    ap.add_argument("--out", default=OUT)
+    ap.add_argument("--out", default=None, help="default: book_triplets_<book_id>.json")
     args = ap.parse_args()
 
     kb = json.load(open(KB))
     books = json.load(open(SECTIONS))
     bk = books[args.book_id]
     book_path = bk["source_file"]
+    book_name = bk.get("title", args.book_id).split(",")[0]  # short citing name
+    latin_hint = args.book_id == "gerlach"
+    out = args.out or os.path.join(HERE, "..", "knowledge_base", "book_triplets_%s.json" % args.book_id)
+    all_ch = args.chapters.strip().lower() == "all"
     chapters = set(args.chapters.split(","))
     secs = [s for s in bk["sections"]
-            if s["chapter"] in chapters and s["n_chars"] >= args.min_chars]
+            if (all_ch or s["chapter"] in chapters) and s["n_chars"] >= args.min_chars]
     if args.limit:
         secs = secs[:args.limit]
 
     if args.dry_run:
         s = secs[0]
-        print(build_prompt(kb, s, section_text(book_path, s)))
-        print("\n[dry-run] %d sections would be mined from chapters %s" % (len(secs), sorted(chapters)))
+        print(build_prompt(kb, s, section_text(book_path, s), book_name, latin_hint))
+        print("\n[dry-run] %d sections would be mined from chapters %s" % (len(secs), args.chapters))
         return
 
     llm = LLMClient()
@@ -140,20 +151,20 @@ def main():
         sys.exit("No LLM backend configured. Set TIH_LLM_BACKEND=openai + TIH_LLM_BASE_URL/MODEL "
                  "(run on casper). Use --dry-run to inspect prompts without an LLM.")
 
-    # resume support: keep already-mined sections
+    # resume support: keep already-mined sections (per-book file, keyed by section number)
     done = {}
-    if os.path.exists(args.out):
-        prev = json.load(open(args.out))
+    if os.path.exists(out):
+        prev = json.load(open(out))
         done = {r["section"]: r for r in prev.get("records", []) if r.get("book_id") == args.book_id}
 
     records = list(done.values())
     n_new = n_trip = 0
     for i, s in enumerate(secs):
-        key = "%s:%s" % (args.book_id, s["num"])
-        if key in done:
+        if s["num"] in done:
             continue
         text = section_text(book_path, s)
-        raw = _parse_json(llm.chat(SYSTEM, build_prompt(kb, s, text), temperature=0.0, max_tokens=1200))
+        raw = _parse_json(llm.chat(SYSTEM, build_prompt(kb, s, text, book_name, latin_hint),
+                                   temperature=0.0, max_tokens=1200))
         trips = validate_triplets(raw, text)
         records.append({"book_id": args.book_id, "section": s["num"], "title": s["title"],
                         "triplets": trips})
@@ -161,13 +172,13 @@ def main():
         n_trip += len(trips)
         print("  [%d/%d] §%-7s %-40s -> %d triplets" % (i + 1, len(secs), s["num"], s["title"][:40], len(trips)))
         if n_new % 10 == 0:  # checkpoint
-            json.dump({"book_id": args.book_id, "records": records}, open(args.out, "w"),
+            json.dump({"book_id": args.book_id, "records": records}, open(out, "w"),
                       ensure_ascii=False, indent=1)
 
-    json.dump({"book_id": args.book_id, "records": records}, open(args.out, "w"),
+    json.dump({"book_id": args.book_id, "records": records}, open(out, "w"),
               ensure_ascii=False, indent=1)
     print("\nwrote %s: %d new sections, %d validated triplets (total records %d)"
-          % (args.out, n_new, n_trip, len(records)))
+          % (out, n_new, n_trip, len(records)))
 
 
 if __name__ == "__main__":

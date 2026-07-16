@@ -10,19 +10,26 @@ interactive refinement pass (WS-B) both query.
 | Layer | Source | rel / nodes added | Status |
 |---|---|---|---|
 | **seed** | `tcm_knowledge.json` | every fact, re-typed | ✅ done (`build_kg.py`) |
-| **macro** | Gerlach hierarchy (`parse_book.py` → `book_sections.json`) | `section_of` + `section:` nodes (184) | ✅ done |
-| **micro** | qwen2.5:14b triplets from Gerlach ch.2–7, cited + snippet | `points_to`/`argues_against` + `attested_in` + `snippets` | ✅ done (120 cited edges; 50 candidates held for review) |
+| **macro** | 3-book hierarchies (`parse_book.py` → `book_sections.json`) | `section_of` + `section:` nodes (406) | ✅ done |
+| **micro** | qwen2.5:14b triplets from 3 books, cited + snippet | `points_to`/`argues_against` + `attested_in` + `snippets` | ✅ done (282 cited edges; 98 candidates held for review) |
 
 ## Current graph (seed + macro + micro)
 
 ```
-nodes 363   edges 671   rules 10   snippets 120
-edges: points_to 135 (27 seed + 108 book-cited), argues_against 12, evidence_for 76,
-       has_symptom 55, recommends 39, section_of 184, attested_in 120, probes 21, ...
+nodes 605   edges 1245   rules 15   snippets 282
+edges: points_to 283 (27 seed + 256 book-cited), argues_against 26, evidence_for 94,
+       has_symptom 55, recommends 39, section_of 406, attested_in 282, probes 21, ...
 ```
 
-Micro layer covers Gerlach ch.2–4 (feature chapters) + ch.5–7 (clinical cases) — 88 new triplets
-from ch.5–7 folded in 2026-07-16.
+Micro layer folds **three licensed books** (each mined independently into its own
+`book_triplets_<id>.json`, then merged by `build_kg.py`, which globs all per-book files):
+- **gerlach** (`--mode decimal`, ch.2–7) — 121 edges. Modern, feature-organised backbone.
+- **oriental** (`--mode title`, all sections) — 93 edges. Classical zoning perspective (Dubounet ed.).
+- **maciocia** (`--mode title`, all sections) — 68 edges. Adds sublingual-vein / purple / Yin-Xu nuance
+  (slide-deck PDF → `pdftotext -layout`; noisier sections, but cite-or-abstain keeps only real triplets).
+
+Books with no decimal numbering are parsed by `--mode title` (flush-left capitalised heading lines);
+each heading becomes its own "chapter" so `micro_extract.py --chapters all` mines the whole book.
 
 ## WS-C graph-RAG retrieval (`retrieval.py`)
 
@@ -62,20 +69,30 @@ ontology-spine step, not merged.
 ## Building the macro layer
 
 ```bash
+# decimal-numbered book (Gerlach):
 python stage2_interpretation/kg/parse_book.py \
     --book tongue_lit/874856627-TCM-Tongue-Diagnosis-Explained.txt --id gerlach \
     --title "Gerlach O., TCM Tongue Diagnosis Explained (World Scientific, 2025)"
+# title-heading books (no decimal numbering) — Oriental (.txt), Maciocia (pdftotext -layout the PDF):
+python stage2_interpretation/kg/parse_book.py --mode title \
+    --book tongue_lit/371253413-Oriental-Tongue-Diagnosis.txt --id oriental \
+    --title "Oriental Tongue Diagnosis (ed. Dubounet)"
+python stage2_interpretation/kg/parse_book.py --mode title \
+    --book tongue_lit/tongue-diagnosis-maciocia-online.txt --id maciocia \
+    --title "Maciocia G., Tongue Diagnosis in Chinese Medicine (online)"
 # -> book_sections.json (tracked: section metadata + char offsets, NOT the copyrighted text)
-python stage2_interpretation/kg/build_kg.py --verify   # folds macro in automatically
+python stage2_interpretation/kg/build_kg.py --verify   # folds macro + all micro books in automatically
 ```
 
-## Micro layer (next, offline on casper)
+## Micro layer (offline on casper, one file per book)
 
 ```bash
 # inspect the extraction prompt without an LLM:
-python stage2_interpretation/kg/micro_extract.py --dry-run --book-id gerlach
-# run with the LLM env set (casper): mines chapters 2-4, cite-or-abstain, -> book_triplets.json
-python stage2_interpretation/kg/micro_extract.py --book-id gerlach --chapters 2,3,4
+python stage2_interpretation/kg/micro_extract.py --dry-run --book-id oriental --chapters all
+# run with the LLM env set (casper). Each book -> book_triplets_<id>.json (never clobbers the others):
+python stage2_interpretation/kg/micro_extract.py --book-id gerlach  --chapters 2,3,4
+python stage2_interpretation/kg/micro_extract.py --book-id oriental --chapters all
+python stage2_interpretation/kg/micro_extract.py --book-id maciocia --chapters all
 ```
 
 `micro_extract.py` gives the LLM our canonical feature/pattern vocabulary (so triplets map into our

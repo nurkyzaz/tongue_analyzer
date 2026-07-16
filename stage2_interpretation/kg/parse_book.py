@@ -27,6 +27,55 @@ HEADING_RE = re.compile(r"^[ \t]*(\d+(?:\.\d+){1,3})[ \t]+(\S.*\S)[ \t]*$")
 LEADER_RE = re.compile(r"\.[ \t]+\.")           # ". ." dot-leader run => table of contents
 PAGEND_RE = re.compile(r"\s\d{1,3}$")            # trailing page number => table of contents
 
+# Title-heading mode (books with no decimal numbering — Oriental Tongue Diagnosis, Maciocia slides).
+# A heading is a short, flush-left, capitalised line with no digits and no terminal sentence
+# punctuation (e.g. "Pale Tongue Body", "Sublingual veins"). Body paragraphs are excluded by the
+# length/word-count/punctuation guards; indented bullets by the flush-left guard. Imperfect section
+# boundaries are tolerable: the micro-extractor is cite-or-abstain, so noisy splits cost recall, not
+# correctness.
+TITLE_RE = re.compile(r"^[A-Z][A-Za-z][A-Za-z/&,'()\- ]{1,52}[A-Za-z)]$")
+
+
+def parse_sections_title(text, max_words=8, max_indent=2):
+    """-> flat list of title-delimited sections (schema-compatible with parse_sections)."""
+    cands = []  # (title, char_start_of_line, char_end_of_line)
+    pos = 0
+    for line in text.splitlines(keepends=True):
+        start = pos
+        pos += len(line)
+        raw = line.rstrip("\n")
+        indent = len(raw) - len(raw.lstrip(" \t"))
+        title = raw.strip()
+        if indent > max_indent:
+            continue
+        if not TITLE_RE.match(title):
+            continue
+        if len(title.split()) > max_words:
+            continue
+        cands.append((title, start, start + len(line)))
+
+    # keep the LAST occurrence of each identical title (the body heading follows any ToC listing)
+    last = {}
+    for title, s, e in cands:
+        last[title] = (title, s, e)
+    heads = sorted(last.values(), key=lambda t: t[1])
+
+    sections = []
+    for i, (title, hstart, hend) in enumerate(heads):
+        body_end = heads[i + 1][1] if i + 1 < len(heads) else len(text)
+        num = str(i + 1)
+        sections.append({
+            "num": num,
+            "title": title,
+            "level": 1,
+            "parent": None,
+            "chapter": num,          # each heading is its own "chapter" (use --chapters all downstream)
+            "body_start": hend,
+            "body_end": body_end,
+            "n_chars": body_end - hend,
+        })
+    return sections
+
 
 def parse_sections(text):
     """-> list of dicts sorted by document order, with body-span char offsets."""
@@ -83,11 +132,14 @@ def main():
     ap.add_argument("--id", required=True, help="short book id, e.g. gerlach")
     ap.add_argument("--out", default=DEFAULT_OUT)
     ap.add_argument("--title", default=None, help="human-readable book title for citations")
+    ap.add_argument("--mode", choices=["decimal", "title"], default="decimal",
+                    help="decimal = numbered headings (Gerlach); title = flush-left title headings "
+                         "(Oriental Tongue Diagnosis, Maciocia slides)")
     args = ap.parse_args()
 
     with open(args.book, encoding="utf-8", errors="replace") as f:
         text = f.read()
-    sections = parse_sections(text)
+    sections = parse_sections(text) if args.mode == "decimal" else parse_sections_title(text)
 
     # merge into any existing multi-book file, keyed by book id
     data = {}

@@ -25,11 +25,27 @@ from kg import normalize as norm  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 KB = os.path.join(HERE, "..", "knowledge_base", "tcm_knowledge.json")
-SECTIONS = os.path.join(HERE, "..", "knowledge_base", "book_sections.json")
-# micro triplets: prefer the qwen extraction, fall back to the gemma one
-TRIPLETS_CANDIDATES = [os.path.join(HERE, "..", "knowledge_base", f)
-                       for f in ("book_triplets_qwen.json", "book_triplets.json")]
-OUT = os.path.join(HERE, "..", "knowledge_base", "kg_graph.json")
+KB_DIR = os.path.join(HERE, "..", "knowledge_base")
+SECTIONS = os.path.join(KB_DIR, "book_sections.json")
+OUT = os.path.join(KB_DIR, "kg_graph.json")
+
+
+def _triplet_files():
+    """One micro-layer triplet file per book: book_triplets_<book_id>.json (sorted for determinism).
+
+    Legacy fallback: if no per-book files exist, use the old single book_triplets_qwen.json /
+    book_triplets.json (both gerlach) so the graph still builds on an un-migrated checkout.
+    """
+    import glob
+    files = sorted(glob.glob(os.path.join(KB_DIR, "book_triplets_*.json")))
+    files = [f for f in files if os.path.basename(f) != "book_triplets_qwen.json"]
+    if files:
+        return files
+    for legacy in ("book_triplets_qwen.json", "book_triplets.json"):
+        p = os.path.join(KB_DIR, legacy)
+        if os.path.exists(p):
+            return [p]
+    return []
 
 
 def _pattern_node(g, pid, p):
@@ -197,10 +213,12 @@ def add_micro_layer(g, triplets_file, kb, book_titles=None):
         g.add_edge(vid, "attested_in", "section:%s:%s" % (book_id, sec), sources=[cite])
         n_edge += 1
 
-    # keep candidates for the ontology-spine / expansion step (not merged as edges)
-    g.meta["micro_candidates"] = [
-        {"feature": t["raw_feature"], "pattern": t["pattern"], "section": t.get("section"),
-         "snippet": t.get("snippet", "")[:160]} for t in res["candidate"]]
+    # keep candidates for the ontology-spine / expansion step (not merged as edges); accumulate
+    # across books so a multi-book build doesn't drop earlier books' candidates
+    g.meta.setdefault("micro_candidates", []).extend(
+        {"book_id": book_id, "feature": t["raw_feature"], "pattern": t["pattern"],
+         "section": t.get("section"), "snippet": t.get("snippet", "")[:160]}
+        for t in res["candidate"])
     return n_edge, len(res["candidate"]), len(res["junk"])
 
 
@@ -277,12 +295,18 @@ def main():
         g.meta["layers"].append("macro")
         book_titles = {bid: bk.get("title", bid) for bid, bk in json.load(open(SECTIONS)).items()}
         print("added macro layer: %d book sections from %s" % (n_sec, os.path.basename(SECTIONS)))
-    triplets = next((p for p in TRIPLETS_CANDIDATES if os.path.exists(p)), None)
-    if triplets:
-        n_e, n_c, n_j = add_micro_layer(g, triplets, kb, book_titles)
+    triplet_files = _triplet_files()
+    if triplet_files:
         g.meta["layers"].append("micro")
-        print("added micro layer: %d cited edges (+%d candidates held for review, %d junk) from %s"
-              % (n_e, n_c, n_j, os.path.basename(triplets)))
+        tot_e = tot_c = tot_j = 0
+        for tf in triplet_files:
+            n_e, n_c, n_j = add_micro_layer(g, tf, kb, book_titles)
+            tot_e += n_e; tot_c += n_c; tot_j += n_j
+            print("added micro layer: %d cited edges (+%d candidates held for review, %d junk) from %s"
+                  % (n_e, n_c, n_j, os.path.basename(tf)))
+        if len(triplet_files) > 1:
+            print("  micro-layer totals across %d books: %d edges, %d candidates, %d junk"
+                  % (len(triplet_files), tot_e, tot_c, tot_j))
     g.save(args.out)
     st = g.stats()
     print("wrote %s" % args.out)

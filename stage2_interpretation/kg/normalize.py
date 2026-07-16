@@ -40,6 +40,16 @@ PATTERN_ALIASES = {
     "reactive calor": "damp_heat",
     "heat": "damp_heat",
     "calor (heat, re) and xue (blood) deficiency": "blood_deficiency",  # dominant term
+    # pure romanisation / synonym of an existing pattern key (Maciocia, Oriental) — zero-risk
+    "yin xu": "yin_deficiency",
+    "yin_xu": "yin_deficiency",
+    "deep damage to hepatic yin": "yin_deficiency",
+    "liver-qi stagnation": "qi_stagnation",
+    "liver qi stagnation": "qi_stagnation",
+    "liver-qi_stagnation": "qi_stagnation",
+    # NOTE: Gerlach's Latin guiding-criteria (ira, ventus, repletio, felleal...) and out-of-set
+    # patterns (heart fire, orbis cardialis) are deliberately NOT aliased — no honest mapping into
+    # our 10-pattern set exists, so they stay as reviewable candidates (documented ontology gaps).
 }
 
 # --- feature aliases: free-text sign -> (canonical feature key, canonical value) ------------------

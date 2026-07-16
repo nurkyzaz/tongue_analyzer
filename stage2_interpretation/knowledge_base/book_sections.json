@@ -1846,5 +1846,2241 @@
     "n_chars": 8307
    }
   ]
+ },
+ "oriental": {
+  "book_id": "oriental",
+  "title": "Oriental Tongue Diagnosis (ed. Dubounet)",
+  "source_file": "tongue_lit/371253413-Oriental-Tongue-Diagnosis.txt",
+  "n_sections": 96,
+  "sections": [
+   {
+    "num": "1",
+    "title": "Introduction",
+    "level": 1,
+    "parent": null,
+    "chapter": "1",
+    "body_start": 116,
+    "body_end": 684,
+    "n_chars": 568
+   },
+   {
+    "num": "2",
+    "title": "Connections",
+    "level": 1,
+    "parent": null,
+    "chapter": "2",
+    "body_start": 696,
+    "body_end": 696,
+    "n_chars": 0
+   },
+   {
+    "num": "3",
+    "title": "Channels/Meridians Reaching the Tongue",
+    "level": 1,
+    "parent": null,
+    "chapter": "3",
+    "body_start": 735,
+    "body_end": 1660,
+    "n_chars": 925
+   },
+   {
+    "num": "4",
+    "title": "Tongue Diagnosis Method and Cautions",
+    "level": 1,
+    "parent": null,
+    "chapter": "4",
+    "body_start": 1697,
+    "body_end": 3426,
+    "n_chars": 1729
+   },
+   {
+    "num": "5",
+    "title": "Tongue Feature Indications",
+    "level": 1,
+    "parent": null,
+    "chapter": "5",
+    "body_start": 3453,
+    "body_end": 3681,
+    "n_chars": 228
+   },
+   {
+    "num": "6",
+    "title": "Tongue Body Color",
+    "level": 1,
+    "parent": null,
+    "chapter": "6",
+    "body_start": 3699,
+    "body_end": 3768,
+    "n_chars": 69
+   },
+   {
+    "num": "7",
+    "title": "Normal Tongue Body",
+    "level": 1,
+    "parent": null,
+    "chapter": "7",
+    "body_start": 3787,
+    "body_end": 3834,
+    "n_chars": 47
+   },
+   {
+    "num": "8",
+    "title": "Bluish Purple or Reddish Purple Tongue Body",
+    "level": 1,
+    "parent": null,
+    "chapter": "8",
+    "body_start": 3878,
+    "body_end": 4255,
+    "n_chars": 377
+   },
+   {
+    "num": "9",
+    "title": "Red Tongue Body",
+    "level": 1,
+    "parent": null,
+    "chapter": "9",
+    "body_start": 4271,
+    "body_end": 4641,
+    "n_chars": 370
+   },
+   {
+    "num": "10",
+    "title": "Red Tip",
+    "level": 1,
+    "parent": null,
+    "chapter": "10",
+    "body_start": 4649,
+    "body_end": 4691,
+    "n_chars": 42
+   },
+   {
+    "num": "11",
+    "title": "Scarlet Tongue Body",
+    "level": 1,
+    "parent": null,
+    "chapter": "11",
+    "body_start": 4711,
+    "body_end": 4887,
+    "n_chars": 176
+   },
+   {
+    "num": "12",
+    "title": "Dark Red Tongue Body",
+    "level": 1,
+    "parent": null,
+    "chapter": "12",
+    "body_start": 4908,
+    "body_end": 5471,
+    "n_chars": 563
+   },
+   {
+    "num": "13",
+    "title": "Pale Tongue Body",
+    "level": 1,
+    "parent": null,
+    "chapter": "13",
+    "body_start": 5488,
+    "body_end": 5771,
+    "n_chars": 283
+   },
+   {
+    "num": "14",
+    "title": "Green Tongue Body",
+    "level": 1,
+    "parent": null,
+    "chapter": "14",
+    "body_start": 5789,
+    "body_end": 6119,
+    "n_chars": 330
+   },
+   {
+    "num": "15",
+    "title": "Tongue Body Shape",
+    "level": 1,
+    "parent": null,
+    "chapter": "15",
+    "body_start": 6137,
+    "body_end": 6302,
+    "n_chars": 165
+   },
+   {
+    "num": "16",
+    "title": "Stiff",
+    "level": 1,
+    "parent": null,
+    "chapter": "16",
+    "body_start": 6308,
+    "body_end": 7072,
+    "n_chars": 764
+   },
+   {
+    "num": "17",
+    "title": "Flaccid",
+    "level": 1,
+    "parent": null,
+    "chapter": "17",
+    "body_start": 7080,
+    "body_end": 7748,
+    "n_chars": 668
+   },
+   {
+    "num": "18",
+    "title": "Swollen",
+    "level": 1,
+    "parent": null,
+    "chapter": "18",
+    "body_start": 7756,
+    "body_end": 8105,
+    "n_chars": 349
+   },
+   {
+    "num": "19",
+    "title": "Big or Enlarged Tongue",
+    "level": 1,
+    "parent": null,
+    "chapter": "19",
+    "body_start": 8128,
+    "body_end": 8480,
+    "n_chars": 352
+   },
+   {
+    "num": "20",
+    "title": "Half the Tongue Is Swollen",
+    "level": 1,
+    "parent": null,
+    "chapter": "20",
+    "body_start": 8507,
+    "body_end": 8594,
+    "n_chars": 87
+   },
+   {
+    "num": "21",
+    "title": "Hammer Shaped",
+    "level": 1,
+    "parent": null,
+    "chapter": "21",
+    "body_start": 8608,
+    "body_end": 8913,
+    "n_chars": 305
+   },
+   {
+    "num": "22",
+    "title": "Local Swelling on One Side",
+    "level": 1,
+    "parent": null,
+    "chapter": "22",
+    "body_start": 8940,
+    "body_end": 9154,
+    "n_chars": 214
+   },
+   {
+    "num": "23",
+    "title": "Swollen Sides",
+    "level": 1,
+    "parent": null,
+    "chapter": "23",
+    "body_start": 9168,
+    "body_end": 9310,
+    "n_chars": 142
+   },
+   {
+    "num": "24",
+    "title": "Swollen Between the Tip and the Central Surface",
+    "level": 1,
+    "parent": null,
+    "chapter": "24",
+    "body_start": 9358,
+    "body_end": 9640,
+    "n_chars": 282
+   },
+   {
+    "num": "25",
+    "title": "Swollen Edges",
+    "level": 1,
+    "parent": null,
+    "chapter": "25",
+    "body_start": 9654,
+    "body_end": 9804,
+    "n_chars": 150
+   },
+   {
+    "num": "26",
+    "title": "Swollen Tip",
+    "level": 1,
+    "parent": null,
+    "chapter": "26",
+    "body_start": 9816,
+    "body_end": 10096,
+    "n_chars": 280
+   },
+   {
+    "num": "27",
+    "title": "Short and Contracted",
+    "level": 1,
+    "parent": null,
+    "chapter": "27",
+    "body_start": 10117,
+    "body_end": 10869,
+    "n_chars": 752
+   },
+   {
+    "num": "28",
+    "title": "Long",
+    "level": 1,
+    "parent": null,
+    "chapter": "28",
+    "body_start": 10874,
+    "body_end": 11106,
+    "n_chars": 232
+   },
+   {
+    "num": "29",
+    "title": "Front Swollen",
+    "level": 1,
+    "parent": null,
+    "chapter": "29",
+    "body_start": 11120,
+    "body_end": 11235,
+    "n_chars": 115
+   },
+   {
+    "num": "30",
+    "title": "Thin",
+    "level": 1,
+    "parent": null,
+    "chapter": "30",
+    "body_start": 11240,
+    "body_end": 11561,
+    "n_chars": 321
+   },
+   {
+    "num": "31",
+    "title": "Tongue Body Features",
+    "level": 1,
+    "parent": null,
+    "chapter": "31",
+    "body_start": 11582,
+    "body_end": 11583,
+    "n_chars": 1
+   },
+   {
+    "num": "32",
+    "title": "Rough or Tender Texture",
+    "level": 1,
+    "parent": null,
+    "chapter": "32",
+    "body_start": 11607,
+    "body_end": 11803,
+    "n_chars": 196
+   },
+   {
+    "num": "33",
+    "title": "Red Spots",
+    "level": 1,
+    "parent": null,
+    "chapter": "33",
+    "body_start": 11813,
+    "body_end": 12595,
+    "n_chars": 782
+   },
+   {
+    "num": "34",
+    "title": "White Spots",
+    "level": 1,
+    "parent": null,
+    "chapter": "34",
+    "body_start": 12607,
+    "body_end": 12815,
+    "n_chars": 208
+   },
+   {
+    "num": "35",
+    "title": "Black Spots",
+    "level": 1,
+    "parent": null,
+    "chapter": "35",
+    "body_start": 12827,
+    "body_end": 12922,
+    "n_chars": 95
+   },
+   {
+    "num": "36",
+    "title": "Ulcerated Tongue Body",
+    "level": 1,
+    "parent": null,
+    "chapter": "36",
+    "body_start": 12944,
+    "body_end": 13032,
+    "n_chars": 88
+   },
+   {
+    "num": "37",
+    "title": "Numb Tongue Body",
+    "level": 1,
+    "parent": null,
+    "chapter": "37",
+    "body_start": 13049,
+    "body_end": 13110,
+    "n_chars": 61
+   },
+   {
+    "num": "38",
+    "title": "Loose Tongue Body",
+    "level": 1,
+    "parent": null,
+    "chapter": "38",
+    "body_start": 13128,
+    "body_end": 13220,
+    "n_chars": 92
+   },
+   {
+    "num": "39",
+    "title": "Deviated Tongue Body",
+    "level": 1,
+    "parent": null,
+    "chapter": "39",
+    "body_start": 13241,
+    "body_end": 13429,
+    "n_chars": 188
+   },
+   {
+    "num": "40",
+    "title": "Moving, Lolling, Wagging, Playful Tongue Body",
+    "level": 1,
+    "parent": null,
+    "chapter": "40",
+    "body_start": 13475,
+    "body_end": 13657,
+    "n_chars": 182
+   },
+   {
+    "num": "41",
+    "title": "Rolled Tongue Body",
+    "level": 1,
+    "parent": null,
+    "chapter": "41",
+    "body_start": 13676,
+    "body_end": 13722,
+    "n_chars": 46
+   },
+   {
+    "num": "42",
+    "title": "Teeth Marks on Tongue Body (Scalloped)",
+    "level": 1,
+    "parent": null,
+    "chapter": "42",
+    "body_start": 13761,
+    "body_end": 14146,
+    "n_chars": 385
+   },
+   {
+    "num": "43",
+    "title": "Quivering or Trembling Tongue Body",
+    "level": 1,
+    "parent": null,
+    "chapter": "43",
+    "body_start": 14181,
+    "body_end": 14772,
+    "n_chars": 591
+   },
+   {
+    "num": "44",
+    "title": "Sore Covered Tongue Body",
+    "level": 1,
+    "parent": null,
+    "chapter": "44",
+    "body_start": 14797,
+    "body_end": 14798,
+    "n_chars": 1
+   },
+   {
+    "num": "45",
+    "title": "Side effects of some western medications",
+    "level": 1,
+    "parent": null,
+    "chapter": "45",
+    "body_start": 14839,
+    "body_end": 14842,
+    "n_chars": 3
+   },
+   {
+    "num": "46",
+    "title": "Tongue Body Moisture",
+    "level": 1,
+    "parent": null,
+    "chapter": "46",
+    "body_start": 14863,
+    "body_end": 14914,
+    "n_chars": 51
+   },
+   {
+    "num": "47",
+    "title": "Dry Tongue Body",
+    "level": 1,
+    "parent": null,
+    "chapter": "47",
+    "body_start": 14930,
+    "body_end": 14991,
+    "n_chars": 61
+   },
+   {
+    "num": "48",
+    "title": "Slightly Dry Tongue Body",
+    "level": 1,
+    "parent": null,
+    "chapter": "48",
+    "body_start": 15016,
+    "body_end": 15069,
+    "n_chars": 53
+   },
+   {
+    "num": "49",
+    "title": "Tongue Coating",
+    "level": 1,
+    "parent": null,
+    "chapter": "49",
+    "body_start": 15084,
+    "body_end": 15150,
+    "n_chars": 66
+   },
+   {
+    "num": "50",
+    "title": "White Tongue Coat",
+    "level": 1,
+    "parent": null,
+    "chapter": "50",
+    "body_start": 15168,
+    "body_end": 15570,
+    "n_chars": 402
+   },
+   {
+    "num": "51",
+    "title": "White Like Powder Tongue Coat",
+    "level": 1,
+    "parent": null,
+    "chapter": "51",
+    "body_start": 15600,
+    "body_end": 15899,
+    "n_chars": 299
+   },
+   {
+    "num": "52",
+    "title": "White Like Snow Tongue Coat",
+    "level": 1,
+    "parent": null,
+    "chapter": "52",
+    "body_start": 15927,
+    "body_end": 16022,
+    "n_chars": 95
+   },
+   {
+    "num": "53",
+    "title": "Yellow Tongue Coat",
+    "level": 1,
+    "parent": null,
+    "chapter": "53",
+    "body_start": 16041,
+    "body_end": 16654,
+    "n_chars": 613
+   },
+   {
+    "num": "54",
+    "title": "Dirty Yellow Tongue Coat",
+    "level": 1,
+    "parent": null,
+    "chapter": "54",
+    "body_start": 16679,
+    "body_end": 16762,
+    "n_chars": 83
+   },
+   {
+    "num": "55",
+    "title": "Simultaneous White and Yellow Tongue Coating",
+    "level": 1,
+    "parent": null,
+    "chapter": "55",
+    "body_start": 16807,
+    "body_end": 17029,
+    "n_chars": 222
+   },
+   {
+    "num": "56",
+    "title": "Gray Tongue Coat",
+    "level": 1,
+    "parent": null,
+    "chapter": "56",
+    "body_start": 17046,
+    "body_end": 17371,
+    "n_chars": 325
+   },
+   {
+    "num": "57",
+    "title": "Black Tongue Coat",
+    "level": 1,
+    "parent": null,
+    "chapter": "57",
+    "body_start": 17389,
+    "body_end": 18046,
+    "n_chars": 657
+   },
+   {
+    "num": "58",
+    "title": "Half Yellow, Half White (Longitudinally)",
+    "level": 1,
+    "parent": null,
+    "chapter": "58",
+    "body_start": 18087,
+    "body_end": 18165,
+    "n_chars": 78
+   },
+   {
+    "num": "59",
+    "title": "Yellow Root With A White Tip",
+    "level": 1,
+    "parent": null,
+    "chapter": "59",
+    "body_start": 18194,
+    "body_end": 18471,
+    "n_chars": 277
+   },
+   {
+    "num": "60",
+    "title": "Tongue Coat Thickness",
+    "level": 1,
+    "parent": null,
+    "chapter": "60",
+    "body_start": 18493,
+    "body_end": 18494,
+    "n_chars": 1
+   },
+   {
+    "num": "61",
+    "title": "Thin Coating",
+    "level": 1,
+    "parent": null,
+    "chapter": "61",
+    "body_start": 18507,
+    "body_end": 18820,
+    "n_chars": 313
+   },
+   {
+    "num": "62",
+    "title": "Thick Coating",
+    "level": 1,
+    "parent": null,
+    "chapter": "62",
+    "body_start": 18834,
+    "body_end": 19285,
+    "n_chars": 451
+   },
+   {
+    "num": "63",
+    "title": "Peeled, Mirrored, Shiny, No Coating",
+    "level": 1,
+    "parent": null,
+    "chapter": "63",
+    "body_start": 19321,
+    "body_end": 19925,
+    "n_chars": 604
+   },
+   {
+    "num": "64",
+    "title": "Tongue Body Cracks",
+    "level": 1,
+    "parent": null,
+    "chapter": "64",
+    "body_start": 19944,
+    "body_end": 19945,
+    "n_chars": 1
+   },
+   {
+    "num": "65",
+    "title": "Short Horizontal Cracks",
+    "level": 1,
+    "parent": null,
+    "chapter": "65",
+    "body_start": 19969,
+    "body_end": 20008,
+    "n_chars": 39
+   },
+   {
+    "num": "66",
+    "title": "Long Horizontal Cracks",
+    "level": 1,
+    "parent": null,
+    "chapter": "66",
+    "body_start": 20031,
+    "body_end": 20080,
+    "n_chars": 49
+   },
+   {
+    "num": "67",
+    "title": "Transverse Cracks On the Sides of the Tongue",
+    "level": 1,
+    "parent": null,
+    "chapter": "67",
+    "body_start": 20125,
+    "body_end": 20174,
+    "n_chars": 49
+   },
+   {
+    "num": "68",
+    "title": "Transverse Cracks Behind Tip",
+    "level": 1,
+    "parent": null,
+    "chapter": "68",
+    "body_start": 20203,
+    "body_end": 20256,
+    "n_chars": 53
+   },
+   {
+    "num": "69",
+    "title": "Very Deep Ventral Cracks With Other Smaller Cracks",
+    "level": 1,
+    "parent": null,
+    "chapter": "69",
+    "body_start": 20307,
+    "body_end": 20366,
+    "n_chars": 59
+   },
+   {
+    "num": "70",
+    "title": "Tongue Coat Root",
+    "level": 1,
+    "parent": null,
+    "chapter": "70",
+    "body_start": 20383,
+    "body_end": 20384,
+    "n_chars": 1
+   },
+   {
+    "num": "71",
+    "title": "Tongue Coat Has Root",
+    "level": 1,
+    "parent": null,
+    "chapter": "71",
+    "body_start": 20405,
+    "body_end": 20593,
+    "n_chars": 188
+   },
+   {
+    "num": "72",
+    "title": "Tongue Coat Has No Root",
+    "level": 1,
+    "parent": null,
+    "chapter": "72",
+    "body_start": 20617,
+    "body_end": 20835,
+    "n_chars": 218
+   },
+   {
+    "num": "73",
+    "title": "Tongue Diagnosis",
+    "level": 1,
+    "parent": null,
+    "chapter": "73",
+    "body_start": 20852,
+    "body_end": 21498,
+    "n_chars": 646
+   },
+   {
+    "num": "74",
+    "title": "As with any assessment method, the doctor",
+    "level": 1,
+    "parent": null,
+    "chapter": "74",
+    "body_start": 21540,
+    "body_end": 21646,
+    "n_chars": 106
+   },
+   {
+    "num": "75",
+    "title": "Below are some of the guidelines Chinese medical",
+    "level": 1,
+    "parent": null,
+    "chapter": "75",
+    "body_start": 21695,
+    "body_end": 21799,
+    "n_chars": 104
+   },
+   {
+    "num": "76",
+    "title": "Tongue body color May be a sign of",
+    "level": 1,
+    "parent": null,
+    "chapter": "76",
+    "body_start": 21834,
+    "body_end": 22289,
+    "n_chars": 455
+   },
+   {
+    "num": "77",
+    "title": "Purple                 Stagnant qi",
+    "level": 1,
+    "parent": null,
+    "chapter": "77",
+    "body_start": 22324,
+    "body_end": 22542,
+    "n_chars": 218
+   },
+   {
+    "num": "78",
+    "title": "Changes in the tongue shape usually reflect",
+    "level": 1,
+    "parent": null,
+    "chapter": "78",
+    "body_start": 22586,
+    "body_end": 22641,
+    "n_chars": 55
+   },
+   {
+    "num": "79",
+    "title": "Tongue shape           May be a sign of",
+    "level": 1,
+    "parent": null,
+    "chapter": "79",
+    "body_start": 22681,
+    "body_end": 22799,
+    "n_chars": 118
+   },
+   {
+    "num": "80",
+    "title": "Thin                   Blood deficiency",
+    "level": 1,
+    "parent": null,
+    "chapter": "80",
+    "body_start": 22839,
+    "body_end": 22879,
+    "n_chars": 40
+   },
+   {
+    "num": "81",
+    "title": "Trembling              Spleen qi deficiency",
+    "level": 1,
+    "parent": null,
+    "chapter": "81",
+    "body_start": 22923,
+    "body_end": 22924,
+    "n_chars": 1
+   },
+   {
+    "num": "82",
+    "title": "Elongated              Heart heat",
+    "level": 1,
+    "parent": null,
+    "chapter": "82",
+    "body_start": 22958,
+    "body_end": 22959,
+    "n_chars": 1
+   },
+   {
+    "num": "83",
+    "title": "Sides curled up        Liver qi stagnation",
+    "level": 1,
+    "parent": null,
+    "chapter": "83",
+    "body_start": 23002,
+    "body_end": 23086,
+    "n_chars": 84
+   },
+   {
+    "num": "84",
+    "title": "Cracks                 Excess heat or yin deficiency",
+    "level": 1,
+    "parent": null,
+    "chapter": "84",
+    "body_start": 23139,
+    "body_end": 24285,
+    "n_chars": 1146
+   },
+   {
+    "num": "85",
+    "title": "Other Tongue Tips",
+    "level": 1,
+    "parent": null,
+    "chapter": "85",
+    "body_start": 24303,
+    "body_end": 24752,
+    "n_chars": 449
+   },
+   {
+    "num": "86",
+    "title": "Tongue self diagnosis",
+    "level": 1,
+    "parent": null,
+    "chapter": "86",
+    "body_start": 24774,
+    "body_end": 27145,
+    "n_chars": 2371
+   },
+   {
+    "num": "87",
+    "title": "Structural characteristics",
+    "level": 1,
+    "parent": null,
+    "chapter": "87",
+    "body_start": 27172,
+    "body_end": 35260,
+    "n_chars": 8088
+   },
+   {
+    "num": "88",
+    "title": "Dark Red (Scarlet, Cardinal)",
+    "level": 1,
+    "parent": null,
+    "chapter": "88",
+    "body_start": 35289,
+    "body_end": 35658,
+    "n_chars": 369
+   },
+   {
+    "num": "89",
+    "title": "Blue",
+    "level": 1,
+    "parent": null,
+    "chapter": "89",
+    "body_start": 35663,
+    "body_end": 35734,
+    "n_chars": 71
+   },
+   {
+    "num": "90",
+    "title": "Tongue Body Shapes and Clinical Indications",
+    "level": 1,
+    "parent": null,
+    "chapter": "90",
+    "body_start": 35778,
+    "body_end": 35778,
+    "n_chars": 0
+   },
+   {
+    "num": "91",
+    "title": "Body Shape                     Indications",
+    "level": 1,
+    "parent": null,
+    "chapter": "91",
+    "body_start": 35821,
+    "body_end": 38202,
+    "n_chars": 2381
+   },
+   {
+    "num": "92",
+    "title": "Tongue Coatings and Clinical Indications",
+    "level": 1,
+    "parent": null,
+    "chapter": "92",
+    "body_start": 38243,
+    "body_end": 38543,
+    "n_chars": 300
+   },
+   {
+    "num": "93",
+    "title": "Tongue Coat               Indications",
+    "level": 1,
+    "parent": null,
+    "chapter": "93",
+    "body_start": 38581,
+    "body_end": 39176,
+    "n_chars": 595
+   },
+   {
+    "num": "94",
+    "title": "Coat Coloration           Indications",
+    "level": 1,
+    "parent": null,
+    "chapter": "94",
+    "body_start": 39214,
+    "body_end": 40078,
+    "n_chars": 864
+   },
+   {
+    "num": "95",
+    "title": "Coat Rooting                           Indications",
+    "level": 1,
+    "parent": null,
+    "chapter": "95",
+    "body_start": 40129,
+    "body_end": 54843,
+    "n_chars": 14714
+   },
+   {
+    "num": "96",
+    "title": "Read more with this book",
+    "level": 1,
+    "parent": null,
+    "chapter": "96",
+    "body_start": 54868,
+    "body_end": 54869,
+    "n_chars": 1
+   }
+  ]
+ },
+ "maciocia": {
+  "book_id": "maciocia",
+  "title": "Maciocia G., Tongue Diagnosis in Chinese Medicine (online)",
+  "source_file": "tongue_lit/tongue-diagnosis-maciocia-online.txt",
+  "n_sections": 126,
+  "sections": [
+   {
+    "num": "1",
+    "title": "Copyright Giovanni Maciocia",
+    "level": 1,
+    "parent": null,
+    "chapter": "1",
+    "body_start": 88,
+    "body_end": 172,
+    "n_chars": 84
+   },
+   {
+    "num": "2",
+    "title": "Limitations of tongue diagnosis",
+    "level": 1,
+    "parent": null,
+    "chapter": "2",
+    "body_start": 204,
+    "body_end": 204,
+    "n_chars": 0
+   },
+   {
+    "num": "3",
+    "title": "Items of observations of the Tongue",
+    "level": 1,
+    "parent": null,
+    "chapter": "3",
+    "body_start": 240,
+    "body_end": 240,
+    "n_chars": 0
+   },
+   {
+    "num": "4",
+    "title": "Aspects of tongue diagnosis",
+    "level": 1,
+    "parent": null,
+    "chapter": "4",
+    "body_start": 268,
+    "body_end": 268,
+    "n_chars": 0
+   },
+   {
+    "num": "5",
+    "title": "Normal Tongue",
+    "level": 1,
+    "parent": null,
+    "chapter": "5",
+    "body_start": 282,
+    "body_end": 282,
+    "n_chars": 0
+   },
+   {
+    "num": "6",
+    "title": "Topography of tongue",
+    "level": 1,
+    "parent": null,
+    "chapter": "6",
+    "body_start": 303,
+    "body_end": 303,
+    "n_chars": 0
+   },
+   {
+    "num": "7",
+    "title": "Tongue areas",
+    "level": 1,
+    "parent": null,
+    "chapter": "7",
+    "body_start": 316,
+    "body_end": 541,
+    "n_chars": 225
+   },
+   {
+    "num": "8",
+    "title": "Pale tongue",
+    "level": 1,
+    "parent": null,
+    "chapter": "8",
+    "body_start": 553,
+    "body_end": 553,
+    "n_chars": 0
+   },
+   {
+    "num": "9",
+    "title": "Red tongues",
+    "level": 1,
+    "parent": null,
+    "chapter": "9",
+    "body_start": 565,
+    "body_end": 643,
+    "n_chars": 78
+   },
+   {
+    "num": "10",
+    "title": "The tongue body colour in exterior conditions",
+    "level": 1,
+    "parent": null,
+    "chapter": "10",
+    "body_start": 689,
+    "body_end": 689,
+    "n_chars": 0
+   },
+   {
+    "num": "11",
+    "title": "Differentiation between Heat and Fire",
+    "level": 1,
+    "parent": null,
+    "chapter": "11",
+    "body_start": 727,
+    "body_end": 727,
+    "n_chars": 0
+   },
+   {
+    "num": "12",
+    "title": "Red points and red spots",
+    "level": 1,
+    "parent": null,
+    "chapter": "12",
+    "body_start": 752,
+    "body_end": 844,
+    "n_chars": 92
+   },
+   {
+    "num": "13",
+    "title": "White vesicles",
+    "level": 1,
+    "parent": null,
+    "chapter": "13",
+    "body_start": 859,
+    "body_end": 859,
+    "n_chars": 0
+   },
+   {
+    "num": "14",
+    "title": "Shen disturbances and tip of tongue",
+    "level": 1,
+    "parent": null,
+    "chapter": "14",
+    "body_start": 895,
+    "body_end": 895,
+    "n_chars": 0
+   },
+   {
+    "num": "15",
+    "title": "Yin Xu and Empty Heat on tongue",
+    "level": 1,
+    "parent": null,
+    "chapter": "15",
+    "body_start": 927,
+    "body_end": 985,
+    "n_chars": 58
+   },
+   {
+    "num": "16",
+    "title": "Purple Tongue",
+    "level": 1,
+    "parent": null,
+    "chapter": "16",
+    "body_start": 999,
+    "body_end": 1190,
+    "n_chars": 191
+   },
+   {
+    "num": "17",
+    "title": "Sublingual veins",
+    "level": 1,
+    "parent": null,
+    "chapter": "17",
+    "body_start": 1207,
+    "body_end": 1260,
+    "n_chars": 53
+   },
+   {
+    "num": "18",
+    "title": "Observation of tongue body shape",
+    "level": 1,
+    "parent": null,
+    "chapter": "18",
+    "body_start": 1293,
+    "body_end": 1714,
+    "n_chars": 421
+   },
+   {
+    "num": "19",
+    "title": "Preventing value of tongue diagnosis in the elderly",
+    "level": 1,
+    "parent": null,
+    "chapter": "19",
+    "body_start": 1766,
+    "body_end": 1766,
+    "n_chars": 0
+   },
+   {
+    "num": "20",
+    "title": "Tongue coating",
+    "level": 1,
+    "parent": null,
+    "chapter": "20",
+    "body_start": 1781,
+    "body_end": 2178,
+    "n_chars": 397
+   },
+   {
+    "num": "21",
+    "title": "Root of coating",
+    "level": 1,
+    "parent": null,
+    "chapter": "21",
+    "body_start": 2194,
+    "body_end": 2243,
+    "n_chars": 49
+   },
+   {
+    "num": "22",
+    "title": "Thickness of Coating",
+    "level": 1,
+    "parent": null,
+    "chapter": "22",
+    "body_start": 2264,
+    "body_end": 2264,
+    "n_chars": 0
+   },
+   {
+    "num": "23",
+    "title": "Colour of Coating",
+    "level": 1,
+    "parent": null,
+    "chapter": "23",
+    "body_start": 2282,
+    "body_end": 2282,
+    "n_chars": 0
+   },
+   {
+    "num": "24",
+    "title": "Coating distribution",
+    "level": 1,
+    "parent": null,
+    "chapter": "24",
+    "body_start": 2303,
+    "body_end": 2339,
+    "n_chars": 36
+   },
+   {
+    "num": "25",
+    "title": "Tongue diagnosis and herbal therapy",
+    "level": 1,
+    "parent": null,
+    "chapter": "25",
+    "body_start": 2375,
+    "body_end": 2742,
+    "n_chars": 367
+   },
+   {
+    "num": "26",
+    "title": "Correlation between Gastric Acidity and the Tongue",
+    "level": 1,
+    "parent": null,
+    "chapter": "26",
+    "body_start": 2793,
+    "body_end": 2793,
+    "n_chars": 0
+   },
+   {
+    "num": "27",
+    "title": "Types of Tongue in Cases of Perforated Ulcer",
+    "level": 1,
+    "parent": null,
+    "chapter": "27",
+    "body_start": 2838,
+    "body_end": 2839,
+    "n_chars": 1
+   },
+   {
+    "num": "28",
+    "title": "Body Shape and Sublingual Veins",
+    "level": 1,
+    "parent": null,
+    "chapter": "28",
+    "body_start": 2871,
+    "body_end": 2871,
+    "n_chars": 0
+   },
+   {
+    "num": "29",
+    "title": "Tongue in Stomach Cancer-Body Colour",
+    "level": 1,
+    "parent": null,
+    "chapter": "29",
+    "body_start": 2908,
+    "body_end": 2908,
+    "n_chars": 0
+   },
+   {
+    "num": "30",
+    "title": "Tongue and Colonoscopy- Body Colour",
+    "level": 1,
+    "parent": null,
+    "chapter": "30",
+    "body_start": 2944,
+    "body_end": 3102,
+    "n_chars": 158
+   },
+   {
+    "num": "31",
+    "title": "Tongue and Yin-Xu Epigastric Pain",
+    "level": 1,
+    "parent": null,
+    "chapter": "31",
+    "body_start": 3136,
+    "body_end": 3183,
+    "n_chars": 47
+   },
+   {
+    "num": "32",
+    "title": "Wen Bing and tongue diagnosis",
+    "level": 1,
+    "parent": null,
+    "chapter": "32",
+    "body_start": 3213,
+    "body_end": 5184,
+    "n_chars": 1971
+   },
+   {
+    "num": "33",
+    "title": "Order of observation of the tongue",
+    "level": 1,
+    "parent": null,
+    "chapter": "33",
+    "body_start": 5220,
+    "body_end": 6577,
+    "n_chars": 1357
+   },
+   {
+    "num": "34",
+    "title": "Aspect     Specific    Clinical Significance      Eight",
+    "level": 1,
+    "parent": null,
+    "chapter": "34",
+    "body_start": 6633,
+    "body_end": 6750,
+    "n_chars": 117
+   },
+   {
+    "num": "35",
+    "title": "Tongue                Good or poor prognosis",
+    "level": 1,
+    "parent": null,
+    "chapter": "35",
+    "body_start": 6795,
+    "body_end": 6795,
+    "n_chars": 0
+   },
+   {
+    "num": "36",
+    "title": "Shen",
+    "level": 1,
+    "parent": null,
+    "chapter": "36",
+    "body_start": 6801,
+    "body_end": 6859,
+    "n_chars": 58
+   },
+   {
+    "num": "37",
+    "title": "Body                                          Yin/Yang",
+    "level": 1,
+    "parent": null,
+    "chapter": "37",
+    "body_start": 6915,
+    "body_end": 7537,
+    "n_chars": 622
+   },
+   {
+    "num": "38",
+    "title": "Coating                     progression of pathogenic",
+    "level": 1,
+    "parent": null,
+    "chapter": "38",
+    "body_start": 7592,
+    "body_end": 8673,
+    "n_chars": 1081
+   },
+   {
+    "num": "39",
+    "title": "Please note that the Lung area encompasses",
+    "level": 1,
+    "parent": null,
+    "chapter": "39",
+    "body_start": 8716,
+    "body_end": 9072,
+    "n_chars": 356
+   },
+   {
+    "num": "40",
+    "title": "Liver swelling",
+    "level": 1,
+    "parent": null,
+    "chapter": "40",
+    "body_start": 9087,
+    "body_end": 10813,
+    "n_chars": 1726
+   },
+   {
+    "num": "41",
+    "title": "Dark lips",
+    "level": 1,
+    "parent": null,
+    "chapter": "41",
+    "body_start": 10823,
+    "body_end": 18715,
+    "n_chars": 7892
+   },
+   {
+    "num": "42",
+    "title": "Time",
+    "level": 1,
+    "parent": null,
+    "chapter": "42",
+    "body_start": 18720,
+    "body_end": 20949,
+    "n_chars": 2229
+   },
+   {
+    "num": "43",
+    "title": "Full Heat                                Empty Heat",
+    "level": 1,
+    "parent": null,
+    "chapter": "43",
+    "body_start": 21001,
+    "body_end": 24188,
+    "n_chars": 3187
+   },
+   {
+    "num": "44",
+    "title": "YANG MING CHANNEL SYNDROME",
+    "level": 1,
+    "parent": null,
+    "chapter": "44",
+    "body_start": 24216,
+    "body_end": 24663,
+    "n_chars": 447
+   },
+   {
+    "num": "45",
+    "title": "BAI HU TANG",
+    "level": 1,
+    "parent": null,
+    "chapter": "45",
+    "body_start": 24675,
+    "body_end": 24819,
+    "n_chars": 144
+   },
+   {
+    "num": "46",
+    "title": "YANG MING FU SYNDROME",
+    "level": 1,
+    "parent": null,
+    "chapter": "46",
+    "body_start": 24841,
+    "body_end": 24919,
+    "n_chars": 78
+   },
+   {
+    "num": "47",
+    "title": "Clinical manifestations",
+    "level": 1,
+    "parent": null,
+    "chapter": "47",
+    "body_start": 24943,
+    "body_end": 25378,
+    "n_chars": 435
+   },
+   {
+    "num": "48",
+    "title": "Treatment",
+    "level": 1,
+    "parent": null,
+    "chapter": "48",
+    "body_start": 25388,
+    "body_end": 25388,
+    "n_chars": 0
+   },
+   {
+    "num": "49",
+    "title": "TIAO WEI CHENG QI TANG",
+    "level": 1,
+    "parent": null,
+    "chapter": "49",
+    "body_start": 25411,
+    "body_end": 26464,
+    "n_chars": 1053
+   },
+   {
+    "num": "50",
+    "title": "YANG MING CHANNEL       STOMACH-HEAT",
+    "level": 1,
+    "parent": null,
+    "chapter": "50",
+    "body_start": 26501,
+    "body_end": 27414,
+    "n_chars": 913
+   },
+   {
+    "num": "51",
+    "title": "WEI LEVEL",
+    "level": 1,
+    "parent": null,
+    "chapter": "51",
+    "body_start": 27425,
+    "body_end": 27425,
+    "n_chars": 0
+   },
+   {
+    "num": "52",
+    "title": "QI LEVEL             HEAT",
+    "level": 1,
+    "parent": null,
+    "chapter": "52",
+    "body_start": 27452,
+    "body_end": 27479,
+    "n_chars": 27
+   },
+   {
+    "num": "53",
+    "title": "YING LEVEL",
+    "level": 1,
+    "parent": null,
+    "chapter": "53",
+    "body_start": 27490,
+    "body_end": 27658,
+    "n_chars": 168
+   },
+   {
+    "num": "54",
+    "title": "The Channel Syndrome with",
+    "level": 1,
+    "parent": null,
+    "chapter": "54",
+    "body_start": 27684,
+    "body_end": 27684,
+    "n_chars": 0
+   },
+   {
+    "num": "55",
+    "title": "Stomach-Heat is treated by",
+    "level": 1,
+    "parent": null,
+    "chapter": "55",
+    "body_start": 27711,
+    "body_end": 27743,
+    "n_chars": 32
+   },
+   {
+    "num": "56",
+    "title": "Gao) which clear Heat because the",
+    "level": 1,
+    "parent": null,
+    "chapter": "56",
+    "body_start": 27777,
+    "body_end": 27777,
+    "n_chars": 0
+   },
+   {
+    "num": "57",
+    "title": "Heat is still superficial enough to",
+    "level": 1,
+    "parent": null,
+    "chapter": "57",
+    "body_start": 27813,
+    "body_end": 27876,
+    "n_chars": 63
+   },
+   {
+    "num": "58",
+    "title": "The Fu Syndrome with",
+    "level": 1,
+    "parent": null,
+    "chapter": "58",
+    "body_start": 27898,
+    "body_end": 27898,
+    "n_chars": 0
+   },
+   {
+    "num": "59",
+    "title": "Stomach-Fire is treated by",
+    "level": 1,
+    "parent": null,
+    "chapter": "59",
+    "body_start": 27926,
+    "body_end": 27957,
+    "n_chars": 31
+   },
+   {
+    "num": "60",
+    "title": "Fire by moving downwards",
+    "level": 1,
+    "parent": null,
+    "chapter": "60",
+    "body_start": 27983,
+    "body_end": 28036,
+    "n_chars": 53
+   },
+   {
+    "num": "61",
+    "title": "Fire, this is too deep in the",
+    "level": 1,
+    "parent": null,
+    "chapter": "61",
+    "body_start": 28067,
+    "body_end": 28067,
+    "n_chars": 0
+   },
+   {
+    "num": "62",
+    "title": "Interior to be expelled by",
+    "level": 1,
+    "parent": null,
+    "chapter": "62",
+    "body_start": 28095,
+    "body_end": 31312,
+    "n_chars": 3217
+   },
+   {
+    "num": "63",
+    "title": "Red points tip",
+    "level": 1,
+    "parent": null,
+    "chapter": "63",
+    "body_start": 31327,
+    "body_end": 31375,
+    "n_chars": 48
+   },
+   {
+    "num": "64",
+    "title": "Red points sides                      Red spots root",
+    "level": 1,
+    "parent": null,
+    "chapter": "64",
+    "body_start": 31428,
+    "body_end": 34772,
+    "n_chars": 3344
+   },
+   {
+    "num": "65",
+    "title": "Tongue without coating   Tongue red without coating",
+    "level": 1,
+    "parent": null,
+    "chapter": "65",
+    "body_start": 34824,
+    "body_end": 35883,
+    "n_chars": 1059
+   },
+   {
+    "num": "66",
+    "title": "Heat in the Lungs",
+    "level": 1,
+    "parent": null,
+    "chapter": "66",
+    "body_start": 35901,
+    "body_end": 35902,
+    "n_chars": 1
+   },
+   {
+    "num": "67",
+    "title": "This tongue lacks a coating",
+    "level": 1,
+    "parent": null,
+    "chapter": "67",
+    "body_start": 35930,
+    "body_end": 36029,
+    "n_chars": 99
+   },
+   {
+    "num": "68",
+    "title": "NO COATING         YIN XU",
+    "level": 1,
+    "parent": null,
+    "chapter": "68",
+    "body_start": 36055,
+    "body_end": 36059,
+    "n_chars": 4
+   },
+   {
+    "num": "69",
+    "title": "NO COATING         YIN XU WITH",
+    "level": 1,
+    "parent": null,
+    "chapter": "69",
+    "body_start": 36090,
+    "body_end": 36090,
+    "n_chars": 0
+   },
+   {
+    "num": "70",
+    "title": "RED BODY          EMPTY HEAT",
+    "level": 1,
+    "parent": null,
+    "chapter": "70",
+    "body_start": 36120,
+    "body_end": 37404,
+    "n_chars": 1284
+   },
+   {
+    "num": "71",
+    "title": "Deficiency of Stomach-Yin With Stomach Empty Heat",
+    "level": 1,
+    "parent": null,
+    "chapter": "71",
+    "body_start": 37454,
+    "body_end": 41290,
+    "n_chars": 3836
+   },
+   {
+    "num": "72",
+    "title": "YANG",
+    "level": 1,
+    "parent": null,
+    "chapter": "72",
+    "body_start": 41296,
+    "body_end": 41296,
+    "n_chars": 0
+   },
+   {
+    "num": "73",
+    "title": "DEFICIENCY                                 HEAT",
+    "level": 1,
+    "parent": null,
+    "chapter": "73",
+    "body_start": 41345,
+    "body_end": 41345,
+    "n_chars": 0
+   },
+   {
+    "num": "74",
+    "title": "COLD (Pale tongue)                      (Red tongue)",
+    "level": 1,
+    "parent": null,
+    "chapter": "74",
+    "body_start": 41399,
+    "body_end": 42558,
+    "n_chars": 1159
+   },
+   {
+    "num": "75",
+    "title": "Reddish-Purple    Bluish-Purple",
+    "level": 1,
+    "parent": null,
+    "chapter": "75",
+    "body_start": 42590,
+    "body_end": 42591,
+    "n_chars": 1
+   },
+   {
+    "num": "76",
+    "title": "Bluish-Purple",
+    "level": 1,
+    "parent": null,
+    "chapter": "76",
+    "body_start": 42605,
+    "body_end": 42643,
+    "n_chars": 38
+   },
+   {
+    "num": "77",
+    "title": "Reddish-Purple   Reddish-Purple",
+    "level": 1,
+    "parent": null,
+    "chapter": "77",
+    "body_start": 42675,
+    "body_end": 42676,
+    "n_chars": 1
+   },
+   {
+    "num": "78",
+    "title": "Bluish-Purple    Reddish-Purple",
+    "level": 1,
+    "parent": null,
+    "chapter": "78",
+    "body_start": 42708,
+    "body_end": 42712,
+    "n_chars": 4
+   },
+   {
+    "num": "79",
+    "title": "Bluish-Purple   Bluish-Purple",
+    "level": 1,
+    "parent": null,
+    "chapter": "79",
+    "body_start": 42742,
+    "body_end": 46525,
+    "n_chars": 3783
+   },
+   {
+    "num": "80",
+    "title": "Sublingual veins very dark",
+    "level": 1,
+    "parent": null,
+    "chapter": "80",
+    "body_start": 46553,
+    "body_end": 47191,
+    "n_chars": 638
+   },
+   {
+    "num": "81",
+    "title": "TONGUE DIAGNOSIS",
+    "level": 1,
+    "parent": null,
+    "chapter": "81",
+    "body_start": 47208,
+    "body_end": 48806,
+    "n_chars": 1598
+   },
+   {
+    "num": "82",
+    "title": "Tongue",
+    "level": 1,
+    "parent": null,
+    "chapter": "82",
+    "body_start": 48813,
+    "body_end": 50586,
+    "n_chars": 1773
+   },
+   {
+    "num": "83",
+    "title": "Swollen sides",
+    "level": 1,
+    "parent": null,
+    "chapter": "83",
+    "body_start": 50600,
+    "body_end": 52624,
+    "n_chars": 2024
+   },
+   {
+    "num": "84",
+    "title": "Normal-sized tongue                  Swollen tongues",
+    "level": 1,
+    "parent": null,
+    "chapter": "84",
+    "body_start": 52677,
+    "body_end": 54456,
+    "n_chars": 1779
+   },
+   {
+    "num": "85",
+    "title": "Swelling of Tip",
+    "level": 1,
+    "parent": null,
+    "chapter": "85",
+    "body_start": 54473,
+    "body_end": 56199,
+    "n_chars": 1726
+   },
+   {
+    "num": "86",
+    "title": "Dampness with Spleen deficiency",
+    "level": 1,
+    "parent": null,
+    "chapter": "86",
+    "body_start": 56231,
+    "body_end": 58540,
+    "n_chars": 2309
+   },
+   {
+    "num": "87",
+    "title": "HE crack        HE crack        HE crack",
+    "level": 1,
+    "parent": null,
+    "chapter": "87",
+    "body_start": 58583,
+    "body_end": 58587,
+    "n_chars": 4
+   },
+   {
+    "num": "88",
+    "title": "ST crack        ST crack      ST - LU crack",
+    "level": 1,
+    "parent": null,
+    "chapter": "88",
+    "body_start": 58633,
+    "body_end": 62611,
+    "n_chars": 3978
+   },
+   {
+    "num": "89",
+    "title": "STIFF",
+    "level": 1,
+    "parent": null,
+    "chapter": "89",
+    "body_start": 62619,
+    "body_end": 72291,
+    "n_chars": 9672
+   },
+   {
+    "num": "90",
+    "title": "Front third",
+    "level": 1,
+    "parent": null,
+    "chapter": "90",
+    "body_start": 72303,
+    "body_end": 72356,
+    "n_chars": 53
+   },
+   {
+    "num": "91",
+    "title": "Centre",
+    "level": 1,
+    "parent": null,
+    "chapter": "91",
+    "body_start": 72364,
+    "body_end": 72422,
+    "n_chars": 58
+   },
+   {
+    "num": "92",
+    "title": "Root",
+    "level": 1,
+    "parent": null,
+    "chapter": "92",
+    "body_start": 72428,
+    "body_end": 72558,
+    "n_chars": 130
+   },
+   {
+    "num": "93",
+    "title": "Lung-Yin Xu, also Empty-Heat as it   Lung-Yin Xu",
+    "level": 1,
+    "parent": null,
+    "chapter": "93",
+    "body_start": 72607,
+    "body_end": 73190,
+    "n_chars": 583
+   },
+   {
+    "num": "94",
+    "title": "DEFICIENCY OF YIN OF STOMACH AND INTESTINES",
+    "level": 1,
+    "parent": null,
+    "chapter": "94",
+    "body_start": 73234,
+    "body_end": 73540,
+    "n_chars": 306
+   },
+   {
+    "num": "95",
+    "title": "Deficiency of Spleen-Yin (coating missing on the sides)",
+    "level": 1,
+    "parent": null,
+    "chapter": "95",
+    "body_start": 73596,
+    "body_end": 75801,
+    "n_chars": 2205
+   },
+   {
+    "num": "96",
+    "title": "Sudden appearance or disappearance of partial coating",
+    "level": 1,
+    "parent": null,
+    "chapter": "96",
+    "body_start": 75856,
+    "body_end": 78271,
+    "n_chars": 2415
+   },
+   {
+    "num": "97",
+    "title": "Normal filiform",
+    "level": 1,
+    "parent": null,
+    "chapter": "97",
+    "body_start": 78287,
+    "body_end": 78541,
+    "n_chars": 254
+   },
+   {
+    "num": "98",
+    "title": "With Root   Rootless",
+    "level": 1,
+    "parent": null,
+    "chapter": "98",
+    "body_start": 78562,
+    "body_end": 78563,
+    "n_chars": 1
+   },
+   {
+    "num": "99",
+    "title": "Thick coating with",
+    "level": 1,
+    "parent": null,
+    "chapter": "99",
+    "body_start": 78584,
+    "body_end": 78595,
+    "n_chars": 11
+   },
+   {
+    "num": "100",
+    "title": "Thick coating without root",
+    "level": 1,
+    "parent": null,
+    "chapter": "100",
+    "body_start": 78622,
+    "body_end": 81935,
+    "n_chars": 3313
+   },
+   {
+    "num": "101",
+    "title": "THIN",
+    "level": 1,
+    "parent": null,
+    "chapter": "101",
+    "body_start": 81941,
+    "body_end": 82032,
+    "n_chars": 91
+   },
+   {
+    "num": "102",
+    "title": "COATING",
+    "level": 1,
+    "parent": null,
+    "chapter": "102",
+    "body_start": 82040,
+    "body_end": 84138,
+    "n_chars": 2098
+   },
+   {
+    "num": "103",
+    "title": "ST              GB                     GB",
+    "level": 1,
+    "parent": null,
+    "chapter": "103",
+    "body_start": 84180,
+    "body_end": 84821,
+    "n_chars": 641
+   },
+   {
+    "num": "104",
+    "title": "Nourish ST-Yin and           Resolve Dampness or Phlegm",
+    "level": 1,
+    "parent": null,
+    "chapter": "104",
+    "body_start": 84877,
+    "body_end": 84938,
+    "n_chars": 61
+   },
+   {
+    "num": "105",
+    "title": "Phlegm (because the lack     body)",
+    "level": 1,
+    "parent": null,
+    "chapter": "105",
+    "body_start": 84973,
+    "body_end": 84994,
+    "n_chars": 21
+   },
+   {
+    "num": "106",
+    "title": "Stomach-Yin deficiency",
+    "level": 1,
+    "parent": null,
+    "chapter": "106",
+    "body_start": 85017,
+    "body_end": 85063,
+    "n_chars": 46
+   },
+   {
+    "num": "107",
+    "title": "Phlegm)",
+    "level": 1,
+    "parent": null,
+    "chapter": "107",
+    "body_start": 85071,
+    "body_end": 85072,
+    "n_chars": 1
+   },
+   {
+    "num": "108",
+    "title": "Nourish Yin, clear       Tonify Qi",
+    "level": 1,
+    "parent": null,
+    "chapter": "108",
+    "body_start": 85107,
+    "body_end": 85107,
+    "n_chars": 0
+   },
+   {
+    "num": "109",
+    "title": "Empty Heat,              and/or Blood",
+    "level": 1,
+    "parent": null,
+    "chapter": "109",
+    "body_start": 85145,
+    "body_end": 85261,
+    "n_chars": 116
+   },
+   {
+    "num": "110",
+    "title": "Yin deficiency the       Blood",
+    "level": 1,
+    "parent": null,
+    "chapter": "110",
+    "body_start": 85292,
+    "body_end": 85388,
+    "n_chars": 96
+   },
+   {
+    "num": "111",
+    "title": "Dampness)",
+    "level": 1,
+    "parent": null,
+    "chapter": "111",
+    "body_start": 85398,
+    "body_end": 85402,
+    "n_chars": 4
+   },
+   {
+    "num": "112",
+    "title": "Clear Heat              Resolve",
+    "level": 1,
+    "parent": null,
+    "chapter": "112",
+    "body_start": 85434,
+    "body_end": 86397,
+    "n_chars": 963
+   },
+   {
+    "num": "113",
+    "title": "Stomach and Spleen",
+    "level": 1,
+    "parent": null,
+    "chapter": "113",
+    "body_start": 86416,
+    "body_end": 88832,
+    "n_chars": 2416
+   },
+   {
+    "num": "114",
+    "title": "Correlation Between Types of Tongue and",
+    "level": 1,
+    "parent": null,
+    "chapter": "114",
+    "body_start": 88872,
+    "body_end": 88907,
+    "n_chars": 35
+   },
+   {
+    "num": "115",
+    "title": "Gastroscopy Results and Tongue Coating",
+    "level": 1,
+    "parent": null,
+    "chapter": "115",
+    "body_start": 88946,
+    "body_end": 88947,
+    "n_chars": 1
+   },
+   {
+    "num": "116",
+    "title": "Correlation Between Gastric Acidity and the Tongue",
+    "level": 1,
+    "parent": null,
+    "chapter": "116",
+    "body_start": 88998,
+    "body_end": 89049,
+    "n_chars": 51
+   },
+   {
+    "num": "117",
+    "title": "Body Shape",
+    "level": 1,
+    "parent": null,
+    "chapter": "117",
+    "body_start": 89062,
+    "body_end": 89066,
+    "n_chars": 4
+   },
+   {
+    "num": "118",
+    "title": "Sublingual Veins",
+    "level": 1,
+    "parent": null,
+    "chapter": "118",
+    "body_start": 89083,
+    "body_end": 89084,
+    "n_chars": 1
+   },
+   {
+    "num": "119",
+    "title": "The Tongue in Stomach Cancer - Body Colour",
+    "level": 1,
+    "parent": null,
+    "chapter": "119",
+    "body_start": 89127,
+    "body_end": 89137,
+    "n_chars": 10
+   },
+   {
+    "num": "120",
+    "title": "The Tongue and Colonoscopy - Body Colour",
+    "level": 1,
+    "parent": null,
+    "chapter": "120",
+    "body_start": 89178,
+    "body_end": 89179,
+    "n_chars": 1
+   },
+   {
+    "num": "121",
+    "title": "Coating",
+    "level": 1,
+    "parent": null,
+    "chapter": "121",
+    "body_start": 89187,
+    "body_end": 89188,
+    "n_chars": 1
+   },
+   {
+    "num": "122",
+    "title": "Correlation between Atrophic-Necrotic Epithelial",
+    "level": 1,
+    "parent": null,
+    "chapter": "122",
+    "body_start": 89237,
+    "body_end": 89237,
+    "n_chars": 0
+   },
+   {
+    "num": "123",
+    "title": "Cells of the Tongue and Yin-Xu Epigastric Pain",
+    "level": 1,
+    "parent": null,
+    "chapter": "123",
+    "body_start": 89285,
+    "body_end": 89395,
+    "n_chars": 110
+   },
+   {
+    "num": "124",
+    "title": "Epithelial Cells of the Tongue in Three Groups",
+    "level": 1,
+    "parent": null,
+    "chapter": "124",
+    "body_start": 89442,
+    "body_end": 89545,
+    "n_chars": 103
+   },
+   {
+    "num": "125",
+    "title": "Ye Tian Shi",
+    "level": 1,
+    "parent": null,
+    "chapter": "125",
+    "body_start": 89558,
+    "body_end": 89617,
+    "n_chars": 59
+   },
+   {
+    "num": "126",
+    "title": "Wu You Ke",
+    "level": 1,
+    "parent": null,
+    "chapter": "126",
+    "body_start": 89628,
+    "body_end": 90671,
+    "n_chars": 1043
+   }
+  ]
  }
 }
