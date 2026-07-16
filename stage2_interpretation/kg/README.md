@@ -11,17 +11,21 @@ interactive refinement pass (WS-B) both query.
 |---|---|---|---|
 | **seed** | `tcm_knowledge.json` | every fact, re-typed | ✅ done (`build_kg.py`) |
 | **macro** | Gerlach hierarchy (`parse_book.py` → `book_sections.json`) | `section_of` + `section:` nodes (184) | ✅ done |
-| **micro** | LLM-extracted book triplets, each cited + snippet | same edge rels + `snippets` store | 🔜 extractor ready (`micro_extract.py`, dry-run validated); run on casper, then write the merge |
+| **micro** | qwen2.5:14b triplets from Gerlach ch.2–4, cited + snippet | `points_to`/`argues_against` + `attested_in` + `snippets` | ✅ done (72 cited edges; 49 candidates held for review) |
 
-## Current graph (seed + macro)
+## Current graph (seed + macro + micro)
 
 ```
-nodes 359  (pattern 10, symptom 55, recommendation 39, question 21, feature 13,
-            value 17, region 4, organ 8, section 192)
-edges 427  (has_symptom 55, evidence_for 76, recommends 39, probes 21,
-            is_value_of 17, points_to 27, maps_to 8, section_of 184)
-rules 10
+nodes 360   edges 572   rules 10   snippets 72
+edges: points_to 93 (27 seed + 66 book-cited), argues_against 6, evidence_for 76,
+       has_symptom 55, recommends 39, section_of 184, attested_in 72, probes 21, ...
 ```
+
+Micro edges are tagged `cond.layer="micro"`, carry a book citation + a `snippet` id, and COEXIST with
+the seed rule weights (rule engine keeps using seed edges; the WS-C matcher can prefer cited micro
+edges). 49 `candidate` triplets — real signs our detector can't observe (sublingual veins) or Gerlach
+patterns outside our 10 (ira, repletio hepatici) — are held in `_meta.micro_candidates` for the
+ontology-spine step, not merged.
 
 ## Building the macro layer
 

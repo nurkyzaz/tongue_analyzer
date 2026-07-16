@@ -21,10 +21,14 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from kg.graph import KnowledgeGraph, slug  # noqa: E402
+from kg import normalize as norm  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 KB = os.path.join(HERE, "..", "knowledge_base", "tcm_knowledge.json")
 SECTIONS = os.path.join(HERE, "..", "knowledge_base", "book_sections.json")
+# micro triplets: prefer the qwen extraction, fall back to the gemma one
+TRIPLETS_CANDIDATES = [os.path.join(HERE, "..", "knowledge_base", f)
+                       for f in ("book_triplets_qwen.json", "book_triplets.json")]
 OUT = os.path.join(HERE, "..", "knowledge_base", "kg_graph.json")
 
 
@@ -144,6 +148,53 @@ def add_macro_layer(g, sections_file):
     return n_sec
 
 
+def add_micro_layer(g, triplets_file, kb, book_titles=None):
+    """Add LLM-extracted, cited feature->pattern edges from the licensed books (WS-A micro layer).
+
+    Triplets are normalized to our canonical vocabulary; only `mapped` ones become graph edges (each
+    cited to the book section, with a short attributed snippet in the snippet store). `candidate`
+    triplets (real signs our detector can't observe, or patterns outside our set) are recorded for
+    ontology review but NOT merged; `junk` is dropped. Micro edges are tagged `layer:"micro"` and carry
+    their own weight, so they COEXIST with the seed rule weights (the rule engine keeps using seed
+    edges; the WS-C grounded matcher can prefer cited micro edges).
+    """
+    book_titles = book_titles or {}
+    feats = set(kb.get("features", {})) | set(kb.get("extra_features", {}))
+    pats = set(kb.get("patterns", {}))
+    data = json.load(open(triplets_file))
+    book_id = data.get("book_id", "book")
+    res = norm.normalize_records(data["records"], feats, pats)
+
+    sec_titles = {}
+    if os.path.exists(SECTIONS):
+        for bk in json.load(open(SECTIONS)).values():
+            for s in bk["sections"]:
+                sec_titles[s["num"]] = s["title"]
+
+    n_edge = 0
+    for i, t in enumerate(res["mapped"]):
+        sec = t.get("section", "?")
+        cite = "%s §%s — %s" % (book_titles.get(book_id, book_id.title()), sec, sec_titles.get(sec, ""))
+        snip_id = "snip:%s:%s:%d" % (book_id, sec, i)
+        g.add_snippet(snip_id, t.get("snippet", ""), cite, location=sec)
+        vid = "value:%s=%s" % (t["feature"], t.get("value") or "present")
+        if vid not in g.nodes:  # ensure the value node exists (present-type for extras)
+            g.add_node(vid, "value", name={"feature": t["feature"], "value": t.get("value") or "present"})
+            g.add_edge(vid, "is_value_of", "feature:%s" % t["feature"])
+        rel = "points_to" if t["polarity"] == "supports" else "argues_against"
+        e = g.add_edge(vid, rel, "pattern:%s" % t["pattern"], weight=0.5,
+                       cond={"layer": "micro"}, sources=[cite], snippet=snip_id)
+        # traceability: which section attests this
+        g.add_edge(vid, "attested_in", "section:%s:%s" % (book_id, sec), sources=[cite])
+        n_edge += 1
+
+    # keep candidates for the ontology-spine / expansion step (not merged as edges)
+    g.meta["micro_candidates"] = [
+        {"feature": t["raw_feature"], "pattern": t["pattern"], "section": t.get("section"),
+         "snippet": t.get("snippet", "")[:160]} for t in res["candidate"]]
+    return n_edge, len(res["candidate"]), len(res["junk"])
+
+
 def verify_parity(g, kb):
     """Assert the graph is a strict superset of the KB. Returns list of problems (empty = ok)."""
     problems = []
@@ -211,10 +262,18 @@ def main():
         "framing": "Educational only — 'traditionally associated with…', never a diagnosis.",
     })
     seed_from_kb(g, kb)
+    book_titles = {}
     if os.path.exists(SECTIONS):
         n_sec = add_macro_layer(g, SECTIONS)
         g.meta["layers"].append("macro")
+        book_titles = {bid: bk.get("title", bid) for bid, bk in json.load(open(SECTIONS)).items()}
         print("added macro layer: %d book sections from %s" % (n_sec, os.path.basename(SECTIONS)))
+    triplets = next((p for p in TRIPLETS_CANDIDATES if os.path.exists(p)), None)
+    if triplets:
+        n_e, n_c, n_j = add_micro_layer(g, triplets, kb, book_titles)
+        g.meta["layers"].append("micro")
+        print("added micro layer: %d cited edges (+%d candidates held for review, %d junk) from %s"
+              % (n_e, n_c, n_j, os.path.basename(triplets)))
     g.save(args.out)
     st = g.stats()
     print("wrote %s" % args.out)
