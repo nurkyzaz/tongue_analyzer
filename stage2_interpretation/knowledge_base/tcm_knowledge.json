@@ -718,6 +718,122 @@
    },
    "cite": "user-observed; Maciocia (coating vs body cracks)",
    "note": "cracks on a THICK GREASY coat may be cracks in the COATING, not true body fissures — discount the Yin-deficiency reading that fissures would otherwise drive"
+  },
+  {
+   "id": "pale_thin_blood_deficiency",
+   "when": {
+    "zhi": "light",
+    "thin": "present"
+   },
+   "boost": {
+    "blood_deficiency": 0.5,
+    "spleen_qi_deficiency": -0.2
+   },
+   "cite": "Maciocia (pale+thin body)",
+   "note": "a pale AND thin body leans Blood deficiency more strongly than the general pale->qi/spleen reading"
+  },
+  {
+   "id": "purple_moist_cold_stasis",
+   "when": {
+    "purple_body": "present",
+    "moisture": "wet"
+   },
+   "boost": {
+    "yang_deficiency": 0.4,
+    "damp_heat": -0.3
+   },
+   "cite": "SL/Mac",
+   "note": "purple + a moist tongue = COLD blood-stasis (yang/cold drives it), not heat-stasis"
+  },
+  {
+   "id": "purple_red_heat_stasis",
+   "when": {
+    "purple_body": "present",
+    "red_tongue": "present"
+   },
+   "boost": {
+    "yin_deficiency": 0.3,
+    "yang_deficiency": -0.3
+   },
+   "cite": "SL/Mac",
+   "note": "purple + a red/dry body = HEAT blood-stasis (heat drives the stasis), not cold-stasis"
+  },
+  {
+   "id": "thick_peeled_stomach_yin",
+   "when": {
+    "peeled_coating": "present"
+   },
+   "boost": {
+    "yin_deficiency": 0.4,
+    "damp_heat": -0.7,
+    "phlegm_dampness": -0.4
+   },
+   "cite": "Maciocia (peeled/mirror coating)",
+   "note": "NEGATION: a peeled/patchy coat with a residual (yellow or thick) patch = Stomach-Yin damage with a lingering pathogen, NOT damp-heat — peeling dominates the reading",
+   "any": {
+    "tai": [
+     "yellow",
+     "light_yellow"
+    ],
+    "coat_thickness": "thick"
+   }
+  },
+  {
+   "id": "red_tip_empty_heat",
+   "when": {
+    "red_tip": "present",
+    "tai": "white"
+   },
+   "boost": {
+    "yin_deficiency": 0.4,
+    "damp_heat": -0.3
+   },
+   "cite": "SL (red tip = Heart/Lung heat)",
+   "note": "a red tip on a thin/white coat points to upper (Heart/Lung) empty-heat, not damp-heat; a dedicated heart_heat pattern is a future addition"
   }
- ]
+ ],
+ "symptom_patterns": {
+  "tiredness or fatigue, worse after meals": {
+   "spleen_qi_deficiency": 0.5,
+   "yang_deficiency": 0.3,
+   "blood_deficiency": 0.2
+  },
+  "cold hands and feet or feeling cold": {
+   "yang_deficiency": 0.7
+  },
+  "thirst or a dry mouth and throat": {
+   "yin_deficiency": 0.5,
+   "damp_heat": 0.3
+  },
+  "night sweats or evening heat/flushing": {
+   "yin_deficiency": 0.7
+  },
+  "bloating or fullness after eating": {
+   "spleen_qi_deficiency": 0.5,
+   "phlegm_dampness": 0.3
+  },
+  "loose stools or poor appetite": {
+   "spleen_qi_deficiency": 0.6
+  },
+  "a heavy, foggy feeling or lots of phlegm": {
+   "phlegm_dampness": 0.6,
+   "damp_heat": 0.3
+  },
+  "a bitter or sticky taste in the mouth": {
+   "damp_heat": 0.6
+  },
+  "irritability, stress or frequent sighing": {
+   "qi_stagnation": 0.7
+  },
+  "dizziness, pallor or brittle nails/hair": {
+   "blood_deficiency": 0.6
+  },
+  "fixed or stabbing pain, or a dark complexion": {
+   "blood_stasis": 0.7
+  },
+  "insomnia or restless, poor sleep": {
+   "yin_deficiency": 0.4,
+   "qi_stagnation": 0.3
+  }
+ }
 }

@@ -112,6 +112,15 @@ def seed_from_kb(g, kb):
             g.add_node(oid, "organ", name={"text": organ})
             g.add_edge(rid, "maps_to", oid)
 
+    # user-reported symptoms -> pattern (WS-B lever; kb['symptom_patterns']) --------------
+    # distinct from a pattern's downstream associated_symptoms: these are what a USER reports in
+    # refinement, with per-pattern weights, entering as symptom evidence over the same graph.
+    for sym, pats in kb.get("symptom_patterns", {}).items():
+        sid = "symptom:%s" % slug(sym)
+        g.add_node(sid, "symptom", name={"text": sym}, props={"user_reported": True})
+        for pat, w in pats.items():
+            g.add_edge(sid, "evidence_for", "pattern:%s" % pat, weight=w)
+
     # combination rules kept verbatim (hyperedges) --------------------
     g.rules = list(kb.get("combination_rules", []))
 

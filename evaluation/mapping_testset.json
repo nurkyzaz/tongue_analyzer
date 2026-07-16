@@ -1,52 +1,246 @@
 {
-  "_about": "Grounded feature-combination -> pattern test cases for the DIAGNOSIS MAPPING (not feature detection). Each case is a canonical tongue picture from TCM tongue-diagnosis references; `accept` lists the pattern id(s) that reference sources consider correct for that combination. Runner: evaluation/eval_mapping.py. Sources: Sacred Lotus TCM tongue diagnosis; Maciocia, Tongue Diagnosis in Chinese Medicine; Delphi consensus PMC8983216; Wang Qi CCMQ 9-constitution model.",
-  "cases": [
-    {"id": "pale_toothmarks", "note": "pale body + tooth marks + thin white coat = Spleen Qi (→Qi-deficiency constitution)",
-     "features": {"zhi": "light", "tooth_mk": "severe", "coating": "non_greasy", "tai": "white", "fissure": "none"},
-     "accept": ["spleen_qi_deficiency", "yang_deficiency"]},
-
-    {"id": "pale_swollen_wet", "note": "pale + swollen + WET, thin white (non-greasy) coat = Spleen/Kidney Yang deficiency; the wet sheen is what separates it from damp-heat",
-     "features": {"zhi": "light", "coating": "non_greasy", "tai": "white", "swollen": "present", "tooth_mk": "light", "moisture": "wet"},
-     "accept": ["yang_deficiency", "spleen_qi_deficiency"]},
-
-    {"id": "red_greasy_yellow", "note": "red body + greasy yellow coat = Damp-Heat",
-     "features": {"zhi": "dark", "coating": "greasy_thick", "tai": "yellow", "red_tongue": "present"},
-     "accept": ["damp_heat"]},
-
-    {"id": "thick_greasy_white_swollen", "note": "thick greasy white coat + swollen, normal body = Phlegm-Dampness",
-     "features": {"zhi": "regular", "coating": "greasy_thick", "tai": "white", "swollen": "present", "slippery_coating": "present"},
-     "accept": ["phlegm_dampness"]},
-
-    {"id": "red_peeled_cracked", "note": "red body + peeled/no coat + cracks = Yin deficiency (empty heat)",
-     "features": {"zhi": "dark", "fissure": "severe", "coating": "non_greasy", "tai": "white", "peeled_coating": "present", "red_tongue": "present"},
-     "accept": ["yin_deficiency"]},
-
-    {"id": "dark_purple", "note": "dark/purple body = Blood stasis",
-     "features": {"zhi": "dark", "coating": "non_greasy", "tai": "white", "purple_body": "present"},
-     "accept": ["blood_stasis"]},
-
-    {"id": "red_dots_yellow", "note": "red dots/prickles + yellow greasy coat = Heat in blood / Damp-Heat",
-     "features": {"zhi": "dark", "coating": "greasy", "tai": "yellow", "red_dots": "present"},
-     "accept": ["damp_heat"]},
-
-    {"id": "pale_thin_body", "note": "pale + thin (not swollen) body = Blood deficiency (under-nourished)",
-     "features": {"zhi": "light", "coating": "non_greasy", "tai": "white", "thin": "present", "tooth_mk": "none"},
-     "accept": ["blood_deficiency"]},
-
-    {"id": "balanced_normal", "note": "light-red body + thin white coat, no marks = Balanced",
-     "features": {"zhi": "regular", "coating": "non_greasy", "tai": "white", "fissure": "none", "tooth_mk": "none"},
-     "accept": ["balanced"]},
-
-    {"id": "greasy_yellow_cracked_HARD", "note": "HARD/contradictory: greasy yellow coat (damp) + cracks (yin-dry) = Damp-Heat consuming fluids (or damp-heat + yin-def)",
-     "features": {"zhi": "dark", "coating": "greasy_thick", "tai": "yellow", "fissure": "severe", "red_tongue": "present"},
-     "accept": ["damp_heat", "yin_deficiency"]},
-
-    {"id": "red_tip_thin_coat", "note": "red tip (Heart/upper-jiao heat) on an otherwise near-normal tongue + scanty coat = heat, leans Yin-deficiency / Heart-heat",
-     "features": {"zhi": "regular", "coating": "non_greasy", "tai": "white", "red_tip": "present", "fissure": "light"},
-     "accept": ["yin_deficiency", "damp_heat"]},
-
-    {"id": "swollen_red_yellow", "note": "CONTEXT FLIP: same swelling as the yang case, but with a RED body + greasy YELLOW coat = Damp-Heat (proves swelling flips meaning by body colour/coat)",
-     "features": {"zhi": "dark", "coating": "greasy", "tai": "yellow", "swollen": "present", "red_tongue": "present"},
-     "accept": ["damp_heat"]}
-  ]
+ "_about": "Grounded feature-combination -> pattern test cases for the DIAGNOSIS MAPPING (not feature detection). Each case is a canonical tongue picture from TCM tongue-diagnosis references; `accept` lists the pattern id(s) that reference sources consider correct for that combination. Runner: evaluation/eval_mapping.py. Sources: Sacred Lotus TCM tongue diagnosis; Maciocia, Tongue Diagnosis in Chinese Medicine; Delphi consensus PMC8983216; Wang Qi CCMQ 9-constitution model.",
+ "cases": [
+  {
+   "id": "pale_toothmarks",
+   "note": "pale body + tooth marks + thin white coat = Spleen Qi (→Qi-deficiency constitution)",
+   "features": {
+    "zhi": "light",
+    "tooth_mk": "severe",
+    "coating": "non_greasy",
+    "tai": "white",
+    "fissure": "none"
+   },
+   "accept": [
+    "spleen_qi_deficiency",
+    "yang_deficiency"
+   ]
+  },
+  {
+   "id": "pale_swollen_wet",
+   "note": "pale + swollen + WET, thin white (non-greasy) coat = Spleen/Kidney Yang deficiency; the wet sheen is what separates it from damp-heat",
+   "features": {
+    "zhi": "light",
+    "coating": "non_greasy",
+    "tai": "white",
+    "swollen": "present",
+    "tooth_mk": "light",
+    "moisture": "wet"
+   },
+   "accept": [
+    "yang_deficiency",
+    "spleen_qi_deficiency"
+   ]
+  },
+  {
+   "id": "red_greasy_yellow",
+   "note": "red body + greasy yellow coat = Damp-Heat",
+   "features": {
+    "zhi": "dark",
+    "coating": "greasy_thick",
+    "tai": "yellow",
+    "red_tongue": "present"
+   },
+   "accept": [
+    "damp_heat"
+   ]
+  },
+  {
+   "id": "thick_greasy_white_swollen",
+   "note": "thick greasy white coat + swollen, normal body = Phlegm-Dampness",
+   "features": {
+    "zhi": "regular",
+    "coating": "greasy_thick",
+    "tai": "white",
+    "swollen": "present",
+    "slippery_coating": "present"
+   },
+   "accept": [
+    "phlegm_dampness"
+   ]
+  },
+  {
+   "id": "red_peeled_cracked",
+   "note": "red body + peeled/no coat + cracks = Yin deficiency (empty heat)",
+   "features": {
+    "zhi": "dark",
+    "fissure": "severe",
+    "coating": "non_greasy",
+    "tai": "white",
+    "peeled_coating": "present",
+    "red_tongue": "present"
+   },
+   "accept": [
+    "yin_deficiency"
+   ]
+  },
+  {
+   "id": "dark_purple",
+   "note": "dark/purple body = Blood stasis",
+   "features": {
+    "zhi": "dark",
+    "coating": "non_greasy",
+    "tai": "white",
+    "purple_body": "present"
+   },
+   "accept": [
+    "blood_stasis"
+   ]
+  },
+  {
+   "id": "red_dots_yellow",
+   "note": "red dots/prickles + yellow greasy coat = Heat in blood / Damp-Heat",
+   "features": {
+    "zhi": "dark",
+    "coating": "greasy",
+    "tai": "yellow",
+    "red_dots": "present"
+   },
+   "accept": [
+    "damp_heat"
+   ]
+  },
+  {
+   "id": "pale_thin_body",
+   "note": "pale + thin (not swollen) body = Blood deficiency (under-nourished)",
+   "features": {
+    "zhi": "light",
+    "coating": "non_greasy",
+    "tai": "white",
+    "thin": "present",
+    "tooth_mk": "none"
+   },
+   "accept": [
+    "blood_deficiency"
+   ]
+  },
+  {
+   "id": "balanced_normal",
+   "note": "light-red body + thin white coat, no marks = Balanced",
+   "features": {
+    "zhi": "regular",
+    "coating": "non_greasy",
+    "tai": "white",
+    "fissure": "none",
+    "tooth_mk": "none"
+   },
+   "accept": [
+    "balanced"
+   ]
+  },
+  {
+   "id": "greasy_yellow_cracked_HARD",
+   "note": "HARD/contradictory: greasy yellow coat (damp) + cracks (yin-dry) = Damp-Heat consuming fluids (or damp-heat + yin-def)",
+   "features": {
+    "zhi": "dark",
+    "coating": "greasy_thick",
+    "tai": "yellow",
+    "fissure": "severe",
+    "red_tongue": "present"
+   },
+   "accept": [
+    "damp_heat",
+    "yin_deficiency"
+   ]
+  },
+  {
+   "id": "red_tip_thin_coat",
+   "note": "red tip (Heart/upper-jiao heat) on an otherwise near-normal tongue + scanty coat = heat, leans Yin-deficiency / Heart-heat",
+   "features": {
+    "zhi": "regular",
+    "coating": "non_greasy",
+    "tai": "white",
+    "red_tip": "present",
+    "fissure": "light"
+   },
+   "accept": [
+    "yin_deficiency",
+    "damp_heat"
+   ]
+  },
+  {
+   "id": "swollen_red_yellow",
+   "note": "CONTEXT FLIP: same swelling as the yang case, but with a RED body + greasy YELLOW coat = Damp-Heat (proves swelling flips meaning by body colour/coat)",
+   "features": {
+    "zhi": "dark",
+    "coating": "greasy",
+    "tai": "yellow",
+    "swollen": "present",
+    "red_tongue": "present"
+   },
+   "accept": [
+    "damp_heat"
+   ]
+  },
+  {
+   "id": "pale_thin_blood_def",
+   "note": "pale + thin body -> Blood deficiency (override general pale->qi)",
+   "features": {
+    "zhi": "light",
+    "thin": "present",
+    "coating": "non_greasy",
+    "tai": "white",
+    "fissure": "none"
+   },
+   "accept": [
+    "blood_deficiency"
+   ]
+  },
+  {
+   "id": "purple_moist_cold_stasis",
+   "note": "purple + moist tongue -> cold blood-stasis (stasis/yang, not damp-heat)",
+   "features": {
+    "purple_body": "present",
+    "moisture": "wet",
+    "zhi": "dark",
+    "coating": "non_greasy"
+   },
+   "accept": [
+    "blood_stasis",
+    "yang_deficiency"
+   ]
+  },
+  {
+   "id": "purple_red_heat_stasis",
+   "note": "purple + red body -> heat blood-stasis (stasis/heat, not cold)",
+   "features": {
+    "purple_body": "present",
+    "red_tongue": "present",
+    "zhi": "dark",
+    "coating": "non_greasy"
+   },
+   "accept": [
+    "blood_stasis",
+    "yin_deficiency",
+    "damp_heat"
+   ]
+  },
+  {
+   "id": "thick_peeled_stomach_yin",
+   "note": "peeled coat with a residual yellow patch -> Stomach-Yin damage, NOT damp-heat (negation)",
+   "features": {
+    "peeled_coating": "present",
+    "tai": "yellow",
+    "coating": "non_greasy",
+    "zhi": "regular",
+    "fissure": "light"
+   },
+   "accept": [
+    "yin_deficiency"
+   ]
+  },
+  {
+   "id": "red_tip_white_empty_heat",
+   "note": "red tip on white coat -> upper empty-heat, not damp-heat",
+   "features": {
+    "red_tip": "present",
+    "tai": "white",
+    "coating": "non_greasy",
+    "zhi": "regular"
+   },
+   "accept": [
+    "yin_deficiency"
+   ]
+  }
+ ]
 }
