@@ -27,9 +27,15 @@ is filtered through that second lens (§7).
 - **WS-F output design:** a Claude Design handoff bundle (Savor 舌 tab) is in `prompt-execution-request/`;
   it maps 1:1 onto WS-B (Refine flow), WS-C (linkage cards + confidence bars), and the Sources sheet
   (citation-only / citation+snippet licensing states). Iterating on it collaboratively.
-- Not yet started: WS-C (grounded matcher, shadow), WS-B (refinement engine), WS-D (RAGAS gate), WS-E (deploy).
-  The KG (`kg_graph.json`) is **not yet wired into serving** — it feeds `retrieval.py` + the graph-RAG
-  gate in shadow; the live demo still runs the rule engine + RAG corpus. WS-C flips serving onto the graph.
+- **WS-C — built & gated (2026-07-16):** grounded matcher (`kg/matcher.py`) + shadow run (0 hallucination,
+  0.50 top-1 vs rules, within-family) → **ensemble** `kg/ensemble.py` (rule prior + cited matcher evidence,
+  `blended=(1-α)·rule+α·matcher`, α=0.35, abstention neutral, matcher-only hints capped at α). Wired into
+  `interpret.py` behind `TIH_WSC_ENSEMBLE` (**default OFF** — promotion decision). Eval on human40:
+  **top-1 stability vs rule 0.75, lead-cited 0.925, matcher-added 0.0, hallucination 0.0**; **WS-D
+  faithfulness gate PASS (micro 0.868 ≥ 0.85**, vs 0.936 rule-only — honest dip for the added grounding).
+  **Step 4 done:** raw `confidence_pct` on every pattern card + shown in UI (was a word only).
+- Not yet started: WS-B (refinement engine), WS-E (deploy the ensemble on by default — pending the
+  faithfulness-tradeoff call). The KG still isn't the live ranker until `TIH_WSC_ENSEMBLE=1` ships.
 
 ---
 

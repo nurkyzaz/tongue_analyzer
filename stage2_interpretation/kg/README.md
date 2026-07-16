@@ -78,7 +78,23 @@ Jaccard) so promotion is on the numbers, not decided in advance. The rule engine
 hallucination-rate **0.0**, top-1 agreement **0.50** vs the rule engine, mean Jaccard 0.48, abstain 0.0
 — disagreements almost all within-family (phlegm ↔ spleen-qi ↔ yin ↔ damp-heat). Verdict: safe, but
 not a clear win → **ensemble** (matcher for cited evidence + a second-opinion prior), don't replace the
-rule ranker. Narrative faithfulness gate (`evaluation/eval_faithfulness.py`): **0.936 → PASS**.
+rule ranker.
+
+## WS-C ensemble (`ensemble.py`) — rule prior + cited evidence
+
+`ensemble_cards(rule_cards, matcher_out)` blends the auditable rule vote (the prior) with the matcher's
+cite-or-abstain confidence: `blended = (1-α)·rule + α·matcher`, α=0.35 (rule-dominant). Two safety
+properties by construction: **abstention is neutral** (a rule pattern the matcher didn't name keeps its
+prior, not a penalty), and **matcher-only hints are capped at α** (a grounded pattern the rule missed
+can appear as a cited secondary, never overturn a confident rule lead). When the rule engine leads with
+`balanced`, the ensemble stays out of the way. Each surfaced pattern gets book **citations** (source +
+snippet), the matcher's `why`, and an honest `confidence_pct`. Wired into `interpret.py` behind
+`TIH_WSC_ENSEMBLE` (**default OFF** until promoted); fully degrading (no graph / LLM down → rule cards).
+
+**Eval** (`evaluation/eval_ensemble.py`, human40, α=0.35): top-1 **stability vs rule 0.75**, **lead-cited
+0.925**, matcher-added 0.0, hallucination 0.0. **WS-D faithfulness gate on the ensemble path: micro
+0.868 → PASS** (rule-only baseline 0.936 — an honest dip for the added grounding). Promotion to
+default-ON is a pending decision (the faithfulness tradeoff).
 
 Micro edges are tagged `cond.layer="micro"`, carry a book citation + a `snippet` id, and COEXIST with
 the seed rule weights (rule engine keeps using seed edges; the WS-C matcher can prefer cited micro

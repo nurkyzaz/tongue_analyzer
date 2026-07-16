@@ -15,6 +15,24 @@ import os
 from llm_client import LLMClient
 
 _RETRIEVER = None
+_MATCHER = None
+
+# WS-C ensemble: layer the grounded cite-or-abstain matcher (cited book evidence + honest confidence)
+# on top of the rule-engine prior. OFF by default — a promotion decision gated by WS-D (the plan:
+# "nothing promotes without the gate"). Enable with TIH_WSC_ENSEMBLE=1 once the numbers clear.
+WSC_ENSEMBLE = os.getenv("TIH_WSC_ENSEMBLE", "0") == "1"
+
+
+def _matcher():
+    """Lazy singleton grounded matcher; None if the graph/LLM aren't available so callers degrade."""
+    global _MATCHER
+    if _MATCHER is None:
+        try:
+            from kg.matcher import GroundedMatcher
+            _MATCHER = GroundedMatcher()
+        except Exception:
+            _MATCHER = False
+    return _MATCHER or None
 
 
 def _retriever():
@@ -268,7 +286,8 @@ def _card(kb, pid, conf):
             "modern_correlation": pat.get("modern_correlation", ""),
             "recommendations": pat.get("recommendations", {}),
             "followup_questions": pat.get("followup_questions", []),
-            "confidence": round(conf, 3)}
+            "confidence": round(conf, 3),
+            "confidence_pct": round(conf * 100)}   # WS-C step 4: honest raw number, not just a word
 
 
 def _cond_ok(cond, present):
@@ -340,6 +359,25 @@ def vote_patterns(readings, kb, present=None, top_k=3):
     if top_raw < 0.55:                       # no strong pattern -> lead with the balanced picture
         out = [_card(kb, "balanced", 1.0 - top_raw / 0.55)] + out
     return out
+
+
+def _apply_wsc_ensemble(patterns, present, kb):
+    """WS-C: blend the grounded matcher (cited book evidence) onto the rule prior. Fully degrading —
+    any failure (no graph, LLM down, exception) returns the rule cards untouched, so serving never
+    breaks. The matcher itself falls back to the graph-RAG ranking when no LLM is configured, so the
+    ensemble still attaches book citations even offline."""
+    try:
+        m = _matcher()
+        if not m:
+            return patterns, {"applied": False, "reason": "matcher unavailable"}
+        from kg.ensemble import ensemble_cards
+        matcher_out = m.match(present)
+        cards, meta = ensemble_cards(patterns, matcher_out,
+                                     make_card=lambda pid, c: _card(kb, pid, c))
+        meta["matcher_dropped"] = len(matcher_out.get("dropped", []))
+        return cards, meta
+    except Exception as e:
+        return patterns, {"applied": False, "reason": "error: %s" % type(e).__name__}
 
 
 def _synthesis(readings, patterns):
@@ -691,7 +729,10 @@ def interpret(stage1_output, metadata=None, llm: LLMClient = None):
                 + coat_axis_readings(chars)
                 + zoned_readings(stage1_output)
                 + extra_readings(stage1_output.get("extra_characteristics", {}), kb, stats))
-    patterns = vote_patterns(readings, kb, present_features(stage1_output))   # + context rules
+    patterns = vote_patterns(readings, kb, present_features(stage1_output))   # rule prior (+ context rules)
+    ensemble_meta = None
+    if WSC_ENSEMBLE:                                          # WS-C: blend grounded cited evidence on top
+        patterns, ensemble_meta = _apply_wsc_ensemble(patterns, present_features(stage1_output), kb)
     disp = [r for r in readings if r.get("display", True)]   # display hides the conflated coating
     for r in disp:                                           # per-sign distinctiveness + honesty tags
         rel = r.get("rel")
@@ -721,6 +762,7 @@ def interpret(stage1_output, metadata=None, llm: LLMClient = None):
         "findings_text": found_text, "findings": findings, "recommendation": recommendation,
         "symptoms": symptoms,
         "features": disp, "patterns": patterns,
+        "ensemble": ensemble_meta,          # WS-C transparency: how the blend ranked (None if off)
         "reasoning": [{"note": r["note"], "cite": r["cite"]} for r in fired if r["note"]],
         "regions": kb.get("regions", {}),
         "combined": combined, "sources": sources, "report": report, "disclaimer": DISCLAIMER,

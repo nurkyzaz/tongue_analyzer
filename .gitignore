@@ -83,3 +83,5 @@ evaluation/faithfulness_results.json
 
 # WHO IST derived index (rebuildable via who_terms.py; who_spine.json is the tracked curated map)
 stage2_interpretation/knowledge_base/who_terms.json
+evaluation/ensemble_results.json
+evaluation/faithfulness_ensemble.json

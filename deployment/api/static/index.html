@@ -424,7 +424,7 @@ function renderReading(d){
         ? `<div class="why"><b>為何 · Why</b> ${p.reasoning.map(r=>r.note).join(' · ')}</div>`:'';
       return `<div class="pcard" style="opacity:${op}">
         <div class="ptop"><span class="pzh" style="font-size:${zhSize}">${zhPattern(p)}</span>
-          <span class="pen">${p.plain_name||p.tcm_name||''}</span><span class="pw">${weightWord(p.confidence)}</span></div>
+          <span class="pen">${p.plain_name||p.tcm_name||''}</span><span class="pw">${weightWord(p.confidence)} · ${p.confidence_pct??bar}%</span></div>
         ${chipHtml}${why}
         <div class="track3"><i style="width:${bar}%"></i></div></div>`;
     }).join('');

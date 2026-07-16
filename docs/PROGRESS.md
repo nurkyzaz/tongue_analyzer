@@ -76,6 +76,15 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
   engine, mean Jaccard 0.48, abstain 0.0. Disagreements are almost all **within-family** (phlegm ↔
   spleen-qi ↔ yin ↔ damp-heat). **Verdict: safe but not clearly better than rules → ensemble (use the
   matcher for cited evidence + a second-opinion prior), do NOT wholesale-replace the rule ranker.**
+- ✅ **WS-C ensemble — built + gated (2026-07-16)** (`kg/ensemble.py`, wired into `interpret.py` behind
+  `TIH_WSC_ENSEMBLE`, **default OFF**): rule prior + cited matcher confidence, `blended=(1-α)·rule+α·matcher`
+  (α=0.35). Safety by construction — **abstention is neutral** (unnamed rule patterns keep their prior),
+  **matcher-only hints capped at α** (cited secondary, never overturn a confident rule lead), balanced-lead
+  passes through, fully degrading. Adds book **citations** + `why` + honest **`confidence_pct`** per card
+  (WS-C step 4; UI now shows the % not just a word). **Eval** (`evaluation/eval_ensemble.py`, human40,
+  α=0.35): top-1 **stability vs rule 0.75**, **lead-cited 0.925**, matcher-added 0.0, hallucination 0.0.
+  **WS-D gate on the ensemble path: micro 0.868 → PASS** (rule-only 0.936 — honest dip for the grounding).
+  Promotion to default-ON is a pending decision (faithfulness tradeoff).
 - ✅ **WS-D RAGAS-style faithfulness gate** (`evaluation/eval_faithfulness.py`, 12 imgs): local
   claim-grounding judge over the LLM narrative → **faithfulness 0.936 (73/78 claims)**, threshold 0.85 →
   **GATE PASS** (LLM narrator may default ON). The 5 flagged claims are soft symptom/wellness
