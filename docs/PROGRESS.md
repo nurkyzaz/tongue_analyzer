@@ -48,7 +48,15 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
   `evaluation/eval_mapping.py`)
 - ✅ **Grounded RAG+LLM narrative** — rule backbone + a TRUE vector RAG (faiss + nomic-embed via Ollama +
   TF-IDF hybrid) over a 102-chunk cited corpus (`knowledge_cards.json`); retrieval hit@4 96%
-  (`evaluation/eval_rag.py`). See `docs/RAG_LLM_INTERPRETATION.md`.
+  (`evaluation/eval_rag.py`). See `docs/archive/RAG_LLM_INTERPRETATION.md`.
+- 🔄 **WS-A macro-micro knowledge graph** (`stage2_interpretation/kg/`, the Stage-2 overhaul — PLAN.md §3):
+  seed layer from `tcm_knowledge.json` with `--verify` **superset parity**; macro layer = Gerlach's 184
+  book sections (`parse_book.py`); graph = 359 nodes / 427 edges / 10 rules incl. inverse `evidence_for`
+  edges (WS-B lever). Micro layer: offline extractor `micro_extract.py` (casper, free) + `normalize.py`;
+  **qwen2.5:14b chosen** over gemma3:4b on Gerlach ch.2 (more faithful, 0 junk). Next: full ch.2–4 run +
+  `add_micro_layer`.
+- ⬜ WS-C grounded cite-or-abstain matcher (shadow → ensemble) · ⬜ WS-B refinement engine (symptom evidence
+  + information-gain questions) · ⬜ WS-D RAGAS eval gate.
 
 ## Phase 4 — Integration
 - ✅ `pipeline.py` orchestrator (image[+metadata] → quantitative JSON + report) — **end-to-end works**
@@ -62,19 +70,21 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
 
 ---
 
-## Current state (2026-07-13) — see `docs/HANDOFF.md` for the full picture
-**Production:** seg_combined + **multitask_v5** (v6/v7/v8 all lost to v5 on the honest human metric) +
-extra_features. **Honest accuracy ~61% vs human** (`eval_model.py --source human`); coating weakest.
-**Stage-1 additions:** coating split thickness×texture (thickness 82% vs conflated 55%), red-tip &
-moisture signals (`zoning.py`). **Stage-2:** combination rules (mapping test 12/12) + graded/honest
-report (headline, distinctiveness, per-sign confidence) + grounded RAG+LLM (Ollama gemma3 + nomic-embed,
-102-chunk corpus, retrieval 96%). **Testing:** human40 (labeled), human40b (40 imgs, NOT yet labeled),
-merged `label_store`, mapping_testset, eval_rag, labeled `data/eval/gallery/`. **Demo** live on :7860 with
-LLM+RAG.
+## Current state (2026-07-16) — see `docs/PLAN.md` (SoT) + `docs/HANDOFF.md`
+**Stage 1 FROZEN:** seg_combined + **multitask_v5** (v6/v7/v8 all lost to v5 on the honest human metric) +
+extra_features + `zoning.py` geometry. Honest accuracy ~61% exact / **97% within-one-grade** vs human. Not
+chasing further (label ceiling).
+**Stage 2 = the active work (PLAN.md §3):** rule engine (combination rules, mapping test 12/12) +
+grounded RAG+LLM narrative (retrieval 96%), now being overhauled onto a **macro-micro knowledge graph**
+(`kg/`) built from the newly-licensed books in `tongue_lit/`. WS-A graph is built (seed+macro, parity
+verified); micro extraction underway (qwen2.5:14b on casper, free).
+**App design:** a Claude Design handoff bundle for the Savor 舌 tab lives in `prompt-execution-request/` —
+maps 1:1 onto WS-B (refine), WS-C (linkage cards), and the Sources sheet.
 
-**Blocked on user data:** label human40b (`evaluation/label_human40b.html`); real-phone photos for color
-calibration + true real-world accuracy. **Next-value:** grow the human eval → re-verify; cleaner coating
-labels (not loss re-weighting); grow RAG corpus; hallucination-rate eval before LLM-default; deploy.
+**Blocked on user data:** real-phone photos for color calibration + true real-world accuracy.
+**Next (PLAN.md sequence):** finish WS-A micro layer → WS-C matcher (shadow) → WS-B refinement → WS-D
+RAGAS gate → WS-E deploy. **Repo cleanup done** (docs 26→11 living; archives under `docs/archive/` +
+`evaluation/archive/`).
 
 ## Was waiting on team (resolved / moot)
 - vLLM `:8000` key — not obtained; using **local Ollama** (gemma3 + nomic-embed, no auth) instead.

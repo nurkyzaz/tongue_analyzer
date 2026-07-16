@@ -1,7 +1,11 @@
-# Handoff — TongueInsight (TIH) · state & next steps (2026-07-13)
+# Handoff — TongueInsight (TIH) · state & next steps (2026-07-16)
 
-Read this first. It's the self-contained "start here" for a fresh agent. Deeper detail is in the docs
-linked below and in `git log`.
+Read this first, then **[PLAN.md](PLAN.md)** — the single source of truth for remaining work (Stage 2
+RAG overhaul). Deeper history is in `docs/PROGRESS.md`, `docs/archive/`, and `git log`.
+
+**Current focus:** the Stage 2 overhaul — a macro-micro **knowledge graph** built from newly-licensed
+TCM books (`tongue_lit/`, git-ignored/copyrighted), a grounded cite-or-abstain matcher, interactive
+symptom-evidence refinement, and a RAGAS eval gate. Stage 1 is **frozen** (v5). See PLAN.md §3.
 
 ## What the project is
 An **educational** wellness app: photo of a tongue → detected visual features → a grounded
@@ -52,16 +56,26 @@ LLM/RAG needs **Ollama** on `:11434` (models: `gemma3:latest` chat, `nomic-embed
 local, no auth). The shared vLLM `:8000` needs a key we don't have. Without the env vars, the demo serves
 the deterministic template (always works).
 
-## What was done this session (all pushed)
-Stage-1 signals: **coating split into thickness×texture** (COATING_SPLIT.md — thickness 82% vs conflated
-55% on human), **red-tip voting** (validated), **moisture** (wet-only, honest). Stage-2 mapping:
-**combination rules** (context: swelling flips yang↔damp-heat by colour/moisture; `mapping_testset.json`
-+ `eval_mapping.py` = 12/12). Interpretation: **headline + distinctiveness + per-sign confidence**
-honesty; **hybrid RAG+LLM** — grounded narrative (rule backbone intact) + a **true vector RAG** (faiss +
-nomic embeddings + TF-IDF hybrid) over a **102-chunk cited corpus** (`knowledge_cards.json`:
-constitutions, ICD-11 patterns, disambiguations, symptoms, combos, food therapy), retrieval **hit@4 96%**
-(`eval_rag.py`). Data/testing: **labeled gallery** (`build_gallery.py` → `data/eval/gallery/` +
-`gallery.html`), **fresh human40b** set (40 imgs, not yet labeled).
+## What's new (2026-07-16) — Stage 2 KG overhaul started
+Consolidated all planning into **PLAN.md** (v2, single source of truth); archived 17 superseded docs →
+`docs/archive/`, 11 one-off scripts → `evaluation/archive/`. **WS-A knowledge graph built**
+(`stage2_interpretation/kg/`):
+- `graph.py` — typed `KnowledgeGraph` with forward `feature→pattern` **and inverse `symptom/question→
+  pattern`** edges (the WS-B lever). `build_kg.py --verify` seeds it from `tcm_knowledge.json` and asserts
+  **strict superset parity** (enabling the KG changes nothing day-1). `parse_book.py` parsed Gerlach's 184
+  sections → `book_sections.json` (macro layer; metadata+offsets only, never the copyrighted text). Graph =
+  359 nodes / 427 edges / 10 rules.
+- `micro_extract.py` — offline LLM triplet extractor (casper GPU 0, Ollama, **free**), cite-or-abstain.
+  `normalize.py` maps extracted triplets → our canonical vocab (Gerlach Latin → our keys) as mapped /
+  candidate / junk. **Model comparison (Gerlach ch.2): qwen2.5:14b chosen** over gemma3:4b — more faithful,
+  uses our keys, 0 junk. `review_triplets.py` builds a local QA page.
+- **Next:** full chapters 2–4 extraction with qwen14b → write `build_kg.add_micro_layer` → WS-C grounded
+  matcher (shadow) + WS-B refinement engine. A **design bundle** for the app is in
+  `prompt-execution-request/` (Savor 舌 tab; maps 1:1 onto WS-B/WS-C/Sources — see PLAN.md §5).
+
+Prior rounds (pushed): coating split thickness×texture, red-tip/moisture, combination rules
+(`eval_mapping.py` 12/12), hybrid RAG+LLM over a cited corpus (`knowledge_cards.json`, retrieval hit@4
+96%), labeled gallery, human40+human40b eval sets. Detail in `docs/archive/` + `git log`.
 
 ## Blocked on the user (do these when data arrives)
 1. ✅ **human40b labeled** (2026-07-13) — folded into the eval (75 human images now). Confirmed v5 ~59%,
@@ -69,27 +83,32 @@ constitutions, ICD-11 patterns, disambiguations, symptoms, combos, food therapy)
 2. **Real phone photos** across skin tones/lighting → settles color calibration (`eval_color_calib.py`)
    and measures true real-world accuracy. STILL NEEDED.
 
-## Advised next steps (roughly by value)
-1. **Grow the human eval** (label human40b) — it gates everything; then re-check v5 vs recent changes.
-2. **Training-signal fix** needs *cleaner/more coating labels*, not loss re-weighting (v8 proved that).
-   Consider harvesting expert-graded greasy-vs-thick data or per-characteristic fine-tuning.
-3. **Keep growing the RAG corpus** (`knowledge_cards.json` → `build_corpus.py` → `rag.py --build` →
-   `eval_rag.py`) with open-access (CC-BY) literature + remaining disambiguation pairs. Corpus quality =
-   the RAG's ceiling. NEVER vendor copyrighted texts (Maciocia etc.).
-4. **Before defaulting the LLM ON in production:** run a hallucination-rate check (does the narrative
-   ever add a sign/claim not in the grounding?) and consider a stronger model. Rule backbone stays.
-5. **Deployment:** easiest = containerize the FastAPI app on a cheap CPU box (0.34s/img), app = thin
-   client or PWA of the existing demo. On-device (Core ML/TFLite) is the v2 privacy story.
-6. **Licensing before commercial ship:** seg model trained partly on SM-Tongue (CC-BY-NC) — retrain seg
-   without it or license. DINOv3 gated (using DINOv2 fallback).
+## Advised next steps (per PLAN.md sequence)
+1. **Finish WS-A:** run the full Gerlach chapters 2–4 micro-extraction with **qwen2.5:14b** on casper
+   (free, ~15 min), expand `normalize.py`'s alias map to catch its candidates, then write
+   `build_kg.add_micro_layer` (validated against real triplets) so the graph gets cited book edges.
+   (Later: WHO-terminology ontology spine; parse Maciocia too.)
+2. **WS-C grounded matcher** in *shadow mode* — LLM cite-or-abstain over the KG, logged alongside the rule
+   engine on the gallery; promote on the numbers. Add raw confidence % back to the output (quick win).
+3. **WS-B refinement engine** — symptom-evidence re-scoring + information-gain question selection over the
+   KG's `evidence_for` edges (UI-agnostic; pairs with the design's Refine flow).
+4. **WS-D eval gate** — adopt **RAGAS** (faithfulness) as the hallucination gate before defaulting the LLM
+   ON; expand `eval_mapping.py`; keep TCMEval-SDT (rules 69.7%) and `eval_rag.py`.
+5. **WS-E deploy** — containerize FastAPI on a cheap CPU box (0.34s/img); narrator off-box; template is the
+   always-on fallback. **Licensing before ship:** seg uses SM-Tongue (CC-BY-NC) → retrain without it or
+   license; DINOv3 gated (DINOv2 fallback); surface book snippets to users only if the grant allows.
+6. **WS-F output design** — user-led; a design bundle already exists in `prompt-execution-request/`.
 
 ## Map of the important files
-- Plan & status: `docs/DIRECTION_REVIEW.md` (workstreams WS1-6, statuses), `docs/PROGRESS.md`.
-- Accuracy story: `docs/ACCURACY_INVESTIGATION.md`, `docs/BENCHMARK.md`, `docs/LABEL_STORE.md`.
-- Mapping: `docs/FEATURE_MAPPING_REFERENCE.md`, `docs/FEATURE_PATTERN_MAPPING.md`, `docs/COATING_SPLIT.md`.
-- Interpretation/RAG: `docs/RAG_LLM_INTERPRETATION.md`.
-- Color: `docs/COLOR_CALIBRATION.md`. Feedback round: `docs/FEATURE_FEEDBACK_2026-07-13.md`.
-- Eval harnesses: `evaluation/{eval_model,eval_mapping,eval_rag,eval_color_calib,eval_coat_axes,eval_human_labels}.py`.
+- **Plan (SoT):** `docs/PLAN.md`. Architecture: `docs/ARCHITECTURE.md`. Status board: `docs/PROGRESS.md`.
+- Knowledge graph (WS-A): `stage2_interpretation/kg/` (`graph.py`, `build_kg.py`, `parse_book.py`,
+  `micro_extract.py`, `normalize.py`, `review_triplets.py`, `README.md`).
+- Living mapping refs: `docs/FEATURE_MAPPING_REFERENCE.md`, `docs/FEATURE_PATTERN_MAPPING.md`,
+  `docs/LABEL_STORE.md`, `docs/BENCHMARK.md`, `docs/LABELING_GUIDE.md`.
+- Historical detail (accuracy/RAG/coating/color investigations): `docs/archive/`.
+- Living eval harnesses: `evaluation/{eval_model,eval_mapping,eval_rag,eval_coat_axes,eval_extra_features,
+  eval_seg,eval_stage1,benchmark,benchmark_syndrome}.py` (one-offs archived under `evaluation/archive/`).
+- App design bundle: `prompt-execution-request/` (Claude Design handoff — the Savor 舌 tab comps).
 
 ## Working style the user expects
 Rigorous and honest: measure before promoting, report negatives plainly (v8/color-calib were kept OFF on

@@ -13,43 +13,44 @@ photo ─► [Stage 1: feature detection]  ─► structured JSON ─► [Stage 
             segmentation + graded features                    grounded TCM knowledge base (+ optional LLM)
 ```
 
-## Status (2026-07-13)
+## Status (2026-07-16)
 
-**Working end-to-end**, honestly measured. **New agents / contributors: start with
-[docs/HANDOFF.md](docs/HANDOFF.md).**
+**Working end-to-end**, honestly measured. Stage 1 is **frozen**; the active work is the **Stage 2
+knowledge-graph + RAG overhaul**. **New agents / contributors: read [docs/PLAN.md](docs/PLAN.md) (the
+single source of truth), then [docs/HANDOFF.md](docs/HANDOFF.md).**
 
 | Component | State |
 |---|---|
-| Segmentation (U-Net++, TonguExpert + SM-Tongue) | ✅ **0.975 real-photo Dice** (`seg_combined`) |
-| Feature model (5 core + 8 extra, multi-task) | ✅ **production = `multitask_v5`**; ~61% vs HUMAN labels (auto-benchmark 0.87 is optimistic) |
+| Segmentation (U-Net++, TonguExpert + SM-Tongue) | ✅ **frozen** — 0.975 real-photo Dice (`seg_combined`) |
+| Feature model (5 core + 8 extra, multi-task) | ✅ **frozen** — `multitask_v5`; ~61% exact / 97% within-one-grade vs human labels |
 | Stage-1 signals | ✅ coating split thickness×texture, red-tip, moisture (`zoning.py`) |
 | Interpretation (rule engine + KB) | ✅ distinctiveness-weighted votes + **combination rules** (context-aware) + honest graded report |
-| Grounded RAG + LLM narrative | ✅ rule backbone + **true vector RAG** (102-chunk cited corpus, retrieval 96%) + local-LLM narrative (Ollama) |
-| FastAPI service + web demo | ✅ live on casper `:7860` (camera guide, mask overlay, examples), cloudflared HTTPS tunnel |
+| Grounded RAG + LLM narrative | ✅ rule backbone + true vector RAG (cited corpus, retrieval 96%) + local-LLM narrative (Ollama) |
+| **Macro-micro knowledge graph** (`stage2_interpretation/kg/`) | 🔄 seed+macro built (parity-verified); micro extraction from licensed books underway (PLAN.md §3) |
+| FastAPI service + web demo | ✅ live on casper `:7860` (camera guide, mask overlay), cloudflared HTTPS tunnel |
 | **Honest metric** | promote a change only if it beats v5 on the **human** eval / mapping test — not on val/auto |
 
 ## Docs (read these)
 
-- **[docs/HANDOFF.md](docs/HANDOFF.md)** — self-contained project state, where it runs, and next steps. **Start here.**
-- **[docs/DIRECTION_REVIEW.md](docs/DIRECTION_REVIEW.md)** — the assessment + workstream plan (WS1–6) with statuses.
-- **[docs/RAG_LLM_INTERPRETATION.md](docs/RAG_LLM_INTERPRETATION.md)** — the hybrid rule+RAG+LLM interpretation layer.
-- **[docs/ACCURACY_INVESTIGATION.md](docs/ACCURACY_INVESTIGATION.md)** — why the model misreads and what actually helps.
-- **[docs/IMPROVEMENT_PLAN.md](docs/IMPROVEMENT_PLAN.md)** — the original sensitivity/interpretation plan (largely delivered).
-- **[docs/TCM_RESEARCH.md](docs/TCM_RESEARCH.md)** — how TCM literature categorizes features, and the
-  reputable open resources (WHO ICD-11, CCMQ, SymMap) we ground the knowledge base in.
+- **[docs/PLAN.md](docs/PLAN.md)** — the master plan / single source of truth for remaining work. **Start here.**
+- **[docs/HANDOFF.md](docs/HANDOFF.md)** — self-contained project state, where it runs, next steps.
+- **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** — how the pieces fit together today.
+- **[stage2_interpretation/kg/README.md](stage2_interpretation/kg/README.md)** — the knowledge-graph layers, model, and build.
 - **[docs/RESOURCES.md](docs/RESOURCES.md)** — audit of every external dataset/model, with licensing flags.
-- **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** · **[docs/PROGRESS.md](docs/PROGRESS.md)**
+- **[docs/PROGRESS.md](docs/PROGRESS.md)** · living mapping refs `FEATURE_PATTERN_MAPPING.md`, `LABEL_STORE.md`, `BENCHMARK.md`.
+- Historical investigations (accuracy/RAG/coating/color/original plans) are archived under **[docs/archive/](docs/archive/)**.
 
 ## Repository layout
 
 | Path | Purpose |
 |---|---|
 | `stage1_quantitative/` | Segmentation + multi-task feature model + inference → JSON |
-| `stage2_interpretation/` | Grounded TCM knowledge base + interpreter (LLM-optional) |
+| `stage2_interpretation/` | Interpreter + rule KB + RAG; `kg/` = macro-micro knowledge graph (WS-A) |
 | `data/` | Data prep + loaders (raw data **not** committed) |
-| `evaluation/` | Metrics (Dice/IoU, macro-F1, Memory-SAM benchmark) |
+| `evaluation/` | Living eval harnesses (one-offs under `evaluation/archive/`) |
 | `deployment/api/` | FastAPI service + single-page web demo |
-| `scripts/`, `docs/` | Cluster/one-off scripts · documentation |
+| `prompt-execution-request/` | Claude Design handoff bundle — the Savor 舌 tab app comps |
+| `docs/` | Documentation (`PLAN.md` = SoT; superseded notes under `docs/archive/`) |
 
 ## Compute
 

@@ -7,6 +7,16 @@ docs (to be archived — see §6). Deep history stays in `docs/PROGRESS.md` and 
 The project is an **educational, non-diagnostic** wellness feature (計五味 / Savor): tongue photo →
 detected features → a grounded TCM "constitution leaning," framed as *"traditionally associated with…"*.
 
+### Progress since v2 (updated 2026-07-16)
+- **WS-G cleanup — done** (§6). **WS-A knowledge graph — in progress:** seed + macro layers built and
+  parity-verified (`stage2_interpretation/kg/`, 359 nodes / 427 edges incl. the WS-B `evidence_for`
+  edges); micro extraction running on casper (free) — **qwen2.5:14b** chosen over gemma3:4b (more
+  faithful, uses our vocab, 0 junk). Next in WS-A: full Gerlach ch.2–4 run → `add_micro_layer`.
+- **WS-F output design:** a Claude Design handoff bundle (Savor 舌 tab) is in `prompt-execution-request/`;
+  it maps 1:1 onto WS-B (Refine flow), WS-C (linkage cards + confidence bars), and the Sources sheet
+  (citation-only / citation+snippet licensing states). Iterating on it collaboratively.
+- Not yet started: WS-C (grounded matcher, shadow), WS-B (refinement engine), WS-D (RAGAS gate), WS-E (deploy).
+
 ---
 
 ## 1. Where we are (honest status)
