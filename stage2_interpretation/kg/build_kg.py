@@ -24,6 +24,7 @@ from kg.graph import KnowledgeGraph, slug  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 KB = os.path.join(HERE, "..", "knowledge_base", "tcm_knowledge.json")
+SECTIONS = os.path.join(HERE, "..", "knowledge_base", "book_sections.json")
 OUT = os.path.join(HERE, "..", "knowledge_base", "kg_graph.json")
 
 
@@ -111,6 +112,38 @@ def seed_from_kb(g, kb):
     g.rules = list(kb.get("combination_rules", []))
 
 
+def add_macro_layer(g, sections_file):
+    """Add book chapter/section title nodes + `section_of` hierarchy (WS-A macro layer).
+
+    Section nodes carry the body-span offsets so the micro-extraction step can locate the text to
+    read (the text itself is never stored in the graph — copyrighted). Chapter nodes are synthesized
+    from the section numbering. Macro only ADDS; seed parity is unaffected.
+    """
+    data = json.load(open(sections_file))
+    n_sec = 0
+    for book_id, bk in data.items():
+        book_title = bk.get("title", book_id)
+        for ch in sorted({s["chapter"] for s in bk["sections"]}):
+            g.add_node("section:%s:%s" % (book_id, ch), "section",
+                       name={"num": ch, "title": "Chapter %s" % ch, "book": book_title},
+                       props={"level": 1, "book_id": book_id}, sources=[book_title])
+        for s in bk["sections"]:
+            sid = "section:%s:%s" % (book_id, s["num"])
+            g.add_node(sid, "section",
+                       name={"num": s["num"], "title": s["title"], "book": book_title},
+                       props={"level": s["level"], "book_id": book_id, "n_chars": s["n_chars"],
+                              "body_start": s["body_start"], "body_end": s["body_end"]},
+                       sources=[book_title])
+            parent_num = s["parent"] or s["chapter"]
+            pid = "section:%s:%s" % (book_id, parent_num)
+            if pid not in g.nodes:  # stub any missing intermediate parent
+                g.add_node(pid, "section", name={"num": parent_num, "book": book_title},
+                           props={"book_id": book_id}, sources=[book_title])
+            g.add_edge(sid, "section_of", pid)
+            n_sec += 1
+    return n_sec
+
+
 def verify_parity(g, kb):
     """Assert the graph is a strict superset of the KB. Returns list of problems (empty = ok)."""
     problems = []
@@ -178,6 +211,10 @@ def main():
         "framing": "Educational only — 'traditionally associated with…', never a diagnosis.",
     })
     seed_from_kb(g, kb)
+    if os.path.exists(SECTIONS):
+        n_sec = add_macro_layer(g, SECTIONS)
+        g.meta["layers"].append("macro")
+        print("added macro layer: %d book sections from %s" % (n_sec, os.path.basename(SECTIONS)))
     g.save(args.out)
     st = g.stats()
     print("wrote %s" % args.out)

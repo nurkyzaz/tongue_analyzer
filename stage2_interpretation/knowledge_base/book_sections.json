@@ -1,0 +1,1850 @@
+{
+ "gerlach": {
+  "book_id": "gerlach",
+  "title": "Gerlach O., TCM Tongue Diagnosis Explained (World Scientific, 2025)",
+  "source_file": "tongue_lit/874856627-TCM-Tongue-Diagnosis-Explained.txt",
+  "n_sections": 184,
+  "sections": [
+   {
+    "num": "1.1",
+    "title": "History of tongue diagnosis",
+    "level": 2,
+    "parent": "1",
+    "chapter": "1",
+    "body_start": 59981,
+    "body_end": 61071,
+    "n_chars": 1090
+   },
+   {
+    "num": "1.2",
+    "title": "Tongue diagnosis in Western medicine",
+    "level": 2,
+    "parent": "1",
+    "chapter": "1",
+    "body_start": 61112,
+    "body_end": 61922,
+    "n_chars": 810
+   },
+   {
+    "num": "1.3",
+    "title": "External conditions of tongue viewing",
+    "level": 2,
+    "parent": "1",
+    "chapter": "1",
+    "body_start": 61964,
+    "body_end": 61965,
+    "n_chars": 1
+   },
+   {
+    "num": "1.3.1",
+    "title": "Lighting",
+    "level": 3,
+    "parent": "1.3",
+    "chapter": "1",
+    "body_start": 61980,
+    "body_end": 63247,
+    "n_chars": 1267
+   },
+   {
+    "num": "1.4",
+    "title": "Correct tongue posture and sources of error",
+    "level": 2,
+    "parent": "1",
+    "chapter": "1",
+    "body_start": 63295,
+    "body_end": 63296,
+    "n_chars": 1
+   },
+   {
+    "num": "1.4.1",
+    "title": "Tongue posture",
+    "level": 3,
+    "parent": "1.4",
+    "chapter": "1",
+    "body_start": 63317,
+    "body_end": 65242,
+    "n_chars": 1925
+   },
+   {
+    "num": "1.4.2",
+    "title": "Extending the tongue",
+    "level": 3,
+    "parent": "1.4",
+    "chapter": "1",
+    "body_start": 65269,
+    "body_end": 66044,
+    "n_chars": 775
+   },
+   {
+    "num": "1.4.3",
+    "title": "Tongue posture at a glance (Gerlach 2015)",
+    "level": 3,
+    "parent": "1.4",
+    "chapter": "1",
+    "body_start": 66092,
+    "body_end": 66474,
+    "n_chars": 382
+   },
+   {
+    "num": "1.5",
+    "title": "Artificial changes in tongue pattern",
+    "level": 2,
+    "parent": "1",
+    "chapter": "1",
+    "body_start": 66515,
+    "body_end": 67717,
+    "n_chars": 1202
+   },
+   {
+    "num": "1.6",
+    "title": "Anatomical basics",
+    "level": 2,
+    "parent": "1",
+    "chapter": "1",
+    "body_start": 67739,
+    "body_end": 67740,
+    "n_chars": 1
+   },
+   {
+    "num": "1.6.1",
+    "title": "The papillae linguales",
+    "level": 3,
+    "parent": "1.6",
+    "chapter": "1",
+    "body_start": 67769,
+    "body_end": 68093,
+    "n_chars": 324
+   },
+   {
+    "num": "1.6.2",
+    "title": "Filiform papillae (papillae filiformes)",
+    "level": 3,
+    "parent": "1.6",
+    "chapter": "1",
+    "body_start": 68139,
+    "body_end": 71551,
+    "n_chars": 3412
+   },
+   {
+    "num": "1.6.3",
+    "title": "Fungiform papillae (papillae fungiformes)",
+    "level": 3,
+    "parent": "1.6",
+    "chapter": "1",
+    "body_start": 71599,
+    "body_end": 72338,
+    "n_chars": 739
+   },
+   {
+    "num": "1.6.4",
+    "title": "Leaf papillae (papillae foliatae)",
+    "level": 3,
+    "parent": "1.6",
+    "chapter": "1",
+    "body_start": 72378,
+    "body_end": 73083,
+    "n_chars": 705
+   },
+   {
+    "num": "1.6.5",
+    "title": "Wall papillae (papillae vallatae)",
+    "level": 3,
+    "parent": "1.6",
+    "chapter": "1",
+    "body_start": 73123,
+    "body_end": 80966,
+    "n_chars": 7843
+   },
+   {
+    "num": "2.1",
+    "title": "Size of the tongue body",
+    "level": 2,
+    "parent": "2",
+    "chapter": "2",
+    "body_start": 80994,
+    "body_end": 82467,
+    "n_chars": 1473
+   },
+   {
+    "num": "2.1.1",
+    "title": "Normal-sized tongue body",
+    "level": 3,
+    "parent": "2.1",
+    "chapter": "2",
+    "body_start": 82498,
+    "body_end": 84434,
+    "n_chars": 1936
+   },
+   {
+    "num": "2.1.2",
+    "title": "Small tongue body",
+    "level": 3,
+    "parent": "2.1",
+    "chapter": "2",
+    "body_start": 84458,
+    "body_end": 86630,
+    "n_chars": 2172
+   },
+   {
+    "num": "2.1.3",
+    "title": "Large tongue body",
+    "level": 3,
+    "parent": "2.1",
+    "chapter": "2",
+    "body_start": 86654,
+    "body_end": 88199,
+    "n_chars": 1545
+   },
+   {
+    "num": "2.1.4",
+    "title": "Size of tongue body at a glance",
+    "level": 3,
+    "parent": "2.1",
+    "chapter": "2",
+    "body_start": 88237,
+    "body_end": 90816,
+    "n_chars": 2579
+   },
+   {
+    "num": "2.2",
+    "title": "Tongue body color",
+    "level": 2,
+    "parent": "2",
+    "chapter": "2",
+    "body_start": 90838,
+    "body_end": 91024,
+    "n_chars": 186
+   },
+   {
+    "num": "2.2.1",
+    "title": "Red tongue body",
+    "level": 3,
+    "parent": "2.2",
+    "chapter": "2",
+    "body_start": 91046,
+    "body_end": 96087,
+    "n_chars": 5041
+   },
+   {
+    "num": "2.2.2",
+    "title": "Pale tongue body",
+    "level": 3,
+    "parent": "2.2",
+    "chapter": "2",
+    "body_start": 96110,
+    "body_end": 104403,
+    "n_chars": 8293
+   },
+   {
+    "num": "2.2.4",
+    "title": "Inhomogeneous coloration of the tongue body (red and pale)",
+    "level": 3,
+    "parent": "2.2",
+    "chapter": "2",
+    "body_start": 104468,
+    "body_end": 106697,
+    "n_chars": 2229
+   },
+   {
+    "num": "2.2.5",
+    "title": "The colors of the tongue body at a glance",
+    "level": 3,
+    "parent": "2.2",
+    "chapter": "2",
+    "body_start": 106745,
+    "body_end": 107345,
+    "n_chars": 600
+   },
+   {
+    "num": "2.3",
+    "title": "Topology of the tongue body",
+    "level": 2,
+    "parent": "2",
+    "chapter": "2",
+    "body_start": 107379,
+    "body_end": 107380,
+    "n_chars": 1
+   },
+   {
+    "num": "2.3.1",
+    "title": "Somatotopic classification of the tongue",
+    "level": 3,
+    "parent": "2.3",
+    "chapter": "2",
+    "body_start": 107429,
+    "body_end": 114793,
+    "n_chars": 7364
+   },
+   {
+    "num": "2.3.2",
+    "title": "Plump swelling with repletio (fullness)",
+    "level": 3,
+    "parent": "2.3",
+    "chapter": "2",
+    "body_start": 114841,
+    "body_end": 115741,
+    "n_chars": 900
+   },
+   {
+    "num": "2.3.3",
+    "title": "Soft swelling in humor (humidity, shi)",
+    "level": 3,
+    "parent": "2.3",
+    "chapter": "2",
+    "body_start": 115788,
+    "body_end": 116416,
+    "n_chars": 628
+   },
+   {
+    "num": "2.3.4",
+    "title": "Local reddening in calor (heat, re)",
+    "level": 3,
+    "parent": "2.3",
+    "chapter": "2",
+    "body_start": 116460,
+    "body_end": 118009,
+    "n_chars": 1549
+   },
+   {
+    "num": "2.3.5",
+    "title": "Dry surface and fissures in xue (blood), fluid, and yin",
+    "level": 3,
+    "parent": "2.3",
+    "chapter": "2",
+    "body_start": 118073,
+    "body_end": 122262,
+    "n_chars": 4189
+   },
+   {
+    "num": "2.3.6",
+    "title": "Lividity in xue (blood) stasis",
+    "level": 3,
+    "parent": "2.3",
+    "chapter": "2",
+    "body_start": 122301,
+    "body_end": 124168,
+    "n_chars": 1867
+   },
+   {
+    "num": "2.3.7",
+    "title": "White and yellow sticky coatings in humor (humidity, shi) and",
+    "level": 3,
+    "parent": "2.3",
+    "chapter": "2",
+    "body_start": 124238,
+    "body_end": 125845,
+    "n_chars": 1607
+   },
+   {
+    "num": "2.3.8",
+    "title": "Topology of the tongue body at a glance",
+    "level": 3,
+    "parent": "2.3",
+    "chapter": "2",
+    "body_start": 125891,
+    "body_end": 126878,
+    "n_chars": 987
+   },
+   {
+    "num": "2.4",
+    "title": "The surface of the tongue",
+    "level": 2,
+    "parent": "2",
+    "chapter": "2",
+    "body_start": 126908,
+    "body_end": 126909,
+    "n_chars": 1
+   },
+   {
+    "num": "2.4.1",
+    "title": "The surface of the normal tongue",
+    "level": 3,
+    "parent": "2.4",
+    "chapter": "2",
+    "body_start": 126948,
+    "body_end": 128380,
+    "n_chars": 1432
+   },
+   {
+    "num": "2.4.2",
+    "title": "Humor (humidity, shi):",
+    "level": 3,
+    "parent": "2.4",
+    "chapter": "2",
+    "body_start": 128411,
+    "body_end": 132687,
+    "n_chars": 4276
+   },
+   {
+    "num": "2.4.3",
+    "title": "Pituita (phlegm, tan): yellow, sticky coating",
+    "level": 3,
+    "parent": "2.4",
+    "chapter": "2",
+    "body_start": 132739,
+    "body_end": 135654,
+    "n_chars": 2915
+   },
+   {
+    "num": "2.4.4",
+    "title": "Pathogenic factor algor (cold, han): hyaline spots.",
+    "level": 3,
+    "parent": "2.4",
+    "chapter": "2",
+    "body_start": 135712,
+    "body_end": 149331,
+    "n_chars": 13619
+   },
+   {
+    "num": "2.4.5",
+    "title": "Toxic damage to the yin: gray, brown or black coating",
+    "level": 3,
+    "parent": "2.4",
+    "chapter": "2",
+    "body_start": 149393,
+    "body_end": 150470,
+    "n_chars": 1077
+   },
+   {
+    "num": "2.4.6",
+    "title": "Changes in the tongue surface at a glance",
+    "level": 3,
+    "parent": "2.4",
+    "chapter": "2",
+    "body_start": 150518,
+    "body_end": 151315,
+    "n_chars": 797
+   },
+   {
+    "num": "2.4.7",
+    "title": "Coexistence of coatings",
+    "level": 3,
+    "parent": "2.4",
+    "chapter": "2",
+    "body_start": 151346,
+    "body_end": 160638,
+    "n_chars": 9292
+   },
+   {
+    "num": "3.1",
+    "title": "Asymmetries of the tongue",
+    "level": 2,
+    "parent": "3",
+    "chapter": "3",
+    "body_start": 160668,
+    "body_end": 160669,
+    "n_chars": 1
+   },
+   {
+    "num": "3.1.1",
+    "title": "Tongue findings",
+    "level": 3,
+    "parent": "3.1",
+    "chapter": "3",
+    "body_start": 160691,
+    "body_end": 162288,
+    "n_chars": 1597
+   },
+   {
+    "num": "3.1.2",
+    "title": "Differential diagnosis",
+    "level": 3,
+    "parent": "3.1",
+    "chapter": "3",
+    "body_start": 162317,
+    "body_end": 167503,
+    "n_chars": 5186
+   },
+   {
+    "num": "3.1.3",
+    "title": "The asymmetries of the tongue at a glance",
+    "level": 3,
+    "parent": "3.1",
+    "chapter": "3",
+    "body_start": 167551,
+    "body_end": 168087,
+    "n_chars": 536
+   },
+   {
+    "num": "3.2",
+    "title": "Tenu-intestinal (small intestine) pattern",
+    "level": 2,
+    "parent": "3",
+    "chapter": "3",
+    "body_start": 168135,
+    "body_end": 168136,
+    "n_chars": 1
+   },
+   {
+    "num": "3.2.1",
+    "title": "Tongue findings",
+    "level": 3,
+    "parent": "3.2",
+    "chapter": "3",
+    "body_start": 168160,
+    "body_end": 169696,
+    "n_chars": 1536
+   },
+   {
+    "num": "3.2.2",
+    "title": "Differential diagnosis",
+    "level": 3,
+    "parent": "3.2",
+    "chapter": "3",
+    "body_start": 169727,
+    "body_end": 175313,
+    "n_chars": 5586
+   },
+   {
+    "num": "3.2.3",
+    "title": "The tenu-intestinal (small intestine) pattern at a glance",
+    "level": 3,
+    "parent": "3.2",
+    "chapter": "3",
+    "body_start": 175377,
+    "body_end": 176051,
+    "n_chars": 674
+   },
+   {
+    "num": "3.3",
+    "title": "Differential diagnosis of dental impressions",
+    "level": 2,
+    "parent": "3",
+    "chapter": "3",
+    "body_start": 176100,
+    "body_end": 176236,
+    "n_chars": 136
+   },
+   {
+    "num": "3.3.1",
+    "title": "Tooth impressions at humor (humidity, shi)",
+    "level": 3,
+    "parent": "3.3",
+    "chapter": "3",
+    "body_start": 176285,
+    "body_end": 177766,
+    "n_chars": 1481
+   },
+   {
+    "num": "3.3.2",
+    "title": "Tooth impressions as a felleal (gallbladder) sign in ira",
+    "level": 3,
+    "parent": "3.3",
+    "chapter": "3",
+    "body_start": 177829,
+    "body_end": 181383,
+    "n_chars": 3554
+   },
+   {
+    "num": "3.3.3",
+    "title": "Dental impressions at a glance",
+    "level": 3,
+    "parent": "3.3",
+    "chapter": "3",
+    "body_start": 181420,
+    "body_end": 181580,
+    "n_chars": 160
+   },
+   {
+    "num": "3.4",
+    "title": "Xue (blood) deficiency signs",
+    "level": 2,
+    "parent": "3",
+    "chapter": "3",
+    "body_start": 181613,
+    "body_end": 181614,
+    "n_chars": 1
+   },
+   {
+    "num": "3.4.1",
+    "title": "Tiger pattern, wadi pattern on",
+    "level": 3,
+    "parent": "3.4",
+    "chapter": "3",
+    "body_start": 181651,
+    "body_end": 183733,
+    "n_chars": 2082
+   },
+   {
+    "num": "3.4.2",
+    "title": "Dry leather pattern",
+    "level": 3,
+    "parent": "3.4",
+    "chapter": "3",
+    "body_start": 183759,
+    "body_end": 184861,
+    "n_chars": 1102
+   },
+   {
+    "num": "3.4.3",
+    "title": "White gums",
+    "level": 3,
+    "parent": "3.4",
+    "chapter": "3",
+    "body_start": 184878,
+    "body_end": 185731,
+    "n_chars": 853
+   },
+   {
+    "num": "3.4.4",
+    "title": "Coexistence of xue (blood) deficiency signs",
+    "level": 3,
+    "parent": "3.4",
+    "chapter": "3",
+    "body_start": 185781,
+    "body_end": 186813,
+    "n_chars": 1032
+   },
+   {
+    "num": "3.4.5",
+    "title": "The classic xue (blood) deficiency signs at a glance",
+    "level": 3,
+    "parent": "3.4",
+    "chapter": "3",
+    "body_start": 186872,
+    "body_end": 187209,
+    "n_chars": 337
+   },
+   {
+    "num": "3.4.6",
+    "title": "Function and pathophysiology of xue (blood)",
+    "level": 3,
+    "parent": "3.4",
+    "chapter": "3",
+    "body_start": 187259,
+    "body_end": 191836,
+    "n_chars": 4577
+   },
+   {
+    "num": "3.5",
+    "title": "Damage to the yin and fluid deficiency: the wadi",
+    "level": 2,
+    "parent": "3",
+    "chapter": "3",
+    "body_start": 191889,
+    "body_end": 201544,
+    "n_chars": 9655
+   },
+   {
+    "num": "3.6",
+    "title": "Ventus (wind) points",
+    "level": 2,
+    "parent": "3",
+    "chapter": "3",
+    "body_start": 201569,
+    "body_end": 202256,
+    "n_chars": 687
+   },
+   {
+    "num": "3.6.1",
+    "title": "Ventus externus (external wind, feng)",
+    "level": 3,
+    "parent": "3.6",
+    "chapter": "3",
+    "body_start": 202300,
+    "body_end": 207784,
+    "n_chars": 5484
+   },
+   {
+    "num": "3.6.2",
+    "title": "Ventus internus (internal wind, zhong feng)",
+    "level": 3,
+    "parent": "3.6",
+    "chapter": "3",
+    "body_start": 207834,
+    "body_end": 209285,
+    "n_chars": 1451
+   },
+   {
+    "num": "3.7",
+    "title": "Cardiac (heart) gutter",
+    "level": 2,
+    "parent": "3",
+    "chapter": "3",
+    "body_start": 209312,
+    "body_end": 209313,
+    "n_chars": 1
+   },
+   {
+    "num": "3.7.1",
+    "title": "Cardiac (heart) constitution",
+    "level": 3,
+    "parent": "3.7",
+    "chapter": "3",
+    "body_start": 209348,
+    "body_end": 212602,
+    "n_chars": 3254
+   },
+   {
+    "num": "3.7.2",
+    "title": "Cardio-fetal (heart–gallbladder) constitution",
+    "level": 3,
+    "parent": "3.7",
+    "chapter": "3",
+    "body_start": 212654,
+    "body_end": 221118,
+    "n_chars": 8464
+   },
+   {
+    "num": "4.1",
+    "title": "Common tongue findings for the upper calorium",
+    "level": 2,
+    "parent": "4",
+    "chapter": "4",
+    "body_start": 221168,
+    "body_end": 221414,
+    "n_chars": 246
+   },
+   {
+    "num": "4.1.1",
+    "title": "Wadi pattern",
+    "level": 3,
+    "parent": "4.1",
+    "chapter": "4",
+    "body_start": 221433,
+    "body_end": 222799,
+    "n_chars": 1366
+   },
+   {
+    "num": "4.1.2",
+    "title": "Plump swelling with repletio (energetic excess, shi)",
+    "level": 3,
+    "parent": "4.1",
+    "chapter": "4",
+    "body_start": 222858,
+    "body_end": 224840,
+    "n_chars": 1982
+   },
+   {
+    "num": "4.1.3",
+    "title": "Redness with calor (heat, re)",
+    "level": 3,
+    "parent": "4.1",
+    "chapter": "4",
+    "body_start": 224876,
+    "body_end": 231984,
+    "n_chars": 7108
+   },
+   {
+    "num": "4.1.4",
+    "title": "Impressions of the tip of the tongue",
+    "level": 3,
+    "parent": "4.1",
+    "chapter": "4",
+    "body_start": 232027,
+    "body_end": 233947,
+    "n_chars": 1920
+   },
+   {
+    "num": "4.1.5",
+    "title": "Cardiac (heart) gutter",
+    "level": 3,
+    "parent": "4.1",
+    "chapter": "4",
+    "body_start": 233976,
+    "body_end": 235145,
+    "n_chars": 1169
+   },
+   {
+    "num": "4.1.6",
+    "title": "Common tongue findings for the upper calorium (warmer) at",
+    "level": 3,
+    "parent": "4.1",
+    "chapter": "4",
+    "body_start": 235209,
+    "body_end": 238342,
+    "n_chars": 3133
+   },
+   {
+    "num": "4.2.1",
+    "title": "Plump swelling with repletio (energetic excess, shi)",
+    "level": 3,
+    "parent": "4.2",
+    "chapter": "4",
+    "body_start": 238401,
+    "body_end": 240947,
+    "n_chars": 2546
+   },
+   {
+    "num": "4.2.2",
+    "title": "Reddening with calor (heat, re)",
+    "level": 3,
+    "parent": "4.2",
+    "chapter": "4",
+    "body_start": 240985,
+    "body_end": 242788,
+    "n_chars": 1803
+   },
+   {
+    "num": "4.2.3",
+    "title": "Wadi pattern",
+    "level": 3,
+    "parent": "4.2",
+    "chapter": "4",
+    "body_start": 242807,
+    "body_end": 244730,
+    "n_chars": 1923
+   },
+   {
+    "num": "4.2.4",
+    "title": "Humor (humidity, shi) and pituita (phlegm, tan)",
+    "level": 3,
+    "parent": "4.2",
+    "chapter": "4",
+    "body_start": 244784,
+    "body_end": 246304,
+    "n_chars": 1520
+   },
+   {
+    "num": "4.2.5",
+    "title": "Common tongue findings for the middle calorium (warmer) at",
+    "level": 3,
+    "parent": "4.2",
+    "chapter": "4",
+    "body_start": 246369,
+    "body_end": 246800,
+    "n_chars": 431
+   },
+   {
+    "num": "4.3",
+    "title": "Common tongue findings for the lower calorium",
+    "level": 2,
+    "parent": "4",
+    "chapter": "4",
+    "body_start": 246850,
+    "body_end": 247351,
+    "n_chars": 501
+   },
+   {
+    "num": "4.3.1",
+    "title": "Humor (humidity, shi) and pituita (phlegm, tan)",
+    "level": 3,
+    "parent": "4.3",
+    "chapter": "4",
+    "body_start": 247405,
+    "body_end": 248614,
+    "n_chars": 1209
+   },
+   {
+    "num": "4.3.2",
+    "title": "Swelling with repletio (energetic excess, shi)",
+    "level": 3,
+    "parent": "4.3",
+    "chapter": "4",
+    "body_start": 248667,
+    "body_end": 250429,
+    "n_chars": 1762
+   },
+   {
+    "num": "4.3.3",
+    "title": "Reddening with calor (heat, re)",
+    "level": 3,
+    "parent": "4.3",
+    "chapter": "4",
+    "body_start": 250467,
+    "body_end": 251592,
+    "n_chars": 1125
+   },
+   {
+    "num": "4.3.4",
+    "title": "Wadi pattern",
+    "level": 3,
+    "parent": "4.3",
+    "chapter": "4",
+    "body_start": 251611,
+    "body_end": 253199,
+    "n_chars": 1588
+   },
+   {
+    "num": "4.3.5",
+    "title": "Common tongue findings for the lower calorium (warmer) at",
+    "level": 3,
+    "parent": "4.3",
+    "chapter": "4",
+    "body_start": 253263,
+    "body_end": 253684,
+    "n_chars": 421
+   },
+   {
+    "num": "4.4",
+    "title": "Common findings for the tongue margins",
+    "level": 2,
+    "parent": "4",
+    "chapter": "4",
+    "body_start": 253727,
+    "body_end": 255883,
+    "n_chars": 2156
+   },
+   {
+    "num": "4.4.1",
+    "title": "Swelling of the edges of the tongue in repletio hepatici",
+    "level": 3,
+    "parent": "4.4",
+    "chapter": "4",
+    "body_start": 255946,
+    "body_end": 256635,
+    "n_chars": 689
+   },
+   {
+    "num": "4.4.2",
+    "title": "Asymmetric swelling of the tongue margins in repletio",
+    "level": 3,
+    "parent": "4.4",
+    "chapter": "4",
+    "body_start": 256695,
+    "body_end": 258624,
+    "n_chars": 1929
+   },
+   {
+    "num": "4.4.3",
+    "title": "Tiger and wadi pattern on the edges of the tongue",
+    "level": 3,
+    "parent": "4.4",
+    "chapter": "4",
+    "body_start": 258680,
+    "body_end": 260528,
+    "n_chars": 1848
+   },
+   {
+    "num": "4.4.4",
+    "title": "Tooth impressions with humor (humidity, shi) and ira",
+    "level": 3,
+    "parent": "4.4",
+    "chapter": "4",
+    "body_start": 260587,
+    "body_end": 261922,
+    "n_chars": 1335
+   },
+   {
+    "num": "4.4.5",
+    "title": "Reddening of the edges of the tongue with calor (heat, re)",
+    "level": 3,
+    "parent": "4.4",
+    "chapter": "4",
+    "body_start": 261987,
+    "body_end": 262677,
+    "n_chars": 690
+   },
+   {
+    "num": "4.4.6",
+    "title": "Common findings for the tongue margins at a glance",
+    "level": 3,
+    "parent": "4.4",
+    "chapter": "4",
+    "body_start": 262734,
+    "body_end": 280551,
+    "n_chars": 17817
+   },
+   {
+    "num": "5.1",
+    "title": "Step-by-step tongue diagnostics using the example of",
+    "level": 2,
+    "parent": "5",
+    "chapter": "5",
+    "body_start": 280608,
+    "body_end": 280703,
+    "n_chars": 95
+   },
+   {
+    "num": "5.1.1",
+    "title": "Medical history",
+    "level": 3,
+    "parent": "5.1",
+    "chapter": "5",
+    "body_start": 280725,
+    "body_end": 282062,
+    "n_chars": 1337
+   },
+   {
+    "num": "5.1.2",
+    "title": "Tongue diagnostics",
+    "level": 3,
+    "parent": "5.1",
+    "chapter": "5",
+    "body_start": 282087,
+    "body_end": 290720,
+    "n_chars": 8633
+   },
+   {
+    "num": "5.1.3",
+    "title": "TCM diagnosis",
+    "level": 3,
+    "parent": "5.1",
+    "chapter": "5",
+    "body_start": 290740,
+    "body_end": 293220,
+    "n_chars": 2480
+   },
+   {
+    "num": "5.1.4",
+    "title": "Therapy",
+    "level": 3,
+    "parent": "5.1",
+    "chapter": "5",
+    "body_start": 293234,
+    "body_end": 297111,
+    "n_chars": 3877
+   },
+   {
+    "num": "5.1.5",
+    "title": "Course of therapy",
+    "level": 3,
+    "parent": "5.1",
+    "chapter": "5",
+    "body_start": 297135,
+    "body_end": 299737,
+    "n_chars": 2602
+   },
+   {
+    "num": "5.2",
+    "title": "Peroneal nerve palsy in post-polio syndrome",
+    "level": 2,
+    "parent": "5",
+    "chapter": "5",
+    "body_start": 299785,
+    "body_end": 299786,
+    "n_chars": 1
+   },
+   {
+    "num": "5.2.1",
+    "title": "Medical history",
+    "level": 3,
+    "parent": "5.2",
+    "chapter": "5",
+    "body_start": 299808,
+    "body_end": 301216,
+    "n_chars": 1408
+   },
+   {
+    "num": "5.2.2",
+    "title": "Tongue diagnostics",
+    "level": 3,
+    "parent": "5.2",
+    "chapter": "5",
+    "body_start": 301241,
+    "body_end": 303840,
+    "n_chars": 2599
+   },
+   {
+    "num": "5.2.3",
+    "title": "TCM diagnosis",
+    "level": 3,
+    "parent": "5.2",
+    "chapter": "5",
+    "body_start": 303860,
+    "body_end": 305520,
+    "n_chars": 1660
+   },
+   {
+    "num": "5.2.4",
+    "title": "Therapy",
+    "level": 3,
+    "parent": "5.2",
+    "chapter": "5",
+    "body_start": 305534,
+    "body_end": 307241,
+    "n_chars": 1707
+   },
+   {
+    "num": "5.2.5",
+    "title": "Course of therapy",
+    "level": 3,
+    "parent": "5.2",
+    "chapter": "5",
+    "body_start": 307265,
+    "body_end": 311478,
+    "n_chars": 4213
+   },
+   {
+    "num": "5.3",
+    "title": "Achillodynia",
+    "level": 2,
+    "parent": "5",
+    "chapter": "5",
+    "body_start": 311495,
+    "body_end": 311496,
+    "n_chars": 1
+   },
+   {
+    "num": "5.3.1",
+    "title": "Medical history",
+    "level": 3,
+    "parent": "5.3",
+    "chapter": "5",
+    "body_start": 311518,
+    "body_end": 312549,
+    "n_chars": 1031
+   },
+   {
+    "num": "5.3.2",
+    "title": "Tongue diagnostics",
+    "level": 3,
+    "parent": "5.3",
+    "chapter": "5",
+    "body_start": 312574,
+    "body_end": 317643,
+    "n_chars": 5069
+   },
+   {
+    "num": "5.3.3",
+    "title": "TCM diagnosis",
+    "level": 3,
+    "parent": "5.3",
+    "chapter": "5",
+    "body_start": 317663,
+    "body_end": 319500,
+    "n_chars": 1837
+   },
+   {
+    "num": "5.3.4",
+    "title": "Therapy",
+    "level": 3,
+    "parent": "5.3",
+    "chapter": "5",
+    "body_start": 319514,
+    "body_end": 321859,
+    "n_chars": 2345
+   },
+   {
+    "num": "5.3.5",
+    "title": "Course of therapy",
+    "level": 3,
+    "parent": "5.3",
+    "chapter": "5",
+    "body_start": 321883,
+    "body_end": 327548,
+    "n_chars": 5665
+   },
+   {
+    "num": "5.4",
+    "title": "Depression",
+    "level": 2,
+    "parent": "5",
+    "chapter": "5",
+    "body_start": 327563,
+    "body_end": 327564,
+    "n_chars": 1
+   },
+   {
+    "num": "5.4.1",
+    "title": "Medical history",
+    "level": 3,
+    "parent": "5.4",
+    "chapter": "5",
+    "body_start": 327586,
+    "body_end": 328578,
+    "n_chars": 992
+   },
+   {
+    "num": "5.4.2",
+    "title": "Tongue diagnostics",
+    "level": 3,
+    "parent": "5.4",
+    "chapter": "5",
+    "body_start": 328603,
+    "body_end": 331746,
+    "n_chars": 3143
+   },
+   {
+    "num": "5.4.3",
+    "title": "TCM diagnosis",
+    "level": 3,
+    "parent": "5.4",
+    "chapter": "5",
+    "body_start": 331766,
+    "body_end": 334696,
+    "n_chars": 2930
+   },
+   {
+    "num": "5.4.4",
+    "title": "Therapy",
+    "level": 3,
+    "parent": "5.4",
+    "chapter": "5",
+    "body_start": 334710,
+    "body_end": 337687,
+    "n_chars": 2977
+   },
+   {
+    "num": "5.4.5",
+    "title": "Course of therapy",
+    "level": 3,
+    "parent": "5.4",
+    "chapter": "5",
+    "body_start": 337711,
+    "body_end": 342925,
+    "n_chars": 5214
+   },
+   {
+    "num": "5.5",
+    "title": "Hot flushes, knee pain, and burning sensation on",
+    "level": 2,
+    "parent": "5",
+    "chapter": "5",
+    "body_start": 342978,
+    "body_end": 342990,
+    "n_chars": 12
+   },
+   {
+    "num": "5.5.1",
+    "title": "Medical history",
+    "level": 3,
+    "parent": "5.5",
+    "chapter": "5",
+    "body_start": 343012,
+    "body_end": 344089,
+    "n_chars": 1077
+   },
+   {
+    "num": "5.5.2",
+    "title": "Tongue diagnostics",
+    "level": 3,
+    "parent": "5.5",
+    "chapter": "5",
+    "body_start": 344114,
+    "body_end": 348026,
+    "n_chars": 3912
+   },
+   {
+    "num": "5.5.3",
+    "title": "TCM diagnosis",
+    "level": 3,
+    "parent": "5.5",
+    "chapter": "5",
+    "body_start": 348046,
+    "body_end": 350844,
+    "n_chars": 2798
+   },
+   {
+    "num": "5.5.4",
+    "title": "Therapy",
+    "level": 3,
+    "parent": "5.5",
+    "chapter": "5",
+    "body_start": 350858,
+    "body_end": 354212,
+    "n_chars": 3354
+   },
+   {
+    "num": "5.5.5",
+    "title": "Course of therapy",
+    "level": 3,
+    "parent": "5.5",
+    "chapter": "5",
+    "body_start": 354236,
+    "body_end": 361127,
+    "n_chars": 6891
+   },
+   {
+    "num": "5.6",
+    "title": "Pain with degenerative lumbar spine changes and",
+    "level": 2,
+    "parent": "5",
+    "chapter": "5",
+    "body_start": 361179,
+    "body_end": 361197,
+    "n_chars": 18
+   },
+   {
+    "num": "5.6.1",
+    "title": "Medical history",
+    "level": 3,
+    "parent": "5.6",
+    "chapter": "5",
+    "body_start": 361219,
+    "body_end": 362301,
+    "n_chars": 1082
+   },
+   {
+    "num": "5.6.2",
+    "title": "Tongue diagnostics",
+    "level": 3,
+    "parent": "5.6",
+    "chapter": "5",
+    "body_start": 362326,
+    "body_end": 369949,
+    "n_chars": 7623
+   },
+   {
+    "num": "5.6.3",
+    "title": "TCM diagnosis",
+    "level": 3,
+    "parent": "5.6",
+    "chapter": "5",
+    "body_start": 369969,
+    "body_end": 371936,
+    "n_chars": 1967
+   },
+   {
+    "num": "5.6.4",
+    "title": "Therapy",
+    "level": 3,
+    "parent": "5.6",
+    "chapter": "5",
+    "body_start": 371950,
+    "body_end": 374506,
+    "n_chars": 2556
+   },
+   {
+    "num": "5.6.5",
+    "title": "Course of therapy",
+    "level": 3,
+    "parent": "5.6",
+    "chapter": "5",
+    "body_start": 374530,
+    "body_end": 377743,
+    "n_chars": 3213
+   },
+   {
+    "num": "5.7",
+    "title": "Nausea and polyneuropathy (after chemotherapy,",
+    "level": 2,
+    "parent": "5",
+    "chapter": "5",
+    "body_start": 377794,
+    "body_end": 377844,
+    "n_chars": 50
+   },
+   {
+    "num": "5.7.1",
+    "title": "Medical history",
+    "level": 3,
+    "parent": "5.7",
+    "chapter": "5",
+    "body_start": 377866,
+    "body_end": 378745,
+    "n_chars": 879
+   },
+   {
+    "num": "5.7.2",
+    "title": "Tongue diagnostics",
+    "level": 3,
+    "parent": "5.7",
+    "chapter": "5",
+    "body_start": 378770,
+    "body_end": 384549,
+    "n_chars": 5779
+   },
+   {
+    "num": "5.7.3",
+    "title": "TCM diagnosis",
+    "level": 3,
+    "parent": "5.7",
+    "chapter": "5",
+    "body_start": 384569,
+    "body_end": 386757,
+    "n_chars": 2188
+   },
+   {
+    "num": "5.7.4",
+    "title": "Therapy",
+    "level": 3,
+    "parent": "5.7",
+    "chapter": "5",
+    "body_start": 386771,
+    "body_end": 390611,
+    "n_chars": 3840
+   },
+   {
+    "num": "5.7.5",
+    "title": "Course of therapy",
+    "level": 3,
+    "parent": "5.7",
+    "chapter": "5",
+    "body_start": 390635,
+    "body_end": 393432,
+    "n_chars": 2797
+   },
+   {
+    "num": "5.8",
+    "title": "Sleep disturbance and facial skin redness",
+    "level": 2,
+    "parent": "5",
+    "chapter": "5",
+    "body_start": 393478,
+    "body_end": 393479,
+    "n_chars": 1
+   },
+   {
+    "num": "5.8.1",
+    "title": "Medical history",
+    "level": 3,
+    "parent": "5.8",
+    "chapter": "5",
+    "body_start": 393501,
+    "body_end": 394472,
+    "n_chars": 971
+   },
+   {
+    "num": "5.8.2",
+    "title": "Tongue diagnostics",
+    "level": 3,
+    "parent": "5.8",
+    "chapter": "5",
+    "body_start": 394497,
+    "body_end": 400027,
+    "n_chars": 5530
+   },
+   {
+    "num": "5.8.3",
+    "title": "TCM diagnosis",
+    "level": 3,
+    "parent": "5.8",
+    "chapter": "5",
+    "body_start": 400047,
+    "body_end": 402514,
+    "n_chars": 2467
+   },
+   {
+    "num": "5.8.4",
+    "title": "Therapy",
+    "level": 3,
+    "parent": "5.8",
+    "chapter": "5",
+    "body_start": 402528,
+    "body_end": 405825,
+    "n_chars": 3297
+   },
+   {
+    "num": "5.8.5",
+    "title": "Course of therapy",
+    "level": 3,
+    "parent": "5.8",
+    "chapter": "5",
+    "body_start": 405849,
+    "body_end": 409276,
+    "n_chars": 3427
+   },
+   {
+    "num": "5.9",
+    "title": "Tinnitus and emotional stress",
+    "level": 2,
+    "parent": "5",
+    "chapter": "5",
+    "body_start": 409310,
+    "body_end": 409311,
+    "n_chars": 1
+   },
+   {
+    "num": "5.9.1",
+    "title": "Medical history",
+    "level": 3,
+    "parent": "5.9",
+    "chapter": "5",
+    "body_start": 409333,
+    "body_end": 410118,
+    "n_chars": 785
+   },
+   {
+    "num": "5.9.2",
+    "title": "Tongue diagnostics",
+    "level": 3,
+    "parent": "5.9",
+    "chapter": "5",
+    "body_start": 410143,
+    "body_end": 418095,
+    "n_chars": 7952
+   },
+   {
+    "num": "5.9.3",
+    "title": "TCM diagnosis",
+    "level": 3,
+    "parent": "5.9",
+    "chapter": "5",
+    "body_start": 418115,
+    "body_end": 420575,
+    "n_chars": 2460
+   },
+   {
+    "num": "5.9.4",
+    "title": "Therapy",
+    "level": 3,
+    "parent": "5.9",
+    "chapter": "5",
+    "body_start": 420589,
+    "body_end": 423439,
+    "n_chars": 2850
+   },
+   {
+    "num": "5.9.5",
+    "title": "Course of therapy",
+    "level": 3,
+    "parent": "5.9",
+    "chapter": "5",
+    "body_start": 423463,
+    "body_end": 426297,
+    "n_chars": 2834
+   },
+   {
+    "num": "5.10",
+    "title": "Ulcerative colitis",
+    "level": 2,
+    "parent": "5",
+    "chapter": "5",
+    "body_start": 426321,
+    "body_end": 426322,
+    "n_chars": 1
+   },
+   {
+    "num": "5.10.1",
+    "title": "Medical history",
+    "level": 3,
+    "parent": "5.10",
+    "chapter": "5",
+    "body_start": 426345,
+    "body_end": 427093,
+    "n_chars": 748
+   },
+   {
+    "num": "5.10.2",
+    "title": "Tongue diagnostics",
+    "level": 3,
+    "parent": "5.10",
+    "chapter": "5",
+    "body_start": 427119,
+    "body_end": 432841,
+    "n_chars": 5722
+   },
+   {
+    "num": "5.10.3",
+    "title": "TCM diagnosis",
+    "level": 3,
+    "parent": "5.10",
+    "chapter": "5",
+    "body_start": 432862,
+    "body_end": 435574,
+    "n_chars": 2712
+   },
+   {
+    "num": "5.10.4",
+    "title": "Therapy",
+    "level": 3,
+    "parent": "5.10",
+    "chapter": "5",
+    "body_start": 435589,
+    "body_end": 439108,
+    "n_chars": 3519
+   },
+   {
+    "num": "5.10.5",
+    "title": "Course of therapy",
+    "level": 3,
+    "parent": "5.10",
+    "chapter": "5",
+    "body_start": 439133,
+    "body_end": 445966,
+    "n_chars": 6833
+   },
+   {
+    "num": "5.11",
+    "title": "Chronic lymphedema",
+    "level": 2,
+    "parent": "5",
+    "chapter": "5",
+    "body_start": 445990,
+    "body_end": 445991,
+    "n_chars": 1
+   },
+   {
+    "num": "5.11.1",
+    "title": "Medical history",
+    "level": 3,
+    "parent": "5.11",
+    "chapter": "5",
+    "body_start": 446014,
+    "body_end": 447516,
+    "n_chars": 1502
+   },
+   {
+    "num": "5.11.2",
+    "title": "Tongue diagnostics",
+    "level": 3,
+    "parent": "5.11",
+    "chapter": "5",
+    "body_start": 447542,
+    "body_end": 451037,
+    "n_chars": 3495
+   },
+   {
+    "num": "5.11.3",
+    "title": "TCM diagnosis",
+    "level": 3,
+    "parent": "5.11",
+    "chapter": "5",
+    "body_start": 451058,
+    "body_end": 452706,
+    "n_chars": 1648
+   },
+   {
+    "num": "5.11.4",
+    "title": "Therapy",
+    "level": 3,
+    "parent": "5.11",
+    "chapter": "5",
+    "body_start": 452721,
+    "body_end": 455523,
+    "n_chars": 2802
+   },
+   {
+    "num": "5.11.5",
+    "title": "Course of therapy",
+    "level": 3,
+    "parent": "5.11",
+    "chapter": "5",
+    "body_start": 455548,
+    "body_end": 458139,
+    "n_chars": 2591
+   },
+   {
+    "num": "5.12",
+    "title": "Aids",
+    "level": 2,
+    "parent": "5",
+    "chapter": "5",
+    "body_start": 458149,
+    "body_end": 458150,
+    "n_chars": 1
+   },
+   {
+    "num": "5.12.1",
+    "title": "Medical history",
+    "level": 3,
+    "parent": "5.12",
+    "chapter": "5",
+    "body_start": 458173,
+    "body_end": 459719,
+    "n_chars": 1546
+   },
+   {
+    "num": "5.12.2",
+    "title": "Tongue diagnostics",
+    "level": 3,
+    "parent": "5.12",
+    "chapter": "5",
+    "body_start": 459745,
+    "body_end": 466212,
+    "n_chars": 6467
+   },
+   {
+    "num": "5.12.3",
+    "title": "TCM diagnosis",
+    "level": 3,
+    "parent": "5.12",
+    "chapter": "5",
+    "body_start": 466233,
+    "body_end": 468552,
+    "n_chars": 2319
+   },
+   {
+    "num": "5.12.4",
+    "title": "Therapy",
+    "level": 3,
+    "parent": "5.12",
+    "chapter": "5",
+    "body_start": 468567,
+    "body_end": 473348,
+    "n_chars": 4781
+   },
+   {
+    "num": "5.12.5",
+    "title": "Course of therapy",
+    "level": 3,
+    "parent": "5.12",
+    "chapter": "5",
+    "body_start": 473373,
+    "body_end": 483759,
+    "n_chars": 10386
+   },
+   {
+    "num": "5.13",
+    "title": "Dry cough after pertussis",
+    "level": 2,
+    "parent": "5",
+    "chapter": "5",
+    "body_start": 483790,
+    "body_end": 483791,
+    "n_chars": 1
+   },
+   {
+    "num": "5.13.1",
+    "title": "Medical history",
+    "level": 3,
+    "parent": "5.13",
+    "chapter": "5",
+    "body_start": 483814,
+    "body_end": 484340,
+    "n_chars": 526
+   },
+   {
+    "num": "5.13.2",
+    "title": "Tongue diagnostics",
+    "level": 3,
+    "parent": "5.13",
+    "chapter": "5",
+    "body_start": 484366,
+    "body_end": 488763,
+    "n_chars": 4397
+   },
+   {
+    "num": "5.13.3",
+    "title": "TCM diagnosis",
+    "level": 3,
+    "parent": "5.13",
+    "chapter": "5",
+    "body_start": 488784,
+    "body_end": 490703,
+    "n_chars": 1919
+   },
+   {
+    "num": "5.13.4",
+    "title": "Therapy",
+    "level": 3,
+    "parent": "5.13",
+    "chapter": "5",
+    "body_start": 490718,
+    "body_end": 493740,
+    "n_chars": 3022
+   },
+   {
+    "num": "5.13.5",
+    "title": "Course of therapy",
+    "level": 3,
+    "parent": "5.13",
+    "chapter": "5",
+    "body_start": 493765,
+    "body_end": 497348,
+    "n_chars": 3583
+   },
+   {
+    "num": "5.14",
+    "title": "Hereditary spastic paraplegia type 7 (HSP7) and optic",
+    "level": 2,
+    "parent": "5",
+    "chapter": "5",
+    "body_start": 497407,
+    "body_end": 497453,
+    "n_chars": 46
+   },
+   {
+    "num": "5.14.1",
+    "title": "Medical history",
+    "level": 3,
+    "parent": "5.14",
+    "chapter": "5",
+    "body_start": 497476,
+    "body_end": 498755,
+    "n_chars": 1279
+   },
+   {
+    "num": "5.14.2",
+    "title": "Tongue diagnostics",
+    "level": 3,
+    "parent": "5.14",
+    "chapter": "5",
+    "body_start": 498781,
+    "body_end": 501810,
+    "n_chars": 3029
+   },
+   {
+    "num": "5.14.3",
+    "title": "TCM diagnosis",
+    "level": 3,
+    "parent": "5.14",
+    "chapter": "5",
+    "body_start": 501831,
+    "body_end": 503495,
+    "n_chars": 1664
+   },
+   {
+    "num": "5.14.4",
+    "title": "Therapy",
+    "level": 3,
+    "parent": "5.14",
+    "chapter": "5",
+    "body_start": 503510,
+    "body_end": 506004,
+    "n_chars": 2494
+   },
+   {
+    "num": "5.14.5",
+    "title": "Course of therapy",
+    "level": 3,
+    "parent": "5.14",
+    "chapter": "5",
+    "body_start": 506029,
+    "body_end": 518676,
+    "n_chars": 12647
+   },
+   {
+    "num": "6.1",
+    "title": "Patient with Crohn’s disease",
+    "level": 2,
+    "parent": "6",
+    "chapter": "6",
+    "body_start": 518709,
+    "body_end": 520079,
+    "n_chars": 1370
+   },
+   {
+    "num": "6.2",
+    "title": "Patient with bronchial asthma",
+    "level": 2,
+    "parent": "6",
+    "chapter": "6",
+    "body_start": 520113,
+    "body_end": 521330,
+    "n_chars": 1217
+   },
+   {
+    "num": "6.3",
+    "title": "Patient with chronic pain syndrome and generalized",
+    "level": 2,
+    "parent": "6",
+    "chapter": "6",
+    "body_start": 521385,
+    "body_end": 524778,
+    "n_chars": 3393
+   },
+   {
+    "num": "7.1",
+    "title": "Patient with genetic mutation of the SPG7 gene",
+    "level": 2,
+    "parent": "7",
+    "chapter": "7",
+    "body_start": 524829,
+    "body_end": 526580,
+    "n_chars": 1751
+   },
+   {
+    "num": "7.2",
+    "title": "Patient with peripheral polyneuropathy of the legs",
+    "level": 2,
+    "parent": "7",
+    "chapter": "7",
+    "body_start": 526635,
+    "body_end": 529719,
+    "n_chars": 3084
+   },
+   {
+    "num": "7.3",
+    "title": "Patient with age-related macular degeneration",
+    "level": 2,
+    "parent": "7",
+    "chapter": "7",
+    "body_start": 529769,
+    "body_end": 534508,
+    "n_chars": 4739
+   },
+   {
+    "num": "7.4",
+    "title": "Patient with sarcoidosis",
+    "level": 2,
+    "parent": "7",
+    "chapter": "7",
+    "body_start": 534537,
+    "body_end": 542844,
+    "n_chars": 8307
+   }
+  ]
+ }
+}

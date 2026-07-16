@@ -10,8 +10,42 @@ interactive refinement pass (WS-B) both query.
 | Layer | Source | rel / nodes added | Status |
 |---|---|---|---|
 | **seed** | `tcm_knowledge.json` | every fact, re-typed | ✅ done (`build_kg.py`) |
-| **macro** | book chapter/section hierarchy (Gerlach backbone, `tongue_lit/`) | `section_of` + `section:` nodes | ⏳ next |
-| **micro** | LLM-extracted book triplets, each with citation + snippet | same edge rels + `snippets` store | ⏳ (offline on casper) |
+| **macro** | Gerlach hierarchy (`parse_book.py` → `book_sections.json`) | `section_of` + `section:` nodes (184) | ✅ done |
+| **micro** | LLM-extracted book triplets, each cited + snippet | same edge rels + `snippets` store | 🔜 extractor ready (`micro_extract.py`, dry-run validated); run on casper, then write the merge |
+
+## Current graph (seed + macro)
+
+```
+nodes 359  (pattern 10, symptom 55, recommendation 39, question 21, feature 13,
+            value 17, region 4, organ 8, section 192)
+edges 427  (has_symptom 55, evidence_for 76, recommends 39, probes 21,
+            is_value_of 17, points_to 27, maps_to 8, section_of 184)
+rules 10
+```
+
+## Building the macro layer
+
+```bash
+python stage2_interpretation/kg/parse_book.py \
+    --book tongue_lit/874856627-TCM-Tongue-Diagnosis-Explained.txt --id gerlach \
+    --title "Gerlach O., TCM Tongue Diagnosis Explained (World Scientific, 2025)"
+# -> book_sections.json (tracked: section metadata + char offsets, NOT the copyrighted text)
+python stage2_interpretation/kg/build_kg.py --verify   # folds macro in automatically
+```
+
+## Micro layer (next, offline on casper)
+
+```bash
+# inspect the extraction prompt without an LLM:
+python stage2_interpretation/kg/micro_extract.py --dry-run --book-id gerlach
+# run with the LLM env set (casper): mines chapters 2-4, cite-or-abstain, -> book_triplets.json
+python stage2_interpretation/kg/micro_extract.py --book-id gerlach --chapters 2,3,4
+```
+
+`micro_extract.py` gives the LLM our canonical feature/pattern vocabulary (so triplets map into our
+ontology), enforces **cite-or-abstain** (a triplet is dropped unless its snippet is verbatim in the
+section), runs at temperature 0, and writes a reviewable `book_triplets.json`. The graph merge
+(`build_kg.add_micro_layer`) is written after a first run, validated against real extractions.
 
 The seed layer is a strict **superset** of the KB — `build_kg.py --verify` asserts every pattern,
 feature, `points_to` weight, symptom, recommendation, follow-up question and combination rule is
