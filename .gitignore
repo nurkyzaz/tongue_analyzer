@@ -68,3 +68,6 @@ data/eval/human_masks/
 
 # Licensed TCM literature (copyrighted books + source papers) — process locally, never commit
 tongue_lit/
+
+# compiled knowledge graph — rebuildable artifact (kg/build_kg.py); sources are tracked
+stage2_interpretation/knowledge_base/kg_graph.json

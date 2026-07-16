@@ -1,0 +1,56 @@
+# Macro-micro TCM knowledge graph (WS-A)
+
+The grounded substrate for the Stage 2 overhaul (see [`docs/PLAN.md`](../../docs/PLAN.md) §2–3).
+Replaces the split between a rule KB (`tcm_knowledge.json`) and a flat card list
+(`knowledge_cards.json`) with one typed graph that retrieval + the grounded matcher (WS-C) and the
+interactive refinement pass (WS-B) both query.
+
+## Layers (all merge into one graph)
+
+| Layer | Source | rel / nodes added | Status |
+|---|---|---|---|
+| **seed** | `tcm_knowledge.json` | every fact, re-typed | ✅ done (`build_kg.py`) |
+| **macro** | book chapter/section hierarchy (Gerlach backbone, `tongue_lit/`) | `section_of` + `section:` nodes | ⏳ next |
+| **micro** | LLM-extracted book triplets, each with citation + snippet | same edge rels + `snippets` store | ⏳ (offline on casper) |
+
+The seed layer is a strict **superset** of the KB — `build_kg.py --verify` asserts every pattern,
+feature, `points_to` weight, symptom, recommendation, follow-up question and combination rule is
+reachable in the graph. So enabling the graph changes **no** current behaviour on day one; macro/micro
+only *add*.
+
+## Build
+
+```bash
+python stage2_interpretation/kg/build_kg.py --verify   # -> knowledge_base/kg_graph.json (git-ignored)
+```
+
+The compiled `kg_graph.json` is a rebuildable artifact (git-ignored, like `corpus.jsonl`). Its
+**sources** are tracked: `tcm_knowledge.json` today, plus triplet/section files once macro+micro land.
+
+## Model (see `graph.py` docstring for the full node-id + rel conventions)
+
+- **Nodes** are typed (`pattern`, `feature`, `value`, `symptom`, `recommendation`, `question`,
+  `region`, `organ`, later `section`), each with `name`, `props`, and a `sources` citation list.
+- **Edges** carry `rel`, optional `weight`, `cond`, `sources`, and a `snippet` id (micro layer).
+- **`rules`** holds the combination rules verbatim (context-conditioned hyperedges — kept as-is
+  because they gate multi-feature boosts the rule engine already applies).
+- **`snippets`** is the attributed short-quote store (traceability for cite-or-abstain in WS-C).
+
+## Why the inverse `evidence_for` edges matter (WS-B)
+
+Seeding also emits `symptom -> pattern` and `question -> pattern` **`evidence_for`** edges (the
+inverse of `has_symptom` / `probes`). That is the lever for the personalization idea: a user's
+follow-up answers re-enter as *symptom evidence* and re-score patterns over the same graph, and
+`questions_for_pattern` lets us pick the question that best separates the top candidates by
+information gain instead of a fixed list.
+
+## Query API (`KnowledgeGraph`)
+
+```python
+from kg.graph import KnowledgeGraph
+g = KnowledgeGraph.load()
+g.patterns_for_value("zhi", "light")       # forward:  detected feature -> [(pattern, weight, sources)]
+g.patterns_for_symptom("symptom:bloating") # inverse:  user evidence  -> [(pattern, weight, sources)]  (WS-B)
+g.questions_for_pattern("pattern:...")     # candidate disambiguation probes (WS-B)
+g.symptoms_for_pattern / g.recs_for_pattern / g.snippet / g.edges_from / g.edges_to / g.stats()
+```
