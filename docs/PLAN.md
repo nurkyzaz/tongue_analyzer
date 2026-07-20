@@ -35,8 +35,9 @@ is filtered through that second lens (§7).
   faithfulness 0.929** — vs α=0.35 (0.75 / 0.925 / 0.868). Citations attach independent of α, so α=0.2
   keeps the grounding while recovering faithfulness to ~the rule-only baseline (0.936) → the tradeoff is
   gone. **Step 4 done:** raw `confidence_pct` on every card + shown in UI (was a word only).
-- Pending: flip `TIH_WSC_ENSEMBLE=1` to default-ON on the live demo (numbers now strongly support it).
-  Then WS-B (refinement engine) is the next new build; WS-E deploy.
+- **Promoted 2026-07-16: `TIH_WSC_ENSEMBLE` is default-ON and LIVE** on the casper demo (qwen2.5:14b) —
+  verified end-to-end (`/analyze` returns cited, %-scored ensemble patterns). **WS-B (refinement engine)
+  is now the active build**; WS-E deploy after.
 
 ---
 

@@ -103,8 +103,8 @@ LLM down → rule cards).
 Citations attach whenever the matcher grounds a pattern — **independent of α** — so lowering α costs
 almost no grounding (0.925→0.90) but recovers faithfulness to the rule-only baseline (0.868→0.929) and
 raises stability. matcher-added 0.0, hallucination 0.0 at both. **WS-D gate PASS** at α=0.2 (0.929 ≥
-0.85). At α=0.2 the faithfulness tradeoff is gone → the case for flipping `TIH_WSC_ENSEMBLE=1` to
-default-ON is strong (grounding added at ~baseline faithfulness); the live flip is the one pending call.
+0.85). At α=0.2 the faithfulness tradeoff is gone, so `TIH_WSC_ENSEMBLE` was **promoted default-ON (live on the
+casper demo, qwen2.5:14b)** — verified end-to-end (`/analyze` returns cited, %-scored ensemble patterns).
 
 Micro edges are tagged `cond.layer="micro"`, carry a book citation + a `snippet` id, and COEXIST with
 the seed rule weights (rule engine keeps using seed edges; the WS-C matcher can prefer cited micro

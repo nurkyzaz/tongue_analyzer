@@ -96,9 +96,8 @@ Prior rounds (pushed): coating split thickness×texture, red-tip/moisture, combi
    behind `TIH_WSC_ENSEMBLE` (**default OFF**). **α sweep picked α=0.2** (default): stability-vs-rule
    0.85, lead-cited 0.90, 0 hallucination, **WS-D faithfulness 0.929** (≈ rule-only 0.936) — vs α=0.35
    (0.75 / 0.925 / 0.868). Citations attach independent of α, so α=0.2 keeps grounding while recovering
-   faithfulness → the tradeoff is gone. Raw `confidence_pct` now on every card + in the UI. **Pending call:
-   flip `TIH_WSC_ENSEMBLE=1` to default-ON** (numbers strongly support it). Then **WS-B refinement engine**
-   is the next new build.
+   faithfulness → the tradeoff is gone. Raw `confidence_pct` now on every card + in the UI. **Promoted default-ON & LIVE** (casper demo, qwen2.5:14b) — verified end-to-end. **WS-B
+   refinement engine** is now the active build.
 3. **WS-B refinement engine** — symptom-evidence re-scoring + information-gain question selection over the
    KG's `evidence_for` edges (UI-agnostic; pairs with the design's Refine flow).
 4. **WS-D eval gate** — adopt **RAGAS** (faithfulness) as the hallucination gate before defaulting the LLM

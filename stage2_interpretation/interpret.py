@@ -18,9 +18,10 @@ _RETRIEVER = None
 _MATCHER = None
 
 # WS-C ensemble: layer the grounded cite-or-abstain matcher (cited book evidence + honest confidence)
-# on top of the rule-engine prior. OFF by default — a promotion decision gated by WS-D (the plan:
-# "nothing promotes without the gate"). Enable with TIH_WSC_ENSEMBLE=1 once the numbers clear.
-WSC_ENSEMBLE = os.getenv("TIH_WSC_ENSEMBLE", "0") == "1"
+# on top of the rule-engine prior. PROMOTED default-ON (2026-07-16) — the α=0.2 sweep cleared the WS-D
+# faithfulness gate at ~the rule-only baseline (0.929 vs 0.936) while keeping the book grounding
+# (lead-cited 0.90) and 0 hallucination. Set TIH_WSC_ENSEMBLE=0 to fall back to the pure rule ranker.
+WSC_ENSEMBLE = os.getenv("TIH_WSC_ENSEMBLE", "1") == "1"
 
 
 def _matcher():
