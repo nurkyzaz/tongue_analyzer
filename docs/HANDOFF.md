@@ -98,8 +98,11 @@ Prior rounds (pushed): coating split thickness×texture, red-tip/moisture, combi
    (0.75 / 0.925 / 0.868). Citations attach independent of α, so α=0.2 keeps grounding while recovering
    faithfulness → the tradeoff is gone. Raw `confidence_pct` now on every card + in the UI. **Promoted default-ON & LIVE** (casper demo, qwen2.5:14b) — verified end-to-end. **WS-B
    refinement engine** is now the active build.
-3. **WS-B refinement engine** — symptom-evidence re-scoring + information-gain question selection over the
-   KG's `evidence_for` edges (UI-agnostic; pairs with the design's Refine flow).
+3. **WS-B — DONE (2026-07-16).** `kg/refine_engine.py`: two-pass reading — `select_questions` (info-gain
+   over the KG's `probes` edges, disambiguates the top-2, covers both) + `rescore` (folds answers over
+   answer→pattern edges, re-ranks the whole set). Wired into `interpret._followup_block` + `/refine`
+   pass-2 + the frontend. Verified live (t12: spleen overtakes phlegm to 74% after answers). Log-odds
+   `refine()` is the interim fallback. **WS-E deploy is the next new build.**
 4. **WS-D eval gate** — adopt **RAGAS** (faithfulness) as the hallucination gate before defaulting the LLM
    ON; expand `eval_mapping.py`; keep TCMEval-SDT (rules 69.7%) and `eval_rag.py`.
 5. **WS-E deploy** — containerize FastAPI on a cheap CPU box (0.34s/img); narrator off-box; template is the
@@ -134,7 +137,8 @@ offline KB work + graph-RAG + JSON-mode + feedback loop; defer per-request-heavy
 ## Map of the important files
 - **Plan (SoT):** `docs/PLAN.md`. Architecture: `docs/ARCHITECTURE.md`. Status board: `docs/PROGRESS.md`.
 - Knowledge graph (WS-A): `stage2_interpretation/kg/` (`graph.py`, `build_kg.py`, `parse_book.py`,
-  `micro_extract.py`, `normalize.py`, `who_terms.py`, `retrieval.py`, `matcher.py`, `README.md`).
+  `micro_extract.py`, `normalize.py`, `who_terms.py`, `retrieval.py`, `matcher.py`, `ensemble.py` (WS-C),
+  `refine_engine.py` (WS-B), `README.md`).
   Curated data: `knowledge_base/{book_sections.json, who_spine.json}` (tracked); `book_triplets_*.json`,
   `who_terms.json`, `kg_graph.json` are git-ignored rebuildable artifacts.
 - Living mapping refs: `docs/FEATURE_MAPPING_REFERENCE.md`, `docs/FEATURE_PATTERN_MAPPING.md`,

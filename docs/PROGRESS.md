@@ -90,9 +90,15 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
   claim-grounding judge over the LLM narrative → **faithfulness 0.936 (73/78 claims)**, threshold 0.85 →
   **GATE PASS** (LLM narrator may default ON). The 5 flagged claims are soft symptom/wellness
   extrapolations, not false diagnoses. Env `TIH_FAITHFULNESS_MIN` sets the gate; `<0.85` ⇒ template only.
+- ✅ **WS-B interactive evidence refinement — DONE (2026-07-16)** (`kg/refine_engine.py`): two-pass
+  reading. `select_questions` picks the items that best **disambiguate the top-2** (info gain = probe
+  weight × contestedness, covering both candidates) — replaces the fixed per-pattern list; `rescore`
+  folds yes/no answers in over the KG's answer→pattern edges and **re-ranks the whole set** (a strong
+  'yes' on the runner-up can overtake the lead). Wired into `interpret._followup_block` + `/refine`
+  pass-2 + the frontend refine flow. **Verified live: t12 phlegm 69% vs spleen 59% → after answers,
+  spleen → 74% (#1).** Log-odds `refine()` stays as the interim fallback.
 - ⬜ **"Update tcm_knowledge.json itself"** (new combination rules / negation rules / symptom section) —
-  NOT started; see PLAN §7-A status note. · ⬜ WS-B refinement engine (symptom evidence + info-gain
-  questions; KG edges already exist). · ⬜ WS-C ensemble wiring (rule prior × matcher, per the shadow verdict).
+  superseded: knowledge now grows from book parsing (WS-A), not hand-edits. See PLAN §7-A.
 
 ## Phase 4 — Integration
 - ✅ `pipeline.py` orchestrator (image[+metadata] → quantitative JSON + report) — **end-to-end works**

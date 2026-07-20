@@ -36,8 +36,14 @@ is filtered through that second lens (§7).
   keeps the grounding while recovering faithfulness to ~the rule-only baseline (0.936) → the tradeoff is
   gone. **Step 4 done:** raw `confidence_pct` on every card + shown in UI (was a word only).
 - **Promoted 2026-07-16: `TIH_WSC_ENSEMBLE` is default-ON and LIVE** on the casper demo (qwen2.5:14b) —
-  verified end-to-end (`/analyze` returns cited, %-scored ensemble patterns). **WS-B (refinement engine)
-  is now the active build**; WS-E deploy after.
+  verified end-to-end (`/analyze` returns cited, %-scored ensemble patterns).
+- **WS-B — DONE (2026-07-16):** interactive evidence refinement (`kg/refine_engine.py`). Two-pass reading:
+  `select_questions` picks the items that best **disambiguate the top-2** (info gain = probe weight ×
+  contestedness, covering both candidates) → replaces the fixed per-pattern list; `rescore` folds the
+  user's yes/no answers in over the KG's answer→pattern edges and **re-ranks the whole set** (a strong
+  'yes' on the runner-up can overtake the lead). Wired into `interpret.py` (`_followup_block`) + `/refine`
+  pass-2 + the frontend. Verified live: t12 phlegm 69% vs spleen 59% → after answers, spleen → 74% (#1).
+  The transparent log-odds `refine()` stays as the interim fallback. **WS-E deploy is next.**
 
 ---
 
