@@ -134,7 +134,7 @@ chasing further (label ceiling).
 grounded RAG+LLM narrative (retrieval 96%), now being overhauled onto a **macro-micro knowledge graph**
 (`kg/`) built from the newly-licensed books in `tongue_lit/`. WS-A graph is built (seed+macro, parity
 verified); micro extraction underway (qwen2.5:14b on casper, free).
-**App design:** a Claude Design handoff bundle for the Savor 舌 tab lives in `prompt-execution-request/` —
+**App design:** a Claude Design handoff bundle for the Savor 舌 tab lives in `design/` —
 maps 1:1 onto WS-B (refine), WS-C (linkage cards), and the Sources sheet.
 
 **Blocked on user data:** real-phone photos for color calibration + true real-world accuracy.

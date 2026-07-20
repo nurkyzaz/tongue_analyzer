@@ -74,7 +74,7 @@ Consolidated all planning into **PLAN.md** (v2, single source of truth); archive
   uses our keys, 0 junk. `review_triplets.py` builds a local QA page.
 - **Next:** full chapters 2–4 extraction with qwen14b → write `build_kg.add_micro_layer` → WS-C grounded
   matcher (shadow) + WS-B refinement engine. A **design bundle** for the app is in
-  `prompt-execution-request/` (Savor 舌 tab; maps 1:1 onto WS-B/WS-C/Sources — see PLAN.md §5).
+  `design/` (Savor 舌 tab; maps 1:1 onto WS-B/WS-C/Sources — see PLAN.md §5).
 
 Prior rounds (pushed): coating split thickness×texture, red-tip/moisture, combination rules
 (`eval_mapping.py` 12/12), hybrid RAG+LLM over a cited corpus (`knowledge_cards.json`, retrieval hit@4
@@ -118,7 +118,7 @@ Prior rounds (pushed): coating split thickness×texture, red-tip/moisture, combi
    always-on fallback. **Licensing before ship:** seg uses SM-Tongue (CC-BY-NC) → retrain without it or
    license; DINOv3 gated (DINOv2 fallback); surface book snippets to users only if the grant allows.
 6. **WS-F output design — phone demo BUILT (2026-07-16).** `deployment/api/static/index.html` now
-   recreates the `prompt-execution-request/project/TongueInsight.dc.html` design as a live phone UI
+   recreates the Savor 舌 tab design (specs in `design/`) as a live phone UI
    (Capture → Analysing → Reading → Refine → Sources), wired to `/analyze` + `/refine`, with a `?demo=1`
    offline fixture. See PROGRESS.md Phase 4. Remaining design polish: 十日之間 trend (needs app-side
    history storage — intentionally omitted rather than fabricated), citation+snippet licensing toggle.
@@ -155,7 +155,7 @@ offline KB work + graph-RAG + JSON-mode + feedback loop; defer per-request-heavy
 - Historical detail (accuracy/RAG/coating/color investigations): `docs/archive/`.
 - Living eval harnesses: `evaluation/{eval_model,eval_mapping,eval_rag,eval_coat_axes,eval_extra_features,
   eval_seg,eval_stage1,benchmark,benchmark_syndrome}.py` (one-offs archived under `evaluation/archive/`).
-- App design bundle: `prompt-execution-request/` (Claude Design handoff — the Savor 舌 tab comps).
+- App design bundle: `design/` (Claude Design handoff — the Savor 舌 tab comps).
 
 ## Working style the user expects
 Rigorous and honest: measure before promoting, report negatives plainly (v8/color-calib were kept OFF on

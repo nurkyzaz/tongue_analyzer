@@ -24,7 +24,7 @@ is filtered through that second lens (§7).
   `who_spine.json`) tags 25 pattern/feature nodes with canonical code + 中文 + pīnyīn for bilingual
   output. Remaining WS-A polish: expand the alias map for Gerlach's Latin candidates; Chinese textbooks
   blocked (no source files). Next major step: **WS-C grounded matcher** over this graph.
-- **WS-F output design:** a Claude Design handoff bundle (Savor 舌 tab) is in `prompt-execution-request/`;
+- **WS-F output design:** a Claude Design handoff bundle (Savor 舌 tab) is in `design/`;
   it maps 1:1 onto WS-B (Refine flow), WS-C (linkage cards + confidence bars), and the Sources sheet
   (citation-only / citation+snippet licensing states). Iterating on it collaboratively.
 - **WS-C — built & gated (2026-07-16):** grounded matcher (`kg/matcher.py`) + shadow run (0 hallucination,

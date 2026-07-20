@@ -49,7 +49,7 @@ single source of truth), then [docs/HANDOFF.md](docs/HANDOFF.md).**
 | `data/` | Data prep + loaders (raw data **not** committed) |
 | `evaluation/` | Living eval harnesses (one-offs under `evaluation/archive/`) |
 | `deployment/api/` | FastAPI service + single-page web demo |
-| `prompt-execution-request/` | Claude Design handoff bundle — the Savor 舌 tab app comps |
+| `design/` | Claude Design handoff bundle — the Savor 舌 tab app comps |
 | `docs/` | Documentation (`PLAN.md` = SoT; superseded notes under `docs/archive/`) |
 
 ## Compute
