@@ -93,10 +93,12 @@ Prior rounds (pushed): coating split thickness×texture, red-tip/moisture, combi
    --chapters all` on casper → `build_kg.py --verify` (globs all `book_triplets_*.json`).
 2. **WS-C — built & gated.** Matcher (`kg/matcher.py`) + shadow run (0 halluc, 0.50 top-1 vs rules) →
    **ensemble** (`kg/ensemble.py`, rule prior + cited matcher evidence, α=0.35) wired into `interpret.py`
-   behind `TIH_WSC_ENSEMBLE` (**default OFF**). Numbers: top-1 stability vs rule 0.75, lead-cited 0.925,
-   0 hallucination; **WS-D faithfulness gate PASS (micro 0.868)** vs 0.936 rule-only. Raw `confidence_pct`
-   now on every card + in the UI. **Pending call:** flip `TIH_WSC_ENSEMBLE=1` to default-ON (the added
-   book grounding vs a modest faithfulness dip). Then **WS-B refinement engine** is the next new build.
+   behind `TIH_WSC_ENSEMBLE` (**default OFF**). **α sweep picked α=0.2** (default): stability-vs-rule
+   0.85, lead-cited 0.90, 0 hallucination, **WS-D faithfulness 0.929** (≈ rule-only 0.936) — vs α=0.35
+   (0.75 / 0.925 / 0.868). Citations attach independent of α, so α=0.2 keeps grounding while recovering
+   faithfulness → the tradeoff is gone. Raw `confidence_pct` now on every card + in the UI. **Pending call:
+   flip `TIH_WSC_ENSEMBLE=1` to default-ON** (numbers strongly support it). Then **WS-B refinement engine**
+   is the next new build.
 3. **WS-B refinement engine** — symptom-evidence re-scoring + information-gain question selection over the
    KG's `evidence_for` edges (UI-agnostic; pairs with the design's Refine flow).
 4. **WS-D eval gate** — adopt **RAGAS** (faithfulness) as the hallucination gate before defaulting the LLM

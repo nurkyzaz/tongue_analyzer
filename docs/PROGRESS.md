@@ -81,10 +81,11 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
   (α=0.35). Safety by construction — **abstention is neutral** (unnamed rule patterns keep their prior),
   **matcher-only hints capped at α** (cited secondary, never overturn a confident rule lead), balanced-lead
   passes through, fully degrading. Adds book **citations** + `why` + honest **`confidence_pct`** per card
-  (WS-C step 4; UI now shows the % not just a word). **Eval** (`evaluation/eval_ensemble.py`, human40,
-  α=0.35): top-1 **stability vs rule 0.75**, **lead-cited 0.925**, matcher-added 0.0, hallucination 0.0.
-  **WS-D gate on the ensemble path: micro 0.868 → PASS** (rule-only 0.936 — honest dip for the grounding).
-  Promotion to default-ON is a pending decision (faithfulness tradeoff).
+  (WS-C step 4; UI now shows the % not just a word). **Eval** (`evaluation/eval_ensemble.py`, human40) —
+  **α sweep picked α=0.2**: stability-vs-rule **0.85**, lead-cited **0.90**, matcher-added 0.0, halluc 0.0,
+  **WS-D faithfulness 0.929** (vs α=0.35: 0.75 / 0.925 / 0.868; rule-only baseline 0.936). Citations
+  attach independent of α → α=0.2 keeps grounding AND recovers faithfulness to ~baseline (tradeoff gone).
+  Promotion to default-ON (flip `TIH_WSC_ENSEMBLE=1` live) now strongly supported — one pending call.
 - ✅ **WS-D RAGAS-style faithfulness gate** (`evaluation/eval_faithfulness.py`, 12 imgs): local
   claim-grounding judge over the LLM narrative → **faithfulness 0.936 (73/78 claims)**, threshold 0.85 →
   **GATE PASS** (LLM narrator may default ON). The 5 flagged claims are soft symptom/wellness

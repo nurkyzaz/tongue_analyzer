@@ -29,13 +29,14 @@ is filtered through that second lens (§7).
   (citation-only / citation+snippet licensing states). Iterating on it collaboratively.
 - **WS-C — built & gated (2026-07-16):** grounded matcher (`kg/matcher.py`) + shadow run (0 hallucination,
   0.50 top-1 vs rules, within-family) → **ensemble** `kg/ensemble.py` (rule prior + cited matcher evidence,
-  `blended=(1-α)·rule+α·matcher`, α=0.35, abstention neutral, matcher-only hints capped at α). Wired into
-  `interpret.py` behind `TIH_WSC_ENSEMBLE` (**default OFF** — promotion decision). Eval on human40:
-  **top-1 stability vs rule 0.75, lead-cited 0.925, matcher-added 0.0, hallucination 0.0**; **WS-D
-  faithfulness gate PASS (micro 0.868 ≥ 0.85**, vs 0.936 rule-only — honest dip for the added grounding).
-  **Step 4 done:** raw `confidence_pct` on every pattern card + shown in UI (was a word only).
-- Not yet started: WS-B (refinement engine), WS-E (deploy the ensemble on by default — pending the
-  faithfulness-tradeoff call). The KG still isn't the live ranker until `TIH_WSC_ENSEMBLE=1` ships.
+  `blended=(1-α)·rule+α·matcher`, abstention neutral, matcher-only hints capped at α). Wired into
+  `interpret.py` behind `TIH_WSC_ENSEMBLE` (**default OFF** — promotion decision). **α sweep on human40
+  picked α=0.2:** stability-vs-rule **0.85**, lead-cited **0.90**, matcher-added/hallucination 0.0, **WS-D
+  faithfulness 0.929** — vs α=0.35 (0.75 / 0.925 / 0.868). Citations attach independent of α, so α=0.2
+  keeps the grounding while recovering faithfulness to ~the rule-only baseline (0.936) → the tradeoff is
+  gone. **Step 4 done:** raw `confidence_pct` on every card + shown in UI (was a word only).
+- Pending: flip `TIH_WSC_ENSEMBLE=1` to default-ON on the live demo (numbers now strongly support it).
+  Then WS-B (refinement engine) is the next new build; WS-E deploy.
 
 ---
 

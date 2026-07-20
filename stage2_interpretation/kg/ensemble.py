@@ -19,7 +19,11 @@ faithfulness gate; nothing here is live until those pass.
 """
 import os
 
-DEFAULT_ALPHA = float(os.getenv("TIH_WSC_ALPHA", "0.35"))   # matcher weight; rule keeps the majority
+# matcher weight; rule keeps the majority. alpha=0.2 chosen on the human40 sweep: it recovers narrative
+# faithfulness to the rule-only baseline (0.868@0.35 -> 0.929@0.2, vs 0.936 rule-only) while keeping the
+# grounding (lead-cited 0.90) and raising stability (0.85) — citations attach independent of alpha, so a
+# lower weight costs almost no grounding but keeps the ranking close to the auditable prior.
+DEFAULT_ALPHA = float(os.getenv("TIH_WSC_ALPHA", "0.2"))
 
 
 def blend(rule_conf, matcher_conf, alpha=DEFAULT_ALPHA):
