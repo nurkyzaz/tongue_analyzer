@@ -138,6 +138,30 @@ def kb_pattern(chars, extra, kb):
     return scores.most_common(1)[0][0] if scores else "balanced"
 
 
+def _present(chars, extra):
+    """Build the matcher's {feature: value} view from the parsed tongue clause."""
+    present = dict(chars)
+    for feat in extra:
+        present[feat] = "present"
+    return present
+
+
+def ensemble_pattern(chars, extra, kb, matcher, alpha):
+    """Top pattern via the WS-C ensemble (rule prior + cited matcher, weight alpha) on the SAME parsed
+    features — so rule vs matcher-forward is apples-to-apples against the gold syndrome. alpha=1.0 ~
+    matcher-forward (rule fills only the patterns the matcher abstains on)."""
+    import interpret
+    from kg.matcher import _synth_readings
+    from kg.ensemble import ensemble_cards
+    present = _present(chars, extra)
+    rule_cards = interpret.vote_patterns(_synth_readings(present, kb), kb, present)
+    mo = matcher.match(present)
+    cards, _ = ensemble_cards(rule_cards, mo, make_card=lambda pid, c: interpret._card(kb, pid, c),
+                              alpha=alpha)
+    cards = [c for c in cards if c["id"] != "balanced"]
+    return cards[0]["id"] if cards else "balanced"
+
+
 def gold_axes(options, answer):
     axes = set()
     for opt in answer.replace("；", ";").split(";"):
@@ -153,8 +177,16 @@ def gold_axes(options, answer):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--data", required=True)
+    ap.add_argument("--engine", choices=["rule", "ensemble"], default="rule",
+                    help="rule = KB vote (the 69.7% baseline); ensemble = WS-C rule+matcher blend")
+    ap.add_argument("--alpha", type=float, default=0.2, help="ensemble matcher weight (1.0 = matcher-forward)")
     args = ap.parse_args()
     kb = load_kb()
+    matcher = None
+    if args.engine == "ensemble":
+        from kg.matcher import GroundedMatcher
+        matcher = GroundedMatcher()
+        assert matcher.llm.enabled, "ensemble engine needs the LLM env (run on casper)"
     cases = json.load(open(args.data, encoding="utf-8"))
     n = hit = 0
     by_gold = collections.Counter(); by_hit = collections.Counter()
@@ -167,7 +199,8 @@ def main():
         chars, extra = parse_tongue(data)
         if not chars and not extra:
             continue
-        pat = kb_pattern(chars, extra, kb)
+        pat = (ensemble_pattern(chars, extra, kb, matcher, args.alpha)
+               if args.engine == "ensemble" else kb_pattern(chars, extra, kb))
         our_ax = PATTERN_AXIS.get(pat, set())
         gax = gold_axes(opts, ans)
         if not gax:
@@ -177,7 +210,8 @@ def main():
         hit += consistent
         for a in gax:
             by_gold[a] += 1; by_hit[a] += consistent
-    print(f"KB-reasoning vs expert syndrome (TCMEval-SDT, tongue-bearing cases): n={n}")
+    tag = "engine=%s" % args.engine + (" alpha=%s" % args.alpha if args.engine == "ensemble" else "")
+    print(f"KB-reasoning vs expert syndrome (TCMEval-SDT, tongue-bearing cases): n={n}  [{tag}]")
     print(f"Directional consistency (our tongue-axis ∈ expert syndrome axes): {hit}/{n} = {hit/max(n,1):.1%}")
     print("Per expert-axis recall:")
     for a in AXES:
