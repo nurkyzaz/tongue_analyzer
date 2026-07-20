@@ -11,6 +11,7 @@ tradition's perspective, never a diagnosis.
 """
 import json
 import os
+import re
 
 from llm_client import LLMClient
 
@@ -22,6 +23,66 @@ _MATCHER = None
 # faithfulness gate at ~the rule-only baseline (0.929 vs 0.936) while keeping the book grounding
 # (lead-cited 0.90) and 0 hallucination. Set TIH_WSC_ENSEMBLE=0 to fall back to the pure rule ranker.
 WSC_ENSEMBLE = os.getenv("TIH_WSC_ENSEMBLE", "1") == "1"
+
+# External references (book/author/database names, URLs, section codes) ground the reasoning INTERNALLY
+# but must not reach the public surface. TIH_SHOW_CITATIONS=true keeps them (internal QA/debug); default
+# false strips them from the response JSON right before it's returned — the KG/matcher/refine engine
+# still build WITH citations, we only redact the final output.
+SHOW_CITATIONS = os.getenv("TIH_SHOW_CITATIONS", "false").lower() in ("1", "true", "yes")
+
+# source names / databases / venues to redact from free-text narrative (their section codes + URLs are
+# handled separately). Kept broad; matched case-insensitively as whole words.
+_SOURCE_NAMES = re.compile(
+    r"\b(Gerlach|Maciocia|Kirschbaum|Dubounet|Oriental Tongue Diagnosis|World Scientific|World Century|"
+    r"Sacred Lotus|SymMap|Nucleic Acids Research|TCMEval|Wang Qi|CCMQ|WHO|ICD[-\s]?11|Delphi|"
+    r"Foundations of Chinese Medicine|Atlas of Chinese Tongue Diagnosis)\b", re.I)
+_URL = re.compile(r"https?://\S+")
+_SECTION = re.compile(r"§\s*[\d.]+[A-Za-z]?|\bp\.?\s*\d+\b|\b[A-Z]{2}\d{2,}\b|\bPMC\d+\b")
+_GROUNDING_LINE = re.compile(r"\*\*Grounding:\*\*[^\n]*\n?", re.I)
+
+
+def _redact(text):
+    """Replace any external attribution in free text with generic 'traditional texts' phrasing."""
+    if not text or not isinstance(text, str):
+        return text
+    text = _GROUNDING_LINE.sub("", text)
+    text = _URL.sub("traditional texts", text)
+    text = _SECTION.sub("", text)
+    text = _SOURCE_NAMES.sub("traditional texts", text)
+    text = re.sub(r"(traditional texts)([\s,;·—-]+traditional texts)+", r"\1", text)  # collapse repeats
+    text = re.sub(r"[ \t]{2,}", " ", text)
+    return text.strip(" ·—-,;")
+
+
+def _redact_tree(obj):
+    """Recursively rewrite every string in a nested structure with _redact (source names/URLs/§ only,
+    so non-source text is untouched) — the safety net that catches any field, present or future."""
+    if isinstance(obj, str):
+        return _redact(obj)
+    if isinstance(obj, list):
+        return [_redact_tree(x) for x in obj]
+    if isinstance(obj, dict):
+        return {k: _redact_tree(v) for k, v in obj.items()}
+    return obj
+
+
+def strip_external(result):
+    """Remove all external references from a response dict (book/author/db names, URLs, § codes, cited
+    snippets) while KEEPING the reasoning payload the user needs (patterns, confidence, advice, follow-up
+    questions). Internal grounding is untouched — this only rewrites the outbound JSON."""
+    # 1) structural drops: whole fields whose purpose is attribution
+    for p in result.get("patterns") or []:
+        p.pop("citations", None)          # book source + verbatim snippet
+        p.pop("evidence", None)           # matcher evidence (carries sources)
+        for r in p.get("reasoning") or []:
+            r["cite"] = ""                # drop rule citation codes (e.g. "SL/Mac", "Gerlach p.61")
+    for r in result.get("reasoning") or []:
+        r["cite"] = ""
+    result["sources"] = []                # the Sources-sheet payload (author/db names + URLs)
+    # 2) recursive redaction of any remaining free text (narrative, regions notes, why, findings, …)
+    result = _redact_tree(result)
+    result["show_citations"] = False
+    return result
 
 
 def _matcher():
@@ -810,7 +871,7 @@ def interpret(stage1_output, metadata=None, llm: LLMClient = None):
               if llm.enabled else None) \
         or _markdown(disp, patterns, combined, sources, headline, confidence_note)
 
-    return {
+    result = {
         "overview": overview, "headline": headline, "confidence_note": confidence_note,
         "findings_text": found_text, "findings": findings, "recommendation": recommendation,
         "symptoms": symptoms,
@@ -821,7 +882,9 @@ def interpret(stage1_output, metadata=None, llm: LLMClient = None):
         "combined": combined, "sources": sources, "report": report, "disclaimer": DISCLAIMER,
         # WS-B pass-1 follow-up flow: info-gain questions that disambiguate the top-2 candidates
         "followup": _followup_block(patterns),
+        "show_citations": SHOW_CITATIONS,
     }
+    return result if SHOW_CITATIONS else strip_external(result)
 
 
 def refine(base_confidence, answers):

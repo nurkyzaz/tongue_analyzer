@@ -76,7 +76,15 @@ def refine_endpoint(req: RefineReq):
     service()                       # ensures stage2_interpretation is on sys.path
     if req.patterns:
         from kg.refine_engine import rescore
+        import interpret
         reranked, deltas = rescore(req.patterns, req.answers)
+        if not interpret.SHOW_CITATIONS:                 # keep the public surface citation-free
+            for p in reranked:
+                p.pop("citations", None); p.pop("evidence", None)
+                if p.get("why"):
+                    p["why"] = interpret._redact(p["why"])
+                for r in p.get("reasoning") or []:
+                    r["cite"] = ""
         return {"patterns": reranked, "deltas": deltas,
                 "confidence": reranked[0]["confidence"] if reranked else req.base_confidence}
     from interpret import refine

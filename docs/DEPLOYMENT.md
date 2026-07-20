@@ -101,6 +101,27 @@ curl -fsS localhost:7860/health
 #   (graph-rag-fallback), patterns cited + %-scored, WS-B follow-up questions present.
 ```
 
+## Public surface has NO external attribution (`TIH_SHOW_CITATIONS`, default false)
+
+Book/author/database names, URLs, and section codes ground the reasoning **internally** but must not
+reach the client. `TIH_SHOW_CITATIONS=false` (the default) strips them from the response JSON right
+before it's returned — the KG, matcher, and refinement engine still build **with** citations; only the
+outbound surface is redacted (`interpret.strip_external`):
+- pattern cards drop `citations` / `evidence`; rule `reasoning[].cite` codes are blanked; top-level
+  `sources` (the Sources-sheet payload) is emptied.
+- all free text (LLM narrative, `regions` notes, `why`, findings, advice) is passed through a recursive
+  redactor that rewrites any source name/URL/§-code to generic "traditional texts" phrasing.
+- the UI (`static/index.html`) hides the **Sources** button + citation rows when `show_citations` is
+  false and shows a generic "grounded in traditional tongue-diagnosis knowledge" note; the hard-coded
+  demo data carries no source names either.
+- kept for the client: `patterns` (+ `confidence_pct`), `headline`, `recommendation`/advice, `followup`
+  (WS-B questions), `report` — all attribution-free.
+
+Set `TIH_SHOW_CITATIONS=true` only for internal QA/debug (returns the full cited payload). **Set it
+`false` (or leave unset) in every public/cloud environment and on the casper demo.** Logs are clean by
+construction: the response is stripped before return, and uvicorn access logs carry no bodies.
+Verified: `POST /analyze` on a real photo returns zero external names / codes / URLs.
+
 ## Rollout
 
 1. **Containerize — DONE.** Dockerfile + pinned requirements + baked 3 checkpoints (see above). `/health`

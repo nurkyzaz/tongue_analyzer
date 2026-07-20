@@ -43,18 +43,21 @@ the human eval or the mapping test — not on val/auto metrics.** This disciplin
 
 ## Demo (live)
 FastAPI + web page (`deployment/api/`), `uvicorn ... :7860`, public HTTPS via a cloudflared tunnel.
-**Currently launched WITH the local LLM + RAG** (Ollama). Restart recipe that works (ssh returns
-124/"Terminated" but the detached process launches fine):
+**Currently launched WITH the local LLM (qwen2.5:14b) + WS-C ensemble + citations HIDDEN.** Restart
+recipe that works (ssh returns 124/"Terminated" but the detached process launches fine):
 ```
-ssh nurkyz@192.168.1.184 'pkill -f "uvicorn deployment.api.app"; sleep 2'
+ssh nurkyz@192.168.1.184 'pkill -9 -f "uvicorn deployment.api.app"; sleep 2'
 ssh nurkyz@192.168.1.184 'cd ~/tongue && source envs/tih/bin/activate && setsid nohup env \
-  CUDA_VISIBLE_DEVICES=0 TIH_LLM_BACKEND=openai TIH_LLM_BASE_URL=http://localhost:11434/v1 \
-  TIH_LLM_MODEL=gemma3:latest TIH_LLM_API_KEY=ollama \
-  uvicorn deployment.api.app:app --host 0.0.0.0 --port 7860 >> logs/api.log 2>&1 </dev/null & disown'
+  TIH_SHOW_CITATIONS=false TIH_WSC_ENSEMBLE=1 TIH_LLM_BACKEND=openai \
+  TIH_LLM_BASE_URL=http://localhost:11434/v1 TIH_LLM_MODEL=qwen2.5:14b-instruct TIH_LLM_API_KEY=ollama \
+  uvicorn deployment.api.app:app --host 0.0.0.0 --port 7860 > logs/demo.log 2>&1 </dev/null & disown'
 ```
-LLM/RAG needs **Ollama** on `:11434` (models: `gemma3:latest` chat, `nomic-embed-text` embeddings — both
-local, no auth). The shared vLLM `:8000` needs a key we don't have. Without the env vars, the demo serves
-the deterministic template (always works).
+LLM needs **Ollama** on `:11434` (no auth). Without the LLM env the demo serves the deterministic
+template + CPU graph-RAG ensemble (always works). **`TIH_SHOW_CITATIONS=false` (default) keeps all
+external references (book/author/DB names, URLs, § codes) OUT of the response, UI, and logs** — internal
+grounding is untouched; set `true` only for internal QA. See DEPLOYMENT.md § "Public surface has no
+external attribution". `pgrep "uvicorn deployment.api.app"` also matches your own ssh cmd string — check
+port 7860 / `ss -ltn` instead.
 
 ## What's new (2026-07-16) — Stage 2 KG overhaul started
 Consolidated all planning into **PLAN.md** (v2, single source of truth); archived 17 superseded docs →

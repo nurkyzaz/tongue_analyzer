@@ -270,7 +270,7 @@
       <div style="font-size:12px;color:var(--mut);margin-top:8px;line-height:1.55">Where each link comes from. Reference only.</div>
       <div id="srcRows" style="display:flex;flex-direction:column;gap:16px;margin-top:20px"></div>
       <div style="margin-top:20px;font-size:10.5px;color:var(--dim);line-height:1.6;border-top:1px solid #222;padding-top:14px">
-        Normalised against the WHO International Standard Terminologies (2022). Citations only — quoted text shown only where the licence allows.
+        Grounded in traditional tongue-diagnosis knowledge. Educational, non-diagnostic.
       </div>
     </div>
   </div>
@@ -484,6 +484,14 @@ function renderReading(d){
 
 /* ---- sources sheet ---- */
 function buildSources(it){
+  // external references are hidden on the public surface (TIH_SHOW_CITATIONS=false): drop the
+  // Sources button and show a generic grounding note instead of book/author citations.
+  const showCites = it.show_citations !== false && ((it.sources||[]).length || (it.patterns||[]).some(p=>(p.reasoning||[]).some(r=>r.cite)));
+  const btn=$('srcBtn'); if(btn) btn.style.display = showCites ? '' : 'none';
+  if(!showCites){
+    $('srcRows').innerHTML='<div style="color:var(--mut);font-size:12.5px;line-height:1.6">These readings are grounded in traditional tongue-diagnosis knowledge.</div>';
+    return;
+  }
   const rows=[];
   (it.patterns||[]).filter(p=>p.id!=='balanced').slice(0,3).forEach(p=>{
     const refs=(p.reasoning||[]).filter(r=>r.cite).map(r=>({book:r.cite,loc:r.note,snip:''}));
@@ -574,7 +582,7 @@ if(new URLSearchParams(location.search).has('demo')){
     disclaimer:'Traditional associations from the TCM literature, for learning — not a diagnosis. See a clinician if something worries you.',
     combined:'Your findings vote most strongly for a **damp, phlegm-heavy** picture — the coating sits on the line between the two.',
     report:'ok',
-    sources:['Gerlach, TCM Tongue Diagnosis Explained','WHO IST 2022'],
+    sources:[],show_citations:false,
     features:[
       {key:'coat_texture',label:'Coating',tcm_term:'厚膩苔',value:'greasy',severity:0.69,band:'pronounced',notable:true,points_to:{phlegm_damp:0.9,damp_heat:0.6}},
       {key:'tooth_mk',label:'Tooth marks',tcm_term:'齒痕',value:'present',severity:0.62,band:'clear',notable:true,points_to:{phlegm_damp:0.7,spleen_qi:0.8}},
@@ -583,9 +591,9 @@ if(new URLSearchParams(location.search).has('demo')){
     ],
     patterns:[
       {id:'phlegm_damp',tcm_name:'痰濕',plain_name:'Phlegm-Dampness',confidence:0.74,
-        reasoning:[{note:'greasy thick coating reads as damp-phlegm gathering',cite:'Gerlach p.61'}]},
+        reasoning:[{note:'greasy thick coating reads as damp-phlegm gathering',cite:''}]},
       {id:'damp_heat',tcm_name:'濕熱',plain_name:'Damp-Heat',confidence:0.41,
-        reasoning:[{note:'red points at the tip lean the damp toward heat',cite:'Gerlach p.72'}]},
+        reasoning:[{note:'red points at the tip lean the damp toward heat',cite:''}]},
     ],
     recommendation:{actions:['溫熱早餐 · a warm breakfast','飯後散步二十分 · a 20-min walk after eating','少冰飲生冷 · ease off iced & raw-cold food']},
     followup:[{pattern_id:'phlegm_damp',tcm_name:'痰濕',plain_name:'Phlegm-Dampness',base_confidence:0.74,
