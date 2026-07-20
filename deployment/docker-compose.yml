@@ -1,0 +1,24 @@
+# WS-E cheap-CPU deploy (docs/DEPLOYMENT.md). Default = template + CPU graph-RAG ensemble, NO LLM,
+# no image data leaves the box.  Build+run from repo root:  docker compose -f deployment/docker-compose.yml up -d
+services:
+  tih-api:
+    build:
+      context: ..                     # repo root (checkpoints + code live there)
+      dockerfile: deployment/Dockerfile
+    image: tih-api:latest
+    ports:
+      - "7860:7860"
+    environment:
+      # --- lock down before exposing publicly ---
+      TIH_API_KEY: "${TIH_API_KEY:-}"                 # if set, /analyze needs X-API-Key
+      TIH_CORS_ORIGINS: "${TIH_CORS_ORIGINS:-*}"      # restrict to the app origin in prod
+      TIH_WSC_ENSEMBLE: "1"
+      OMP_NUM_THREADS: "2"
+      # --- OPTIONAL off-box LLM narrative + matcher `why` (Phase 2). Point at a GPU box / hosted API;
+      #     leave unset to serve the template + CPU graph-RAG ensemble (cited, LLM-less). ---
+      # TIH_LLM_BACKEND: "openai"
+      # TIH_LLM_BASE_URL: "http://casper:11434/v1"
+      # TIH_LLM_MODEL: "qwen2.5:14b-instruct"
+      # TIH_LLM_API_KEY: "ollama"
+    restart: unless-stopped
+    mem_limit: 3g

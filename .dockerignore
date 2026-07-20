@@ -1,0 +1,37 @@
+# Keep the build context small + never bake copyrighted books, datasets, or spare checkpoints.
+.git
+.gitignore
+**/__pycache__/
+*.pyc
+*.pyo
+*.zip
+*.log
+
+# copyrighted source books / licensed corpora — MUST NOT ship in the image
+tongue_lit/
+
+# datasets & eval assets (not needed to serve)
+data/
+shezhen datasets/
+test_images/
+notebooks/
+evaluation/
+docs/
+design/
+prompt-execution-request/
+
+# all checkpoints excluded, then re-include only the 3 production weights
+checkpoints/
+!checkpoints/seg_combined/best.pt
+!checkpoints/multitask_v5/best.pt
+!checkpoints/extra_features/best.pt
+
+# derived/large KG build artifacts not needed at runtime (kg_graph.json IS served, so keep it)
+stage2_interpretation/knowledge_base/who_terms.json
+stage2_interpretation/knowledge_base/book_triplets_*.json
+stage2_interpretation/kg/kg_triplets_review.html
+
+# scratch
+scratchpad/
+*.egg-info/
+.pytest_cache/

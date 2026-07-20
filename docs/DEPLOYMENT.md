@@ -81,10 +81,30 @@ default the LLM on until we've shown it doesn't add unstated claims.
 The existing web demo (`deployment/api/static/index.html`) doubles as the **PWA/reference client** and
 the **internal QA harness** (run it against `data/eval/gallery/` — known answers).
 
+## Container (WS-E — built & smoke-tested 2026-07-16)
+
+`deployment/Dockerfile` (multi-stage: a `build-essential` builder compiles the few source wheels —
+e.g. `stringzilla`, an albumentations dep — so the final `python:3.11-slim` image carries **no gcc**),
+`deployment/requirements.txt` (CPU torch wheels, pinned to the casper env; **excludes** faiss /
+scikit-learn / pandas — only the off-box RAG narrative needs those), `.dockerignore` (never bakes
+`tongue_lit/` or datasets; re-includes only the 3 production checkpoints). Image **1.71 GB**.
+
+**Default serving = template + CPU graph-RAG ensemble, NO LLM** (`TIH_WSC_ENSEMBLE=1`, no `TIH_LLM_*`):
+the matcher/ensemble fall back to the pure-graph ranking, so patterns still carry **book citations +
+confidence %** with zero LLM cost and no image data leaving the box. The LLM narrative + matcher `why`
+are the off-box Phase-2 toggle (uncomment `TIH_LLM_*` in `docker-compose.yml`).
+
+```bash
+docker compose -f deployment/docker-compose.yml up -d --build     # build + run
+curl -fsS localhost:7860/health
+# smoke-tested: POST /analyze on a real photo -> full reading in ~1.45 s CPU, ensemble applied
+#   (graph-rag-fallback), patterns cited + %-scored, WS-B follow-up questions present.
+```
+
 ## Rollout
 
-1. **Containerize.** Dockerfile (python-3.11-slim, torch **CPU** wheel, `opencv-python-headless`),
-   pinned requirements, bake in the 3 checkpoints (~300 MB). `/health` already exists.
+1. **Containerize — DONE.** Dockerfile + pinned requirements + baked 3 checkpoints (see above). `/health`
+   works; `/analyze` verified in-container. Remaining ops (need the box): push image to a registry.
 2. **Provision** the cheap box + domain + TLS. Set `TIH_API_KEY` and `TIH_CORS_ORIGINS=<app origin>`.
 3. **Deploy + smoke-test** `/health` and `/analyze` on gallery images (known answers) before wiring the app.
 4. **App team wires** the tongue feature (design pack) to `POST /analyze` → renders the reading screen.

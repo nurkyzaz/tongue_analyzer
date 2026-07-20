@@ -1,0 +1,15 @@
+# WS-E cheap-CPU serving deps (pinned to the casper env; versions are the source of truth).
+# CPU torch wheels only — serving needs no GPU (full pipeline ~0.34s/img on CPU).
+# Excludes: faiss / scikit-learn (only the OFF-BOX RAG narrative needs them), pandas (train-time only).
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.6.0
+torchvision==0.21.0
+segmentation-models-pytorch==0.5.0
+timm==1.0.27
+albumentations==2.0.8
+opencv-python-headless==4.11.0.86
+numpy==2.2.6
+pillow==12.2.0
+fastapi==0.139.0
+uvicorn==0.50.2
+pydantic==2.13.4

@@ -43,7 +43,14 @@ is filtered through that second lens (§7).
   user's yes/no answers in over the KG's answer→pattern edges and **re-ranks the whole set** (a strong
   'yes' on the runner-up can overtake the lead). Wired into `interpret.py` (`_followup_block`) + `/refine`
   pass-2 + the frontend. Verified live: t12 phlegm 69% vs spleen 59% → after answers, spleen → 74% (#1).
-  The transparent log-odds `refine()` stays as the interim fallback. **WS-E deploy is next.**
+  The transparent log-odds `refine()` stays as the interim fallback.
+- **WS-E — containerized (2026-07-16):** `deployment/Dockerfile` (multi-stage, CPU torch, pinned deps,
+  baked 3 checkpoints), `requirements.txt`, `.dockerignore`, `docker-compose.yml`. Image **1.71 GB**;
+  **built + smoke-tested locally** — `/analyze` runs the full pipeline + CPU graph-RAG ensemble (cited,
+  %-scored patterns) + WS-B questions + template narrative in **~1.45 s, no GPU, no LLM, no image data
+  off-box**. LLM narrative = off-box Phase-2 toggle. Remaining WS-E (needs the box): provision the cheap
+  CPU host + TLS + `TIH_API_KEY`/CORS, push image, app-team wires `POST /analyze`. Licensing blocker for
+  paid ship: retrain seg without SM-Tongue (CC-BY-NC) or license it.
 
 ---
 

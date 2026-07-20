@@ -102,7 +102,13 @@ Prior rounds (pushed): coating split thickness×texture, red-tip/moisture, combi
    over the KG's `probes` edges, disambiguates the top-2, covers both) + `rescore` (folds answers over
    answer→pattern edges, re-ranks the whole set). Wired into `interpret._followup_block` + `/refine`
    pass-2 + the frontend. Verified live (t12: spleen overtakes phlegm to 74% after answers). Log-odds
-   `refine()` is the interim fallback. **WS-E deploy is the next new build.**
+   `refine()` is the interim fallback.
+4. **WS-E — containerized (2026-07-16).** `deployment/Dockerfile` (multi-stage CPU torch, pinned
+   `requirements.txt`, baked 3 checkpoints, `.dockerignore` keeps books/datasets out), `docker-compose.yml`.
+   Image 1.71 GB, built + smoke-tested: `docker compose -f deployment/docker-compose.yml up -d --build`
+   → `/analyze` ~1.45 s CPU, template + graph-RAG ensemble (cited, LLM-less), WS-B questions. LLM narrative
+   = off-box toggle. **Remaining (needs the box): provision cheap CPU host + TLS + API key/CORS, push image,
+   app wires `POST /analyze`.** Then the seg SM-Tongue (CC-BY-NC) licensing blocker before charging money.
 4. **WS-D eval gate** — adopt **RAGAS** (faithfulness) as the hallucination gate before defaulting the LLM
    ON; expand `eval_mapping.py`; keep TCMEval-SDT (rules 69.7%) and `eval_rag.py`.
 5. **WS-E deploy** — containerize FastAPI on a cheap CPU box (0.34s/img); narrator off-box; template is the
