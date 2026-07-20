@@ -62,15 +62,23 @@ def analyze(req: AnalyzeReq, x_api_key: str = Header(default="")):
 
 
 class RefineReq(BaseModel):
-    base_confidence: float
-    answers: list                  # [{"weight": float, "answer": bool}]
+    base_confidence: float = 0.0
+    answers: list                              # [{"weight": float, "answer": bool, "target_pattern"?: id}]
+    patterns: list | None = None               # WS-B pass-2: [{"id","confidence",...}] to re-rank
 
 
 @app.post("/refine")
 def refine_endpoint(req: RefineReq):
-    """Follow-up flow: update a pattern's confidence from the user's yes/no answers (transparent
-    log-odds). Exploratory refinement of a traditional framework's perspective, not a diagnosis."""
+    """Follow-up flow (WS-B pass-2). If `patterns` is given, the yes/no answers enter as evidence and
+    RE-RANK the whole candidate set over the KG's answer->pattern edges (a strong 'yes' on the runner-up
+    can overtake the lead). Otherwise falls back to the single-pattern log-odds update on
+    `base_confidence`. Exploratory refinement of a traditional framework's perspective, not a diagnosis."""
     service()                       # ensures stage2_interpretation is on sys.path
+    if req.patterns:
+        from kg.refine_engine import rescore
+        reranked, deltas = rescore(req.patterns, req.answers)
+        return {"patterns": reranked, "deltas": deltas,
+                "confidence": reranked[0]["confidence"] if reranked else req.base_confidence}
     from interpret import refine
     return {"confidence": refine(req.base_confidence, req.answers)}
 

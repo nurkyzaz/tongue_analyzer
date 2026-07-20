@@ -288,7 +288,7 @@
 const $=id=>document.getElementById(id);
 const md=s=>(s||'').replace(/\*\*(.+?)\*\*/g,'<b style="color:#fff">$1</b>').replace(/\[[^\]]*\]/g,'');
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-let stream=null, lastData=null, refineState=null;
+let stream=null, lastData=null, refineState=null, refineUsed=false;
 
 /* ---- static capture guidance (宜/忌) ---- */
 const CAPTURE_YIJI=[
@@ -434,7 +434,7 @@ function renderReading(d){
   // refine strip — only when a top-2 is genuinely close and questions exist
   const fu=(it.followup||[])[0];
   const close=pats.length>=2 && (pats[1].confidence/(pats[0].confidence||1))>=0.55;
-  if(fu && fu.questions && fu.questions.length && close){
+  if(fu && fu.questions && fu.questions.length && close && !refineUsed){
     $('refineStrip').style.display='block';
     $('refineN').textContent=Math.min(2,fu.questions.length);
     $('refineWhy').innerHTML=`<span style="font-family:var(--serif);color:#fff">${notable[0]?zhFeature(notable[0]):'苔膩'}</span> supports both readings, and yours sits on the line. A couple of questions would settle it.`;
@@ -517,23 +517,36 @@ function renderRefine(){
     <button class="qopt" data-a="1">是 · Yes<span class="en">Often</span></button>
     <button class="qopt" data-a="0">否 · No<span class="en">No</span></button>`;
   $('refOpts').querySelectorAll('.qopt').forEach(b=>b.onclick=async()=>{
-    st.answers[st.i]={weight:q.weight,answer:b.dataset.a==='1'};
-    try{const r=await fetch('/refine',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({base_confidence:st.fu.base_confidence,answers:Object.values(st.answers)})});
-      st.conf=(await r.json()).confidence;}catch(e){}
+    st.answers[st.i]={weight:q.weight,answer:b.dataset.a==='1',target_pattern:q.target_pattern};
+    try{const it=(lastData||{}).interpretation||{};
+      const r=await fetch('/refine',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({base_confidence:st.fu.base_confidence,answers:Object.values(st.answers),
+        patterns:(it.patterns||[])})});   // WS-B pass-2: re-rank the whole candidate set
+      const j=await r.json();st.conf=j.confidence;if(j.patterns)st.reranked=j.patterns;}catch(e){}
     if(st.i<n-1){st.i++;renderRefine();}else{applyRefine();}
   });
   show('s-refine');
 }
 function applyRefine(){
-  // reflect the refined confidence on the top linkage card + a "refined" marker
+  refineUsed=true;
   const it=(lastData||{}).interpretation||{};
-  const card=$('linkage').firstElementChild;
-  if(card){
-    const bar=card.querySelector('.track3 i');if(bar)bar.style.width=Math.round(refineState.conf*100)+'%';
-    if(!card.querySelector('.refined')){const t=card.querySelector('.ptop');
+  if(refineState && refineState.reranked){
+    // WS-B pass-2: fold the re-ranked candidate set back in and re-render (top-2 may have swapped)
+    it.patterns=refineState.reranked; lastData.interpretation=it;
+    renderReading(lastData);
+    const card=$('linkage').firstElementChild;
+    if(card && !card.querySelector('.refined')){
       const m=document.createElement('span');m.className='refined';m.style.marginLeft='auto';m.textContent='已補問 · refined';
       const pw=card.querySelector('.pw');if(pw)pw.replaceWith(m);}
+  }else{
+    // fallback: reflect the single-pattern refined confidence on the top card
+    const card=$('linkage').firstElementChild;
+    if(card){
+      const bar=card.querySelector('.track3 i');if(bar)bar.style.width=Math.round(refineState.conf*100)+'%';
+      if(!card.querySelector('.refined')){
+        const m=document.createElement('span');m.className='refined';m.style.marginLeft='auto';m.textContent='已補問 · refined';
+        const pw=card.querySelector('.pw');if(pw)pw.replaceWith(m);}
+    }
   }
   $('refineStrip').style.display='none';
   show('s-reading');

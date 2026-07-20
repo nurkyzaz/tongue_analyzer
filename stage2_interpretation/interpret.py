@@ -36,6 +36,51 @@ def _matcher():
     return _MATCHER or None
 
 
+_GRAPH = None
+
+
+def _graph():
+    """Lazy singleton knowledge graph (for WS-B info-gain question selection); None if unavailable."""
+    global _GRAPH
+    if _GRAPH is None:
+        try:
+            from kg.graph import KnowledgeGraph
+            g = json.load(open(os.path.join(os.path.dirname(__file__), "knowledge_base", "kg_graph.json")))
+            _GRAPH = KnowledgeGraph(nodes=g["nodes"], edges=g["edges"], rules=g.get("rules"),
+                                    snippets=g.get("snippets"), meta=g.get("_meta"))
+        except Exception:
+            _GRAPH = False
+    return _GRAPH or None
+
+
+def _followup_block(patterns):
+    """WS-B pass-1: the questions that best DISAMBIGUATE the top-2 candidates (information gain over the
+    KG's `probes` edges), plus the two candidates being separated. Falls back to the lead pattern's
+    fixed KB question list if the graph is unavailable."""
+    top = [p for p in patterns if p.get("id") != "balanced"]
+    if not top:
+        return []
+    lead = top[0]
+    questions = []
+    g = _graph()
+    if g is not None:
+        try:
+            from kg.refine_engine import select_questions
+            questions = select_questions(g, patterns, k=3)
+        except Exception:
+            questions = []
+    if not questions:                       # degraded: the lead pattern's own fixed questions
+        questions = [dict(q, target_pattern=lead["id"], target_name=lead.get("plain_name", ""))
+                     for q in lead.get("followup_questions", [])]
+    if not questions:
+        return []
+    return [{"pattern_id": lead["id"], "pattern": lead.get("tcm_name", ""),
+             "plain_name": lead.get("plain_name", ""), "base_confidence": lead.get("confidence", 0.0),
+             "questions": questions,
+             "candidates": [{"id": p["id"], "plain_name": p.get("plain_name", ""),
+                             "confidence": p.get("confidence", 0.0)} for p in top[:2]]}]
+
+
 def _retriever():
     """Lazy singleton RAG retriever; None if unavailable (no index / import fails) so callers degrade."""
     global _RETRIEVER
@@ -767,12 +812,8 @@ def interpret(stage1_output, metadata=None, llm: LLMClient = None):
         "reasoning": [{"note": r["note"], "cite": r["cite"]} for r in fired if r["note"]],
         "regions": kb.get("regions", {}),
         "combined": combined, "sources": sources, "report": report, "disclaimer": DISCLAIMER,
-        # follow-up flow: questions for the top non-balanced pattern
-        "followup": ([{"pattern_id": patterns[0]["id"], "pattern": patterns[0]["tcm_name"],
-                       "plain_name": patterns[0]["plain_name"], "base_confidence": patterns[0]["confidence"],
-                       "questions": patterns[0]["followup_questions"]}]
-                     if patterns and patterns[0]["id"] != "balanced" and patterns[0]["followup_questions"]
-                     else []),
+        # WS-B pass-1 follow-up flow: info-gain questions that disambiguate the top-2 candidates
+        "followup": _followup_block(patterns),
     }
 
 
