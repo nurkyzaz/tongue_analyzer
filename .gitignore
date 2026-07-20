@@ -85,3 +85,6 @@ evaluation/faithfulness_results.json
 stage2_interpretation/knowledge_base/who_terms.json
 evaluation/ensemble_results.json
 evaluation/faithfulness_ensemble.json
+
+# recalibrated KB (rebuildable via kg/recalibrate.py; loses to v1 on TCMEval-SDT -> not promoted)
+stage2_interpretation/knowledge_base/tcm_knowledge_v2.json

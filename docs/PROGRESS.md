@@ -97,8 +97,13 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
   'yes' on the runner-up can overtake the lead). Wired into `interpret._followup_block` + `/refine`
   pass-2 + the frontend refine flow. **Verified live: t12 phlegm 69% vs spleen 59% → after answers,
   spleen → 74% (#1).** Log-odds `refine()` stays as the interim fallback.
-- ⬜ **"Update tcm_knowledge.json itself"** (new combination rules / negation rules / symptom section) —
-  superseded: knowledge now grows from book parsing (WS-A), not hand-edits. See PLAN §7-A.
+- ✅ **KB recalibration campaign — v1 kept, v2 loses (2026-07-16)** (`kg/recalibrate.py`, `TIH_KB_VERSION`
+  toggle): tried re-deriving the rule engine's feature→pattern weights from the KG's empirical
+  book-citation frequency. **Book *mention-frequency* is a poor weight signal** (≠ diagnostic
+  discriminativeness): a conservative blend (λ=0.35) *ties* v1 on TCMEval-SDT (69.7%, no mapping
+  regression), and trusting books more *crashes* it (λ=1.0 → 49.5%, mapping 15/17). Production stays v1;
+  the books' value is the cited edges (grounding, used by the ensemble), not scalar weights. Full writeup
+  `docs/KB_RECALIBRATION.md`. (Note: human40 can't score KB changes — feature labels only; 61% is vision.)
 
 ## Phase 4 — Integration
 - ✅ `pipeline.py` orchestrator (image[+metadata] → quantitative JSON + report) — **end-to-end works**

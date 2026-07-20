@@ -93,6 +93,13 @@ def _retriever():
     return _RETRIEVER or None
 
 KB_PATH = os.path.join(os.path.dirname(__file__), "knowledge_base", "tcm_knowledge.json")
+# TIH_KB_VERSION=v2 loads the book-recalibrated KB (kg/recalibrate.py); default v1 = hand-tuned. Instant
+# rollback by unsetting. Only tcm_knowledge_v2.json's feature->pattern weights differ from v1.
+KB_VERSION = os.getenv("TIH_KB_VERSION", "v1")
+if KB_VERSION == "v2":
+    _v2 = os.path.join(os.path.dirname(__file__), "knowledge_base", "tcm_knowledge_v2.json")
+    if os.path.exists(_v2):
+        KB_PATH = _v2
 DISCLAIMER = ("Educational summary exploring the traditional-Chinese-medicine tongue-reading "
               "framework — not a medical diagnosis, and not validated by modern clinical evidence. "
               "For any health concern, please consult a qualified healthcare professional.")
