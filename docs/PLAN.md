@@ -44,6 +44,20 @@ is filtered through that second lens (§7).
   'yes' on the runner-up can overtake the lead). Wired into `interpret.py` (`_followup_block`) + `/refine`
   pass-2 + the frontend. Verified live: t12 phlegm 69% vs spleen 59% → after answers, spleen → 74% (#1).
   The transparent log-odds `refine()` stays as the interim fallback.
+- **Capture-quality gate — DONE (2026-07-21):** ML-free `capture_quality()` in
+  `deployment/api/service.py` — **blur** (variance-of-Laplacian over the tongue bbox) + **exposure**
+  (mean luma + clipped-shadow/highlight fractions on tongue pixels). Hard failures fold into the existing
+  `framing.status="error"` (non-breaking) so a blurry/badly-lit photo is refused *before* a reading is
+  trusted; also emits a `quality_gate` block. This was the Q2(c)/Q3 ship-owed gate — lighting is the #1
+  phone-accuracy killer. Also **harmonised the coverage floor** (was 4% in service vs 5% in the model → now
+  5% everywhere) and added a **`reliable` flag** (coverage ≥ 12%) so the app can down-weight sub-12% tongues
+  instead of silently trusting them. Verified on synthetic images (blur/dark→error, dim/glare→warn, clean→ok).
+  **Open:** one threshold-tuning pass on real phone photos before launch; white-balance left to
+  `color_calibrate` rather than a second flaky check. See `docs/CEO_MARKET_REGULATORY_QA.md` Q5.
+- **Terminology (2026-07-21):** the tongue output should be labelled a **pattern/syndrome _leaning_ (辨证)**,
+  not a "constitution" — `blood_deficiency`/`spleen_qi_deficiency` are syndromes (证), not CCMQ constitutions.
+  For Savor's constitution feature, route through the **existing crosswalk** in `FEATURE_PATTERN_MAPPING.md` §1
+  (both → 气虚质 qi-deficiency; rest map 1:1). No model/data change — a copy + integration-mapping fix.
 - **WS-E — containerized (2026-07-16):** `deployment/Dockerfile` (multi-stage, CPU torch, pinned deps,
   baked 3 checkpoints), `requirements.txt`, `.dockerignore`, `docker-compose.yml`. Image **1.71 GB**;
   **built + smoke-tested locally** — `/analyze` runs the full pipeline + CPU graph-RAG ensemble (cited,
@@ -262,6 +276,7 @@ a first-class symptom section does not). These are the next WS-A file edits.
 | **Moisture** wet↔dry classifier | ✅ (geometry, no retrain) | extend `zoning.py` specular-gloss; unlocks wet→phlegm/yang-def, dry→yin-def/heat (3–4 ambiguous combos) |
 | **Location-aware cracks/dots** (route tip/centre/sides/root → organs) | ✅ (post-process) | crack_centre→spleen, crack_sides→liver, dots_tip→heart-heat = 4 new KB edges; cheap routing on existing detections |
 | Full Stage-1 **retrain** / drop SM-Tongue for a moisture head | ⏸ | Stage-1 is **frozen** (label ceiling; v5 beat v6/v7/v8). Adds weight+time for little honest gain. Revisit only with real phone data. |
+| **Capture-quality gate** (blur + exposure, ML-free) | ✅ **DONE 2026-07-21** | `capture_quality()` in service.py; refuses bad photos before a reading. Needs one real-photo threshold-tuning pass. |
 
 ### 🟡 C · RAG & LLM pipeline — **graph-RAG + structured output in; extra calls & big models out**
 | Item | Verdict | Note |

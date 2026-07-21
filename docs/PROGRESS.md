@@ -126,6 +126,17 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
 
 ---
 
+## 2026-07-21 — CEO Q&A + capture-quality gate
+- ✅ **CEO market/accuracy/regulatory memo** (`docs/CEO_MARKET_REGULATORY_QA.md`) — answers the four founder
+  questions (market need by country; feature-detection vs "diagnosis" accuracy; Apple/regulatory; Savor
+  integration) with cited external evidence, plus **Q5** answering three technical review questions.
+- ✅ **Capture-quality gate** (`deployment/api/service.py`, `capture_quality()`): ML-free blur
+  (Laplacian-variance) + exposure (luma + clipping) check; hard-fails fold into `framing.status` so bad photos
+  are refused before a reading. Harmonised the coverage floor to 5% (was 4% vs 5% split) and added a `reliable`
+  flag (≥12%). Verified on synthetic images. Threshold-tuning on real phone photos still owed.
+- ✅ **Terminology finding:** `blood_deficiency`/`spleen_qi_deficiency` are TCM *syndromes* (证), not CCMQ
+  *constitutions* — output should read "pattern leaning"; Savor mapping uses the existing `FEATURE_PATTERN_MAPPING.md` §1 crosswalk (→ 气虚质).
+
 ## Current state (2026-07-16) — see `docs/PLAN.md` (SoT) + `docs/HANDOFF.md`
 **Stage 1 FROZEN:** seg_combined + **multitask_v5** (v6/v7/v8 all lost to v5 on the honest human metric) +
 extra_features + `zoning.py` geometry. Honest accuracy ~61% exact / **97% within-one-grade** vs human. Not
