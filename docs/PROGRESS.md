@@ -126,6 +126,16 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
 
 ---
 
+## 2026-07-21 (4) — no-LLM: zoned red-sides → Liver (qi-stagnation handle)
+- ✅ **Red-sides (Liver/GB zone) routing** — `zoning.py` now computes `side_redness_delta` (a* of the
+  lateral middle-third edges − whole; sides = `mid_sel ∩ edge_sel`), `infer.py` converts it to a
+  `red_sides` signal (thresh 2.5, conservative), and `zoned_readings` routes it → **qi_stagnation** (+ small
+  damp_heat), tentative/tier-2. This gives the tongue its **one weak handle on qi-stagnation**, which it
+  otherwise can't read (benchmark gave it no axis). Geometry verified on synthetic images (red edges →
+  side_delta 24.9, tip correctly negative; red tip → sides negative). **Threshold is an unvalidated
+  heuristic** (like the "dry" gap) — TODO calibrate on human labels. Eval 33→36 cases (incl. a red-tip≠sides
+  control); **36/36, no regression**. Partly completes PLAN §7-B location-aware routing (cracks/dots still to do).
+
 ## 2026-07-21 (3) — no-LLM focus: eval hardening + 宜/忌 do-avoid pair
 - ✅ **Mapping eval hardened 17 → 33 cases** (`evaluation/mapping_testset.json`): adversarial/conflicting
   pictures (swollen+red+dry, wet+yellow, thin+pale-vs-red cracks…) + full coverage of the 6 new CN-source

@@ -14,6 +14,7 @@ and separately measures a central core vs. a lateral ring. For each zone it repo
 
 It emits interpretable, unit-free signals:
   tip_redness_delta  = a*(tip)    - a*(whole)      > 0  => tip redder than the rest (heat sign)
+  side_redness_delta = a*(sides)  - a*(whole)      > 0  => lateral edges (Liver/GB zone) redder than body
   center_coating     = L*(center) - L*(edge ring)  > 0  => pale/white centre vs. redder rim (coating)
   redness_gradient   = a*(tip)    - a*(root)               tip-to-root redness slope
 
@@ -79,6 +80,10 @@ def analyze(img_rgb, mask):
     dmax = dist.max() + 1e-6
     center_sel = mask & (dist >= 0.55 * dmax)
     edge_sel   = mask & (dist > 0.10 * dmax) & (dist <= 0.35 * dmax)
+    # the SIDES (left+right rim of the MIDDLE third) = the Liver/Gallbladder zone in TCM organ-mapping —
+    # the lateral edge ring, excluding the tip (Heart) and root (Kidney). Redder sides than the rest of
+    # the body is the classic Liver-zone sign (heat / long-held tension) the whole-tongue argmax averages out.
+    side_sel = mid_sel & edge_sel
 
     zones = {
         "whole":  _zone_stats(lab, mask),
@@ -87,12 +92,15 @@ def analyze(img_rgb, mask):
         "root":   _zone_stats(lab, root_sel),
         "center": _zone_stats(lab, center_sel),
         "edge":   _zone_stats(lab, edge_sel),
+        "sides":  _zone_stats(lab, side_sel),
     }
     out = {"ok": True, "zones": zones}
     W, T, R = zones["whole"], zones["tip"], zones["root"]
-    C, E, M = zones["center"], zones["edge"], zones["middle"]
+    C, E, M, S = zones["center"], zones["edge"], zones["middle"], zones["sides"]
     if W and T:
         out["tip_redness_delta"] = round(T["a"] - W["a"], 2)
+    if W and S:
+        out["side_redness_delta"] = round(S["a"] - W["a"], 2)     # sides redder than body => Liver-zone sign
     if T and R:
         out["redness_gradient"] = round(T["a"] - R["a"], 2)
     if C and E:

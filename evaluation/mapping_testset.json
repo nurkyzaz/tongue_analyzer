@@ -481,6 +481,51 @@
     "damp_heat",
     "phlegm_dampness"
    ]
+  },
+  {
+   "id": "red_sides_liver_qi",
+   "note": "red SIDES (Liver/GB zone) on an otherwise near-normal tongue = Liver-zone sign -> qi-stagnation (the tongue's one weak handle on it) [organ zoning]",
+   "features": {
+    "zhi": "regular",
+    "tai": "white",
+    "coating": "non_greasy",
+    "fissure": "none",
+    "tooth_mk": "none",
+    "red_sides": "present"
+   },
+   "accept": [
+    "qi_stagnation",
+    "damp_heat"
+   ]
+  },
+  {
+   "id": "red_sides_red_body_heat",
+   "note": "red sides + red body + yellow coat = Liver heat / damp-heat (heat picture, sides localise the Liver)",
+   "features": {
+    "zhi": "dark",
+    "tai": "yellow",
+    "coating": "greasy",
+    "red_tongue": "present",
+    "red_sides": "present"
+   },
+   "accept": [
+    "damp_heat"
+   ]
+  },
+  {
+   "id": "red_tip_not_sides",
+   "note": "CONTROL: red TIP (Heart) must NOT be read as red sides (Liver) -> stays yin/heat, not qi-stagnation",
+   "features": {
+    "zhi": "regular",
+    "tai": "white",
+    "coating": "non_greasy",
+    "fissure": "light",
+    "red_tip": "present"
+   },
+   "accept": [
+    "yin_deficiency",
+    "damp_heat"
+   ]
   }
  ]
 }

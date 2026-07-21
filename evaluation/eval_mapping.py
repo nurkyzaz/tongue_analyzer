@@ -45,6 +45,9 @@ def build_stage1(feats):
     if feats.get("red_tip") in ("present", "strong"):
         zoned["red_tip"] = {"value": "present", "severity": 0.85}
         zoned["tip_redness_delta"] = 4.0
+    if feats.get("red_sides") == "present":
+        zoned["red_sides"] = {"value": "present", "severity": 0.7}
+        zoned["side_redness_delta"] = 3.5
     if feats.get("moisture") == "wet":
         zoned["moisture"] = {"value": "wet", "severity": 0.7}
     return {"key_characteristics": chars, "extra_characteristics": extra, "zoned_analysis": zoned,

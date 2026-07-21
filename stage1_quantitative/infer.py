@@ -87,6 +87,11 @@ class Stage1Pipeline:
     # tip_redness_delta (a* of tip minus whole tongue) above this => report a red tip. Chosen on the
     # human-40 set: flags 13/38, matching visual inspection (red-tip tongues t05/t12/t29/t35…).
     RED_TIP_THRESH = 2.0
+    # side_redness_delta (a* of the lateral middle-third edges minus whole) above this => red SIDES
+    # (Liver/GB zone). Set slightly stricter than the tip: it's a geometry heuristic NOT yet validated on
+    # a labelled set (like the "dry" gap in zoning.py) — kept conservative so it only fires on clearly
+    # redder edges, and it feeds only a small, tentative vote. TODO: calibrate on human labels.
+    RED_SIDE_THRESH = 2.5
 
     def _zoned(self, img, mask):
         from zoning import analyze
@@ -97,14 +102,22 @@ class Stage1Pipeline:
             return {}
         tip = z.get("tip_redness_delta")
         red_tip = tip is not None and tip > self.RED_TIP_THRESH
+        side = z.get("side_redness_delta")
+        red_sides = side is not None and side > self.RED_SIDE_THRESH
         wet = z.get("moisture") == "wet"
         return {
             "tip_redness_delta": tip,           # a*(tip) - a*(whole); + = tip redder (heat sign)
+            "side_redness_delta": side,         # a*(sides) - a*(whole); + = lateral (Liver/GB) edges redder
             "redness_gradient": z.get("redness_gradient"),
             "red_tip": {
                 "value": "present" if red_tip else "absent",
                 "severity": round(min(max((tip or 0) / 8.0, 0.0), 1.0), 4),
                 "description": "tip redder than the tongue body (upper-jiao / heart heat sign)",
+            },
+            "red_sides": {
+                "value": "present" if red_sides else "absent",
+                "severity": round(min(max((side or 0) / 8.0, 0.0), 1.0), 4),
+                "description": "lateral edges redder than the body (Liver/Gallbladder zone sign)",
             },
             "gloss": z.get("gloss"),
             "moisture": {

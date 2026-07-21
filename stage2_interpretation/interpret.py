@@ -197,7 +197,7 @@ RELIABILITY = {
     "moisture": "moderate",
     "coat_texture": "tentative", "coating": "tentative", "red_tongue": "tentative",
     "purple_body": "tentative", "swollen": "tentative", "thin": "tentative",
-    "black_coating": "tentative", "slippery_coating": "tentative",
+    "black_coating": "tentative", "slippery_coating": "tentative", "red_sides": "tentative",
 }
 CONF_WORD = {"reliable": "clear read", "moderate": "", "tentative": "less certain — worth confirming"}
 
@@ -332,6 +332,19 @@ def zoned_readings(stage1_output):
                      "heat in the upper body / Heart (often stress, poor sleep, or restlessness).",
             # localized heat sign -> small votes toward the heat patterns, weighted by strength
             "points_to": {"yin_deficiency": 0.4 * sev, "damp_heat": 0.3 * sev},
+        })
+    rs = z.get("red_sides")
+    if rs and rs.get("value") == "present":
+        sev = float(rs.get("severity", 0.0))
+        out.append({
+            "key": "red_sides", "label": "Red edges", "value": "present",
+            "severity": round(sev, 3), "rel": round(sev, 3), "band": "", "mentioned": True, "display": True,
+            "tcm_term": "舌邊紅 (red sides)", "tcm": "Liver / Gallbladder zone — heat or long-held tension",
+            "plain": "The side edges of the tongue look redder than the middle — in this tradition the sides "
+                     "map to the Liver/Gallbladder, often linked to stress, frustration or long-held tension. "
+                     "(A subtle, less-certain sign — worth confirming with how you actually feel.)",
+            # sides = Liver zone: the tongue's main (weak) handle on qi-stagnation, plus a little heat.
+            "points_to": {"qi_stagnation": 0.45 * sev, "damp_heat": 0.2 * sev},
         })
     mo = z.get("moisture")
     if mo and mo.get("value") == "wet":
@@ -632,7 +645,7 @@ _REL_W = {"reliable": 1.0, "moderate": 0.6, "tentative": 0.45}
 # clinical priority tier — the primary signs always lead the description; the marginal zoned signals
 # (red_tip, moisture — known to be weak) come last, so they never head the findings.
 _TIER = {"zhi": 0, "coat_texture": 0, "coat_thickness": 0, "tai": 0, "fissure": 0, "tooth_mk": 0,
-         "red_tip": 2, "moisture": 2}   # everything else (extras) = tier 1
+         "red_tip": 2, "moisture": 2, "red_sides": 2}   # everything else (extras) = tier 1
 
 
 def build_findings(disp, present):

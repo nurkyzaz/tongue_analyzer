@@ -285,7 +285,7 @@ exists, but a dedicated section does not).
 | Item | Verdict | Note |
 |---|---|---|
 | **Moisture** wet↔dry classifier | ✅ (geometry, no retrain) | extend `zoning.py` specular-gloss; unlocks wet→phlegm/yang-def, dry→yin-def/heat (3–4 ambiguous combos) |
-| **Location-aware cracks/dots** (route tip/centre/sides/root → organs) | ✅ (post-process) | crack_centre→spleen, crack_sides→liver, dots_tip→heart-heat = 4 new KB edges; cheap routing on existing detections |
+| **Location-aware cracks/dots** (route tip/centre/sides/root → organs) | ◑ **partly done 2026-07-21** | **red_sides → Liver/GB done** (`zoning.py` side_redness_delta → `red_sides` → qi_stagnation; the tongue's one weak handle on qi-stag). Threshold unvalidated (geometry heuristic, tentative vote). Still to do: crack-location routing, dot-location routing. |
 | Full Stage-1 **retrain** / drop SM-Tongue for a moisture head | ⏸ | Stage-1 is **frozen** (label ceiling; v5 beat v6/v7/v8). Adds weight+time for little honest gain. Revisit only with real phone data. |
 | **Capture-quality gate** (blur + exposure, ML-free) | ✅ **DONE 2026-07-21** | `capture_quality()` in service.py; refuses bad photos before a reading. Needs one real-photo threshold-tuning pass. |
 
