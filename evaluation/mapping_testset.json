@@ -241,6 +241,246 @@
    "accept": [
     "yin_deficiency"
    ]
+  },
+  {
+   "id": "greyblack_moist_cold",
+   "note": "grey-black coating + WET + pale = extreme cold-damp / Yang deficiency (moist black is cold, not heat) [Li Candong 灰黑苔]",
+   "features": {
+    "zhi": "light",
+    "tai": "white",
+    "coating": "non_greasy",
+    "black_coating": "present",
+    "moisture": "wet"
+   },
+   "accept": [
+    "yang_deficiency",
+    "phlegm_dampness"
+   ]
+  },
+  {
+   "id": "greyblack_dry_heat",
+   "note": "grey-black coating + RED + yellow + cracks = extreme heat scorching fluids (dry black is heat, not cold) [Li Candong 灰黑苔]",
+   "features": {
+    "zhi": "dark",
+    "tai": "yellow",
+    "coating": "non_greasy",
+    "black_coating": "present",
+    "red_tongue": "present",
+    "fissure": "severe"
+   },
+   "accept": [
+    "damp_heat",
+    "yin_deficiency"
+   ]
+  },
+  {
+   "id": "slippery_pale_cold_damp",
+   "note": "slippery/wet coating + pale + white = cold-damp / Yang def failing to move fluids [Li Candong 滑苔]",
+   "features": {
+    "zhi": "light",
+    "tai": "white",
+    "coating": "greasy",
+    "slippery_coating": "present",
+    "moisture": "wet"
+   },
+   "accept": [
+    "yang_deficiency",
+    "phlegm_dampness",
+    "spleen_qi_deficiency"
+   ]
+  },
+  {
+   "id": "toothmarks_swollen_red_dampheat",
+   "note": "tooth-marks on a SWOLLEN red / yellow-coated tongue = damp-heat, NOT plain qi-def [Zhu Wenfeng 齿痕胖红]",
+   "features": {
+    "zhi": "dark",
+    "tai": "yellow",
+    "coating": "greasy",
+    "tooth_mk": "severe",
+    "swollen": "present",
+    "red_tongue": "present"
+   },
+   "accept": [
+    "damp_heat"
+   ]
+  },
+  {
+   "id": "thin_red_dry_yin",
+   "note": "thin body + RED + cracks = Yin deficiency with empty-heat (thin PALE would be blood-def) [Li Candong 瘦薄舌]",
+   "features": {
+    "zhi": "regular",
+    "tai": "white",
+    "coating": "non_greasy",
+    "thin": "present",
+    "red_tongue": "present",
+    "fissure": "light"
+   },
+   "accept": [
+    "yin_deficiency"
+   ]
+  },
+  {
+   "id": "swollen_red_dry_conflict",
+   "note": "CONFLICT: swollen (damp) + red + severe cracks (yin-dry). Heat/dryness should win over plain damp",
+   "features": {
+    "zhi": "dark",
+    "tai": "yellow",
+    "coating": "non_greasy",
+    "swollen": "present",
+    "red_tongue": "present",
+    "fissure": "severe"
+   },
+   "accept": [
+    "damp_heat",
+    "yin_deficiency"
+   ]
+  },
+  {
+   "id": "pale_greasy_white_cold_damp",
+   "note": "pale + greasy WHITE coat = cold-damp / phlegm on a deficient base",
+   "features": {
+    "zhi": "light",
+    "tai": "white",
+    "coating": "greasy_thick"
+   },
+   "accept": [
+    "phlegm_dampness",
+    "spleen_qi_deficiency",
+    "yang_deficiency"
+   ]
+  },
+  {
+   "id": "red_yellow_dry_nongreasy",
+   "note": "red + yellow but NON-greasy + cracks = heat that has hurt fluids -> yin-def/empty-heat vs damp-heat",
+   "features": {
+    "zhi": "dark",
+    "tai": "yellow",
+    "coating": "non_greasy",
+    "red_tongue": "present",
+    "fissure": "severe"
+   },
+   "accept": [
+    "yin_deficiency",
+    "damp_heat"
+   ]
+  },
+  {
+   "id": "crimson_mirror_peeled",
+   "note": "deep-red + fully peeled (mirror) + smooth = severe Yin deficiency",
+   "features": {
+    "zhi": "dark",
+    "tai": "white",
+    "coating": "non_greasy",
+    "red_tongue": "present",
+    "peeled_coating": "present",
+    "fissure": "severe"
+   },
+   "accept": [
+    "yin_deficiency"
+   ]
+  },
+  {
+   "id": "dark_dry_stasis_vs_heat",
+   "note": "dark body, no purple, no red = blood-stasis tendency (dark alone)",
+   "features": {
+    "zhi": "dark",
+    "tai": "white",
+    "coating": "non_greasy"
+   },
+   "accept": [
+    "blood_stasis",
+    "yin_deficiency"
+   ]
+  },
+  {
+   "id": "redtip_reddots_white",
+   "note": "red tip + red dots on a white coat = upper (Heart) empty-heat, leans yin-def",
+   "features": {
+    "zhi": "regular",
+    "tai": "white",
+    "coating": "non_greasy",
+    "red_tip": "present",
+    "red_dots": "present"
+   },
+   "accept": [
+    "yin_deficiency",
+    "damp_heat"
+   ]
+  },
+  {
+   "id": "pale_swollen_thickgreasy_white",
+   "note": "pale + swollen + thick greasy white = phlegm-damp on a Yang/Spleen-def base",
+   "features": {
+    "zhi": "light",
+    "tai": "white",
+    "coating": "greasy_thick",
+    "swollen": "present",
+    "tooth_mk": "light"
+   },
+   "accept": [
+    "phlegm_dampness",
+    "spleen_qi_deficiency",
+    "yang_deficiency"
+   ]
+  },
+  {
+   "id": "thin_pale_cracks_blood_vs_yin",
+   "note": "thin + PALE + cracks = Blood deficiency (pale wins over crack->yin because pale suppresses heat)",
+   "features": {
+    "zhi": "light",
+    "tai": "white",
+    "coating": "non_greasy",
+    "thin": "present",
+    "fissure": "light"
+   },
+   "accept": [
+    "blood_deficiency",
+    "yin_deficiency"
+   ]
+  },
+  {
+   "id": "yellow_greasy_toothmarks_swollen",
+   "note": "yellow greasy + swollen + tooth-marks = damp-HEAT (heat + damp), not cold spleen-qi",
+   "features": {
+    "zhi": "regular",
+    "tai": "yellow",
+    "coating": "greasy_thick",
+    "swollen": "present",
+    "tooth_mk": "severe"
+   },
+   "accept": [
+    "damp_heat",
+    "phlegm_dampness"
+   ]
+  },
+  {
+   "id": "greasy_white_pale_toothmarks",
+   "note": "greasy white + pale + tooth-marks = cold-damp / Spleen-qi with phlegm",
+   "features": {
+    "zhi": "light",
+    "tai": "white",
+    "coating": "greasy",
+    "tooth_mk": "severe"
+   },
+   "accept": [
+    "spleen_qi_deficiency",
+    "phlegm_dampness",
+    "yang_deficiency"
+   ]
+  },
+  {
+   "id": "wet_yellow_mixed",
+   "note": "CONFLICT: yellow coat (heat) but WET/moist (cold). Wet should temper the heat read",
+   "features": {
+    "zhi": "regular",
+    "tai": "yellow",
+    "coating": "greasy",
+    "moisture": "wet"
+   },
+   "accept": [
+    "damp_heat",
+    "phlegm_dampness"
+   ]
   }
  ]
 }

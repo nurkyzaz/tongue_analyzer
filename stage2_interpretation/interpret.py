@@ -585,6 +585,31 @@ _ACTION = {
     ("moisture", "wet"): "favour warming, well-cooked foods and go easy on cold/raw food and iced drinks",
 }
 
+# 忌 — what a given pattern-leaning traditionally suggests EASING OFF, per pattern. Pairs with the 宜
+# (do) actions above so the no-LLM path emits a full do/avoid pair (the Savor to-do/don't button). These
+# are standard TCM food-therapy contraindications (our wording; grounded in Chinese food-therapy sources
+# + the licensed CN diagnostics textbooks). Framed as gentle "ease off", never medical restriction.
+_PATTERN_AVOID = {
+    "spleen_qi_deficiency": ["cold and raw food, iced drinks and too much raw salad",
+                             "skipping meals or overeating — both tax digestion"],
+    "phlegm_dampness":      ["greasy, fried and very sweet food, and heavy dairy",
+                             "cold/raw food and alcohol, which add to the dampness"],
+    "damp_heat":            ["alcohol, fried, greasy and heavily spiced food",
+                             "sweets and rich meats, and late nights"],
+    "yin_deficiency":       ["spicy, pungent and roasted 'hot' foods",
+                             "coffee, alcohol and late nights — they draw on your reserves"],
+    "yang_deficiency":      ["cold and raw food, iced drinks and very 'cooling' foods (cucumber, watermelon, crab)",
+                             "cold exposure — keep the middle and lower back warm"],
+    "blood_deficiency":     ["skipping meals and crash diets",
+                             "excess coffee/strong tea with meals (it hinders iron), and eye-straining overwork"],
+    "blood_stasis":         ["long sedentary sitting and cold exposure",
+                             "heavy, greasy meals that slow things down"],
+    "qi_stagnation":        ["excess alcohol and irregular, rushed meals under stress",
+                             "over-caffeinating to push through — it tightens the tension"],
+    "special_diathesis":    ["known personal triggers/allergens and unfamiliar 'exotic' foods during flare-ups"],
+    "balanced":             ["extremes — very cold, very greasy or very rich food, and irregular meals"],
+}
+
 
 def _is_notable(r):
     if r["key"] in ("tai", "zhi"):
@@ -656,7 +681,11 @@ def build_recommendation(findings, patterns, kb):
     if not actions and patterns and patterns[0]["id"] != "balanced":     # fall back to grounded pattern recs
         rec = patterns[0].get("recommendations", {})
         actions = (rec.get("diet", []) + rec.get("lifestyle", []))[:2]
-    return {"findings": [f["phrase"] for f in findings[:3]], "conditions": conditions, "actions": actions}
+    # 忌 (avoid) half of the do/avoid pair — from the lead pattern's leaning (empty when balanced leads)
+    lead = patterns[0]["id"] if patterns else None
+    avoid = _PATTERN_AVOID.get(lead, [])[:2] if lead else []
+    return {"findings": [f["phrase"] for f in findings[:3]], "conditions": conditions,
+            "actions": actions, "avoid": avoid}
 
 
 def _symptom_key(f):

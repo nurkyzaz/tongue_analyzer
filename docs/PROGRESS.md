@@ -126,6 +126,16 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
 
 ---
 
+## 2026-07-21 (3) — no-LLM focus: eval hardening + 宜/忌 do-avoid pair
+- ✅ **Mapping eval hardened 17 → 33 cases** (`evaluation/mapping_testset.json`): adversarial/conflicting
+  pictures (swollen+red+dry, wet+yellow, thin+pale-vs-red cracks…) + full coverage of the 6 new CN-source
+  rules. Accept-lists exclude wrong answers, so it's a real regression guard. **33/33 = 100%** — the rule
+  engine holds on the hard cases (heat beats damp in conflicts, wet tempers yellow, etc.).
+- ✅ **忌 (avoid) half of the do/avoid pair** — every pattern had 宜 (do) actions but **no 忌**, though the
+  Savor integration is a do/**don't** button. Added grounded `_PATTERN_AVOID` per pattern (interpret.py) →
+  `recommendation.avoid` in the no-LLM output; wired the demo `今日宜忌` block + `?demo=1` fixture to render
+  忌 stamps (verified via DOM: 宜 white / 忌 muted-grey). Eval still 33/33.
+
 ## 2026-07-21 (2) — terminology wired + no-LLM rules from CN sources
 - ✅ **CCMQ crosswalk wired into output** (`interpret.py` `CCMQ_CONSTITUTION`): every pattern card now
   carries `kind` (证 pattern vs 体质 constitution) + `constitution` (its CCMQ body-constitution), plus a

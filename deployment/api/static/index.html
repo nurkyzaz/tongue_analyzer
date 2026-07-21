@@ -466,13 +466,15 @@ function renderReading(d){
   const norm=feats.filter(f=>!f.notable&&f.label&&GRADED.has(f.key)).map(f=>f.label.toLowerCase());
   $('normalLine').textContent=norm.length?('Within a typical range: '+[...new Set(norm)].join(', ')+'.'):'';
 
-  // advice 宜 (our recommendations are "try" items → 宜 stamps)
+  // advice 宜/忌 — "try" items get 宜 stamps, "ease off" items get 忌 stamps (the do/avoid pair)
   const rec=it.recommendation||{};
   const acts=(rec.actions||[]).slice(0,4);
-  if(acts.length){
+  const avoid=(rec.avoid||[]).slice(0,3);
+  if(acts.length||avoid.length){
     $('adviceBlock').style.display='block';
-    $('adviceYiji').innerHTML=acts.map(a=>`<div class="yrow"><span class="stamp yi">宜</span>
-      <span style="padding-top:2px"><span class="zh" style="font-size:14.5px">${a}</span></span></div>`).join('');
+    const row=(stamp,cls,txt)=>`<div class="yrow"><span class="stamp ${cls}">${stamp}</span>`
+      +`<span style="padding-top:2px"><span class="zh" style="font-size:14.5px">${txt}</span></span></div>`;
+    $('adviceYiji').innerHTML=acts.map(a=>row('宜','yi',a)).join('')+avoid.map(a=>row('忌','',a)).join('');
   }else $('adviceBlock').style.display='none';
 
   $('disc').textContent=it.disclaimer||'Traditional associations from the TCM literature, for learning — not a diagnosis.';
@@ -595,7 +597,7 @@ if(new URLSearchParams(location.search).has('demo')){
       {id:'damp_heat',tcm_name:'濕熱',plain_name:'Damp-Heat',confidence:0.41,
         reasoning:[{note:'red points at the tip lean the damp toward heat',cite:''}]},
     ],
-    recommendation:{actions:['溫熱早餐 · a warm breakfast','飯後散步二十分 · a 20-min walk after eating','少冰飲生冷 · ease off iced & raw-cold food']},
+    recommendation:{actions:['溫熱早餐 · a warm breakfast','飯後散步二十分 · a 20-min walk after eating'],avoid:['肥甘油炸、過甜與奶製品 · greasy, fried, very sweet food & heavy dairy','生冷與酒 · cold/raw food and alcohol']},
     followup:[{pattern_id:'phlegm_damp',tcm_name:'痰濕',plain_name:'Phlegm-Dampness',base_confidence:0.74,
       questions:[{q:'口中黏膩時，會覺得苦嗎？ · When your mouth feels sticky, does it also taste bitter?',weight:0.4,
         why:'A bitter taste splits these two most sharply — 濕熱 usually carries it, 痰濕 usually doesn’t.'},
