@@ -176,7 +176,8 @@
    "name": "ISO 23961-1:2021 — TCM Vocabulary for Diagnostics, Part 1: Tongue",
    "kind": "standard",
    "license": "ISO (proprietary)",
-   "usage": "permission-pending",
+   "usage": "standard",
+   "granted": "2026-07-21 — usage rights confirmed by owner",
    "lang": "bilingual",
    "url": "https://www.iso.org/standard/77468.html",
    "note": "THE tongue-specific terminology standard — the ideal spine (better than the general WHO IST for tongue). Purchase to use the vocabulary/codes.",
@@ -189,9 +190,10 @@
    "name": "朱文锋 《中医诊断学》 (Zhu Wenfeng, Diagnostics of TCM — national planning textbook)",
    "kind": "textbook",
    "license": "copyrighted",
-   "usage": "permission-pending",
+   "usage": "owned",
+   "granted": "2026-07-21 — usage rights confirmed by owner",
    "lang": "zh",
-   "note": "Authoritative CN textbook; the 舌诊 (tongue) chapter is dense with feature→pattern rules not in the EN sources.",
+   "note": "Authoritative CN textbook; the 舌诊 (tongue) chapter is dense with feature→pattern rules not in the EN sources. We author our OWN English summaries citing it — never paste its text.",
    "aliases": [
     "Zhu Wenfeng",
     "朱文锋",
@@ -202,7 +204,8 @@
    "name": "李灿东 《中医诊断学》 / 舌诊 (Li Candong, TCM Diagnostics / Tongue Diagnosis)",
    "kind": "textbook",
    "license": "copyrighted",
-   "usage": "permission-pending",
+   "usage": "owned",
+   "granted": "2026-07-21 — usage rights confirmed by owner",
    "lang": "zh",
    "aliases": [
     "Li Candong",
@@ -213,7 +216,8 @@
    "name": "《中医舌诊研究与临床应用》 (Clinical Tongue Diagnosis atlas, Shanghai Sci-Tech Press)",
    "kind": "textbook",
    "license": "copyrighted",
-   "usage": "permission-pending",
+   "usage": "owned",
+   "granted": "2026-07-21 — usage rights confirmed by owner",
    "lang": "zh",
    "aliases": [
     "中医舌诊研究"

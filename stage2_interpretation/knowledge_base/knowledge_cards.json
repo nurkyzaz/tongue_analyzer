@@ -331,5 +331,53 @@
   "source": "Parameterizing & standardizing TCM diagnosis, narrative review (PMC7914658)",
   "lang": "en",
   "text": "A standardization review underscores that tongue reading is only ONE of the four traditional examinations (looking, listening/smelling, asking, and pulse), and that a single sign lacks diagnostic validity on its own — patterns emerge from combining signs, and practitioner-to-practitioner variability is real. Takeaway: present tongue findings as a tendency to explore alongside how a person actually feels, never a standalone diagnosis, and use follow-up questions to firm up the deficiency patterns the tongue alone cannot settle."
+ },
+ {
+  "id": "disambig:greasy_vs_curdy_coating",
+  "source": "朱文锋《中医诊断学》 (Zhu Wenfeng, 舌诊 chapter)",
+  "lang": "en",
+  "text": "Two thick coatings that look similar but mean different things. GREASY coating (腻苔) is fine, dense, greasy-looking, sticks tightly and cannot be wiped off — the classic sign of DAMPNESS / PHLEGM / retained turbidity; the thicker and greasier, the heavier the damp. CURDY coating (腐苔) is coarse, thick, loose like crumbled tofu and wipes off easily — it points instead to FOOD STAGNATION or interior heat forcing turbid matter upward, and (when it flakes to leave a smooth patch) to recovering or waning stomach qi. Rule of thumb: greasy = damp/phlegm (adherent), curdy = food-stagnation/heat (loose). Our detector reads 'greasy/thick' texture; a coating that scrapes off freely leans curdy and should nudge toward digestion rather than damp."
+ },
+ {
+  "id": "disambig:slippery_vs_dry_coating",
+  "source": "李灿东《中医诊断学》/舌诊 (Li Candong)",
+  "lang": "en",
+  "text": "The MOISTURE of the coating is its own axis and separates cold/deficiency from heat. A SLIPPERY / wet coating (滑苔) with visible surface fluid indicates COLD and DAMP, often Yang deficiency failing to transform fluids. A DRY coating (燥苔) that looks and feels short of moisture indicates that body FLUIDS ARE DAMAGED — by strong Heat, or by Yin deficiency. So the same white coating reads cold-damp when slippery but points to fluid-damage when dry; a yellow coating that is also dry signals heat that has begun to consume fluids (more urgent than a moist yellow coat). This is why our wet↔dry geometry cue matters: pair it with coating colour before concluding."
+ },
+ {
+  "id": "sign:coating_color_heat_depth",
+  "source": "朱文锋《中医诊断学》 (Zhu Wenfeng, 舌诊 chapter)",
+  "lang": "en",
+  "text": "Coating COLOUR grades the depth of a heat/cold pattern. White (白苔) is the baseline or points to cold/damp; as heat deepens the coating turns light-yellow → yellow → deep-yellow (黄苔 = interior heat, deeper the shade the stronger the heat); grey and then black (灰黑苔) mark an EXTREME at either pole. Reading the shade as a dial — not just white-vs-yellow — lets a light-yellow coat be called 'early/mild heat' and a deep-yellow one 'marked heat', which is closer to how the source texts differentiate severity."
+ },
+ {
+  "id": "sign:grey_black_coating_bidirectional",
+  "source": "李灿东《中医诊断学》 (Li Candong)",
+  "lang": "en",
+  "text": "A grey-to-black coating (灰黑苔) is the one colour you must NOT read by shade alone — it is bidirectional and only MOISTURE disambiguates it. Grey-black that is MOIST / slippery indicates EXTREME COLD-DAMP or Yang deficiency (cold at its deepest). Grey-black that is DRY / rough indicates EXTREME HEAT with fluids scorched. Same colour, opposite patterns — so a dark coating should never be interpreted without its wet/dry state, and either reading is a strong (not faint) sign that warrants firming up with symptoms."
+ },
+ {
+  "id": "disambig:red_thorns_by_location",
+  "source": "朱文锋《中医诊断学》 (Zhu Wenfeng); 中医舌诊研究与临床应用",
+  "lang": "en",
+  "text": "Red prickles/thorns (芒刺) and red dots are enlarged, reddened papillae signalling HEAT — and WHERE they sit localises which organ's heat. At the TIP → Heart (and Lung) heat. On the SIDES/edges → Liver–Gallbladder heat. In the CENTRE → Stomach/Spleen heat. This mirrors the standard tongue-zoning map (tip=upper burner, centre=middle burner, root=lower burner, sides=liver/gall). So a red tip with prickles is read as Heart heat specifically, not generic heat — which is exactly what our zoned red-tip cue is for."
+ },
+ {
+  "id": "sign:swollen_vs_thin_body_cn",
+  "source": "李灿东《中医诊断学》 (Li Candong)",
+  "lang": "en",
+  "text": "Tongue SHAPE splits by size AND colour. A SWOLLEN/enlarged body (胖大舌): if pale and moist → Qi/Yang deficiency with dampness (fluids not transformed); if red/dark-red and swollen → damp-heat or toxic-heat. A THIN/small body (瘦薄舌): if pale → Qi and Blood deficiency (not enough to fill the tongue); if red and dry with little coat → Yin deficiency with empty-heat. So 'swollen' and 'thin' each fork on body colour — pale = deficiency/cold direction, red = heat direction — and that fork should drive the pattern, not the size alone."
+ },
+ {
+  "id": "sign:tooth_marks_cn",
+  "source": "朱文锋《中医诊断学》 (Zhu Wenfeng, 舌诊 chapter)",
+  "lang": "en",
+  "text": "Tooth-marks / scalloped edges (齿痕舌) are indentations left where an enlarged, soft tongue presses against the teeth. They indicate SPLEEN-QI DEFICIENCY and/or DAMPNESS (the spleen fails to move fluids, the tongue swells). Read with body colour: tooth-marks on a PALE, wet body → Qi/Yang deficiency with damp; tooth-marks on a swollen RED body → damp-heat. Faint marks with an otherwise normal tongue are a mild/tendency finding, not a strong one — worth flagging softly and confirming with fatigue/appetite questions."
+ },
+ {
+  "id": "card:iso_tongue_vocabulary_spine",
+  "source": "ISO 23961-1:2021 — TCM Vocabulary for Diagnostics, Part 1: Tongue",
+  "lang": "en",
+  "text": "ISO 23961-1:2021 is the tongue-specific international standard that fixes bilingual (English–Chinese) terms and definitions for tongue-diagnosis features — tongue body colour, shape, coating colour, coating quality, moisture and their sub-types. It is a finer, tongue-dedicated vocabulary than the general WHO IST, so it is the preferred ONTOLOGY SPINE for normalising our feature and pattern node names (e.g. mapping 'greasy coating' / 腻苔 / a single canonical code). Using its controlled terms keeps our output consistent and cleanly bilingual and lets edges from different books merge under one name."
  }
 ]
