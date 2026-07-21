@@ -17,6 +17,7 @@ MAXDIM, QUALITY = 1000, 82
 # --- field schemas ---
 FIELDS_EXTRA = [
     {"key": "red_tip", "lab": "Red tip", "help": "Is the tip visibly redder than the rest of the body?", "opts": ["none", "mild", "strong"]},
+    {"key": "red_sides", "lab": "Red sides / edges", "help": "Are the LEFT+RIGHT edges (mid-tongue, the Liver/GB zone) visibly redder than the middle of the body? Ignore the tip.", "opts": ["none", "mild", "strong"]},
     {"key": "red_dots", "lab": "Red dots / prickles", "help": "Red dots or raised red papillae on the surface.", "opts": ["none", "few", "many"]},
     {"key": "surface_pattern", "lab": "Surface pattern / texture", "help": "Texture so patterned you can't tell if it's greasy.", "opts": ["none", "present"]},
     {"key": "coating_obscures_body", "lab": "Coating hides body colour", "help": "Centre coating too thick/pale to read the body colour.", "opts": ["no", "yes"]},

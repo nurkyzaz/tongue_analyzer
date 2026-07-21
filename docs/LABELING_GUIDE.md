@@ -43,6 +43,10 @@ none↔light↔severe boundary). Use the **labeled gallery** as the visual refer
 
 ### Extras
 - **red_tip** none/mild/strong — is the TIP redder than the rest of the body? (strong = obviously, only-the-tip).
+- **red_sides** none/mild/strong — are the **left+right edges** (mid-tongue, the Liver/Gallbladder zone)
+  redder than the **middle** of the body? Look at the *sides only*, not the tip and not the root.
+  *mild* = a touch redder along the rims · *strong* = obviously red/dusky edges vs a paler centre.
+  (Used to validate the `red_sides` → Liver/qi-stagnation signal — its threshold is not yet calibrated.)
 - **red_dots** none/few/many — raised red spots/prickles on the surface.
 - **surface_pattern** — a papillae texture strong enough that you can't judge greasiness from it.
 - **coating_obscures_body** — coating so thick you can't read the body colour underneath.

@@ -126,6 +126,15 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
 
 ---
 
+## 2026-07-21 (5) — validation worklist for the unvalidated heuristics
+- ✅ **`docs/VALIDATION_WORKLIST.md`** organises the 3 unvalidated detectors: only **`red_sides`** needs new
+  labels (no existing colour label for the Liver zone); `black_coating`/`slippery_coating` already have
+  practitioner labels (TCM-Tongue classes 11/12) → casper eval only.
+- ✅ **`red_sides` wired into the labeling loop**: added the field to `build_label_tool.py` + the extra-labels
+  template + a `LABELING_GUIDE.md` rubric, and a **threshold sweep** in `eval_extra_features.py` (mirrors the
+  red_tip sweep) that suggests a calibrated `RED_SIDE_THRESH` once labelled. Fast path = label the 38 human-40
+  tongues for red_sides → re-run the sweep → set the threshold.
+
 ## 2026-07-21 (4) — no-LLM: zoned red-sides → Liver (qi-stagnation handle)
 - ✅ **Red-sides (Liver/GB zone) routing** — `zoning.py` now computes `side_redness_delta` (a* of the
   lateral middle-third edges − whole; sides = `mid_sel ∩ edge_sel`), `infer.py` converts it to a

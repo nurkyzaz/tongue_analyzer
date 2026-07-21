@@ -38,8 +38,9 @@ for iid in sorted(gold):
     with torch.no_grad():
         mask = (pipe.seg(x).sigmoid() > 0.5).float()
         rd_prob = float(torch.sigmoid(pipe.extra(x, mask))[0, RD].cpu()) if pipe.extra is not None else None
-    rows.append({"id": iid, "tipd": z.get("tip_redness_delta"),
-                 "g_tip": gold[iid].get("red_tip"), "rd": rd_prob, "g_dots": gold[iid].get("red_dots")})
+    rows.append({"id": iid, "tipd": z.get("tip_redness_delta"), "sided": z.get("side_redness_delta"),
+                 "g_tip": gold[iid].get("red_tip"), "g_sides": gold[iid].get("red_sides"),
+                 "rd": rd_prob, "g_dots": gold[iid].get("red_dots")})
 
 def mean(vs): vs=[v for v in vs if v is not None]; return sum(vs)/len(vs) if vs else float("nan")
 
@@ -56,6 +57,27 @@ for thr in (0.0, 1.0, 1.5, 2.0, 2.5):
     fn = sum(1 for r in rows if (r["tipd"] is None or r["tipd"] <= thr) and r["g_tip"] in ("mild","strong"))
     prec = tp/(tp+fp) if tp+fp else 0; rec = tp/(tp+fn) if tp+fn else 0
     print(f"    thr={thr:>3}: precision={prec:.2f} recall={rec:.2f} (tp={tp} fp={fp} fn={fn})")
+
+print("\n=== red_sides: zoning side_redness_delta by gold class ===")
+have_sides = any(r["g_sides"] for r in rows)
+if not have_sides:
+    print("  (no red_sides gold labels yet — add them in the label tool, then re-run to calibrate the")
+    print("   RED_SIDE_THRESH in stage1_quantitative/infer.py, exactly like red_tip was.)")
+else:
+    for c in ("none", "mild", "strong"):
+        sub = [r["sided"] for r in rows if r["g_sides"] == c]
+        print(f"  {c:7} n={len(sub):2}  mean sideΔred={mean(sub):+.2f}")
+    print("  threshold sweep (present = mild|strong):")
+    best = None
+    for thr in (0.0, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5):
+        tp = sum(1 for r in rows if r["sided"] is not None and r["sided"] > thr and r["g_sides"] in ("mild","strong"))
+        fp = sum(1 for r in rows if r["sided"] is not None and r["sided"] > thr and r["g_sides"] == "none")
+        fn = sum(1 for r in rows if (r["sided"] is None or r["sided"] <= thr) and r["g_sides"] in ("mild","strong"))
+        prec = tp/(tp+fp) if tp+fp else 0; rec = tp/(tp+fn) if tp+fn else 0
+        f1 = 2*prec*rec/(prec+rec) if prec+rec else 0
+        print(f"    thr={thr:>3}: precision={prec:.2f} recall={rec:.2f} f1={f1:.2f} (tp={tp} fp={fp} fn={fn})")
+        if best is None or f1 > best[1]: best = (thr, f1)
+    print(f"  -> suggested RED_SIDE_THRESH ≈ {best[0]} (best F1={best[1]:.2f}); currently 2.5 in infer.py")
 
 print("\n=== red_dots: extra-model prob by gold class ===")
 for c in ("none", "few", "many"):
