@@ -1,139 +1,335 @@
 [
-  {"id":"constitution:balanced","source":"CCMQ (Wang Qi); Thomson Medical",
-   "text":"Balanced (平和质) constitution: the healthy baseline — good energy and appetite, radiant skin, sound sleep, adapts well to weather. Tongue: pale-red body with a thin white coating. Keep it with moderate regular meals, whole foods, steady activity (walking, Tai Chi), avoiding extremes and greasy food."},
-  {"id":"constitution:qi_deficiency","source":"CCMQ (Wang Qi); Thomson Medical",
-   "text":"Qi-deficiency (气虚质) constitution: low energy and stamina — soft-spoken, easily out of breath, tires quickly, catches colds often, sweats easily. Tongue: pale body, often SWOLLEN with TOOTH-MARKS on the edges, thin coat. Supported by qi-nourishing warm foods (rice, mushrooms, dates, chicken), gentle exercise, and not overexerting."},
-  {"id":"constitution:yang_deficiency","source":"CCMQ (Wang Qi); Thomson Medical",
-   "text":"Yang-deficiency (阳虚质) constitution: cold type — cold hands and feet, dislikes cold, worse after cold food/drink, low warmth. Tongue: pale, SWOLLEN, WET/moist, thin white coat. Supported by warming foods (ginger, garlic, beef), keeping the belly/lower back/feet warm, avoiding raw-cold food and long air-conditioning."},
-  {"id":"constitution:yin_deficiency","source":"CCMQ (Wang Qi); Thomson Medical",
-   "text":"Yin-deficiency (阴虚质) constitution: dry-hot type — dry mouth/throat, thirst for cold drinks, warm palms and soles, night sweats, restless, often lean. Tongue: RED body, LITTLE or PEELED coating, often CRACKS. Supported by cooling-moistening foods (pear, duck, sea cucumber, fungus), good hydration, not over-sweating in exercise."},
-  {"id":"constitution:phlegm_dampness","source":"CCMQ (Wang Qi); Thomson Medical",
-   "text":"Phlegm-dampness (痰湿质) constitution: damp-heavy type — tends to overweight, heavy limbs, sticky mouth, dull complexion, likes greasy/rich food. Tongue: SWOLLEN with a THICK GREASY WHITE coating. Supported by draining foods (barley, red bean, millet, radish, celery), less fatty/sweet food, regular movement to 'move' damp."},
-  {"id":"constitution:damp_heat","source":"CCMQ (Wang Qi); Thomson Medical",
-   "text":"Damp-heat (湿热质) constitution: hot-humid type — oily skin, acne, bitter taste, thirst, body heaviness, sticky/irregular stools, irritable; worse in humid weather. Tongue: RED body with a GREASY YELLOW coating. Supported by cooling light foods (green/mung bean, cucumber, barley, watermelon), avoiding alcohol, smoking and late nights."},
-  {"id":"constitution:blood_stasis","source":"CCMQ (Wang Qi); Thomson Medical; Delphi PMC8983216",
-   "text":"Blood-stasis (血瘀质) constitution: poor-circulation type — dull/dark complexion, dark lips, under-eye circles, easy bruising, forgetful, cold-intolerant. Tongue: PURPLE/dusky body, and DISTENDED DARK SUBLINGUAL (under-tongue) VEINS — the strongest objective stasis sign. Supported by circulation-moving foods (hawthorn, black fungus, garlic), staying warm and active without overexertion."},
-  {"id":"constitution:qi_stagnation","source":"CCMQ (Wang Qi); Thomson Medical",
-   "text":"Qi-stagnation (气郁质) constitution: stuck-energy/emotional type — tends thin, introverted, overthinks and worries, chest/abdominal bloating, sighing, mood swings, poor sleep. Tongue: often near-normal, sometimes slightly dark or with redder SIDES (Liver). Supported by movement, social connection, stress relief, and qi-moving foods (radish, kumquat, hawthorn, citrus)."},
-  {"id":"constitution:special_diathesis","source":"CCMQ (Wang Qi); Thomson Medical",
-   "text":"Special/allergic (特禀质) constitution: reactive type — allergies, asthma, hives, sensitivity to foods, pollen, smells or medicines; seasonal flares. Tongue: variable, no single hallmark. Supported by a simple balanced diet, avoiding known triggers, good hygiene and immune-supporting routine."},
-
-  {"id":"icd11:spleen_qi_deficiency","source":"WHO ICD-11 Ch.26 (TM1)",
-   "text":"In WHO ICD-11 Chapter 26 (Traditional Medicine), the Spleen system carries patterns such as Spleen deficiency with qi stagnation (SF72), Spleen deficiency with dampness accumulation (SF79) and Spleen yang deficiency (SF77). Spleen-qi deficiency = the digestive/transport function is weak, producing tiredness, poor appetite, loose stools, and a pale, tooth-marked tongue. This is a standardized pattern name, not a disease diagnosis."},
-  {"id":"icd11:damp_heat_spleen","source":"WHO ICD-11 Ch.26 (TM1)",
-   "text":"ICD-11 Ch.26 includes 'Dampness-heat encumbering the spleen system pattern' (SF78): damp and heat obstruct the middle burner, giving body heaviness, a bitter sticky mouth, and a red tongue with a greasy yellow coating. A standardized traditional-medicine pattern."},
-  {"id":"icd11:dampness","source":"WHO ICD-11 Ch.26 (TM1)",
-   "text":"ICD-11 Ch.26 classes environmental/pathogenic factors including DAMPNESS and PHLEGM. Dampness/phlegm patterns present with heaviness, fullness, a swollen tongue and a thick greasy coating — fluids the body isn't transforming. Standardized pattern vocabulary (196 patterns, 150 disorders in the chapter)."},
-  {"id":"icd11:blood_stasis","source":"WHO ICD-11 Ch.26 (TM1)",
-   "text":"ICD-11 Ch.26 includes blood-stasis patterns: blood not moving smoothly, giving fixed/stabbing pains, dark complexion, a purple tongue and distended sublingual veins. Standardized traditional-medicine pattern naming."},
-  {"id":"icd11:yin_deficiency","source":"WHO ICD-11 Ch.26 (TM1)",
-   "text":"ICD-11 Ch.26 includes yin-deficiency patterns (e.g. Spleen yin deficiency SF76 among organ variants): cooling/moistening fluids are depleted so 'empty heat' arises — dryness, night sweats, warm palms, a red tongue with little coat and cracks."},
-
-  {"id":"disambig:qi_vs_blood_deficiency","source":"Sacred Lotus; Maciocia",
-   "text":"Qi deficiency vs Blood deficiency (both often show a PALE tongue): qi-deficiency tends to a pale, SWOLLEN, TOOTH-MARKED tongue with tiredness, breathlessness and loose stools; blood-deficiency tends to a pale, THIN, dry-ish tongue with dizziness, palpitations, dry skin and poor sleep. Swollen+toothmarks → qi; thin+dry → blood."},
-  {"id":"disambig:yin_deficiency_vs_damp_heat","source":"Sacred Lotus; Maciocia",
-   "text":"Yin-deficiency vs Damp-heat (both can show a RED tongue): yin-deficiency has a red body with LITTLE/PEELED coating and CRACKS (a dry, depleted surface); damp-heat has a red body with a THICK GREASY YELLOW coating (a wet, loaded surface). Scanty-dry coat → yin-def; greasy-yellow coat → damp-heat."},
-  {"id":"disambig:blood_stasis_vs_heat","source":"Sacred Lotus; Maciocia",
-   "text":"Blood-stasis vs Heat (both can darken the tongue): a PURPLE/dusky body (± dark sublingual veins, purple spots) means blood-stasis; a bright/deep RED body means heat. Purple = stasis, red = heat — colour hue is the tell."},
-  {"id":"disambig:spleen_qi_vs_yang_deficiency","source":"Sacred Lotus; Maciocia",
-   "text":"Spleen-qi deficiency vs Yang deficiency (both weak/cold digestion, both pale+swollen+toothmarked): yang-deficiency adds clear COLD signs — a WET tongue, cold limbs, worse with cold, and pale-white. It's qi-deficiency that has progressed to lack of warmth. More wetness and cold → yang; milder → qi."},
-  {"id":"disambig:yin_vs_blood_deficiency","source":"Sacred Lotus; Maciocia",
-   "text":"Yin deficiency vs Blood deficiency (both deficiency, both can be thinnish): blood-deficiency tongue is PALE (undernourished); yin-deficiency tongue is RED with little coat and cracks ('empty heat', dryness). Pale = blood; red-dry = yin."},
-  {"id":"disambig:damp_heat_vs_phlegm_damp_full","source":"Sacred Lotus; Maciocia; Delphi PMC8983216",
-   "text":"Damp-heat vs Phlegm-dampness (both greasy-coated): damp-heat is HOT-damp (yellow coat, red body, bitter mouth, oily skin, irritability); phlegm-dampness is COOL/neutral damp (white coat, normal/pale body, heaviness, weight gain). The coating colour and any heat signs decide it."},
-
-  {"id":"modern:greasy_coating_digestion","source":"SymMap; tongue-coating microbiome studies (PMC8932003)",
-   "text":"Modern association (not causation): a thick or greasy tongue coating correlates in studies with digestive/gut-microbiome state and metabolic markers; damp-type tongues are described alongside sluggish digestion and metabolic syndrome. Presented as a correlation of interest, not a diagnosis."},
-  {"id":"modern:pale_toothmarks_anemia","source":"clinical literature (association)",
-   "text":"Modern association (not causation): a pale, tooth-marked tongue is repeatedly described alongside low-energy, iron/anaemia-type presentations. In this tradition it maps to Spleen-qi deficiency; framed as an association worth noticing, not a diagnostic claim."},
-  {"id":"modern:red_tongue_heat","source":"clinical literature (association)",
-   "text":"Modern association (not causation): a red tongue with little coating is described alongside states of heat/dehydration or overwork ('running hot'). Traditionally an empty-heat/yin-deficiency picture; an association, not a diagnosis."},
-
-  {"id":"card:damp-heat vs phlegm-damp","source":"Sacred Lotus; Maciocia",
-   "text":"Both damp-heat and phlegm-dampness show a thick, greasy tongue coating. The deciding factor is HEAT: a YELLOW coating and/or a RED tongue body means damp-HEAT; a WHITE coating with a normal or pale body, especially if wet, means plain phlegm-dampness (cold-damp)."},
-  {"id":"card:yang-deficiency vs phlegm-damp (both swollen)","source":"Sacred Lotus; Maciocia",
-   "text":"A swollen tongue occurs in both. If it is also PALE and WET/glossy with a thin white coat, it points to Yang deficiency. If it carries a THICK GREASY coat, it points to phlegm-dampness. Moisture-plus-pale vs thick-greasy is the tell."},
-  {"id":"card:why a pale tongue is ambiguous","source":"Sacred Lotus; CONSTITUTION_BENCHMARK",
-   "text":"A pale tongue alone cannot be pinned to one pattern: it appears in Qi, Blood AND Yang deficiency. Co-signs disambiguate — pale+tooth-marks → qi; pale+thin → blood; pale+swollen+wet → yang. Without pulse and symptoms the tongue is genuinely uncertain here; hedge and ask follow-ups."},
-  {"id":"card:red tip meaning","source":"Sacred Lotus; Maciocia",
-   "text":"A tongue tip distinctly redder than the rest reflects heat in the upper body / Heart, commonly linked to stress, poor sleep or restlessness. It is a localized, usually mild sign — it nudges toward heat (yin-deficiency or damp-heat) rather than defining a pattern."},
-  {"id":"card:cracks / fissures nuance","source":"Sacred Lotus; Maciocia",
-   "text":"Cracks usually indicate Yin/fluid depletion (a dry, under-nourished surface), especially with a red body and scanty coat. But a single deep central crack can be constitutional or reflect Stomach/Spleen, and some cracks are lifelong and harmless. Read cracks with body colour and coating, not alone."},
-  {"id":"card:greasy coating is texture not colour","source":"Sacred Lotus; Maciocia",
-   "text":"'Greasy' describes coating TEXTURE — a sticky, curd-like film hiding the tongue surface — and is the core sign of Dampness/Phlegm. It is independent of coating COLOUR (white vs yellow) and THICKNESS. Papillae can mimic a light film, so a faint greasy read is uncertain."},
-  {"id":"card:wet vs dry surface","source":"Sacred Lotus",
-   "text":"A wet, glossy tongue suggests fluids not being transformed (cold-damp / Yang-deficiency) and argues AGAINST heat, which dries the surface. A genuinely dry tongue points to Yin/fluid depletion or heat. Photo glare can mimic wetness, so treat moisture as a soft signal."},
-  {"id":"card:sublingual veins","source":"Delphi consensus PMC8983216",
-   "text":"Distended, dark under-tongue veins are the strongest single objective sign of Blood stasis, but they need lifting the tongue and a second photo, which this tool does not take — so a blood-stasis read here rests only on a purple/dusky body and is correspondingly less certain."},
-  {"id":"card:what the tongue cannot tell you","source":"Maciocia; WHO ICD-11 Ch.26",
-   "text":"Tongue reading is one of four traditional examinations (looking, listening, asking, pulse). The tongue is informative about coating/damp/heat but weak at separating the deficiency patterns, which need pulse and symptoms. Always frame results as a tendency to explore, never a diagnosis."},
-
-  {"id":"disambig:qi_stagnation_vs_blood_stasis","source":"Sacred Lotus; Maciocia",
-   "text":"Qi stagnation vs Blood stasis (stagnation can deepen into stasis): qi-stagnation is the earlier, functional stage — bloating, sighing, mood swings, a near-normal or slightly dark tongue, sometimes redder Liver SIDES. Blood-stasis is the later, structural stage — fixed/stabbing pain, a PURPLE tongue and dark sublingual veins. Purple/fixed = stasis; distension/mood = stagnation."},
-  {"id":"disambig:white_vs_yellow_coating","source":"Sacred Lotus; Maciocia",
-   "text":"Coating colour reads temperature: a WHITE coating leans COLD (or normal if thin); a YELLOW coating leans HEAT (darker/browner yellow = stronger heat). A coat turning from white to yellow suggests cold changing to heat, or an external pattern moving inward."},
-  {"id":"disambig:thin_vs_thick_coating","source":"Sacred Lotus; Maciocia",
-   "text":"Coating THICKNESS reads how much has accumulated: a THIN coat (you can see the body through it) is normal or a mild/exterior condition; a THICK coat (hides the body) means more internal accumulation — damp, phlegm or retained food. Thickness is separate from greasiness (texture) and colour."},
-  {"id":"disambig:rooted_vs_rootless_coating","source":"Sacred Lotus; Maciocia",
-   "text":"A ROOTED coat looks like it grows from the tongue (healthy Stomach qi). A ROOTLESS coat sits on top and looks easily wiped off — it suggests weakened Stomach/Kidney qi. A peeled/absent coat is the extreme, pointing to Stomach-Yin damage (red body) or qi/blood depletion (pale body)."},
-
-  {"id":"sign:swollen_body","source":"Sacred Lotus; Maciocia",
-   "text":"A SWOLLEN/enlarged tongue (often with tooth-marks) means the body isn't moving fluids — Dampness/Phlegm, or Spleen/Kidney qi-or-yang deficiency. Pale+wet swollen leans yang-deficiency; thick-greasy-coated swollen leans phlegm-damp; a swollen RED tongue with yellow coat leans damp-heat."},
-  {"id":"sign:thin_body","source":"Sacred Lotus; Maciocia",
-   "text":"A THIN/small tongue means not enough substance to fill it — Qi and Blood deficiency when pale, or Yin-deficient heat when red and dry. Read with colour: pale-thin = blood/qi; red-thin-dry = yin."},
-  {"id":"sign:purple_body","source":"Sacred Lotus; Maciocia; Delphi PMC8983216",
-   "text":"A PURPLE/dusky tongue means blood isn't circulating smoothly — Blood stasis. Reddish-purple leans heat-plus-stasis; bluish-purple leans cold-plus-stasis. Purple spots or dark sublingual veins strengthen the stasis reading."},
-  {"id":"sign:red_dots_prickles","source":"Sacred Lotus; Maciocia",
-   "text":"RED DOTS / raised prickles (enlarged red papillae) mean heat in the blood. Their location matters: dots at the TIP → Heart/Lung (upper-body heat, stress); at the SIDES → Liver/Gallbladder; at the ROOT → lower burner. Often seen with a red body and/or yellow coat in damp-heat."},
-  {"id":"sign:peeled_mirror_coating","source":"Sacred Lotus; Maciocia",
-   "text":"A PEELED / mirror (glossy, coatless) patch means the Stomach/Kidney fluids that grow the coat are depleted — Yin deficiency when the body is red, or qi/blood depletion when pale. Geographic (map-like) peeling comes and goes with the same meaning, milder."},
-
-  {"id":"symptom:cold_limbs","source":"CCMQ (Wang Qi); Maciocia",
-   "text":"Cold hands and feet, dislike of cold, wanting warm drinks, and feeling worse after cold food point to a YANG-DEFICIENCY (cold) tendency — on the tongue a pale, swollen, wet body. Warming foods and keeping the core warm are the traditional supports."},
-  {"id":"symptom:night_sweats_dryness","source":"CCMQ (Wang Qi); Maciocia",
-   "text":"Night sweats, dry mouth/throat, warm palms and soles, thirst for cold drinks, and restlessness point to a YIN-DEFICIENCY ('empty heat') tendency — on the tongue a red body with little coat and cracks. Cooling-moistening foods and good rest are the supports."},
-  {"id":"symptom:bloating_loose_stool","source":"CCMQ (Wang Qi); Maciocia",
-   "text":"Bloating after meals, tiredness, poor appetite, loose stools and easy bruising point to a SPLEEN-QI-DEFICIENCY (weak digestion) tendency — on the tongue a pale, tooth-marked body. Warm, well-cooked, easy-to-digest meals and not overeating are the supports."},
-  {"id":"symptom:phlegm_heaviness","source":"CCMQ (Wang Qi); Maciocia",
-   "text":"A heavy or foggy head/limbs, phlegm or mucus, a sticky mouth, puffiness and weight that's hard to shift point to a PHLEGM-DAMPNESS tendency — on the tongue a swollen body with a thick greasy coating. Lighter draining foods and regular movement are the supports."},
-  {"id":"symptom:bitter_mouth_oily_skin","source":"CCMQ (Wang Qi); Maciocia",
-   "text":"A bitter or sticky taste, oily skin and acne, body heaviness with warmth, sticky stools and irritability point to a DAMP-HEAT tendency — on the tongue a red body with a greasy yellow coating. Cooling, light foods and avoiding alcohol/late nights are the supports."},
-  {"id":"symptom:dizzy_palpitations_pale","source":"CCMQ (Wang Qi); Maciocia",
-   "text":"Dizziness, palpitations, poor sleep, dry skin/hair, scanty periods and a pale complexion point to a BLOOD-DEFICIENCY (under-nourished) tendency — on the tongue a pale, thin, dry-ish body. Blood-nourishing foods and enough rest are the supports."},
-  {"id":"symptom:sighing_bloating_stress","source":"CCMQ (Wang Qi); Maciocia",
-   "text":"Frequent sighing, chest or rib fullness, bloating that comes with mood, irritability or low mood, and a lump-in-throat feeling point to a QI-STAGNATION (stuck energy, stress) tendency — the tongue is often near-normal or slightly dark. Movement, stress relief and qi-moving foods are the supports."},
-
-  {"id":"combo:spleen_qi_with_dampness","source":"Maciocia; Sacred Lotus",
-   "text":"Spleen-qi deficiency + Dampness (very common combo): weak digestion can't move fluids, so damp accumulates. Tongue: PALE, SWOLLEN, TOOTH-MARKED body WITH a greasy coating. Read as 'weak-plus-damp' — support digestion (warm cooked meals, don't overeat) AND ease damp (less greasy/sweet/cold-raw)."},
-  {"id":"combo:liver_qi_invading_spleen","source":"Maciocia; Sacred Lotus",
-   "text":"Liver-qi stagnation invading the Spleen (Liver-Spleen disharmony): stress disrupts digestion — bloating, alternating loose/hard stool, irritability that worsens with tension. Tongue: often near-normal or slightly dark body, sometimes with redder SIDES. Move qi (stress relief, movement) and steady digestion."},
-  {"id":"combo:yin_def_with_damp_heat","source":"Maciocia",
-   "text":"Yin deficiency + Damp-heat (a mixed dry-and-damp picture): a RED body with CRACKS (yin depletion) yet a GREASY YELLOW patch (damp-heat) at the same time. Handle gently — clear damp-heat without strong drying, and nourish yin without heavy/greasy tonics. A case where the tongue looks contradictory."},
-  {"id":"combo:qi_and_blood_deficiency","source":"Maciocia; Sacred Lotus",
-   "text":"Qi and Blood deficiency together (Qi generates Blood, so they often co-occur): tiredness and breathlessness PLUS dizziness, pallor, palpitations, poor sleep. Tongue: PALE, THIN, sometimes tooth-marked. Build both with warm, nourishing, easy-to-digest food and real rest."},
-  {"id":"combo:spleen_kidney_yang_deficiency","source":"Maciocia; Sacred Lotus",
-   "text":"Spleen + Kidney Yang deficiency (deep cold): cold limbs, cold/sore lower back and knees, early-morning loose stool, puffiness, low drive. Tongue: PALE, SWOLLEN, WET. The coldest/most-deficient end of the spectrum — warm and tonify strongly, keep the core warm."},
-
-  {"id":"disambig:excess_vs_deficient_heat","source":"Sacred Lotus; Maciocia",
-   "text":"Excess heat vs Deficient (empty) heat, both red-tongued: EXCESS heat = a full, bright RED body with a THICK (often yellow) coat and strong signs (thirst, constipation, restlessness); DEFICIENT heat = a red body with LITTLE or PEELED coat and CRACKS (yin-deficiency), milder, worse at night. Coat thickness is the key: thick=excess, scanty=deficient."},
-  {"id":"disambig:damp_cold_vs_damp_heat","source":"Sacred Lotus; Maciocia",
-   "text":"Damp-cold vs Damp-heat, both greasy-coated and heavy: DAMP-COLD = a WHITE greasy coat, pale/normal body, feeling cold, heavy and sluggish; DAMP-HEAT = a YELLOW greasy coat, red body, bitter/sticky mouth, warmth and irritability. Coating colour (white vs yellow) divides them."},
-  {"id":"disambig:exterior_vs_interior","source":"Sacred Lotus; Maciocia",
-   "text":"Coating depth reads how deep/old a condition is: a THIN coat over a normal body = mild or recent ('exterior'); a THICK coat with a changed body colour = deeper or longer-standing ('interior'). A coat thickening over days suggests moving inward; thinning suggests resolving."},
-
-  {"id":"food:warming_for_yang_cold","source":"CCMQ (Wang Qi); Chinese food therapy",
-   "text":"Food therapy for a COLD / Yang-deficiency tendency (pale, swollen, wet tongue; cold limbs): favour WARMING foods — ginger, cinnamon, cloves, lamb, beef, walnut, well-cooked over raw; limit iced drinks, raw salads and excess cold-natured fruit. Keep the belly and feet warm."},
-  {"id":"food:cooling_for_heat_damp","source":"CCMQ (Wang Qi); Chinese food therapy",
-   "text":"Food therapy for a HEAT / Damp-heat tendency (red body, greasy yellow coat; oily skin, bitter mouth): favour COOLING, draining foods — mung/green bean, cucumber, celery, barley, watermelon, bitter greens; limit alcohol, fried/greasy food, spicy heat and late nights."},
-  {"id":"food:qi_tonics","source":"CCMQ (Wang Qi); Chinese food therapy",
-   "text":"Food therapy for a QI-deficiency tendency (pale, tooth-marked tongue; tiredness): qi-tonic foods — rice and congee, sweet potato, pumpkin, dates, mushrooms, chicken — eaten warm and well-cooked, on a regular schedule, without overeating or crash-dieting."},
-  {"id":"food:blood_nourishing","source":"CCMQ (Wang Qi); Chinese food therapy",
-   "text":"Food therapy for a BLOOD-deficiency tendency (pale, thin tongue; dizziness, palpitations): blood-nourishing foods — dark leafy greens, beetroot, black sesame, goji berries, dates, eggs, (liver) — with enough sleep, since Blood is restored by rest."},
-  {"id":"food:damp_draining","source":"CCMQ (Wang Qi); Chinese food therapy",
-   "text":"Food therapy for a phlegm-DAMPNESS tendency (swollen, greasy-coated tongue; heaviness): damp-draining foods — barley, adzuki/red bean, millet, radish, mushrooms; limit dairy, sweets, greasy and cold-raw food; move daily to help fluids circulate."},
-  {"id":"food:qi_moving","source":"CCMQ (Wang Qi); Chinese food therapy",
-   "text":"Food therapy for a QI-STAGNATION tendency (stress, bloating, near-normal tongue): qi-moving foods — citrus peel, radish, hawthorn, mint, kumquat, jasmine tea; alongside movement, fresh air and stress relief, since stuck qi eases with flow."},
-
-  {"id":"modern:sleep_stress_tongue","source":"clinical literature (association)",
-   "text":"Modern association (not causation): poor sleep and high stress are described alongside a redder tongue TIP and a thicker/greasier coating. In this tradition tip-heat links to the Heart (stress, sleep) and coating to digestion. An association to explore, not a diagnosis."}
+ {
+  "id": "constitution:balanced",
+  "source": "CCMQ (Wang Qi); Thomson Medical",
+  "text": "Balanced (平和质) constitution: the healthy baseline — good energy and appetite, radiant skin, sound sleep, adapts well to weather. Tongue: pale-red body with a thin white coating. Keep it with moderate regular meals, whole foods, steady activity (walking, Tai Chi), avoiding extremes and greasy food."
+ },
+ {
+  "id": "constitution:qi_deficiency",
+  "source": "CCMQ (Wang Qi); Thomson Medical",
+  "text": "Qi-deficiency (气虚质) constitution: low energy and stamina — soft-spoken, easily out of breath, tires quickly, catches colds often, sweats easily. Tongue: pale body, often SWOLLEN with TOOTH-MARKS on the edges, thin coat. Supported by qi-nourishing warm foods (rice, mushrooms, dates, chicken), gentle exercise, and not overexerting."
+ },
+ {
+  "id": "constitution:yang_deficiency",
+  "source": "CCMQ (Wang Qi); Thomson Medical",
+  "text": "Yang-deficiency (阳虚质) constitution: cold type — cold hands and feet, dislikes cold, worse after cold food/drink, low warmth. Tongue: pale, SWOLLEN, WET/moist, thin white coat. Supported by warming foods (ginger, garlic, beef), keeping the belly/lower back/feet warm, avoiding raw-cold food and long air-conditioning."
+ },
+ {
+  "id": "constitution:yin_deficiency",
+  "source": "CCMQ (Wang Qi); Thomson Medical",
+  "text": "Yin-deficiency (阴虚质) constitution: dry-hot type — dry mouth/throat, thirst for cold drinks, warm palms and soles, night sweats, restless, often lean. Tongue: RED body, LITTLE or PEELED coating, often CRACKS. Supported by cooling-moistening foods (pear, duck, sea cucumber, fungus), good hydration, not over-sweating in exercise."
+ },
+ {
+  "id": "constitution:phlegm_dampness",
+  "source": "CCMQ (Wang Qi); Thomson Medical",
+  "text": "Phlegm-dampness (痰湿质) constitution: damp-heavy type — tends to overweight, heavy limbs, sticky mouth, dull complexion, likes greasy/rich food. Tongue: SWOLLEN with a THICK GREASY WHITE coating. Supported by draining foods (barley, red bean, millet, radish, celery), less fatty/sweet food, regular movement to 'move' damp."
+ },
+ {
+  "id": "constitution:damp_heat",
+  "source": "CCMQ (Wang Qi); Thomson Medical",
+  "text": "Damp-heat (湿热质) constitution: hot-humid type — oily skin, acne, bitter taste, thirst, body heaviness, sticky/irregular stools, irritable; worse in humid weather. Tongue: RED body with a GREASY YELLOW coating. Supported by cooling light foods (green/mung bean, cucumber, barley, watermelon), avoiding alcohol, smoking and late nights."
+ },
+ {
+  "id": "constitution:blood_stasis",
+  "source": "CCMQ (Wang Qi); Thomson Medical; Delphi PMC8983216",
+  "text": "Blood-stasis (血瘀质) constitution: poor-circulation type — dull/dark complexion, dark lips, under-eye circles, easy bruising, forgetful, cold-intolerant. Tongue: PURPLE/dusky body, and DISTENDED DARK SUBLINGUAL (under-tongue) VEINS — the strongest objective stasis sign. Supported by circulation-moving foods (hawthorn, black fungus, garlic), staying warm and active without overexertion."
+ },
+ {
+  "id": "constitution:qi_stagnation",
+  "source": "CCMQ (Wang Qi); Thomson Medical",
+  "text": "Qi-stagnation (气郁质) constitution: stuck-energy/emotional type — tends thin, introverted, overthinks and worries, chest/abdominal bloating, sighing, mood swings, poor sleep. Tongue: often near-normal, sometimes slightly dark or with redder SIDES (Liver). Supported by movement, social connection, stress relief, and qi-moving foods (radish, kumquat, hawthorn, citrus)."
+ },
+ {
+  "id": "constitution:special_diathesis",
+  "source": "CCMQ (Wang Qi); Thomson Medical",
+  "text": "Special/allergic (特禀质) constitution: reactive type — allergies, asthma, hives, sensitivity to foods, pollen, smells or medicines; seasonal flares. Tongue: variable, no single hallmark. Supported by a simple balanced diet, avoiding known triggers, good hygiene and immune-supporting routine."
+ },
+ {
+  "id": "icd11:spleen_qi_deficiency",
+  "source": "WHO ICD-11 Ch.26 (TM1)",
+  "text": "In WHO ICD-11 Chapter 26 (Traditional Medicine), the Spleen system carries patterns such as Spleen deficiency with qi stagnation (SF72), Spleen deficiency with dampness accumulation (SF79) and Spleen yang deficiency (SF77). Spleen-qi deficiency = the digestive/transport function is weak, producing tiredness, poor appetite, loose stools, and a pale, tooth-marked tongue. This is a standardized pattern name, not a disease diagnosis."
+ },
+ {
+  "id": "icd11:damp_heat_spleen",
+  "source": "WHO ICD-11 Ch.26 (TM1)",
+  "text": "ICD-11 Ch.26 includes 'Dampness-heat encumbering the spleen system pattern' (SF78): damp and heat obstruct the middle burner, giving body heaviness, a bitter sticky mouth, and a red tongue with a greasy yellow coating. A standardized traditional-medicine pattern."
+ },
+ {
+  "id": "icd11:dampness",
+  "source": "WHO ICD-11 Ch.26 (TM1)",
+  "text": "ICD-11 Ch.26 classes environmental/pathogenic factors including DAMPNESS and PHLEGM. Dampness/phlegm patterns present with heaviness, fullness, a swollen tongue and a thick greasy coating — fluids the body isn't transforming. Standardized pattern vocabulary (196 patterns, 150 disorders in the chapter)."
+ },
+ {
+  "id": "icd11:blood_stasis",
+  "source": "WHO ICD-11 Ch.26 (TM1)",
+  "text": "ICD-11 Ch.26 includes blood-stasis patterns: blood not moving smoothly, giving fixed/stabbing pains, dark complexion, a purple tongue and distended sublingual veins. Standardized traditional-medicine pattern naming."
+ },
+ {
+  "id": "icd11:yin_deficiency",
+  "source": "WHO ICD-11 Ch.26 (TM1)",
+  "text": "ICD-11 Ch.26 includes yin-deficiency patterns (e.g. Spleen yin deficiency SF76 among organ variants): cooling/moistening fluids are depleted so 'empty heat' arises — dryness, night sweats, warm palms, a red tongue with little coat and cracks."
+ },
+ {
+  "id": "disambig:qi_vs_blood_deficiency",
+  "source": "Sacred Lotus; Maciocia",
+  "text": "Qi deficiency vs Blood deficiency (both often show a PALE tongue): qi-deficiency tends to a pale, SWOLLEN, TOOTH-MARKED tongue with tiredness, breathlessness and loose stools; blood-deficiency tends to a pale, THIN, dry-ish tongue with dizziness, palpitations, dry skin and poor sleep. Swollen+toothmarks → qi; thin+dry → blood."
+ },
+ {
+  "id": "disambig:yin_deficiency_vs_damp_heat",
+  "source": "Sacred Lotus; Maciocia",
+  "text": "Yin-deficiency vs Damp-heat (both can show a RED tongue): yin-deficiency has a red body with LITTLE/PEELED coating and CRACKS (a dry, depleted surface); damp-heat has a red body with a THICK GREASY YELLOW coating (a wet, loaded surface). Scanty-dry coat → yin-def; greasy-yellow coat → damp-heat."
+ },
+ {
+  "id": "disambig:blood_stasis_vs_heat",
+  "source": "Sacred Lotus; Maciocia",
+  "text": "Blood-stasis vs Heat (both can darken the tongue): a PURPLE/dusky body (± dark sublingual veins, purple spots) means blood-stasis; a bright/deep RED body means heat. Purple = stasis, red = heat — colour hue is the tell."
+ },
+ {
+  "id": "disambig:spleen_qi_vs_yang_deficiency",
+  "source": "Sacred Lotus; Maciocia",
+  "text": "Spleen-qi deficiency vs Yang deficiency (both weak/cold digestion, both pale+swollen+toothmarked): yang-deficiency adds clear COLD signs — a WET tongue, cold limbs, worse with cold, and pale-white. It's qi-deficiency that has progressed to lack of warmth. More wetness and cold → yang; milder → qi."
+ },
+ {
+  "id": "disambig:yin_vs_blood_deficiency",
+  "source": "Sacred Lotus; Maciocia",
+  "text": "Yin deficiency vs Blood deficiency (both deficiency, both can be thinnish): blood-deficiency tongue is PALE (undernourished); yin-deficiency tongue is RED with little coat and cracks ('empty heat', dryness). Pale = blood; red-dry = yin."
+ },
+ {
+  "id": "disambig:damp_heat_vs_phlegm_damp_full",
+  "source": "Sacred Lotus; Maciocia; Delphi PMC8983216",
+  "text": "Damp-heat vs Phlegm-dampness (both greasy-coated): damp-heat is HOT-damp (yellow coat, red body, bitter mouth, oily skin, irritability); phlegm-dampness is COOL/neutral damp (white coat, normal/pale body, heaviness, weight gain). The coating colour and any heat signs decide it."
+ },
+ {
+  "id": "modern:greasy_coating_digestion",
+  "source": "SymMap; tongue-coating microbiome studies (PMC8932003)",
+  "text": "Modern association (not causation): a thick or greasy tongue coating correlates in studies with digestive/gut-microbiome state and metabolic markers; damp-type tongues are described alongside sluggish digestion and metabolic syndrome. Presented as a correlation of interest, not a diagnosis."
+ },
+ {
+  "id": "modern:pale_toothmarks_anemia",
+  "source": "clinical literature (association)",
+  "text": "Modern association (not causation): a pale, tooth-marked tongue is repeatedly described alongside low-energy, iron/anaemia-type presentations. In this tradition it maps to Spleen-qi deficiency; framed as an association worth noticing, not a diagnostic claim."
+ },
+ {
+  "id": "modern:red_tongue_heat",
+  "source": "clinical literature (association)",
+  "text": "Modern association (not causation): a red tongue with little coating is described alongside states of heat/dehydration or overwork ('running hot'). Traditionally an empty-heat/yin-deficiency picture; an association, not a diagnosis."
+ },
+ {
+  "id": "card:damp-heat vs phlegm-damp",
+  "source": "Sacred Lotus; Maciocia",
+  "text": "Both damp-heat and phlegm-dampness show a thick, greasy tongue coating. The deciding factor is HEAT: a YELLOW coating and/or a RED tongue body means damp-HEAT; a WHITE coating with a normal or pale body, especially if wet, means plain phlegm-dampness (cold-damp)."
+ },
+ {
+  "id": "card:yang-deficiency vs phlegm-damp (both swollen)",
+  "source": "Sacred Lotus; Maciocia",
+  "text": "A swollen tongue occurs in both. If it is also PALE and WET/glossy with a thin white coat, it points to Yang deficiency. If it carries a THICK GREASY coat, it points to phlegm-dampness. Moisture-plus-pale vs thick-greasy is the tell."
+ },
+ {
+  "id": "card:why a pale tongue is ambiguous",
+  "source": "Sacred Lotus; CONSTITUTION_BENCHMARK",
+  "text": "A pale tongue alone cannot be pinned to one pattern: it appears in Qi, Blood AND Yang deficiency. Co-signs disambiguate — pale+tooth-marks → qi; pale+thin → blood; pale+swollen+wet → yang. Without pulse and symptoms the tongue is genuinely uncertain here; hedge and ask follow-ups."
+ },
+ {
+  "id": "card:red tip meaning",
+  "source": "Sacred Lotus; Maciocia",
+  "text": "A tongue tip distinctly redder than the rest reflects heat in the upper body / Heart, commonly linked to stress, poor sleep or restlessness. It is a localized, usually mild sign — it nudges toward heat (yin-deficiency or damp-heat) rather than defining a pattern."
+ },
+ {
+  "id": "card:cracks / fissures nuance",
+  "source": "Sacred Lotus; Maciocia",
+  "text": "Cracks usually indicate Yin/fluid depletion (a dry, under-nourished surface), especially with a red body and scanty coat. But a single deep central crack can be constitutional or reflect Stomach/Spleen, and some cracks are lifelong and harmless. Read cracks with body colour and coating, not alone."
+ },
+ {
+  "id": "card:greasy coating is texture not colour",
+  "source": "Sacred Lotus; Maciocia",
+  "text": "'Greasy' describes coating TEXTURE — a sticky, curd-like film hiding the tongue surface — and is the core sign of Dampness/Phlegm. It is independent of coating COLOUR (white vs yellow) and THICKNESS. Papillae can mimic a light film, so a faint greasy read is uncertain."
+ },
+ {
+  "id": "card:wet vs dry surface",
+  "source": "Sacred Lotus",
+  "text": "A wet, glossy tongue suggests fluids not being transformed (cold-damp / Yang-deficiency) and argues AGAINST heat, which dries the surface. A genuinely dry tongue points to Yin/fluid depletion or heat. Photo glare can mimic wetness, so treat moisture as a soft signal."
+ },
+ {
+  "id": "card:sublingual veins",
+  "source": "Delphi consensus PMC8983216",
+  "text": "Distended, dark under-tongue veins are the strongest single objective sign of Blood stasis, but they need lifting the tongue and a second photo, which this tool does not take — so a blood-stasis read here rests only on a purple/dusky body and is correspondingly less certain."
+ },
+ {
+  "id": "card:what the tongue cannot tell you",
+  "source": "Maciocia; WHO ICD-11 Ch.26",
+  "text": "Tongue reading is one of four traditional examinations (looking, listening, asking, pulse). The tongue is informative about coating/damp/heat but weak at separating the deficiency patterns, which need pulse and symptoms. Always frame results as a tendency to explore, never a diagnosis."
+ },
+ {
+  "id": "disambig:qi_stagnation_vs_blood_stasis",
+  "source": "Sacred Lotus; Maciocia",
+  "text": "Qi stagnation vs Blood stasis (stagnation can deepen into stasis): qi-stagnation is the earlier, functional stage — bloating, sighing, mood swings, a near-normal or slightly dark tongue, sometimes redder Liver SIDES. Blood-stasis is the later, structural stage — fixed/stabbing pain, a PURPLE tongue and dark sublingual veins. Purple/fixed = stasis; distension/mood = stagnation."
+ },
+ {
+  "id": "disambig:white_vs_yellow_coating",
+  "source": "Sacred Lotus; Maciocia",
+  "text": "Coating colour reads temperature: a WHITE coating leans COLD (or normal if thin); a YELLOW coating leans HEAT (darker/browner yellow = stronger heat). A coat turning from white to yellow suggests cold changing to heat, or an external pattern moving inward."
+ },
+ {
+  "id": "disambig:thin_vs_thick_coating",
+  "source": "Sacred Lotus; Maciocia",
+  "text": "Coating THICKNESS reads how much has accumulated: a THIN coat (you can see the body through it) is normal or a mild/exterior condition; a THICK coat (hides the body) means more internal accumulation — damp, phlegm or retained food. Thickness is separate from greasiness (texture) and colour."
+ },
+ {
+  "id": "disambig:rooted_vs_rootless_coating",
+  "source": "Sacred Lotus; Maciocia",
+  "text": "A ROOTED coat looks like it grows from the tongue (healthy Stomach qi). A ROOTLESS coat sits on top and looks easily wiped off — it suggests weakened Stomach/Kidney qi. A peeled/absent coat is the extreme, pointing to Stomach-Yin damage (red body) or qi/blood depletion (pale body)."
+ },
+ {
+  "id": "sign:swollen_body",
+  "source": "Sacred Lotus; Maciocia",
+  "text": "A SWOLLEN/enlarged tongue (often with tooth-marks) means the body isn't moving fluids — Dampness/Phlegm, or Spleen/Kidney qi-or-yang deficiency. Pale+wet swollen leans yang-deficiency; thick-greasy-coated swollen leans phlegm-damp; a swollen RED tongue with yellow coat leans damp-heat."
+ },
+ {
+  "id": "sign:thin_body",
+  "source": "Sacred Lotus; Maciocia",
+  "text": "A THIN/small tongue means not enough substance to fill it — Qi and Blood deficiency when pale, or Yin-deficient heat when red and dry. Read with colour: pale-thin = blood/qi; red-thin-dry = yin."
+ },
+ {
+  "id": "sign:purple_body",
+  "source": "Sacred Lotus; Maciocia; Delphi PMC8983216",
+  "text": "A PURPLE/dusky tongue means blood isn't circulating smoothly — Blood stasis. Reddish-purple leans heat-plus-stasis; bluish-purple leans cold-plus-stasis. Purple spots or dark sublingual veins strengthen the stasis reading."
+ },
+ {
+  "id": "sign:red_dots_prickles",
+  "source": "Sacred Lotus; Maciocia",
+  "text": "RED DOTS / raised prickles (enlarged red papillae) mean heat in the blood. Their location matters: dots at the TIP → Heart/Lung (upper-body heat, stress); at the SIDES → Liver/Gallbladder; at the ROOT → lower burner. Often seen with a red body and/or yellow coat in damp-heat."
+ },
+ {
+  "id": "sign:peeled_mirror_coating",
+  "source": "Sacred Lotus; Maciocia",
+  "text": "A PEELED / mirror (glossy, coatless) patch means the Stomach/Kidney fluids that grow the coat are depleted — Yin deficiency when the body is red, or qi/blood depletion when pale. Geographic (map-like) peeling comes and goes with the same meaning, milder."
+ },
+ {
+  "id": "symptom:cold_limbs",
+  "source": "CCMQ (Wang Qi); Maciocia",
+  "text": "Cold hands and feet, dislike of cold, wanting warm drinks, and feeling worse after cold food point to a YANG-DEFICIENCY (cold) tendency — on the tongue a pale, swollen, wet body. Warming foods and keeping the core warm are the traditional supports."
+ },
+ {
+  "id": "symptom:night_sweats_dryness",
+  "source": "CCMQ (Wang Qi); Maciocia",
+  "text": "Night sweats, dry mouth/throat, warm palms and soles, thirst for cold drinks, and restlessness point to a YIN-DEFICIENCY ('empty heat') tendency — on the tongue a red body with little coat and cracks. Cooling-moistening foods and good rest are the supports."
+ },
+ {
+  "id": "symptom:bloating_loose_stool",
+  "source": "CCMQ (Wang Qi); Maciocia",
+  "text": "Bloating after meals, tiredness, poor appetite, loose stools and easy bruising point to a SPLEEN-QI-DEFICIENCY (weak digestion) tendency — on the tongue a pale, tooth-marked body. Warm, well-cooked, easy-to-digest meals and not overeating are the supports."
+ },
+ {
+  "id": "symptom:phlegm_heaviness",
+  "source": "CCMQ (Wang Qi); Maciocia",
+  "text": "A heavy or foggy head/limbs, phlegm or mucus, a sticky mouth, puffiness and weight that's hard to shift point to a PHLEGM-DAMPNESS tendency — on the tongue a swollen body with a thick greasy coating. Lighter draining foods and regular movement are the supports."
+ },
+ {
+  "id": "symptom:bitter_mouth_oily_skin",
+  "source": "CCMQ (Wang Qi); Maciocia",
+  "text": "A bitter or sticky taste, oily skin and acne, body heaviness with warmth, sticky stools and irritability point to a DAMP-HEAT tendency — on the tongue a red body with a greasy yellow coating. Cooling, light foods and avoiding alcohol/late nights are the supports."
+ },
+ {
+  "id": "symptom:dizzy_palpitations_pale",
+  "source": "CCMQ (Wang Qi); Maciocia",
+  "text": "Dizziness, palpitations, poor sleep, dry skin/hair, scanty periods and a pale complexion point to a BLOOD-DEFICIENCY (under-nourished) tendency — on the tongue a pale, thin, dry-ish body. Blood-nourishing foods and enough rest are the supports."
+ },
+ {
+  "id": "symptom:sighing_bloating_stress",
+  "source": "CCMQ (Wang Qi); Maciocia",
+  "text": "Frequent sighing, chest or rib fullness, bloating that comes with mood, irritability or low mood, and a lump-in-throat feeling point to a QI-STAGNATION (stuck energy, stress) tendency — the tongue is often near-normal or slightly dark. Movement, stress relief and qi-moving foods are the supports."
+ },
+ {
+  "id": "combo:spleen_qi_with_dampness",
+  "source": "Maciocia; Sacred Lotus",
+  "text": "Spleen-qi deficiency + Dampness (very common combo): weak digestion can't move fluids, so damp accumulates. Tongue: PALE, SWOLLEN, TOOTH-MARKED body WITH a greasy coating. Read as 'weak-plus-damp' — support digestion (warm cooked meals, don't overeat) AND ease damp (less greasy/sweet/cold-raw)."
+ },
+ {
+  "id": "combo:liver_qi_invading_spleen",
+  "source": "Maciocia; Sacred Lotus",
+  "text": "Liver-qi stagnation invading the Spleen (Liver-Spleen disharmony): stress disrupts digestion — bloating, alternating loose/hard stool, irritability that worsens with tension. Tongue: often near-normal or slightly dark body, sometimes with redder SIDES. Move qi (stress relief, movement) and steady digestion."
+ },
+ {
+  "id": "combo:yin_def_with_damp_heat",
+  "source": "Maciocia",
+  "text": "Yin deficiency + Damp-heat (a mixed dry-and-damp picture): a RED body with CRACKS (yin depletion) yet a GREASY YELLOW patch (damp-heat) at the same time. Handle gently — clear damp-heat without strong drying, and nourish yin without heavy/greasy tonics. A case where the tongue looks contradictory."
+ },
+ {
+  "id": "combo:qi_and_blood_deficiency",
+  "source": "Maciocia; Sacred Lotus",
+  "text": "Qi and Blood deficiency together (Qi generates Blood, so they often co-occur): tiredness and breathlessness PLUS dizziness, pallor, palpitations, poor sleep. Tongue: PALE, THIN, sometimes tooth-marked. Build both with warm, nourishing, easy-to-digest food and real rest."
+ },
+ {
+  "id": "combo:spleen_kidney_yang_deficiency",
+  "source": "Maciocia; Sacred Lotus",
+  "text": "Spleen + Kidney Yang deficiency (deep cold): cold limbs, cold/sore lower back and knees, early-morning loose stool, puffiness, low drive. Tongue: PALE, SWOLLEN, WET. The coldest/most-deficient end of the spectrum — warm and tonify strongly, keep the core warm."
+ },
+ {
+  "id": "disambig:excess_vs_deficient_heat",
+  "source": "Sacred Lotus; Maciocia",
+  "text": "Excess heat vs Deficient (empty) heat, both red-tongued: EXCESS heat = a full, bright RED body with a THICK (often yellow) coat and strong signs (thirst, constipation, restlessness); DEFICIENT heat = a red body with LITTLE or PEELED coat and CRACKS (yin-deficiency), milder, worse at night. Coat thickness is the key: thick=excess, scanty=deficient."
+ },
+ {
+  "id": "disambig:damp_cold_vs_damp_heat",
+  "source": "Sacred Lotus; Maciocia",
+  "text": "Damp-cold vs Damp-heat, both greasy-coated and heavy: DAMP-COLD = a WHITE greasy coat, pale/normal body, feeling cold, heavy and sluggish; DAMP-HEAT = a YELLOW greasy coat, red body, bitter/sticky mouth, warmth and irritability. Coating colour (white vs yellow) divides them."
+ },
+ {
+  "id": "disambig:exterior_vs_interior",
+  "source": "Sacred Lotus; Maciocia",
+  "text": "Coating depth reads how deep/old a condition is: a THIN coat over a normal body = mild or recent ('exterior'); a THICK coat with a changed body colour = deeper or longer-standing ('interior'). A coat thickening over days suggests moving inward; thinning suggests resolving."
+ },
+ {
+  "id": "food:warming_for_yang_cold",
+  "source": "CCMQ (Wang Qi); Chinese food therapy",
+  "text": "Food therapy for a COLD / Yang-deficiency tendency (pale, swollen, wet tongue; cold limbs): favour WARMING foods — ginger, cinnamon, cloves, lamb, beef, walnut, well-cooked over raw; limit iced drinks, raw salads and excess cold-natured fruit. Keep the belly and feet warm."
+ },
+ {
+  "id": "food:cooling_for_heat_damp",
+  "source": "CCMQ (Wang Qi); Chinese food therapy",
+  "text": "Food therapy for a HEAT / Damp-heat tendency (red body, greasy yellow coat; oily skin, bitter mouth): favour COOLING, draining foods — mung/green bean, cucumber, celery, barley, watermelon, bitter greens; limit alcohol, fried/greasy food, spicy heat and late nights."
+ },
+ {
+  "id": "food:qi_tonics",
+  "source": "CCMQ (Wang Qi); Chinese food therapy",
+  "text": "Food therapy for a QI-deficiency tendency (pale, tooth-marked tongue; tiredness): qi-tonic foods — rice and congee, sweet potato, pumpkin, dates, mushrooms, chicken — eaten warm and well-cooked, on a regular schedule, without overeating or crash-dieting."
+ },
+ {
+  "id": "food:blood_nourishing",
+  "source": "CCMQ (Wang Qi); Chinese food therapy",
+  "text": "Food therapy for a BLOOD-deficiency tendency (pale, thin tongue; dizziness, palpitations): blood-nourishing foods — dark leafy greens, beetroot, black sesame, goji berries, dates, eggs, (liver) — with enough sleep, since Blood is restored by rest."
+ },
+ {
+  "id": "food:damp_draining",
+  "source": "CCMQ (Wang Qi); Chinese food therapy",
+  "text": "Food therapy for a phlegm-DAMPNESS tendency (swollen, greasy-coated tongue; heaviness): damp-draining foods — barley, adzuki/red bean, millet, radish, mushrooms; limit dairy, sweets, greasy and cold-raw food; move daily to help fluids circulate."
+ },
+ {
+  "id": "food:qi_moving",
+  "source": "CCMQ (Wang Qi); Chinese food therapy",
+  "text": "Food therapy for a QI-STAGNATION tendency (stress, bloating, near-normal tongue): qi-moving foods — citrus peel, radish, hawthorn, mint, kumquat, jasmine tea; alongside movement, fresh air and stress relief, since stuck qi eases with flow."
+ },
+ {
+  "id": "modern:sleep_stress_tongue",
+  "source": "clinical literature (association)",
+  "text": "Modern association (not causation): poor sleep and high stress are described alongside a redder tongue TIP and a thicker/greasier coating. In this tradition tip-heat links to the Heart (stress, sleep) and coating to digestion. An association to explore, not a diagnosis."
+ },
+ {
+  "id": "sign:yin_def_scanty_coat_over_red",
+  "source": "Comparative tongue indices in Yin deficiency, cross-sectional (PMC5449755)",
+  "lang": "en",
+  "text": "A controlled study measured tongues in people with a self-reported Yin-deficiency pattern versus controls. The Yin-deficient tongues carried noticeably LESS coating (~35% coverage vs ~44%, p=0.004) and looked redder overall (p=0.010) — but the tongue BODY colour itself was not actually redder (p=0.73). The extra redness came mostly from the thinner coat exposing more of the body. Takeaway for 'red + scanty coat -> Yin deficiency': the SCANTY or PEELED COATING is the more objective sign; a body that only looks redder because the coat is thin is weaker evidence than a body that is intrinsically red."
+ },
+ {
+  "id": "limit:photo_reliability_by_feature",
+  "source": "Smartphone tongue-coating reliability, Quasi-Delphi study (JMIR, PMC7380897)",
+  "lang": "en",
+  "text": "How reliably can a tongue PHOTO be read? In a smartphone reliability study, coating THICKNESS and texture were read most consistently between raters ('thick' and 'greasy/slimy' reached ~83-86% agreement); coating COLOUR was moderate; while tongue BODY COLOUR and MOISTURE were the least reliable — a wet/'slippery' surface barely repeated across two photos (kappa ~0.10) and body colour was weak (kappa ~0.22). Takeaway: trust coating thickness and greasiness most; treat body-colour and wet/dry as softer signals worth confirming. This is why the tool tags those particular reads as less certain."
+ },
+ {
+  "id": "limit:tongue_is_one_of_four_exams",
+  "source": "Parameterizing & standardizing TCM diagnosis, narrative review (PMC7914658)",
+  "lang": "en",
+  "text": "A standardization review underscores that tongue reading is only ONE of the four traditional examinations (looking, listening/smelling, asking, and pulse), and that a single sign lacks diagnostic validity on its own — patterns emerge from combining signs, and practitioner-to-practitioner variability is real. Takeaway: present tongue findings as a tendency to explore alongside how a person actually feels, never a standalone diagnosis, and use follow-up questions to firm up the deficiency patterns the tongue alone cannot settle."
+ }
 ]
