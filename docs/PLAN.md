@@ -9,7 +9,8 @@ detected features → a grounded TCM "constitution leaning," framed as *"traditi
 
 **Positioning (2026-07-16):** we are building this as a **free community tool** — anyone can use it to
 help make sense of their own tongue. We have (or are receiving) permission to ground it on internet
-resources; the running list of usable sources + licenses is in **[INTERNET_RESOURCES.md](INTERNET_RESOURCES.md)**.
+resources; the running list of usable sources + licenses is in **[CORPUS.md](CORPUS.md)** (+ machine-readable
+`stage2_interpretation/knowledge_base/sources.json`).
 **Two goals in tension, both held:** (1) a genuinely-grounded, insightful reading; (2) **cheap mobile
 deployment** — the shipped setup must stay light (thin client + cheap CPU box). Every enhancement below
 is filtered through that second lens (§7).
@@ -225,18 +226,17 @@ All moves were `git mv` (history preserved); nothing was destroyed.
 `ACCURACY_INVESTIGATION`, `LABEL_QUALITY_DIAGNOSIS`, `CONSTITUTION_BENCHMARK`, `COATING_SPLIT`,
 `COLOR_CALIBRATION`, `FEATURE_FEEDBACK_2026-07-13`, `PHASE4_TCM_TONGUE`, `BENCHMARK_DESIGN`, `TCM_RESEARCH`,
 `RAG_LLM_INTERPRETATION`.
-**Living docs (kept):** `PLAN.md` (this), `PROGRESS.md`, `HANDOFF.md`, `ARCHITECTURE.md`, `DEPLOYMENT.md`,
-`LABELING_GUIDE.md`, `LABEL_STORE.md`, `BENCHMARK.md`, `FEATURE_MAPPING_REFERENCE.md`,
-`FEATURE_PATTERN_MAPPING.md`, `RESOURCES.md`.
-**Archived one-off eval scripts → `evaluation/archive/`:** `diagnose_confusion`, `diagnose_label_agreement`,
-`calibrate_logit_adjust`, `eval_memory_sam`, `find_professional_labels`, `benchmark_multimodal`,
-`eval_human_labels`, `eval_fair`, `eval_vs_expert`, `eval_color_calib`, `eval_zoning`.
 **Living harnesses (kept):** `eval_model`, `eval_mapping`, `eval_rag`, `eval_seg`, `eval_stage1`,
-`eval_coat_axes`, `eval_extra_features`, `benchmark`, `benchmark_syndrome`, `build_gallery`,
-`build_label_tool`, `select_eval_set`.
+`eval_coat_axes`, `eval_extra_features`, `eval_extra_vs_practitioner`, `benchmark`, `benchmark_syndrome`,
+`build_gallery`, `build_label_tool`, `select_eval_set`.
 
-**Left in place (your call):** `design.zip` (15 KB, harmless — the unzipped `design/` is untracked too).
-**Still TODO:** `docs/ARCHITECTURE.md` needs a refresh (still describes the dropped SAM/MMIR-TCM plan).
+**Second prune (2026-07-21):** deleted the whole `docs/archive/` plus the now-stale/redundant living docs
+`ARCHITECTURE.md` (described the dropped SAM/MMIR plan — §2 here is current), `HANDOFF.md` (redundant with
+this + PROGRESS), `INTERNET_RESOURCES.md` (→ CORPUS.md + `sources.json`), `FEATURE_MAPPING_REFERENCE.md`
+(→ `FEATURE_PATTERN_MAPPING.md` + `tcm_knowledge.json`), `KB_RECALIBRATION.md` (settled negative result).
+All recoverable from `git log`. **Living docs now:** `PLAN.md`, `PROGRESS.md`, `CEO_MARKET_REGULATORY_QA.md`,
+`CORPUS.md`, `VALIDATION_WORKLIST.md`, `DEPLOYMENT.md`, `LABELING_GUIDE.md`, `LABEL_STORE.md`, `BENCHMARK.md`,
+`FEATURE_PATTERN_MAPPING.md`, `RESOURCES.md` + `docs/design/`.
 
 ---
 

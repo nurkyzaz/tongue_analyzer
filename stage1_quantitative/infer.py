@@ -88,10 +88,10 @@ class Stage1Pipeline:
     # human-40 set: flags 13/38, matching visual inspection (red-tip tongues t05/t12/t29/t35…).
     RED_TIP_THRESH = 2.0
     # side_redness_delta (a* of the lateral middle-third edges minus whole) above this => red SIDES
-    # (Liver/GB zone). Set slightly stricter than the tip: it's a geometry heuristic NOT yet validated on
-    # a labelled set (like the "dry" gap in zoning.py) — kept conservative so it only fires on clearly
-    # redder edges, and it feeds only a small, tentative vote. TODO: calibrate on human labels.
-    RED_SIDE_THRESH = 2.5
+    # (Liver/GB zone). Calibrated on 21 human-40 labels (2026-07-21): none mean -0.60 vs mild mean +1.24;
+    # a sweep put best F1 at 1.5 (precision 1.00, recall 0.43 — no false positives at this cut). Small n,
+    # so it stays a tentative vote; revisit with more labels.
+    RED_SIDE_THRESH = 1.5
 
     def _zoned(self, img, mask):
         from zoning import analyze

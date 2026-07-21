@@ -16,8 +16,8 @@ photo ─► [Stage 1: feature detection]  ─► structured JSON ─► [Stage 
 ## Status (2026-07-16)
 
 **Working end-to-end**, honestly measured. Stage 1 is **frozen**; the active work is the **Stage 2
-knowledge-graph + RAG overhaul**. **New agents / contributors: read [docs/PLAN.md](docs/PLAN.md) (the
-single source of truth), then [docs/HANDOFF.md](docs/HANDOFF.md).**
+knowledge-graph + RAG overhaul**. **New agents / contributors: read [docs/PLAN.md](docs/PLAN.md) — the
+single source of truth — then [docs/PROGRESS.md](docs/PROGRESS.md) for the live log.**
 
 | Component | State |
 |---|---|
@@ -33,12 +33,14 @@ single source of truth), then [docs/HANDOFF.md](docs/HANDOFF.md).**
 ## Docs (read these)
 
 - **[docs/PLAN.md](docs/PLAN.md)** — the master plan / single source of truth for remaining work. **Start here.**
-- **[docs/HANDOFF.md](docs/HANDOFF.md)** — self-contained project state, where it runs, next steps.
-- **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** — how the pieces fit together today.
+- **[docs/PROGRESS.md](docs/PROGRESS.md)** — the live implementation log (most recent work first).
 - **[stage2_interpretation/kg/README.md](stage2_interpretation/kg/README.md)** — the knowledge-graph layers, model, and build.
 - **[docs/RESOURCES.md](docs/RESOURCES.md)** — audit of every external dataset/model, with licensing flags.
-- **[docs/PROGRESS.md](docs/PROGRESS.md)** · living mapping refs `FEATURE_PATTERN_MAPPING.md`, `LABEL_STORE.md`, `BENCHMARK.md`.
-- Historical investigations (accuracy/RAG/coating/color/original plans) are archived under **[docs/archive/](docs/archive/)**.
+- **[docs/CORPUS.md](docs/CORPUS.md)** — RAG corpus + source registry (licenses/permissions).
+- **[docs/VALIDATION_WORKLIST.md](docs/VALIDATION_WORKLIST.md)** — detector validation results + what still needs labels.
+- Mapping/label/metric refs: `FEATURE_PATTERN_MAPPING.md`, `LABEL_STORE.md`, `LABELING_GUIDE.md`, `BENCHMARK.md`.
+- Product/UX: **[docs/design/00_INDEX.md](docs/design/00_INDEX.md)** and `design/`. Decision memo: `CEO_MARKET_REGULATORY_QA.md`.
+- Deep history lives in `git log` (superseded planning/investigation notes were pruned 2026-07-21).
 
 ## Repository layout
 
@@ -50,7 +52,7 @@ single source of truth), then [docs/HANDOFF.md](docs/HANDOFF.md).**
 | `evaluation/` | Living eval harnesses (one-offs under `evaluation/archive/`) |
 | `deployment/api/` | FastAPI service + single-page web demo |
 | `design/` | Claude Design handoff bundle — the Savor 舌 tab app comps |
-| `docs/` | Documentation (`PLAN.md` = SoT; superseded notes under `docs/archive/`) |
+| `docs/` | Documentation (`PLAN.md` = SoT; superseded notes pruned — see `git log`) |
 
 ## Compute
 

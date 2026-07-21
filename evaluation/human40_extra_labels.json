@@ -1,143 +1,171 @@
 {
  "t00": {
-  "red_tip": "none",
+  "red_tip": "mild",
   "red_dots": "none",
   "surface_pattern": "present",
-  "coating_obscures_body": "no",
-  "tip_shape_ambiguous": "no"
+  "coating_obscures_body": "yes",
+  "tip_shape_ambiguous": "no",
+  "red_sides": "none"
  },
  "t01": {
   "tip_shape_ambiguous": "no",
   "coating_obscures_body": "yes",
   "surface_pattern": "none",
   "red_dots": "none",
-  "red_tip": "none"
+  "red_tip": "none",
+  "red_sides": "none"
  },
  "t02": {
   "red_tip": "none",
   "red_dots": "none",
   "surface_pattern": "present",
   "coating_obscures_body": "no",
-  "tip_shape_ambiguous": "yes"
+  "tip_shape_ambiguous": "yes",
+  "red_sides": "none"
  },
  "t03": {
   "red_tip": "mild",
-  "red_dots": "none",
+  "red_dots": "few",
   "surface_pattern": "none",
   "coating_obscures_body": "yes",
-  "tip_shape_ambiguous": "no"
+  "tip_shape_ambiguous": "no",
+  "red_sides": "none"
  },
  "t04": {
   "tip_shape_ambiguous": "yes",
   "coating_obscures_body": "no",
   "surface_pattern": "none",
-  "red_dots": "none",
-  "red_tip": "mild"
+  "red_dots": "few",
+  "red_tip": "none",
+  "red_sides": "none"
  },
  "t05": {
   "tip_shape_ambiguous": "yes",
   "coating_obscures_body": "no",
   "surface_pattern": "present",
-  "red_dots": "none",
-  "red_tip": "none"
+  "red_dots": "few",
+  "red_tip": "mild",
+  "red_sides": "none"
  },
  "t06": {
   "red_tip": "none",
-  "red_dots": "none",
+  "red_dots": "few",
   "surface_pattern": "none",
   "coating_obscures_body": "no",
-  "tip_shape_ambiguous": "no"
+  "tip_shape_ambiguous": "no",
+  "red_sides": "mild"
  },
  "t07": {
   "tip_shape_ambiguous": "yes",
   "coating_obscures_body": "yes",
   "surface_pattern": "none",
   "red_dots": "few",
-  "red_tip": "mild"
+  "red_tip": "none",
+  "red_sides": "none"
  },
  "t08": {
   "coating_obscures_body": "yes",
   "tip_shape_ambiguous": "yes",
-  "surface_pattern": "none",
+  "surface_pattern": "present",
   "red_dots": "none",
-  "red_tip": "none"
+  "red_tip": "none",
+  "red_sides": "mild"
  },
  "t09": {
   "red_tip": "mild",
   "red_dots": "few",
   "surface_pattern": "none",
   "coating_obscures_body": "no",
-  "tip_shape_ambiguous": "yes"
+  "tip_shape_ambiguous": "yes",
+  "red_sides": "mild"
  },
  "t10": {
   "tip_shape_ambiguous": "no",
   "coating_obscures_body": "yes",
   "surface_pattern": "none",
-  "red_dots": "many",
-  "red_tip": "mild"
+  "red_dots": "few",
+  "red_tip": "mild",
+  "red_sides": "mild"
  },
  "t11": {
   "tip_shape_ambiguous": "no",
   "coating_obscures_body": "yes",
-  "surface_pattern": "none",
+  "surface_pattern": "present",
   "red_dots": "none",
-  "red_tip": "strong"
+  "red_tip": "mild",
+  "red_sides": "none"
  },
  "t12": {
   "red_tip": "mild",
   "coating_obscures_body": "yes",
   "tip_shape_ambiguous": "no",
   "surface_pattern": "none",
-  "red_dots": "few"
+  "red_dots": "few",
+  "red_sides": "none"
  },
  "t13": {
   "red_tip": "strong",
   "red_dots": "few",
   "surface_pattern": "none",
   "coating_obscures_body": "no",
-  "tip_shape_ambiguous": "no"
+  "tip_shape_ambiguous": "no",
+  "red_sides": "mild"
  },
  "t14": {
   "red_tip": "strong",
   "tip_shape_ambiguous": "no",
   "red_dots": "few",
   "surface_pattern": "none",
-  "coating_obscures_body": "yes"
+  "coating_obscures_body": "yes",
+  "red_sides": "mild"
+ },
+ "t15": {
+  "tip_shape_ambiguous": "no",
+  "coating_obscures_body": "no",
+  "surface_pattern": "present",
+  "red_dots": "none",
+  "red_sides": "none",
+  "red_tip": "mild"
  },
  "t16": {
   "coating_obscures_body": "yes",
   "tip_shape_ambiguous": "yes",
   "surface_pattern": "none",
   "red_dots": "none",
-  "red_tip": "mild"
+  "red_tip": "mild",
+  "red_sides": "none"
  },
  "t17": {
   "red_tip": "strong",
   "red_dots": "few",
   "surface_pattern": "none",
   "coating_obscures_body": "no",
-  "tip_shape_ambiguous": "no"
+  "tip_shape_ambiguous": "no",
+  "red_sides": "mild"
  },
  "t18": {
   "tip_shape_ambiguous": "yes",
   "coating_obscures_body": "no",
   "surface_pattern": "none",
-  "red_dots": "few",
-  "red_tip": "mild"
+  "red_dots": "none",
+  "red_tip": "none",
+  "red_sides": "none"
  },
  "t19": {
   "surface_pattern": "present",
   "red_dots": "none",
   "red_tip": "mild",
   "coating_obscures_body": "no",
-  "tip_shape_ambiguous": "no"
+  "tip_shape_ambiguous": "no",
+  "red_sides": "none"
  },
  "t20": {
   "tip_shape_ambiguous": "yes",
   "coating_obscures_body": "no",
   "surface_pattern": "present",
   "red_dots": "none",
-  "red_tip": "mild"
+  "red_tip": "none",
+  "red_sides": "none"
  },
  "t21": {
   "red_tip": "mild",

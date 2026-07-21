@@ -48,7 +48,7 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
   `evaluation/eval_mapping.py`)
 - ✅ **Grounded RAG+LLM narrative** — rule backbone + a TRUE vector RAG (faiss + nomic-embed via Ollama +
   TF-IDF hybrid) over a 102-chunk cited corpus (`knowledge_cards.json`); retrieval hit@4 96%
-  (`evaluation/eval_rag.py`). See `docs/archive/RAG_LLM_INTERPRETATION.md`.
+  (`evaluation/eval_rag.py`). (Details in `git log`.)
 - ✅ **WS-A macro-micro knowledge graph** (`stage2_interpretation/kg/`, the Stage-2 overhaul — PLAN.md §3):
   seed layer from `tcm_knowledge.json` with `--verify` **superset parity**; macro layer = 3-book section
   hierarchies (`parse_book.py`, `--mode decimal` for Gerlach + `--mode title` for the narrative books);
@@ -103,7 +103,8 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
   discriminativeness): a conservative blend (λ=0.35) *ties* v1 on TCMEval-SDT (69.7%, no mapping
   regression), and trusting books more *crashes* it (λ=1.0 → 49.5%, mapping 15/17). Production stays v1;
   the books' value is the cited edges (grounding, used by the ensemble), not scalar weights. Full writeup
-  `docs/KB_RECALIBRATION.md`. (Note: human40 can't score KB changes — feature labels only; 61% is vision.)
+  (recalibration campaign — see `git log`; v1 hand-tuned weights kept). (Note: human40 can't score KB
+  changes — feature labels only; 61% is vision.)
 
 ## Phase 4 — Integration
 - ✅ `pipeline.py` orchestrator (image[+metadata] → quantitative JSON + report) — **end-to-end works**
@@ -125,6 +126,16 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
 - ⬜ Deployment: containerize FastAPI (CPU-fast, 0.34s/img) → thin client / PWA; on-device is v2
 
 ---
+
+## 2026-07-21 (7) — removed unpredictable features, calibrated red_sides, doc prune
+- ✅ **red_sides calibrated** on 21 human-40 labels: signal separates classes (none −0.60 / mild +1.24),
+  best F1 at 1.5 → **`RED_SIDE_THRESH` 2.5→1.5**. Merged the labels into `human40_extra_labels.json`.
+- ✅ **Removed `black_coating` entirely** (`_REMOVED_EXTRA` in interpret.py — not surfaced, not voted, not in
+  present_features) since it can't be detected (AP 0.05). **Set `EXTRA_RELIABILITY` = measured AP** so every
+  extra votes in proportion to how well we detect it (red_dots .68 … purple .17). Mapping eval 34/34.
+- ✅ **Doc prune:** deleted `docs/archive/` + `ARCHITECTURE.md`, `HANDOFF.md`, `INTERNET_RESOURCES.md`,
+  `FEATURE_MAPPING_REFERENCE.md`, `KB_RECALIBRATION.md` (stale/redundant; recoverable from git). Fixed all
+  cross-references. Living docs are now the 11 in `docs/` + `docs/design/`.
 
 ## 2026-07-21 (6) — validated extra features vs practitioner labels → fixed rules
 - ✅ **`evaluation/eval_extra_vs_practitioner.py`** — new eval of the extra-features model vs the
@@ -189,7 +200,7 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
 - ✅ **Terminology finding:** `blood_deficiency`/`spleen_qi_deficiency` are TCM *syndromes* (证), not CCMQ
   *constitutions* — output should read "pattern leaning"; Savor mapping uses the existing `FEATURE_PATTERN_MAPPING.md` §1 crosswalk (→ 气虚质).
 
-## Current state (2026-07-16) — see `docs/PLAN.md` (SoT) + `docs/HANDOFF.md`
+## Current state (2026-07-16) — see `docs/PLAN.md` (SoT)
 **Stage 1 FROZEN:** seg_combined + **multitask_v5** (v6/v7/v8 all lost to v5 on the honest human metric) +
 extra_features + `zoning.py` geometry. Honest accuracy ~61% exact / **97% within-one-grade** vs human. Not
 chasing further (label ceiling).

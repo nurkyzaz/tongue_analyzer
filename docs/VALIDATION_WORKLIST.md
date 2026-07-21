@@ -26,20 +26,32 @@ Ran `evaluation/eval_extra_vs_practitioner.py` (extra-features model vs TCM-Tong
 macro-mAP 0.45 (consistent with the long-documented ~0.46). **`peeled_coating` skipped** — only 1 positive in test.
 
 **Action taken (this is the point of validating):**
-- **Disabled both grey-black rules** (`black_moist_extreme_cold`, `black_dry_extreme_heat`) via a new
-  `"enabled": false` flag — the detector's "present" is ~always a false positive, so the rules only added
-  noise. Kept in the KB with a `disabled_note`; TCM mapping is correct, re-enable when detection works.
-- **Halved the `slippery_coat_cold_damp` deltas** (weak detector; co-occurrence gate limits the harm).
-- Removed the two grey-black cases from the mapping eval (they tested now-disabled rules) → **34/34**.
-- Left `swollen`-based rules as-is: precision is low alone, but every rule using it also requires a
-  co-occurring sign (pale+wet, or yellow), which filters the false positives.
+- **Removed `black_coating` entirely** — `_REMOVED_EXTRA` in `interpret.py` skips it in `extra_readings`
+  **and** `present_features`, so it neither surfaces nor votes nor feeds any rule. Its two grey-black rules
+  are also `"enabled": false` (kept in the KB with a `disabled_note`). Re-add if the detector is fixed.
+- **Set each extra's vote weight to its MEASURED AP** (`EXTRA_RELIABILITY` now = red_dots 0.68, red_tongue
+  0.61, thin 0.58, slippery 0.33, swollen 0.19, purple 0.17) — a feature votes in proportion to how well we
+  detect it. Combination rules key on binary presence, so gated context rules are unchanged.
+- **Halved `slippery_coat_cold_damp` deltas**; removed the two grey-black mapping cases → **34/34**.
+- Kept `swollen`/`purple` (weak but load-bearing: swollen gates yang/damp rules, purple is the main
+  blood-stasis sign) — now barely voting (weight 0.19/0.17) but still available as rule context.
 
-Net: the two rules that rested on a **non-functional detector are off**; the ones on **usable detectors
-(red_dots, red_tongue, thin, tooth_mk, fissure, tai, zhi)** stand.
+Net: the **non-functional detector (black_coating) is gone**; the weak ones **vote in proportion to their
+AP**; the usable ones (red_dots, red_tongue, thin, tooth_mk, fissure, tai, zhi) stand.
 
 ---
 
-## 🅰 `red_sides` (Liver/GB zone) — **needs your labels** ⭐ the only real labeling task
+## ✅ Results — `red_sides` (Liver/GB zone), 21 human-40 labels (2026-07-21)
+
+You labelled the first 21 tongues (7 red_sides positives, all "mild"). The zoning signal **separates the
+classes cleanly**: `side_redness_delta` mean **−0.60 (none)** vs **+1.24 (mild)**. Threshold sweep → best F1
+at **1.5** (precision 1.00, recall 0.43 — no false positives at that cut). **Set `RED_SIDE_THRESH = 1.5`**
+(was 2.5). So red_sides is a *validated* (if weak-n) signal — unlike black_coating it earns its place.
+More labels would raise recall confidence; the field stays in the tool for the other 19 tongues whenever.
+
+---
+
+## 🅰 `red_sides` (Liver/GB zone) — how it was validated (for reference)
 
 Why: it's a brand-new geometry signal (`side_redness_delta` → `red_sides` → qi-stagnation) and there is **no
 existing label for "are the side edges red"** anywhere (the practitioner "zone" labels are shape, not colour).

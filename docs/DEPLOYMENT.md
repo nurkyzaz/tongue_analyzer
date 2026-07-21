@@ -58,7 +58,7 @@ The demo currently writes the narrative with **Ollama gemma3:4B**. On a *cheap C
 - **B · Add the LLM narrative as a fast-follow, off-box.** Either (i) call **casper's GPU** as a
   narrative microservice, or (ii) a **hosted small-LLM API** (pennies/call). The rule engine stays the
   auditable backbone; the LLM only re-expresses grounded facts. **Gate on a hallucination-rate check**
-  before defaulting it on (HANDOFF prerequisite). Note (ii) sends features/image off our box → revisit
+  before defaulting it on (WS-D gate prerequisite). Note (ii) sends features/image off our box → revisit
   privacy copy + consent.
 
 **Recommendation:** ship A now, do B as a measured fast-follow. This matches our discipline: don't

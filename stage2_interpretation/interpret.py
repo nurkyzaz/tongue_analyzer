@@ -399,9 +399,18 @@ def feature_readings(chars, kb, stats):
     return readings
 
 
-# How much each extra feature is allowed to influence the PATTERN (from its val-AP; noisy ones barely).
-EXTRA_RELIABILITY = {"peeled_coating": 0.7, "red_dots": 0.6, "thin": 0.55, "red_tongue": 0.55,
-                     "black_coating": 0.35, "purple_body": 0.3, "swollen": 0.3, "slippery_coating": 0.2}
+# Extras we DROP entirely — the detector can't predict them, so surfacing/voting on them only misleads.
+# black_coating: AP 0.05 / F1 0.00 on the 553-img practitioner test split (0 TP, 11 FP) — see
+# docs/VALIDATION_WORKLIST.md. Skipped in extra_readings + present_features (its combination rules were
+# already disabled). Re-add if the detector is ever fixed.
+_REMOVED_EXTRA = {"black_coating"}
+
+# How much each extra feature may influence the PATTERN vote — set to its MEASURED average-precision on
+# the practitioner test split (2026-07-21), so a feature votes in proportion to how well we detect it.
+# Combination rules key on binary presence, not this weight, so gated context rules are unaffected.
+EXTRA_RELIABILITY = {"red_dots": 0.68, "red_tongue": 0.61, "thin": 0.58, "peeled_coating": 0.55,
+                     "slippery_coating": 0.33, "swollen": 0.19, "purple_body": 0.17}
+# peeled_coating had too few positives in test to measure (kept at a cautious mid weight).
 
 
 def extra_readings(extra_chars, kb, stats):
@@ -410,6 +419,8 @@ def extra_readings(extra_chars, kb, stats):
     by that distinctiveness."""
     out, specs = [], kb.get("extra_features", {})
     for feat, c in (extra_chars or {}).items():
+        if feat in _REMOVED_EXTRA:              # detector can't predict it — don't surface or vote
+            continue
         sev = float(c.get("severity", 0.0))
         rel = _rel(sev, feat, stats)
         if rel < MENTION_REL:                   # only surface distinctively-present extras
@@ -461,7 +472,7 @@ def present_features(stage1_output):
     for ch, c in (stage1_output.get("key_characteristics") or {}).items():
         p[ch] = c.get("value")                       # incl. coat_thickness / coat_texture in the real pipeline
     for feat, c in (stage1_output.get("extra_characteristics") or {}).items():
-        if c.get("value") == "present":
+        if c.get("value") == "present" and feat not in _REMOVED_EXTRA:
             p[feat] = "present"
     z = stage1_output.get("zoned_analysis") or {}
     if (z.get("red_tip") or {}).get("value") == "present":
