@@ -1,0 +1,39 @@
+{
+ "_meta": {
+  "purpose": "Registry of every source the RAG corpus / KG draws on, with its license + usage status. build_corpus.py resolves each chunk's `source` string against `aliases` here to stamp a `license` and `usage`, so we always know what may be surfaced to end users vs. what is internal-only. Add a source here BEFORE adding cards that cite it.",
+  "usage_values": {
+   "owned": "we hold a copy with usage rights (internal grounding; short attributed snippets only if the grant allows)",
+   "open-access": "CC-BY / CC-BY-SA — free to reuse WITH attribution; no permission needed",
+   "open-access-nc": "CC-BY-NC — reuse WITH attribution, NON-COMMERCIAL only (flag before a paid ship)",
+   "standard": "published standard (ISO/GB/WHO) — terminology & codes are usable; full text is purchasable, not reproduced",
+   "authored-summary": "our OWN wording summarising public knowledge — no copyrighted text reproduced",
+   "public-web-reference": "freely-readable web reference we paraphrase (not reproduced verbatim)",
+   "permission-pending": "candidate source; DO NOT add cards until a grant is confirmed"
+  }
+ },
+ "sources": {
+  "authored": {"name": "TongueInsight authored summary", "kind": "authored", "license": "own", "usage": "authored-summary", "lang": "en", "aliases": ["authored", "our own", "TongueInsight"]},
+
+  "maciocia": {"name": "Maciocia G. — Tongue Diagnosis in Chinese Medicine; Foundations of Chinese Medicine", "kind": "textbook", "license": "copyrighted", "usage": "owned", "lang": "en", "aliases": ["Maciocia", "Mac"]},
+  "gerlach": {"name": "Gerlach O. — TCM Tongue Diagnosis Explained (World Scientific, 2025)", "kind": "textbook", "license": "copyrighted", "usage": "owned", "lang": "en", "aliases": ["Gerlach", "World Scientific", "World Century"]},
+  "oriental": {"name": "Oriental Tongue Diagnosis (ed. Dubounet)", "kind": "textbook", "license": "copyrighted", "usage": "owned", "lang": "en", "aliases": ["Oriental Tongue Diagnosis", "Dubounet"]},
+  "kirschbaum": {"name": "Kirschbaum B. — Atlas of Chinese Tongue Diagnosis", "kind": "textbook", "license": "copyrighted", "usage": "owned", "lang": "en", "aliases": ["Kirschbaum", "Atlas of Chinese Tongue"]},
+  "who_ist": {"name": "WHO International Standard Terminologies on TCM (2022)", "kind": "standard", "license": "CC-BY-NC-SA-3.0-IGO", "usage": "standard", "lang": "bilingual", "aliases": ["WHO IST", "WHO International Standard", "WHO ICD-11", "ICD-11"]},
+  "ccmq": {"name": "Wang Qi — Constitution in Chinese Medicine Questionnaire (CCMQ), 9-constitution model", "kind": "questionnaire", "license": "published-instrument", "usage": "owned", "lang": "bilingual", "aliases": ["CCMQ", "Wang Qi"]},
+  "sacred_lotus": {"name": "Sacred Lotus — Chinese Medicine (educational web reference)", "kind": "web", "license": "web", "usage": "public-web-reference", "lang": "en", "aliases": ["Sacred Lotus", "SL"]},
+  "clinical_lit": {"name": "Peer-reviewed clinical associations (authored summary of published findings)", "kind": "authored", "license": "own", "usage": "authored-summary", "lang": "en", "aliases": ["clinical literature", "clinical association", "CONSTITUTION_BENCHMARK"]},
+  "delphi_smartphone": {"name": "Intra/Inter-rater reliability of tongue-coating diagnosis via smartphones — Quasi-Delphi (JMIR, PMC7380897)", "kind": "paper", "license": "CC-BY", "usage": "open-access", "lang": "en", "aliases": ["Delphi", "PMC8983216", "PMC7380897"]},
+  "symmap": {"name": "SymMap — TCM symptom/pattern mapping database (Nucleic Acids Research)", "kind": "database", "license": "academic", "usage": "owned", "lang": "bilingual", "aliases": ["SymMap", "Nucleic Acids Research"]},
+  "food_therapy": {"name": "Chinese dietary-therapy references (authored summary)", "kind": "authored", "license": "own", "usage": "authored-summary", "lang": "en", "aliases": ["Chinese food therapy", "food therapy"]},
+  "thomson": {"name": "Thomson Medical — TCM constitution patient education", "kind": "web", "license": "web", "usage": "public-web-reference", "lang": "en", "aliases": ["Thomson Medical"]},
+  "microbiome": {"name": "Tongue-coating microbiome studies (Scientific Reports / PMC8932003)", "kind": "paper", "license": "CC-BY", "usage": "open-access", "lang": "en", "aliases": ["microbiome", "PMC8932003", "Bacillus"]},
+
+  "iso_23961_1": {"name": "ISO 23961-1:2021 — TCM Vocabulary for Diagnostics, Part 1: Tongue", "kind": "standard", "license": "ISO (proprietary)", "usage": "permission-pending", "lang": "bilingual", "url": "https://www.iso.org/standard/77468.html", "note": "THE tongue-specific terminology standard — the ideal spine (better than the general WHO IST for tongue). Purchase to use the vocabulary/codes.", "aliases": ["ISO 23961", "ISO 23961-1"]},
+  "zhu_wenfeng": {"name": "朱文锋 《中医诊断学》 (Zhu Wenfeng, Diagnostics of TCM — national planning textbook)", "kind": "textbook", "license": "copyrighted", "usage": "permission-pending", "lang": "zh", "note": "Authoritative CN textbook; the 舌诊 (tongue) chapter is dense with feature→pattern rules not in the EN sources.", "aliases": ["Zhu Wenfeng", "朱文锋", "中医诊断学"]},
+  "li_candong": {"name": "李灿东 《中医诊断学》 / 舌诊 (Li Candong, TCM Diagnostics / Tongue Diagnosis)", "kind": "textbook", "license": "copyrighted", "usage": "permission-pending", "lang": "zh", "aliases": ["Li Candong", "李灿东"]},
+  "cn_tongue_atlas": {"name": "《中医舌诊研究与临床应用》 (Clinical Tongue Diagnosis atlas, Shanghai Sci-Tech Press)", "kind": "textbook", "license": "copyrighted", "usage": "permission-pending", "lang": "zh", "aliases": ["中医舌诊研究"]},
+  "yin_def_indices": {"name": "Comparative Analysis of Tongue Indices in Self-Reported Yin Deficiency — cross-sectional (PMC5449755)", "kind": "paper", "license": "CC-BY (verify)", "usage": "permission-pending", "lang": "en", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5449755/", "note": "Quantitative feature→pattern data (yin-def → red body, scant coat). Confirm CC-BY, then it's permission-free.", "aliases": ["yin deficiency indices", "PMC5449755"]},
+  "tcm_param_review": {"name": "Can TCM Diagnosis Be Parameterized and Standardized? A Narrative Review (PMC7914658, CC-BY)", "kind": "paper", "license": "CC-BY", "usage": "permission-pending", "lang": "en", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7914658/", "aliases": ["parameterized", "PMC7914658"]},
+  "tcm_tongue_dataset": {"name": "TCM-Tongue: Standardized Tongue Image Dataset w/ Pathological Annotations (arXiv 2507.18288)", "kind": "dataset", "license": "CC-BY-4.0", "usage": "open-access-nc", "lang": "bilingual", "url": "https://arxiv.org/abs/2507.18288", "note": "The dataset paper for the shezhen/TCM-Tongue set we already use; its category definitions are a citable feature vocabulary.", "aliases": ["TCM-Tongue", "arXiv 2507.18288"]}
+ }
+}

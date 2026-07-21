@@ -94,6 +94,8 @@ class Retriever:
         for i in top:
             m = self.meta[i]
             out.append({"id": m["id"], "text": m["text"], "source": m.get("source", ""),
+                        "license": m.get("license", "own"), "usage": m.get("usage", "authored-summary"),
+                        "type": m.get("type", "card"), "tags": m.get("tags", []),
                         "score": round(fused[i], 4)})
         return out
 

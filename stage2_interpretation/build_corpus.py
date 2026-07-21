@@ -1,67 +1,86 @@
 """Build the RAG knowledge corpus (JSONL of retrievable, cited chunks) from our OWN authored, grounded
-content — never copyrighted text. Sources: our tcm_knowledge.json (features/patterns/combination rules/
-zoning, themselves grounded in Maciocia/ICD-11/CCMQ/SymMap) PLUS authored disambiguation cards that
-capture the reasoning a human uses to tell similar pictures apart (the high-value RAG content).
+content — never copyrighted text. Sources: tcm_knowledge.json (features/patterns/combination rules/
+zoning) PLUS authored cards (knowledge_cards.json) that capture the reasoning a human uses to tell
+similar pictures apart (the high-value RAG content).
 
-    python stage2_interpretation/build_corpus.py   ->   knowledge_base/corpus.jsonl
+Every chunk is stamped with provenance resolved from the SOURCE REGISTRY (knowledge_base/sources.json):
+`source_keys`, `license`, and `usage` — so downstream we always know what may be surfaced to end users
+vs. what is internal-only, and adding a licensed source is a registry edit, not a code change.
 
-Expand later with more legitimately-sourced chunks (open-access papers, ICD-11 / CCMQ descriptions).
+    python stage2_interpretation/build_corpus.py            # -> knowledge_base/corpus.jsonl
+    python stage2_interpretation/build_corpus.py --stats     # counts by type / source / license / lang
+    python stage2_interpretation/build_corpus.py --validate  # lint cards + provenance, exit 1 on problems
+
+To ADD a legitimately-sourced source: register it in sources.json (with its license + usage), then add
+authored cards to knowledge_cards.json citing it. `--validate` flags any card whose source is unregistered
+or whose source is still permission-pending.
 """
-import json, os
+import argparse
+import collections
+import json
+import os
+import re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 KB = os.path.join(HERE, "knowledge_base", "tcm_knowledge.json")
 CARDS_FILE = os.path.join(HERE, "knowledge_base", "knowledge_cards.json")
+SOURCES_FILE = os.path.join(HERE, "knowledge_base", "sources.json")
 OUT = os.path.join(HERE, "knowledge_base", "corpus.jsonl")
 
-# Authored cards now live in knowledge_cards.json (growable, cited): CCMQ constitutions, ICD-11 patterns,
-# similar-pattern disambiguations, modern correlations, and nuance/limits. _LEGACY kept as fallback only.
-_LEGACY = [
-    ("damp-heat vs phlegm-damp",
-     "Both damp-heat and phlegm-dampness show a thick, greasy tongue coating. The deciding factor is HEAT: "
-     "a YELLOW coating and/or a RED tongue body means damp-HEAT (heat + damp); a WHITE coating with a "
-     "normal or pale body, especially if the tongue looks wet, means plain phlegm-dampness (cold-damp). "
-     "Colour and moisture separate them.", "Sacred Lotus; Maciocia"),
-    ("yang-deficiency vs phlegm-damp (both swollen)",
-     "A swollen/enlarged tongue occurs in both. If it is also PALE and WET/glossy with a thin white coat, "
-     "it points to Yang deficiency (the warmth to move fluids is low). If it carries a THICK GREASY coat, "
-     "it points to phlegm-dampness (fluids already congealed). Moisture-plus-pale vs thick-greasy is the "
-     "tell.", "Sacred Lotus; Maciocia"),
-    ("why a pale tongue is ambiguous",
-     "A pale tongue alone cannot be pinned to one pattern: it appears in Qi deficiency, Blood deficiency "
-     "AND Yang deficiency. Co-signs disambiguate — pale + tooth-marks leans Qi deficiency; pale + thin "
-     "body leans Blood deficiency; pale + swollen + wet leans Yang deficiency. Without pulse and symptoms "
-     "the tongue is genuinely uncertain here, so hedge and ask follow-ups.", "Sacred Lotus; CONSTITUTION_BENCHMARK"),
-    ("red tip meaning",
-     "A tongue tip that is distinctly redder than the rest reflects heat in the upper body / Heart in this "
-     "tradition, commonly linked to stress, poor sleep or restlessness. It is a localized sign and, on its "
-     "own, a mild one — it nudges toward heat (yin-deficiency or damp-heat) rather than defining a pattern.",
-     "Sacred Lotus; Maciocia"),
-    ("cracks / fissures nuance",
-     "Cracks usually indicate Yin or fluid depletion (a dry, under-nourished surface), especially when the "
-     "body is red and the coat scanty. But a single deep central crack can be constitutional or reflect "
-     "Stomach/Spleen, and some cracks are lifelong and harmless. Read cracks together with body colour and "
-     "coating, not alone.", "Sacred Lotus; Maciocia"),
-    ("greasy coating is texture, not colour",
-     "'Greasy' describes coating TEXTURE — a sticky, curd-like film that hides the tongue surface — and is "
-     "the core sign of Dampness/Phlegm. It is independent of coating COLOUR (white vs yellow) and of "
-     "THICKNESS. Surface papillae can mimic a light film, so a faint greasy read is uncertain.",
-     "Sacred Lotus; Maciocia"),
-    ("wet vs dry surface",
-     "A wet, glossy tongue suggests fluids that aren't being transformed (cold-damp / Yang-deficiency "
-     "direction) and argues AGAINST heat, which dries the surface. A genuinely dry tongue points to Yin/"
-     "fluid depletion or heat. Note: photo glare can mimic wetness, so treat moisture as a soft signal.",
-     "Sacred Lotus"),
-    ("sublingual veins (not captured here)",
-     "Distended, dark under-tongue veins are the strongest single objective sign of Blood stasis, but they "
-     "require lifting the tongue and a second photo, which this tool does not take — so a blood-stasis read "
-     "here rests only on a purple/dusky body and is correspondingly less certain.", "Delphi consensus PMC8983216"),
-    ("what the tongue cannot tell you",
-     "Tongue reading is one of four traditional examinations (looking, listening, asking, pulse). The "
-     "tongue is informative about coating/damp/heat but weak at separating the deficiency patterns, which "
-     "need pulse and symptoms. Always frame results as a tendency to explore, never a diagnosis.",
-     "Maciocia; WHO ICD-11 Ch.26"),
-]
+# most-restrictive-wins ranking, for when a chunk cites several sources (governs snippet surfacing)
+_LICENSE_RANK = {"copyrighted": 5, "ISO (proprietary)": 4, "published-instrument": 4, "academic": 3,
+                 "CC-BY-NC-SA-3.0-IGO": 3, "CC-BY-4.0": 2, "CC-BY (verify)": 2, "CC-BY": 2,
+                 "web": 1, "own": 0}
+
+
+def load_registry():
+    reg = json.load(open(SOURCES_FILE))["sources"]
+    alias_to_key = []
+    for key, s in reg.items():
+        for a in s.get("aliases", [key]):
+            alias_to_key.append((a.lower(), key))
+    alias_to_key.sort(key=lambda t: -len(t[0]))          # match longer aliases first
+    return reg, alias_to_key
+
+
+def resolve_source(source_str, reg, alias_to_key):
+    """Map a free-text `source` string to registry keys, and pick the most-restrictive license/usage."""
+    s = (source_str or "").lower()
+    keys = []
+    for alias, key in alias_to_key:
+        if alias in s and key not in keys:
+            keys.append(key)
+    if not keys:
+        keys = ["authored"] if not s.strip() else []
+    lic, usage, best = "own", "authored-summary", -1
+    for k in keys:
+        L = reg.get(k, {}).get("license", "own")
+        if _LICENSE_RANK.get(L, 1) > best:
+            best, lic, usage = _LICENSE_RANK.get(L, 1), L, reg.get(k, {}).get("usage", "authored-summary")
+    return keys, lic, usage
+
+
+def _pattern_vocab(kb):
+    """canonical pattern id + its display names, for tagging cards by which patterns they discuss."""
+    vocab = {}
+    for pid, p in kb.get("patterns", {}).items():
+        names = [pid, pid.replace("_", " "), (p.get("plain_name") or ""), (p.get("tcm_name") or "")]
+        vocab[pid] = [n.lower() for n in names if n]
+    return vocab
+
+
+def _tags_for(cid, text, pvocab):
+    """Structured tags: the canonical patterns a chunk is about (id prefix + name mentions)."""
+    body = (cid + " " + text).lower()
+    return sorted(pid for pid, names in pvocab.items() if any(n in body for n in names))
+
+
+def _type_of(cid):
+    prefix = cid.split(":", 1)[0]
+    return {"feature": "feature", "extra": "feature", "pattern": "pattern", "rule": "rule",
+            "zone": "zone", "constitution": "constitution", "disambig": "disambiguation",
+            "combo": "combination", "food": "food", "symptom": "symptom", "sign": "sign",
+            "modern": "modern", "limit": "limitation", "nuance": "nuance"}.get(prefix, "card")
 
 
 def chunks_from_kb(kb):
@@ -73,8 +92,7 @@ def chunks_from_kb(kb):
             out.append((f"feature:{fk}", f"{label} — when present: {fv.get('present_tcm','')}. In plain terms: "
                         f"{fv.get('present_plain','')}.", src_all))
         for vk, vv in fv.get("values", {}).items():
-            gloss = vv.get("plain_gloss", "")
-            tcm = vv.get("tcm_term", "")
+            gloss, tcm = vv.get("plain_gloss", ""), vv.get("tcm_term", "")
             pts = ", ".join(vv.get("points_to", {}).keys())
             if gloss or tcm:
                 out.append((f"feature:{fk}={vk}", f"{label} '{vk}' ({tcm}): {gloss}"
@@ -98,29 +116,90 @@ def chunks_from_kb(kb):
     for r in kb.get("combination_rules", []):
         if r.get("note"):
             out.append((f"rule:{r['id']}", "Combination reasoning: " + r["note"], r.get("cite", "")))
-    reg = kb.get("regions", {})
     for zone in ("tip", "center", "sides", "root"):
-        z = reg.get(zone, {})
+        z = kb.get("regions", {}).get(zone, {})
         if z.get("organs"):
-            out.append((f"zone:{zone}", f"Tongue {zone} reflects {z['organs']}: {z.get('note','')}", "Song Weijiang; Maciocia"))
+            out.append((f"zone:{zone}", f"Tongue {zone} reflects {z['organs']}: {z.get('note','')}", "Maciocia"))
     return out
 
 
 def load_cards():
-    if os.path.exists(CARDS_FILE):
-        return [(c["id"], c["text"], c.get("source", "")) for c in json.load(open(CARDS_FILE))]
-    return [(f"card:{t.replace(' ', '_')}", body, src) for t, body, src in _LEGACY]
+    """[(id, text, source, lang)] from knowledge_cards.json (lang optional, defaults en)."""
+    if not os.path.exists(CARDS_FILE):
+        return []
+    return [(c["id"], c["text"], c.get("source", ""), c.get("lang", "en"))
+            for c in json.load(open(CARDS_FILE))]
+
+
+def build_rows(kb, reg, alias_to_key):
+    pvocab = _pattern_vocab(kb)
+    rows = [(cid, text, src, "en") for cid, text, src in chunks_from_kb(kb)] + load_cards()
+    out = []
+    for cid, text, src, lang in rows:
+        keys, lic, usage = resolve_source(src, reg, alias_to_key)
+        out.append({"id": cid, "text": text, "source": src, "source_keys": keys,
+                    "license": lic, "usage": usage, "lang": lang,
+                    "type": _type_of(cid), "tags": _tags_for(cid, text, pvocab)})
+    return out
+
+
+def validate(rows):
+    problems, warnings = [], []
+    seen_ids, seen_text = set(), {}
+    for r in rows:
+        if r["id"] in seen_ids:
+            problems.append(f"duplicate id: {r['id']}")
+        seen_ids.add(r["id"])
+        norm = re.sub(r"\s+", " ", r["text"].lower())[:80]
+        if norm in seen_text:
+            warnings.append(f"near-duplicate text: {r['id']} ~ {seen_text[norm]}")
+        seen_text[norm] = r["id"]
+        n = len(r["text"])
+        if n < 40:
+            warnings.append(f"very short chunk ({n} chars): {r['id']}")
+        if n > 900:
+            warnings.append(f"long chunk ({n} chars, consider splitting): {r['id']}")
+        if r["source"] and not r["source_keys"]:
+            problems.append(f"UNREGISTERED source '{r['source']}' on {r['id']} — add it to sources.json")
+        if r["usage"] == "permission-pending":
+            problems.append(f"card cites a PERMISSION-PENDING source ({r['source']}) on {r['id']} — "
+                            "confirm the grant or remove")
+    return problems, warnings
 
 
 def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--stats", action="store_true")
+    ap.add_argument("--validate", action="store_true")
+    ap.add_argument("--out", default=OUT)
+    args = ap.parse_args()
+
     kb = json.load(open(KB))
-    kb_rows = chunks_from_kb(kb)
-    cards = load_cards()
-    rows = kb_rows + cards
-    with open(OUT, "w") as f:
-        for cid, text, src in rows:
-            f.write(json.dumps({"id": cid, "text": text, "source": src}, ensure_ascii=False) + "\n")
-    print(f"wrote {OUT}  ({len(rows)} chunks: {len(cards)} authored cards + {len(kb_rows)} from KB)")
+    reg, alias_to_key = load_registry()
+    rows = build_rows(kb, reg, alias_to_key)
+
+    if args.validate:
+        problems, warnings = validate(rows)
+        for w in warnings:
+            print("  warn:", w)
+        if problems:
+            print("\nVALIDATION FAILED (%d):" % len(problems))
+            for p in problems:
+                print("  -", p)
+            raise SystemExit(1)
+        print("validation OK — %d chunks, %d warnings" % (len(rows), len(warnings)))
+        return
+
+    if args.stats:
+        for dim in ("type", "license", "usage", "lang"):
+            print("%-8s %s" % (dim, dict(collections.Counter(r[dim] for r in rows).most_common())))
+        return
+
+    with open(args.out, "w") as f:
+        for r in rows:
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+    n_cards = sum(1 for r in rows if r["type"] not in ("feature", "pattern", "rule", "zone"))
+    print("wrote %s (%d chunks: %d authored cards + %d from KB)" % (args.out, len(rows), n_cards, len(rows) - n_cards))
 
 
 if __name__ == "__main__":
