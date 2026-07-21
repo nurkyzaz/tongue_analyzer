@@ -4,7 +4,38 @@ _Created 2026-07-21._ Three new/weak detectors feed the no-LLM rules but aren't 
 labelled data. This is the convenient, prioritised list of what to do about each. **Everything here runs
 on casper** (needs the model + datasets); this note just tells you the exact steps.
 
-TL;DR: **only ONE thing actually needs you to label — `red_sides`.** The other two already have labels.
+TL;DR: **only ONE thing actually needs you to label — `red_sides`.** The other two already had labels and
+are now **validated (results below)** — the result forced a fix.
+
+---
+
+## ✅ Results — extra features vs practitioner labels (553-img held-out test split, 2026-07-21)
+
+Ran `evaluation/eval_extra_vs_practitioner.py` (extra-features model vs TCM-Tongue/shezhenv3-txt test labels):
+
+| feature | prevalence | AP | F1@.5 | read |
+|---|---|---|---|---|
+| red_dots | 0.14 | **0.68** | 0.68 | usable ✓ (matches our "reliable" tag) |
+| red_tongue | 0.27 | **0.61** | 0.50 | usable ✓ |
+| thin | 0.05 | 0.58 | 0.51 | moderate |
+| slippery_coating | 0.02 | 0.33 | 0.23 | **weak** — precision 0.14, over-fires |
+| swollen | 0.06 | 0.19 | 0.26 | over-predicts (137 FP) — but our rules gate it on co-occurrence |
+| purple_body | 0.03 | 0.17 | 0.17 | weak (known low-n) |
+| **black_coating** | 0.01 | **0.05** | **0.00** | **broken** — 0 TP / 11 FP; every firing is a false positive |
+
+macro-mAP 0.45 (consistent with the long-documented ~0.46). **`peeled_coating` skipped** — only 1 positive in test.
+
+**Action taken (this is the point of validating):**
+- **Disabled both grey-black rules** (`black_moist_extreme_cold`, `black_dry_extreme_heat`) via a new
+  `"enabled": false` flag — the detector's "present" is ~always a false positive, so the rules only added
+  noise. Kept in the KB with a `disabled_note`; TCM mapping is correct, re-enable when detection works.
+- **Halved the `slippery_coat_cold_damp` deltas** (weak detector; co-occurrence gate limits the harm).
+- Removed the two grey-black cases from the mapping eval (they tested now-disabled rules) → **34/34**.
+- Left `swollen`-based rules as-is: precision is low alone, but every rule using it also requires a
+  co-occurring sign (pale+wet, or yellow), which filters the false positives.
+
+Net: the two rules that rested on a **non-functional detector are off**; the ones on **usable detectors
+(red_dots, red_tongue, thin, tooth_mk, fissure, tai, zhi)** stand.
 
 ---
 
@@ -56,18 +87,13 @@ to sanity-check that high-score = genuinely red edges.
 
 ---
 
-## 🅱 `black_coating` (灰黑苔) — **already labelled, no work from you**
+## 🅱 `black_coating` (灰黑苔) — ✅ **validated → rules disabled** (see Results)
 
-The **practitioner set (TCM-Tongue, class 11 → `black_coating`)** already labels this on 6,528 images in the
-label store. It needs a **casper eval run** against the TCM-Tongue **test split** (553 imgs the extra model never
-trained on), not new labels. Ping me and I'll wire the check (precision/recall of the `black_coating` head vs the
-practitioner label); if it's weak we soften the two grey-black rules' deltas. Rules affected:
-`black_moist_extreme_cold`, `black_dry_extreme_heat`.
+AP 0.05, F1 0.00 on the 553-img test split. The two grey-black rules are now `"enabled": false`.
 
-## 🅲 `slippery_coating` (滑苔) — **already labelled, no work from you**
+## 🅲 `slippery_coating` (滑苔) — ✅ **validated → deltas halved** (see Results)
 
-Same story — TCM-Tongue class 12 → `slippery_coating`. Same casper eval, no labeling. Rule affected:
-`slippery_coat_cold_damp`.
+AP 0.33, precision 0.14. `slippery_coat_cold_damp` deltas halved; still gated on pale/white/wet co-occurrence.
 
 ---
 

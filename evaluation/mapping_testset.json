@@ -243,37 +243,6 @@
    ]
   },
   {
-   "id": "greyblack_moist_cold",
-   "note": "grey-black coating + WET + pale = extreme cold-damp / Yang deficiency (moist black is cold, not heat) [Li Candong 灰黑苔]",
-   "features": {
-    "zhi": "light",
-    "tai": "white",
-    "coating": "non_greasy",
-    "black_coating": "present",
-    "moisture": "wet"
-   },
-   "accept": [
-    "yang_deficiency",
-    "phlegm_dampness"
-   ]
-  },
-  {
-   "id": "greyblack_dry_heat",
-   "note": "grey-black coating + RED + yellow + cracks = extreme heat scorching fluids (dry black is heat, not cold) [Li Candong 灰黑苔]",
-   "features": {
-    "zhi": "dark",
-    "tai": "yellow",
-    "coating": "non_greasy",
-    "black_coating": "present",
-    "red_tongue": "present",
-    "fissure": "severe"
-   },
-   "accept": [
-    "damp_heat",
-    "yin_deficiency"
-   ]
-  },
-  {
    "id": "slippery_pale_cold_damp",
    "note": "slippery/wet coating + pale + white = cold-damp / Yang def failing to move fluids [Li Candong 滑苔]",
    "features": {

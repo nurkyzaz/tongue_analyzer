@@ -793,6 +793,8 @@
   },
   {
    "id": "black_moist_extreme_cold",
+   "enabled": false,
+   "disabled_note": "2026-07-21: black_coating detector AP 0.05 / F1 0.00 on the practitioner test split (0 TP, 11 FP) — its 'present' signal is ~always a false positive, so this rule would only fire on noise. TCM mapping is correct; re-enable when black_coating detection works.",
    "when": {
     "black_coating": "present"
    },
@@ -812,6 +814,8 @@
   },
   {
    "id": "black_dry_extreme_heat",
+   "enabled": false,
+   "disabled_note": "2026-07-21: same as black_moist_extreme_cold — black_coating detector AP 0.05 / F1 0.00 on the practitioner test split. Re-enable when black_coating detection works.",
    "when": {
     "black_coating": "present"
    },
@@ -839,13 +843,14 @@
     "moisture": "wet"
    },
    "boost": {
-    "phlegm_dampness": 0.3,
-    "yang_deficiency": 0.3,
-    "damp_heat": -0.3,
-    "yin_deficiency": -0.2
+    "phlegm_dampness": 0.15,
+    "yang_deficiency": 0.15,
+    "damp_heat": -0.15,
+    "yin_deficiency": -0.1
    },
    "cite": "Li Candong (滑苔)",
-   "note": "a slippery/wet coating = cold-damp or Yang deficiency failing to transform fluids; argues against heat and Yin-deficiency"
+   "note": "a slippery/wet coating = cold-damp or Yang deficiency failing to transform fluids; argues against heat and Yin-deficiency",
+   "disabled_note": "2026-07-21: slippery_coating detector is weak (AP 0.33, precision 0.14, over-fires) — deltas HALVED so a false-positive detection has limited impact; the co-occurrence gate (needs pale/white/wet) filters some FP. Restore full deltas when detection improves."
   },
   {
    "id": "toothmarks_pale_spleen_qi",

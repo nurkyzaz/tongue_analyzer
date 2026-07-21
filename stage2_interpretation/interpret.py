@@ -480,6 +480,8 @@ def apply_combination_rules(scores, present, kb):
     one must match. Deltas are modest vs base weights; negatives clamp at 0."""
     fired = []
     for rule in kb.get("combination_rules", []):
+        if rule.get("enabled", True) is False:      # rule kept for provenance but disabled (e.g. its
+            continue                                 # detector failed validation) — see `disabled_note`
         if not _cond_ok(rule.get("when", {}), present):
             continue
         anyc = rule.get("any")

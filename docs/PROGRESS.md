@@ -126,6 +126,17 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
 
 ---
 
+## 2026-07-21 (6) — validated extra features vs practitioner labels → fixed rules
+- ✅ **`evaluation/eval_extra_vs_practitioner.py`** — new eval of the extra-features model vs the
+  practitioner labels on the 553-img held-out TCM-Tongue test split. Results: red_dots AP 0.68, red_tongue
+  0.61, thin 0.58 (usable); slippery 0.33 (weak); **black_coating 0.05 / F1 0.00 (broken — 0 TP, 11 FP)**.
+- ✅ **Acted on it:** added an `"enabled": false` flag to `apply_combination_rules`; **disabled both
+  grey-black rules** (detector's "present" is ~always a false positive → pure noise), **halved the slippery
+  rule's deltas**. Removed the 2 grey-black mapping-eval cases (tested disabled rules) → **34/34**. Full
+  table + rationale in `docs/VALIDATION_WORKLIST.md`.
+- ✅ **Labeling tool generated** (`evaluation/label_human40.html`, 40 tongues, includes the new `red_sides`
+  field) and handed to the user — the only remaining item needing new labels.
+
 ## 2026-07-21 (5) — validation worklist for the unvalidated heuristics
 - ✅ **`docs/VALIDATION_WORKLIST.md`** organises the 3 unvalidated detectors: only **`red_sides`** needs new
   labels (no existing colour label for the Liver zone); `black_coating`/`slippery_coating` already have
