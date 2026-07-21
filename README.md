@@ -38,6 +38,7 @@ single source of truth — then [docs/PROGRESS.md](docs/PROGRESS.md) for the liv
 - **[docs/RESOURCES.md](docs/RESOURCES.md)** — audit of every external dataset/model, with licensing flags.
 - **[docs/CORPUS.md](docs/CORPUS.md)** — RAG corpus + source registry (licenses/permissions).
 - **[docs/VALIDATION_WORKLIST.md](docs/VALIDATION_WORKLIST.md)** — detector validation results + what still needs labels.
+- **[docs/DATA_SOURCES_AND_MAPPING.md](docs/DATA_SOURCES_AND_MAPPING.md)** — datasets/books/licences + features → 9 constitutions.
 - Mapping/label/metric refs: `FEATURE_PATTERN_MAPPING.md`, `LABEL_STORE.md`, `LABELING_GUIDE.md`, `BENCHMARK.md`.
 - Product/UX: **[docs/design/00_INDEX.md](docs/design/00_INDEX.md)** and `design/`. Decision memo: `CEO_MARKET_REGULATORY_QA.md`.
 - Deep history lives in `git log` (superseded planning/investigation notes were pruned 2026-07-21).
