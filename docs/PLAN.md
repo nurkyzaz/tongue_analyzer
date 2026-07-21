@@ -259,16 +259,27 @@ accept. Runtime additions (extra LLM calls, big models, re-rankers) are where we
 | **Negation rules** (thick **but peeled** → Stomach-Yin damage, not Damp-heat) | ✅ | fixes real false-positives |
 | **Symptom→pattern edges** section (fatigue→Qi-def, thirst→Yin-def) | ✅ | **required for WS-B**; already partly seeded as `evidence_for` |
 
-**Status of "Update `tcm_knowledge.json` itself" (2026-07-16) — NOT started at the file level.**
-The §7-A **weight recalibration is done but in the graph-RAG scoring layer** (`kg/retrieval.py`:
-sublinear corroboration + IDF distinctiveness) — deliberately *not* in `tcm_knowledge.json`, whose seed
-weights stay hand-tuned and parity-locked so the production rule engine is unchanged. The file-level
-edits are still **pending**: the current 10 combination rules do **not** yet include the new
-Heart-Lung-heat (`red_tip+white`), pale+thin→Blood-def override, or the purple **dry vs moist**
-heat-/cold-stasis split; there are **no negation rules** (thick-but-peeled → Stomach-Yin damage); and
-there is **no dedicated user-symptom→pattern section** (symptoms live per-pattern as
-`associated_symptoms`, which the KG already turns into `evidence_for` edges — the WS-B lever exists, but
-a first-class symptom section does not). These are the next WS-A file edits.
+**Status of "Update `tcm_knowledge.json` itself" (updated 2026-07-21).**
+The §7-A **weight recalibration** lives in the graph-RAG scoring layer (`kg/retrieval.py`: sublinear
+corroboration + IDF distinctiveness) — deliberately *not* in `tcm_knowledge.json`, whose seed weights
+stay hand-tuned and parity-locked. **Combination/negation rules ARE now in the file** and drive the
+no-LLM path: **21 rules** (was 10) including Heart-Lung empty-heat (`red_tip+white`), pale+thin→Blood-def,
+purple **dry-vs-moist** heat/cold-stasis, and the thick-but-peeled → Stomach-Yin negation. **Added
+2026-07-21 from the newly-licensed CN textbooks (Zhu Wenfeng / Li Candong):** grey-black coating
+**bidirectional** (`black_moist_extreme_cold` vs `black_dry_extreme_heat` — same colour, moisture
+disambiguates), `slippery_coat_cold_damp` (both fill a real gap — the `black_coating`/`slippery_coating`
+detectors had **no** rule keying on them), `toothmarks_pale_spleen_qi` + `toothmarks_swollen_red_dampheat`
+(the tooth-mark colour fork), and `thin_red_yin_deficiency` (the thin-body red fork complementing
+pale+thin→Blood-def). All cited; **mapping eval still 17/17** (no regression); each fires only when its
+weak detector triggers, so risk is bounded (revisit deltas if `black_coating`/`slippery_coating`
+detection improves). **Still pending:** a first-class **user-symptom→pattern section** (symptoms live
+per-pattern as `associated_symptoms`, which the KG turns into `evidence_for` edges — the WS-B lever
+exists, but a dedicated section does not).
+
+**Terminology wired (2026-07-21):** the output now labels each result a **pattern (证)** vs
+**constitution (体质)** via `card.kind`, and every card carries `constitution` = its CCMQ body-constitution
+(`CCMQ_CONSTITUTION` crosswalk: `blood_deficiency`/`spleen_qi_deficiency` → 气虚质), plus a top-level
+`constitution_leaning` for Savor's constitution feature. Applies to **both** the no-LLM and LLM outputs.
 
 ### 🟠 B · Stage-1 feature extraction — **accept only the light/geometry parts**
 | Item | Verdict | Note |

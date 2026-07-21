@@ -2,9 +2,11 @@
 
 For each detected feature it reports the **degree** (from Stage-1 severity), the **TCM term**, and a
 **plain-language gloss** of what practitioners in this tradition associate it with. It then votes
-(weighted by severity) toward the patterns in the CCMQ 9-constitution model, and surfaces optional
-**follow-up questions** (validated CCMQ items) that refine confidence. Framed throughout as one
-tradition's perspective, never a diagnosis.
+(weighted by severity) toward TCM **pattern/syndrome leanings (辨证/证)** — what the tongue reads as the
+*state today* — and maps each to its CCMQ **body-constitution (体质)** via `CCMQ_CONSTITUTION` for the
+Savor constitution feature (some of our labels, e.g. blood-/spleen-qi-deficiency, are syndromes not one
+of the nine constitutions). Surfaces optional **follow-up questions** (validated CCMQ items) that refine
+confidence. Framed throughout as one tradition's perspective, never a diagnosis.
 
 `interpret(stage1_output, metadata, llm)` -> structured dict (see bottom).
 `refine(patterns, answers)` -> updated pattern confidences after follow-up answers.
@@ -29,6 +31,24 @@ WSC_ENSEMBLE = os.getenv("TIH_WSC_ENSEMBLE", "1") == "1"
 # false strips them from the response JSON right before it's returned — the KG/matcher/refine engine
 # still build WITH citations, we only redact the final output.
 SHOW_CITATIONS = os.getenv("TIH_SHOW_CITATIONS", "false").lower() in ("1", "true", "yes")
+
+# What the tongue reads is a pattern/syndrome (辨证/证 — the state today); Savor's constitution feature
+# uses Prof. Wang Qi's CCMQ 9 body-constitutions (体质 — the stable baseline). This crosswalk maps each of
+# our pattern ids to its CCMQ constitution so the two features line up. Two of our labels are SYNDROMES,
+# not constitutions — `blood_deficiency` (血虚) and `spleen_qi_deficiency` (脾气虚) — and both fold into the
+# qi-deficiency (气虚质) constitution. Grounded in docs/FEATURE_PATTERN_MAPPING.md §1.
+CCMQ_CONSTITUTION = {
+    "balanced":             {"id": "balanced",        "en": "Balanced",        "zh": "平和质"},
+    "spleen_qi_deficiency": {"id": "qi_deficiency",   "en": "Qi-deficiency",   "zh": "气虚质", "via": "syndrome"},
+    "blood_deficiency":     {"id": "qi_deficiency",   "en": "Qi-deficiency",   "zh": "气虚质", "via": "syndrome"},
+    "yang_deficiency":      {"id": "yang_deficiency", "en": "Yang-deficiency", "zh": "阳虚质"},
+    "yin_deficiency":       {"id": "yin_deficiency",  "en": "Yin-deficiency",  "zh": "阴虚质"},
+    "phlegm_dampness":      {"id": "phlegm_dampness", "en": "Phlegm-dampness", "zh": "痰湿质"},
+    "damp_heat":            {"id": "damp_heat",       "en": "Damp-heat",       "zh": "湿热质"},
+    "blood_stasis":         {"id": "blood_stasis",    "en": "Blood-stasis",    "zh": "血瘀质"},
+    "qi_stagnation":        {"id": "qi_stagnation",   "en": "Qi-stagnation",   "zh": "气郁质"},
+    "special_diathesis":    {"id": "special_diathesis","en": "Special-diathesis","zh": "特禀质"},
+}
 
 # source names / databases / venues to redact from free-text narrative (their section codes + URLs are
 # handled separately). Kept broad; matched case-insensitively as whole words.
@@ -395,6 +415,8 @@ def extra_readings(extra_chars, kb, stats):
 def _card(kb, pid, conf):
     pat = kb["patterns"].get(pid, {})
     return {"id": pid, "tcm_name": pat.get("tcm_name", pid), "plain_name": pat.get("plain_name", ""),
+            "kind": "constitution" if pid in ("balanced", "special_diathesis") else "pattern",  # 体质 vs 证
+            "constitution": CCMQ_CONSTITUTION.get(pid),   # CCMQ body-constitution this maps to (for Savor)
             "explanation": pat.get("explanation", ""),
             "associated_symptoms": pat.get("associated_symptoms", []),
             "modern_correlation": pat.get("modern_correlation", ""),
@@ -876,6 +898,9 @@ def interpret(stage1_output, metadata=None, llm: LLMClient = None):
         "findings_text": found_text, "findings": findings, "recommendation": recommendation,
         "symptoms": symptoms,
         "features": disp, "patterns": patterns,
+        # CCMQ body-constitution (体质) the lead pattern maps to — the hook Savor's constitution feature
+        # consumes. The tongue reads a pattern (证, today's state); this is its stable-baseline equivalent.
+        "constitution_leaning": (patterns[0].get("constitution") if patterns else None),
         "ensemble": ensemble_meta,          # WS-C transparency: how the blend ranked (None if off)
         "reasoning": [{"note": r["note"], "cite": r["cite"]} for r in fired if r["note"]],
         "regions": kb.get("regions", {}),

@@ -790,6 +790,105 @@
    },
    "cite": "SL (red tip = Heart/Lung heat)",
    "note": "a red tip on a thin/white coat points to upper (Heart/Lung) empty-heat, not damp-heat; a dedicated heart_heat pattern is a future addition"
+  },
+  {
+   "id": "black_moist_extreme_cold",
+   "when": {
+    "black_coating": "present"
+   },
+   "any": {
+    "moisture": "wet",
+    "slippery_coating": "present",
+    "zhi": "light",
+    "tai": "white"
+   },
+   "boost": {
+    "yang_deficiency": 0.5,
+    "damp_heat": -0.4,
+    "yin_deficiency": -0.3
+   },
+   "cite": "Li Candong 舌诊 (灰黑苔)",
+   "note": "a MOIST grey-black coating = extreme cold-damp / Yang deficiency, not heat — the SAME colour means opposite things and moisture disambiguates it"
+  },
+  {
+   "id": "black_dry_extreme_heat",
+   "when": {
+    "black_coating": "present"
+   },
+   "any": {
+    "red_tongue": "present",
+    "tai": "yellow",
+    "fissure": ["light", "severe"]
+   },
+   "boost": {
+    "damp_heat": 0.4,
+    "yin_deficiency": 0.3,
+    "yang_deficiency": -0.3
+   },
+   "cite": "Li Candong 舌诊 (灰黑苔)",
+   "note": "a DRY grey-black coating = extreme heat scorching fluids, not cold"
+  },
+  {
+   "id": "slippery_coat_cold_damp",
+   "when": {
+    "slippery_coating": "present"
+   },
+   "any": {
+    "zhi": "light",
+    "tai": "white",
+    "moisture": "wet"
+   },
+   "boost": {
+    "phlegm_dampness": 0.3,
+    "yang_deficiency": 0.3,
+    "damp_heat": -0.3,
+    "yin_deficiency": -0.2
+   },
+   "cite": "Li Candong (滑苔)",
+   "note": "a slippery/wet coating = cold-damp or Yang deficiency failing to transform fluids; argues against heat and Yin-deficiency"
+  },
+  {
+   "id": "toothmarks_pale_spleen_qi",
+   "when": {
+    "tooth_mk": ["light", "severe"],
+    "zhi": "light"
+   },
+   "boost": {
+    "spleen_qi_deficiency": 0.4,
+    "damp_heat": -0.2
+   },
+   "cite": "Zhu Wenfeng 中医诊断学 (齿痕舌)",
+   "note": "tooth-marks on a PALE body = Spleen-qi deficiency with damp; on a red/swollen body it leans damp-heat instead (see toothmarks_swollen_red_dampheat)"
+  },
+  {
+   "id": "toothmarks_swollen_red_dampheat",
+   "when": {
+    "tooth_mk": ["light", "severe"],
+    "swollen": "present"
+   },
+   "any": {
+    "red_tongue": "present",
+    "tai": "yellow"
+   },
+   "boost": {
+    "damp_heat": 0.4,
+    "spleen_qi_deficiency": -0.2
+   },
+   "cite": "Zhu Wenfeng (齿痕胖红)",
+   "note": "tooth-marks on a SWOLLEN red / yellow-coated tongue lean damp-heat, not plain qi-deficiency"
+  },
+  {
+   "id": "thin_red_yin_deficiency",
+   "when": {
+    "thin": "present",
+    "red_tongue": "present"
+   },
+   "boost": {
+    "yin_deficiency": 0.4,
+    "blood_deficiency": -0.2
+   },
+   "cite": "Li Candong (瘦薄舌)",
+   "note": "a THIN body that is RED/dry = Yin deficiency with empty-heat; a thin PALE body = Qi/Blood deficiency (see pale_thin_blood_deficiency)"
   }
  ],
  "symptom_patterns": {

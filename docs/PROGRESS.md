@@ -126,6 +126,18 @@ Living task board. ✅ done · 🔄 in progress · ⬜ todo · ⏸ blocked
 
 ---
 
+## 2026-07-21 (2) — terminology wired + no-LLM rules from CN sources
+- ✅ **CCMQ crosswalk wired into output** (`interpret.py` `CCMQ_CONSTITUTION`): every pattern card now
+  carries `kind` (证 pattern vs 体质 constitution) + `constitution` (its CCMQ body-constitution), plus a
+  top-level `constitution_leaning` for Savor. `blood_deficiency`/`spleen_qi_deficiency` (syndromes) → 气虚质.
+  Survives the public redaction path; applies to **both** no-LLM and LLM outputs.
+- ✅ **No-LLM rule engine improved from the new CN textbooks** — 6 new grounded `combination_rules` in
+  `tcm_knowledge.json` (10→21 total): grey-black coating bidirectional (`black_moist_extreme_cold` /
+  `black_dry_extreme_heat`), `slippery_coat_cold_damp` (both fill gaps — `black_coating`/`slippery_coating`
+  had no rule), tooth-mark colour fork (`toothmarks_pale_spleen_qi` / `toothmarks_swollen_red_dampheat`),
+  `thin_red_yin_deficiency`. Verified each fires with correct deltas; **mapping eval 17/17 (no regression)**.
+  This is how the new sources help the no-LLM path — the corpus cards only feed the LLM narrative.
+
 ## 2026-07-21 — CEO Q&A + capture-quality gate
 - ✅ **CEO market/accuracy/regulatory memo** (`docs/CEO_MARKET_REGULATORY_QA.md`) — answers the four founder
   questions (market need by country; feature-detection vs "diagnosis" accuracy; Apple/regulatory; Savor
