@@ -1,4 +1,4 @@
-"""Parse a licensed TCM book's section hierarchy (WS-A macro layer, docs/PLAN.md §3).
+"""Parse a licensed TCM book's section hierarchy (WS-A macro layer, docs/PROJECT_HANDBOOK.md §3).
 
 Extracts the numbered section skeleton (e.g. `2.2.2 Pale tongue body`) from a book text file and
 records, per section: number, title, level, parent, and the CHARACTER OFFSETS of its body span in

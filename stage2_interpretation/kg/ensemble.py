@@ -1,4 +1,4 @@
-"""WS-C ensemble: rule prior + grounded cited evidence (docs/PLAN.md §WS-C step 3).
+"""WS-C ensemble: rule prior + grounded cited evidence (docs/PROJECT_HANDBOOK.md §WS-C step 3).
 
 The shadow run (evaluation/eval_shadow_matcher.py, human40) showed the grounded matcher (kg/matcher.py)
 hallucinates 0.0 but only top-1-agrees with the rule engine 0.50 of the time — and the disagreements

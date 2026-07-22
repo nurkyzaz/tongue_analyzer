@@ -1,4 +1,4 @@
-"""WHO IST 2022 ontology spine — extract canonical bilingual terminology (WS-A, docs/PLAN.md §3).
+"""WHO IST 2022 ontology spine — extract canonical bilingual terminology (WS-A, docs/PROJECT_HANDBOOK.md §3).
 
 The WHO *International Standard Terminologies on Traditional Chinese Medicine* (2022) is a numbered,
 bilingual glossary: each entry is `<code>  <English term>  [<synonyms>]  <definition>  <简体中文>

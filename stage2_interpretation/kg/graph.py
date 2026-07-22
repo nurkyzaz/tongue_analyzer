@@ -1,4 +1,4 @@
-"""Macro-micro TCM knowledge graph — data model + queries (WS-A, docs/PLAN.md §3).
+"""Macro-micro TCM knowledge graph — data model + queries (WS-A, docs/PROJECT_HANDBOOK.md §3).
 
 A single typed graph unifies three layers so Stage 2 retrieval/reasoning has ONE grounded
 substrate instead of a rule KB + a flat card list:

@@ -1,4 +1,4 @@
-"""WS-C grounded cite-or-abstain matcher (docs/PLAN.md §3, §7-C).
+"""WS-C grounded cite-or-abstain matcher (docs/PROJECT_HANDBOOK.md §3, §7-C).
 
 Consumes the graph-RAG 2-hop retrieval (kg/retrieval.py) and asks an LLM to pick the patterns BEST
 supported *by the retrieved, cited facts only* — never outside knowledge — with a strict JSON schema

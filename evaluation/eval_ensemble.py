@@ -1,4 +1,4 @@
-"""WS-C ensemble eval — is the rule+matcher blend SAFE and does it ADD grounding? (PLAN.md §WS-C step 3)
+"""WS-C ensemble eval — is the rule+matcher blend SAFE and does it ADD grounding? (PROJECT_HANDBOOK.md §WS-C step 3)
 
 The shadow run already established the matcher hallucinates 0.0 but only top-1-agrees with the rule
 engine 0.50 (within-family). This eval scores the *ensemble* (kg/ensemble.py) — rule prior + the

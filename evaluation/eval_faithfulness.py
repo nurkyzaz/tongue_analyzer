@@ -1,4 +1,4 @@
-"""WS-D — RAGAS-style faithfulness gate for the LLM narrative (docs/PLAN.md §7-D).
+"""WS-D — RAGAS-style faithfulness gate for the LLM narrative (docs/PROJECT_HANDBOOK.md §7-D).
 
 The hallucination gate before the LLM narrator may default ON. Implements the RAGAS *faithfulness*
 metric locally (no heavy `ragas`/langchain dependency — it's an eval, but we keep it auditable and

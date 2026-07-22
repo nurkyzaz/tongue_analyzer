@@ -13,11 +13,10 @@ photo ─► [Stage 1: feature detection]  ─► structured JSON ─► [Stage 
             segmentation + graded features                    grounded TCM knowledge base (+ optional LLM)
 ```
 
-## Status (2026-07-16)
+## Status (2026-07-21)
 
-**Working end-to-end**, honestly measured. Stage 1 is **frozen**; the active work is the **Stage 2
-knowledge-graph + RAG overhaul**. **New agents / contributors: read [docs/PLAN.md](docs/PLAN.md) — the
-single source of truth — then [docs/PROGRESS.md](docs/PROGRESS.md) for the live log.**
+**Working end-to-end**, honestly measured. Stage 1 is **frozen**. **New engineers: read
+[docs/PROJECT_HANDBOOK.md](docs/PROJECT_HANDBOOK.md) — the single onboarding + reference doc.**
 
 | Component | State |
 |---|---|
@@ -26,22 +25,17 @@ single source of truth — then [docs/PROGRESS.md](docs/PROGRESS.md) for the liv
 | Stage-1 signals | ✅ coating split thickness×texture, red-tip, moisture (`zoning.py`) |
 | Interpretation (rule engine + KB) | ✅ distinctiveness-weighted votes + **combination rules** (context-aware) + honest graded report |
 | Grounded RAG + LLM narrative | ✅ rule backbone + true vector RAG (cited corpus, retrieval 96%) + local-LLM narrative (Ollama) |
-| **Macro-micro knowledge graph** (`stage2_interpretation/kg/`) | 🔄 seed+macro built (parity-verified); micro extraction from licensed books underway (PLAN.md §3) |
+| **Macro-micro knowledge graph** (`stage2_interpretation/kg/`) | ✅ built from licensed books (~605 nodes / 1245 edges / 282 cited); cite-or-abstain matcher + rule ensemble live |
 | FastAPI service + web demo | ✅ live on casper `:7860` (camera guide, mask overlay), cloudflared HTTPS tunnel |
 | **Honest metric** | promote a change only if it beats v5 on the **human** eval / mapping test — not on val/auto |
 
-## Docs (read these)
+## Docs
 
-- **[docs/PLAN.md](docs/PLAN.md)** — the master plan / single source of truth for remaining work. **Start here.**
-- **[docs/PROGRESS.md](docs/PROGRESS.md)** — the live implementation log (most recent work first).
-- **[stage2_interpretation/kg/README.md](stage2_interpretation/kg/README.md)** — the knowledge-graph layers, model, and build.
-- **[docs/RESOURCES.md](docs/RESOURCES.md)** — audit of every external dataset/model, with licensing flags.
-- **[docs/CORPUS.md](docs/CORPUS.md)** — RAG corpus + source registry (licenses/permissions).
-- **[docs/VALIDATION_WORKLIST.md](docs/VALIDATION_WORKLIST.md)** — detector validation results + what still needs labels.
-- **[docs/DATA_SOURCES_AND_MAPPING.md](docs/DATA_SOURCES_AND_MAPPING.md)** — datasets/books/licences + features → 9 constitutions.
-- Mapping/label/metric refs: `FEATURE_PATTERN_MAPPING.md`, `LABEL_STORE.md`, `LABELING_GUIDE.md`, `BENCHMARK.md`.
-- Product/UX: **[docs/design/00_INDEX.md](docs/design/00_INDEX.md)** and `design/`. Decision memo: `CEO_MARKET_REGULATORY_QA.md`.
-- Deep history lives in `git log` (superseded planning/investigation notes were pruned 2026-07-21).
+- **[docs/PROJECT_HANDBOOK.md](docs/PROJECT_HANDBOOK.md)** — everything: transfer checklist, repo map, data/models, pipeline, rule engine, KG/matcher, RAG, eval, run/config. **Start here.**
+- **[stage2_interpretation/kg/README.md](stage2_interpretation/kg/README.md)** — knowledge-graph build detail (beside its code).
+- **[docs/design/00_INDEX.md](docs/design/00_INDEX.md)** + `design/` — product/UX bundle.
+- `stage2_interpretation/knowledge_base/sources.json` — machine-readable licence registry.
+- Historical planning/progress/analysis notes were consolidated into the handbook and pruned — see `git log`.
 
 ## Repository layout
 
@@ -53,12 +47,12 @@ single source of truth — then [docs/PROGRESS.md](docs/PROGRESS.md) for the liv
 | `evaluation/` | Living eval harnesses (one-offs under `evaluation/archive/`) |
 | `deployment/api/` | FastAPI service + single-page web demo |
 | `design/` | Claude Design handoff bundle — the Savor 舌 tab app comps |
-| `docs/` | Documentation (`PLAN.md` = SoT; superseded notes pruned — see `git log`) |
+| `docs/` | Single handbook (`PROJECT_HANDBOOK.md`) + `design/`; history in `git log` |
 
 ## Compute
 
 Training/inference run on **casper** (`192.168.1.184`), 2× RTX 3090 24GB; use **GPU 0**. Code is synced
-there under `~/tongue/`; data/venv/checkpoints live on the server (not in git). See RESOURCES.md.
+there under `~/tongue/`; data/venv/checkpoints live on the server (not in git). See the handbook §2/§4.
 
 ## Reproduce (on casper)
 

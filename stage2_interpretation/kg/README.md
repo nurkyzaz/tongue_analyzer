@@ -1,6 +1,6 @@
 # Macro-micro TCM knowledge graph (WS-A)
 
-The grounded substrate for the Stage 2 overhaul (see [`docs/PLAN.md`](../../docs/PLAN.md) §2–3).
+The grounded substrate for the Stage 2 overhaul (see [`docs/PROJECT_HANDBOOK.md`](../../docs/PROJECT_HANDBOOK.md) §2–3).
 Replaces the split between a rule KB (`tcm_knowledge.json`) and a flat card list
 (`knowledge_cards.json`) with one typed graph that retrieval + the grounded matcher (WS-C) and the
 interactive refinement pass (WS-B) both query.

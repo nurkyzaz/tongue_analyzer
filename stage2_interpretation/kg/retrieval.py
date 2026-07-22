@@ -1,4 +1,4 @@
-"""WS-C graph-RAG retrieval over the macro-micro knowledge graph (docs/PLAN.md §7-C).
+"""WS-C graph-RAG retrieval over the macro-micro knowledge graph (docs/PROJECT_HANDBOOK.md §7-C).
 
 The old RAG retrieved flat cited chunks (`knowledge_cards.json`). This retrieves a **connected
 2-hop subgraph** around the detected feature nodes, so the grounded matcher (and the LLM narrator)

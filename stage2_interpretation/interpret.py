@@ -36,7 +36,7 @@ SHOW_CITATIONS = os.getenv("TIH_SHOW_CITATIONS", "false").lower() in ("1", "true
 # uses Prof. Wang Qi's CCMQ 9 body-constitutions (体质 — the stable baseline). This crosswalk maps each of
 # our pattern ids to its CCMQ constitution so the two features line up. Two of our labels are SYNDROMES,
 # not constitutions — `blood_deficiency` (血虚) and `spleen_qi_deficiency` (脾气虚) — and both fold into the
-# qi-deficiency (气虚质) constitution. Grounded in docs/FEATURE_PATTERN_MAPPING.md §1.
+# qi-deficiency (气虚质) constitution. Grounded in docs/PROJECT_HANDBOOK.md §1.
 CCMQ_CONSTITUTION = {
     "balanced":             {"id": "balanced",        "en": "Balanced",        "zh": "平和质"},
     "spleen_qi_deficiency": {"id": "qi_deficiency",   "en": "Qi-deficiency",   "zh": "气虚质", "via": "syndrome"},
@@ -401,7 +401,7 @@ def feature_readings(chars, kb, stats):
 
 # Extras we DROP entirely — the detector can't predict them, so surfacing/voting on them only misleads.
 # black_coating: AP 0.05 / F1 0.00 on the 553-img practitioner test split (0 TP, 11 FP) — see
-# docs/VALIDATION_WORKLIST.md. Skipped in extra_readings + present_features (its combination rules were
+# docs/PROJECT_HANDBOOK.md. Skipped in extra_readings + present_features (its combination rules were
 # already disabled). Re-add if the detector is ever fixed.
 _REMOVED_EXTRA = {"black_coating"}
 

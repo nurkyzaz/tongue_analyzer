@@ -24,7 +24,7 @@ CASES = [
 
 # Known calibration gaps — the retrieval is correct (entries resolve, evidence is cited) but the
 # ranking is dominated by micro-edge volume, so a specific-but-rare signal loses. Fix is the
-# empirical distinctiveness re-weighting in PLAN.md §7-A (weight ∝ 1/corpus-frequency). Printed as a
+# empirical distinctiveness re-weighting in PROJECT_HANDBOOK.md §7-A (weight ∝ 1/corpus-frequency). Printed as a
 # warning, does NOT fail the gate — it tracks the gap until §7-A lands.
 KNOWN_GAPS = [
     ("pale + toothmarks -> spleen_qi", {"zhi": "pale", "tooth_mk": "present"}, "spleen_qi_deficiency"),

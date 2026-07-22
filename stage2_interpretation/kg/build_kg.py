@@ -1,4 +1,4 @@
-"""Build the macro-micro TCM knowledge graph (WS-A, docs/PLAN.md §3).
+"""Build the macro-micro TCM knowledge graph (WS-A, docs/PROJECT_HANDBOOK.md §3).
 
     python stage2_interpretation/kg/build_kg.py            # build seed layer -> kg_graph.json
     python stage2_interpretation/kg/build_kg.py --verify   # build + assert SUPERSET parity vs KB

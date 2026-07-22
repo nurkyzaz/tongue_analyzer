@@ -1,4 +1,4 @@
-"""WS-B interactive evidence refinement (docs/PLAN.md §WS-B) — the inference-time, data-free analog of
+"""WS-B interactive evidence refinement (docs/PROJECT_HANDBOOK.md §WS-B) — the inference-time, data-free analog of
 TCM-DiffRAG's train-time personalized KG.
 
 Two-pass reading:

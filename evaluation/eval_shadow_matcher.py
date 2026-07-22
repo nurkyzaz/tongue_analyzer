@@ -1,4 +1,4 @@
-"""WS-C shadow run on REAL Stage-1 outputs (docs/PLAN.md §7-C).
+"""WS-C shadow run on REAL Stage-1 outputs (docs/PROJECT_HANDBOOK.md §7-C).
 
 For each real tongue photo: run Stage-1 -> features, then score the grounded cite-or-abstain matcher
 (kg/matcher.py) against the production rule-engine vote on the SAME features. Logs top-1 agreement,

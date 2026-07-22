@@ -372,7 +372,19 @@ async function analyze(u){
   if(u){$('shot2').src=u;}
   try{
     const r=await fetch('/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:u})});
-    setTimeout(async()=>renderReading(await r.json()),1200);
+    const d=await r.json();
+    // gate: don't render a reading when there's no usable tongue / bad capture
+    const fr=d.framing||{}, q=(d.quantitative||{}).quality||{};
+    const nPat=((d.interpretation||{}).patterns||[]).length;
+    if(fr.status==='error' || q.accepted===false || nPat===0){
+      setTimeout(()=>{
+        show('s-capture');
+        const fh=$('framehint'); fh.style.display='block';
+        fh.textContent=fr.message||'No tongue detected — fill the oval with your tongue in good, even light.';
+      },1200);
+      return;
+    }
+    setTimeout(()=>renderReading(d),1200);
   }catch(e){alert('Error: '+e);show('s-capture');}
 }
 

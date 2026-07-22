@@ -11,7 +11,7 @@ We deliberately do NOT report "disease" or "constitution" accuracy: our data has
 labels for those, so any such number would be circular. Constitution mapping is rule-based/educational.
 
     python evaluation/benchmark.py --mt checkpoints/multitask_v4/best.pt \
-        --extra checkpoints/extra_features/best.pt --out docs/BENCHMARK.md
+        --extra checkpoints/extra_features/best.pt --out docs/PROJECT_HANDBOOK.md
 """
 import argparse, os, sys, json
 import numpy as np
@@ -139,7 +139,7 @@ def main():
     ap.add_argument("--manifest", default="data/processed/manifest.csv")
     ap.add_argument("--labels", default="data/processed/tcm_tongue_labels.csv")
     ap.add_argument("--mask-dir", default="data/external/tcm_tongue/masks")
-    ap.add_argument("--out", default="docs/BENCHMARK.md")
+    ap.add_argument("--out", default="docs/PROJECT_HANDBOOK.md")
     args = ap.parse_args()
     device = "cuda" if torch.cuda.is_available() else "cpu"
     A = benchmark_A(args.mt, args.te_root, args.manifest, device)
