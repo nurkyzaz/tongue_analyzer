@@ -63,12 +63,14 @@ Machine-readable companions kept beside their code: `stage2_interpretation/knowl
 | TonguExpert | [biosino.org](https://www.biosino.org/) | seg masks + **5 core feature** labels | ⚠️ commercial terms unverified |
 | TCM-Tongue (btbu) | [Dryad](https://datadryad.org/dataset/doi:10.5061/dryad.1c59zw48r) · [GitHub](https://github.com/btbuIntelliSense/Intelligent-tongue-diagnosis-detection-dataset) | **extra pathological features** + 553-img practitioner benchmark | CC-BY 4.0 |
 | SM-Tongue | [HF](https://huggingface.co/datasets/Mark-CHAE/SM-Tongue-Public-Original512) | real-**phone** seg pairs | ⚠️ CC-BY-NC (ship-blocker) |
-| BioHit | [GitHub](https://github.com/BioHit/TongeImageDataset) | small seg add-on | no explicit licence |
+| BioHit | [GitHub](https://github.com/BioHit/TongeImageDataset) | 300 imgs + manual masks — **available add-on, not in the final seg manifest** (kept for future refinement) | no explicit licence |
 | human40 / human40b | internal | honest real-world check + threshold calibration | owned |
 
 ### 4.2 Model A — segmentation (U-Net++, `seg_combined`)
 
-- Trained on TonguExpert masks **+ SM-Tongue (real phone) + BioHit**.
+- Trained on TonguExpert masks **+ SM-Tongue (real phone)** — the unified `data/processed/seg_manifest.csv`
+  is 8,147 pairs (5,992 TonguExpert + 2,155 SM-Tongue). (BioHit is an available add-on but was **not** added
+  to this manifest — the combined set already reached target Dice; see §4.1.)
 - Why combined: TonguExpert is clinic-lit; SM-Tongue adds phone photos → fixes the clinic→phone domain gap.
 - Out: binary tongue mask (real-photo Dice ~0.975). Feeds the crop + mask-guidance for the feature CNNs.
 
