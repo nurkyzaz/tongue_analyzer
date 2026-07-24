@@ -33,7 +33,7 @@ photo ─► [Stage 1: feature detection]  ─► structured JSON ─► [Stage 
 
 - **[docs/PROJECT_HANDBOOK.md](docs/PROJECT_HANDBOOK.md)** — everything: transfer checklist, repo map, data/models, pipeline, rule engine, KG/matcher, RAG, eval, run/config. **Start here.**
 - **[stage2_interpretation/kg/README.md](stage2_interpretation/kg/README.md)** — knowledge-graph build detail (beside its code).
-- **[docs/design/00_INDEX.md](docs/design/00_INDEX.md)** + `design/` — product/UX bundle.
+- `design/` — the demo's UI design pack (BRAND, FEATURE_SPEC, prototype `mockup.html`).
 - `stage2_interpretation/knowledge_base/sources.json` — machine-readable licence registry.
 - Historical planning/progress/analysis notes were consolidated into the handbook and pruned — see `git log`.
 

@@ -4,7 +4,7 @@ Single onboarding + reference doc. Audience: engineers who know TCM. Educational
 device — every output is framed "traditionally associated with…", never a diagnosis.
 
 Machine-readable companions kept beside their code: `stage2_interpretation/knowledge_base/sources.json`
-(licence registry), `stage2_interpretation/kg/README.md` (KG build), `docs/design/` (UX bundle).
+(licence registry), `stage2_interpretation/kg/README.md` (KG build), `design/` (demo UI design pack).
 
 ---
 
