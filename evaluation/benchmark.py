@@ -10,8 +10,8 @@ Two expert-labeled test sets (the categories professionals actually annotated â€
 We deliberately do NOT report "disease" or "constitution" accuracy: our data has no independent expert
 labels for those, so any such number would be circular. Constitution mapping is rule-based/educational.
 
-    python evaluation/benchmark.py --mt checkpoints/multitask_v4/best.pt \
-        --extra checkpoints/extra_features/best.pt --out docs/PROJECT_HANDBOOK.md
+    python evaluation/benchmark.py --mt checkpoints/multitask_v5/best.pt \
+        --extra checkpoints/extra_features/best.pt --out docs/BENCHMARK.md
 """
 import argparse, os, sys, json
 import numpy as np
@@ -132,14 +132,14 @@ def write_report(A, B, out, mt_ckpt, extra_ckpt):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--mt", default="checkpoints/multitask_v4/best.pt")
+    ap.add_argument("--mt", default="checkpoints/multitask_v5/best.pt")
     ap.add_argument("--extra", default="checkpoints/extra_features/best.pt")
     ap.add_argument("--data-root", default=".")
     ap.add_argument("--te-root", default="data/raw")
     ap.add_argument("--manifest", default="data/processed/manifest.csv")
     ap.add_argument("--labels", default="data/processed/tcm_tongue_labels.csv")
     ap.add_argument("--mask-dir", default="data/external/tcm_tongue/masks")
-    ap.add_argument("--out", default="docs/PROJECT_HANDBOOK.md")
+    ap.add_argument("--out", default="docs/BENCHMARK.md")
     args = ap.parse_args()
     device = "cuda" if torch.cuda.is_available() else "cpu"
     A = benchmark_A(args.mt, args.te_root, args.manifest, device)

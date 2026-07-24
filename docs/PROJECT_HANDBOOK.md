@@ -78,7 +78,7 @@ Machine-readable companions kept beside their code: `stage2_interpretation/knowl
 
 - Trained on **TonguExpert** — the one set that labels all 5: `coating`, `tai` (coat colour), `zhi` (body colour), `fissure`, `tooth_mk`.
 - Multi-task: shared backbone, one classification head per feature (graded none/light/severe or the colour classes) + a severity regression head. Mask-guided (features masked to the tongue).
-- Accuracy vs expert gold: tai 0.92, cracks 0.92, zhi 0.81, tooth_mk 0.85; ~61% exact 3-way but **97% within one grade**.
+- Accuracy vs expert gold (held-out test, `benchmark.py --mt …v5`): tai 0.92, cracks 0.92, zhi 0.81, tooth_mk 0.85; ~59% exact 3-way but **97% within one grade** (`eval_fair.py`).
 - v6/v7/v8 all lost to v5 on the human metric → frozen.
 
 ### 4.4 Model C — extra features (multi-label CNN, `extra_features`)

@@ -1,7 +1,7 @@
 """Stage-1 end-to-end inference: photo -> segmentation -> mask-guided characteristics -> JSON.
 
     python stage1_quantitative/infer.py --image path.jpg \
-        --seg checkpoints/seg/best.pt --mt checkpoints/multitask_v2/best.pt
+        --seg checkpoints/seg_combined/best.pt --mt checkpoints/multitask_v5/best.pt
 
 Runs the U-Net++ segmenter to get the tongue mask, then the multi-task head (mask-guided) to
 predict the 5 key characteristics with confidences, and emits a Stage1Output JSON. A simple quality
@@ -207,7 +207,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--image", required=True)
     ap.add_argument("--seg", default="checkpoints/seg/best.pt")
-    ap.add_argument("--mt", default="checkpoints/multitask_v2/best.pt")
+    ap.add_argument("--mt", default="checkpoints/multitask_v5/best.pt")
     ap.add_argument("--size", type=int, default=384)
     args = ap.parse_args()
     pipe = Stage1Pipeline(args.seg, args.mt, size=args.size)
